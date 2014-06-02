@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--generated strings. general-->
+
+    <!-- generated strings. general -->
     <string name="app_name">Flippy</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <!--splash screen strings-->
+    <!-- splash screen strings -->
     <string name="splash_screen_tagline">closer communities</string>
     <string name="splash_screen_url">flippy.co</string>
+    <string name="title_activity_onboarding">Flippy Onboarding</string>
 
 </resources>
