@@ -17,7 +17,7 @@ public class SplashScreenActivity extends Activity {
         //TODO Load relevant resources from API here
 
         /*onCreate variables*/
-        int DELAY = 1000;
+        int DELAY = 2000;
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
