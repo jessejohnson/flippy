@@ -5,9 +5,27 @@
     <string name="app_name">Flippy</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
     <!-- splash screen strings -->
     <string name="splash_screen_tagline">closer communities</string>
     <string name="splash_screen_url">flippy.co</string>
+
+    <!-- onboarding strings-->
     <string name="title_activity_onboarding">Flippy Onboarding</string>
+    <string name="get_started_button">Get Started</string>
+    <!-- actual onboarding text-->
+    <string name="onboarding_slide_1">
+        Flippy lets you quickly share important information in your organization
+    </string>
+    <string name="onboarding_slide_2">
+        Select your organization\'s Community and join a Circle, or you could create and manage your own.
+    </string>
+    <string name="onboarding_slide_3">
+        Receive Notices from the Circles you join in real-time. You can save, share and set reminders on those that matter most.
+    </string>
+    <string name="onboarding_slide_4">
+        Ready, set, let\'s go!
+    </string>
+
 
 </resources>

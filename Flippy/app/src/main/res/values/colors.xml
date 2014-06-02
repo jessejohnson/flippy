@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="flippy_orange">#E47E26</color>
+    <color name="flippy_dark_header">#383839</color>
+    <color name="flippy_light_header">#555353</color>
+</resources>
