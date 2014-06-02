@@ -4,19 +4,19 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle"  >
             <corners android:radius="2dp" />
-            <gradient android:startColor="@color/flippy_orange_light" android:endColor="@color/flippy_orange_light" />
+            <gradient android:startColor="@color/flippy_dark_header" android:endColor="@color/flippy_dark_header" />
         </shape>
     </item>
     <item android:state_focused="true">
         <shape android:shape="rectangle"  >
             <corners android:radius="2dp" />
-            <gradient android:startColor="@color/flippy_orange_light" android:endColor="@color/flippy_orange_light" />
+            <gradient android:startColor="@color/flippy_light_header" android:endColor="@color/flippy_light_header" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle"  >
             <corners android:radius="2dp" />
-            <gradient android:startColor="@color/flippy_orange" android:endColor="@color/flippy_orange" />
+            <gradient android:startColor="@color/flippy_light_header" android:endColor="@color/flippy_light_header" />
         </shape>
     </item>
 </selector>

@@ -40,7 +40,7 @@
             android:textStyle="bold"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:padding="15dp"
-            android:background="@drawable/flippy_button_default"
+            android:background="@drawable/flippy_button_dark"
             android:layout_weight="0.5" />
 
         <TextView

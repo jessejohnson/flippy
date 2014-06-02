@@ -1,5 +1,6 @@
 package com.jojo.flippy.app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -7,7 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-
+import android.view.View;
+import android.widget.Button;
 
 
 public class OnboardingActivity extends FragmentActivity {
@@ -24,10 +26,25 @@ public class OnboardingActivity extends FragmentActivity {
         pager = (ViewPager) findViewById(R.id.pager);
         pagerAdapter = new OnboardingPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
+
+        Button btnGetStarted = (Button) findViewById(R.id.buttonGetStarted);
+        btnGetStarted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(OnboardingActivity.this, WelcomeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
+        finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         finish();
     }
 

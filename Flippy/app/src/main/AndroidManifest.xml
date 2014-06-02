@@ -20,6 +20,11 @@
         <activity
             android:name="com.jojo.flippy.app.OnboardingActivity"
             android:label="@string/title_activity_onboarding"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+        </activity>
+        <activity
+            android:name="com.jojo.flippy.app.WelcomeActivity"
+            android:label="@string/title_activity_welcome"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
         </activity>
     </application>
