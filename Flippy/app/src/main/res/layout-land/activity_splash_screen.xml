@@ -16,7 +16,7 @@
         android:layout_gravity="center|top"
         android:src="@drawable/flippy_logo_white"
         android:contentDescription="@string/app_name"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="30dp" />
 
     <TextView
         android:layout_width="wrap_content"
