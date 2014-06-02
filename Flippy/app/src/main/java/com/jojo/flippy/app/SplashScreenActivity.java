@@ -12,6 +12,7 @@ public class SplashScreenActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        //TODO add timer for splash screen delay. Later, load relevant resources from API here
     }
 
 
