@@ -20,12 +20,18 @@ public class SplashScreenActivity extends Activity {
 
         /*onCreate variables*/
         int DELAY = 1000;
-        
+
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
                 startActivity(new Intent(SplashScreenActivity.this, OnboardingActivity.class));
             }
         }, DELAY);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 }
