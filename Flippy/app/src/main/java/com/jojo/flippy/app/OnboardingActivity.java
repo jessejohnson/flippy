@@ -1,6 +1,7 @@
 package com.jojo.flippy.app;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -10,6 +11,10 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
 public class OnboardingActivity extends FragmentActivity {
@@ -27,6 +32,22 @@ public class OnboardingActivity extends FragmentActivity {
         pagerAdapter = new OnboardingPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
 
+        //An Array of indicator image views to be manipulated with each page transition
+        //depending on the current page
+        final ArrayList<ImageView> indicators = new ArrayList<ImageView>();
+        indicators.add((ImageView) findViewById(R.id.imageViewIndicatorOne));
+        indicators.add((ImageView) findViewById(R.id.imageViewIndicatorTwo));
+        indicators.add((ImageView) findViewById(R.id.imageViewIndicatorThree));
+        indicators.add((ImageView) findViewById(R.id.imageViewIndicatorFour));
+
+        pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                setPageIndicator(indicators, position);
+            }
+        });
+
         Button btnGetStarted = (Button) findViewById(R.id.buttonGetStarted);
         btnGetStarted.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,6 +56,16 @@ public class OnboardingActivity extends FragmentActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void setPageIndicator(ArrayList<ImageView> indicatorList, int position) {
+        indicatorList.get(position).setImageResource(R.drawable.indicator_circle_active);
+        for(int i = 0; i < indicatorList.size(); i++){
+            if(i == position){
+                continue;
+            }
+            indicatorList.get(i).setImageResource(R.drawable.indicator_circle);
+        }
     }
 
     @Override

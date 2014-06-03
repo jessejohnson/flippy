@@ -1,5 +1,6 @@
 package com.jojo.flippy.app;
 
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ public class OnboardingTextFragment extends Fragment {
 
         TextView onboardingText = (TextView) rootView.findViewById(R.id.textViewOnboardingPageText);
         onboardingText.setText(getString(onboardingStringIds.get(mPageNumber)));
+
 
         return rootView;
     }

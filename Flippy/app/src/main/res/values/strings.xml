@@ -18,6 +18,7 @@
     <string name="onboarding_slide_2">        Select your organization\'s Community and join a Circle, or you could create and manage your own.</string>
     <string name="onboarding_slide_3">        Receive Notices from the Circles you join in real-time. You can save, share and set reminders on those that matter most.</string>
     <string name="onboarding_slide_4">        Ready, set, let\'s go!</string>
+    <string name="onboarding_dash_1">.</string>
     <string name="title_activity_welcome">Welcome</string>
 
     <!--welcome activity strings-->

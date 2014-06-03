@@ -29,6 +29,46 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom">
+     <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:gravity="center_horizontal"
+         android:layout_gravity="center_horizontal"
+         android:layout_marginBottom="10dp"
+         android:orientation="horizontal">
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:id="@+id/imageViewIndicatorOne"
+             android:src="@drawable/indicator_circle_active"
+             android:layout_marginLeft="5dp"
+             android:layout_marginRight="5dp" />
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:id="@+id/imageViewIndicatorTwo"
+             android:src="@drawable/indicator_circle"
+             android:layout_marginLeft="5dp"
+             android:layout_marginRight="5dp" />
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:id="@+id/imageViewIndicatorThree"
+             android:src="@drawable/indicator_circle"
+             android:layout_marginLeft="5dp"
+             android:layout_marginRight="5dp" />
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:id="@+id/imageViewIndicatorFour"
+             android:src="@drawable/indicator_circle"
+             android:layout_marginLeft="5dp"
+             android:layout_marginRight="5dp" />
+     </LinearLayout>
 
         <Button
             android:layout_width="match_parent"

@@ -4,4 +4,5 @@
     <color name="flippy_dark_header">#383839</color>
     <color name="flippy_light_header">#555353</color>
     <color name="flippy_orange_light">#F2805B</color>
+    <color name="flippy_white">#FFFFFF</color>
 </resources>
