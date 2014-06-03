@@ -13,15 +13,25 @@
     <!-- onboarding strings -->
     <string name="title_activity_onboarding">Flippy Onboarding</string>
     <string name="get_started_button">Get Started</string>
+    <string name="title_activity_welcome">Welcome</string>
+
     <!-- actual onboarding text -->
     <string name="onboarding_slide_1">        Flippy lets you quickly share important information in your organization</string>
     <string name="onboarding_slide_2">        Select your organization\'s Community and join a Circle, or you could create and manage your own.</string>
     <string name="onboarding_slide_3">        Receive Notices from the Circles you join in real-time. You can save, share and set reminders on those that matter most.</string>
     <string name="onboarding_slide_4">        Ready, set, let\'s go!</string>
-    <string name="onboarding_dash_1">.</string>
-    <string name="title_activity_welcome">Welcome</string>
+
 
     <!--welcome activity strings-->
     <string name="welcome_text">Welcome to Flippy</string>
     <string name="signin_with_email">or sign in with your Email</string>
+    <string name="signin_with_twitter">sign in with Twitter</string>
+    <string name="internet_connection_error_dialog_title">An Internet Connection Error Occured</string>
+    <string name="internet_connection_error_dialog_message">
+        It looks like there was a problem with your Internet connection. Connect and try again.
+    </string>
+    <string name="twitter_auth_error_title">A Twitter Authentication Error Occured</string>
+    <string name="twitter_auth_error_message">
+        Something went wrong while trying to authenticate with Twitter.
+    </string>
 </resources>
