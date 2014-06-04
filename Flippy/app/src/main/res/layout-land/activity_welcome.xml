@@ -24,30 +24,27 @@
         android:layout_height="wrap_content"
         android:text="@string/signin_with_twitter"
         android:id="@+id/buttonSigninWithTwitter"
-        android:layout_above="@+id/buttonSigninWithEmail"
-        android:layout_alignLeft="@+id/buttonSigninWithEmail"
-        android:layout_alignStart="@+id/buttonSigninWithEmail"
-        android:layout_marginBottom="38dp"
         android:paddingLeft="15dp"
         android:paddingTop="10dp"
         android:paddingRight="15dp"
         android:paddingBottom="10dp"
-        android:layout_alignRight="@+id/buttonSigninWithEmail"
-        android:layout_alignEnd="@+id/buttonSigninWithEmail"
         android:gravity="center"
         android:background="@drawable/flippy_button_twitter"
         android:textColor="@color/flippy_white"
         android:drawableLeft="@drawable/twitter_logo_white"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_above="@+id/buttonSigninWithEmail"
+        android:layout_marginBottom="50dp"
+        android:layout_alignRight="@+id/buttonSigninWithEmail"
+        android:layout_alignEnd="@+id/buttonSigninWithEmail"
+        android:layout_alignLeft="@+id/buttonSigninWithEmail"
+        android:layout_alignStart="@+id/buttonSigninWithEmail" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signin_with_email"
         android:id="@+id/buttonSigninWithEmail"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="95dp"
         android:gravity="center"
         android:paddingLeft="15dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -55,6 +52,8 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:textColor="#ffffff"
-        android:background="@drawable/flippy_button_dark" />
+        android:background="@drawable/flippy_button_dark"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

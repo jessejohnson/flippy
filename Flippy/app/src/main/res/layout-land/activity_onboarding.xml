@@ -24,47 +24,95 @@
         android:layout_gravity="center" />
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:weightSum="1">
+        android:layout_gravity="center|bottom">
 
-        <Button
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/get_started_button"
-            android:id="@+id/buttonGetStarted"
-            android:layout_gravity="bottom"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:padding="15dp"
-            android:background="@drawable/flippy_button_dark"
-            android:layout_weight="0.5" />
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/splash_screen_tagline"
-            android:layout_gravity="bottom"
-            android:id="@+id/TextViewOnboardingTagLine"
-            android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textStyle="italic"
-            android:layout_weight="0.3" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageViewIndicatorOne"
+                android:src="@drawable/indicator_circle_active"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageViewIndicatorTwo"
+                android:src="@drawable/indicator_circle"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageViewIndicatorThree"
+                android:src="@drawable/indicator_circle"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageViewIndicatorFour"
+                android:src="@drawable/indicator_circle"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/splash_screen_url"
-            android:id="@+id/textViewOnboardingURL"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:textColor="#ffffff"
-            android:textStyle="italic"
-            android:layout_weight="0.2" />
+            android:weightSum="1">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/get_started_button"
+                android:id="@+id/buttonGetStarted"
+                android:layout_gravity="bottom"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:padding="15dp"
+                android:background="@drawable/flippy_button_dark"
+                android:layout_weight="0.5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/splash_screen_tagline"
+                android:layout_gravity="bottom"
+                android:id="@+id/TextViewOnboardingTagLine"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textStyle="italic"
+                android:layout_weight="0.3" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/splash_screen_url"
+                android:id="@+id/textViewOnboardingURL"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textColor="#ffffff"
+                android:textStyle="italic"
+                android:layout_weight="0.2" />
+        </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>
