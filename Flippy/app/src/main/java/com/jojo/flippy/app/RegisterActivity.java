@@ -31,7 +31,7 @@ public class RegisterActivity extends Activity {
             @Override
             public void onClick(View view) {
                 // TODO call the validation class here and post the data to the next activity
-                
+
                 ToastMessages.showToastLong(getApplicationContext(),"The fields are required");
             }
         });
