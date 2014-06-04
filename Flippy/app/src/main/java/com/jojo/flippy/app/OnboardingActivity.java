@@ -68,17 +68,6 @@ public class OnboardingActivity extends FragmentActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        finish();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
-    }
-
     private class OnboardingPagerAdapter extends FragmentStatePagerAdapter {
         public OnboardingPagerAdapter(FragmentManager supportFragmentManager) {
             super(supportFragmentManager);
@@ -93,5 +82,11 @@ public class OnboardingActivity extends FragmentActivity {
         public int getCount() {
             return NUMBER_OF_PAGES;
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 }

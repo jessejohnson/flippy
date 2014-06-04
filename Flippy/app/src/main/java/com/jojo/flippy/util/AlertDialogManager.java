@@ -1,4 +1,4 @@
-package util;
+package com.jojo.flippy.util;
 
 import android.app.AlertDialog;
 import android.content.Context;

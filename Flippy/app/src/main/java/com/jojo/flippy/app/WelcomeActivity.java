@@ -4,13 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -22,8 +19,8 @@ import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
-import util.AlertDialogManager;
-import util.InternetConnectionDetector;
+import com.jojo.flippy.util.AlertDialogManager;
+import com.jojo.flippy.util.InternetConnectionDetector;
 
 
 public class WelcomeActivity extends Activity {
@@ -35,7 +32,10 @@ public class WelcomeActivity extends Activity {
     static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
     static final String PREF_KEY_OAUTH_SECRET = "oauth_secret";
     static final String PREF_KEY_TWITTER_LOGIN = "isTwitterLoggedIn";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 41b659b07582f1c98409d4c80968c0193cf8bf43
     static final String TWITTER_CALLBACK_URL = "oauth://com.jojo.flippy.app";
 
     static final String URL_TWITTER_AUTH = "auth_url";

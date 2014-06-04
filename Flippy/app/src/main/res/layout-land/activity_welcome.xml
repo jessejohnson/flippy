@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.jojo.flippy.app.WelcomeActivity"
+    android:background="@drawable/splash_bg">
+
+    <TextView
+        android:text="@string/welcome_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/TextViewWelcome"
+        android:textSize="24dp"
+        android:textColor="#ffffff"
+        android:layout_marginTop="50dp"
+        android:gravity="center" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signin_with_twitter"
+        android:id="@+id/buttonSigninWithTwitter"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:gravity="center"
+        android:background="@drawable/flippy_button_twitter"
+        android:textColor="@color/flippy_white"
+        android:drawableLeft="@drawable/twitter_logo_white"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_above="@+id/buttonSigninWithEmail"
+        android:layout_marginBottom="50dp"
+        android:layout_alignRight="@+id/buttonSigninWithEmail"
+        android:layout_alignEnd="@+id/buttonSigninWithEmail"
+        android:layout_alignLeft="@+id/buttonSigninWithEmail"
+        android:layout_alignStart="@+id/buttonSigninWithEmail" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signin_with_email"
+        android:id="@+id/buttonSigninWithEmail"
+        android:gravity="center"
+        android:paddingLeft="15dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:paddingRight="15dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textColor="#ffffff"
+        android:background="@drawable/flippy_button_dark"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

@@ -29,7 +29,6 @@
         android:layout_alignStart="@+id/buttonSigninWithEmail"
         android:layout_marginBottom="20dp"
         android:paddingLeft="15dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:paddingTop="10dp"
         android:paddingRight="15dp"
         android:paddingBottom="10dp"
@@ -37,7 +36,9 @@
         android:layout_alignEnd="@+id/buttonSigninWithEmail"
         android:gravity="center"
         android:background="@drawable/flippy_button_twitter"
-        android:textColor="@color/flippy_white" />
+        android:textColor="@color/flippy_white"
+        android:drawableLeft="@drawable/twitter_logo_white"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
         android:layout_width="wrap_content"
