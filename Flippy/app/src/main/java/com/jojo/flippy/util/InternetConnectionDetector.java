@@ -1,4 +1,4 @@
-package util;
+package com.jojo.flippy.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
