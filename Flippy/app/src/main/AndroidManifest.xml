@@ -29,6 +29,12 @@
             android:name="com.jojo.flippy.app.WelcomeActivity"
             android:label="@string/title_activity_welcome"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="oauth" android:host="com.jojo.flippy.app"/>
+            </intent-filter>
         </activity>
     </application>
 
