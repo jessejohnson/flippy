@@ -42,6 +42,7 @@
              android:layout_height="wrap_content"
              android:id="@+id/imageViewIndicatorOne"
              android:src="@drawable/indicator_circle_active"
+             android:contentDescription="@string/app_name"
              android:layout_marginLeft="5dp"
              android:layout_marginRight="5dp" />
 
@@ -88,7 +89,7 @@
             android:layout_height="wrap_content"
             android:text="@string/splash_screen_tagline"
             android:layout_gravity="bottom"
-            android:id="@+id/TextViewOnboardingTagLine"
+            android:id="@+id/textViewOnboardingTagLine"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="italic" />

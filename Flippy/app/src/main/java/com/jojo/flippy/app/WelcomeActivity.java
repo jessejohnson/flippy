@@ -19,6 +19,7 @@ import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
+
 import com.jojo.flippy.util.AlertDialogManager;
 import com.jojo.flippy.util.InternetConnectionDetector;
 
@@ -61,9 +62,18 @@ public class WelcomeActivity extends Activity {
         //initialize signin buttons
         Button SigninWithTwitter = (Button) findViewById(R.id.buttonSigninWithTwitter);
         Button SigninWithEmail = (Button) findViewById(R.id.buttonSigninWithEmail);
+        Button SigninWithFacebook = (Button)findViewById(R.id.buttonSigninWithEmail);
 
         //set shared preferences
         sharedPreferences = WelcomeActivity.this.getSharedPreferences("MyPref", 0);
+
+        //Facebook button click event
+        SigninWithFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         //The onclick listener for the email login
         SigninWithEmail.setOnClickListener(new View.OnClickListener() {
