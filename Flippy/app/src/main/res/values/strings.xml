@@ -29,6 +29,6 @@
     <string name="internet_connection_error_dialog_message">        It looks like there was a problem with your Internet connection. Connect and try again.</string>
     <string name="twitter_auth_error_title">A Twitter Authentication Error Occured</string>
     <string name="twitter_auth_error_message">        Something went wrong while trying to authenticate with Twitter.</string>
-    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_register">Register On Flippy</string>
 
 </resources>

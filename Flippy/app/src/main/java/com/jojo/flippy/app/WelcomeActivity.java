@@ -32,10 +32,7 @@ public class WelcomeActivity extends Activity {
     static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
     static final String PREF_KEY_OAUTH_SECRET = "oauth_secret";
     static final String PREF_KEY_TWITTER_LOGIN = "isTwitterLoggedIn";
-<<<<<<< HEAD
 
-=======
->>>>>>> 41b659b07582f1c98409d4c80968c0193cf8bf43
     static final String TWITTER_CALLBACK_URL = "oauth://com.jojo.flippy.app";
 
     static final String URL_TWITTER_AUTH = "auth_url";
@@ -68,8 +65,16 @@ public class WelcomeActivity extends Activity {
         //set shared preferences
         sharedPreferences = WelcomeActivity.this.getSharedPreferences("MyPref", 0);
 
+        //The onclick listener for the email login
+        SigninWithEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                  Intent emailIntent = new Intent(WelcomeActivity.this,RegisterActivity.class);
+                  startActivity(emailIntent);
 
+                }});
 
+        //The onclick listener for the twitter button
         SigninWithTwitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
