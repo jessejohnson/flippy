@@ -36,7 +36,6 @@ public class WelcomeActivity extends Activity {
     static final String PREF_KEY_OAUTH_SECRET = "oauth_secret";
     static final String PREF_KEY_TWITTER_LOGIN = "isTwitterLoggedIn";
 
-    //TODO change to actual flippy URL, or github pages URL
     static final String TWITTER_CALLBACK_URL = "oauth://com.jojo.flippy.app";
 
     static final String URL_TWITTER_AUTH = "auth_url";
@@ -208,7 +207,7 @@ public class WelcomeActivity extends Activity {
 
 
                 Toast.makeText(WelcomeActivity.this,
-                        "Logged in " + username + " " + handle + " "+ followers+ " ",
+                        "Logged in " + username + " " + handle + " "+ followers+ " " + profileImageUrl+ "",
                         Toast.LENGTH_LONG).show();
 
             }

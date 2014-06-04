@@ -18,7 +18,7 @@ public class AlertDialogManager {
 
         if(status != null){
             //TODO change drawables from indicator circles to actual success/failure drawables
-            alertDialog.setIcon((status)? R.drawable.indicator_circle_active : R.drawable.indicator_circle);
+            //alertDialog.setIcon((status)? R.drawable.indicator_circle_active : R.drawable.indicator_circle);
         }
 
         alertDialog.setButton("Ok", new DialogInterface.OnClickListener(){
