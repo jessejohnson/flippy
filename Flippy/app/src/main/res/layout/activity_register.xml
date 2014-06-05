@@ -52,6 +52,9 @@
             android:hint="@string/email_phone_number_placeholder"
             android:textColor="@color/flippy_white"
             android:singleLine="true"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="text"
+            android:selectAllOnFocus="true"
             android:layout_height="wrap_content"
             android:id="@+id/registerEmailEditText" />
         <EditText
@@ -59,6 +62,8 @@
             android:hint="@string/first_name"
             android:textColor="@color/flippy_white"
             android:singleLine="true"
+            android:selectAllOnFocus="true"
+            android:inputType="text"
             android:layout_height="wrap_content"
             android:id="@+id/editTextRegisterFirstName" />
         <EditText
@@ -66,6 +71,8 @@
             android:hint="@string/last_name"
             android:textColor="@color/flippy_white"
             android:singleLine="true"
+            android:inputType="text"
+            android:selectAllOnFocus="true"
             android:layout_height="wrap_content"
             android:id="@+id/editTextRegisterLastName" />
         <EditText
@@ -73,6 +80,8 @@
             android:hint="@string/register_password"
             android:textColor="@color/flippy_white"
             android:singleLine="true"
+            android:selectAllOnFocus="true"
+            android:inputType="textPassword"
             android:layout_height="wrap_content"
             android:id="@+id/editTextRegisterPassword" />
 
@@ -88,11 +97,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/next"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:textColor="@color/flippy_white"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:padding="15dp"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/registerNextButton"
         android:background="@drawable/flippy_button_default"
         android:layout_alignParentBottom="true"

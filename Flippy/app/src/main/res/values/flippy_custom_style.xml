@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- the theme applied to the application or activity -->
+    <style name="FlippyActionBarTheme"
+        parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/FlippyActionBar</item>
+        <item name="android:popupMenuStyle">@style/FlippyPopupMenu</item>
+        <item name="android:actionBarWidgetTheme">@style/FlippyPopup</item>
+
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/FlippyActionBar</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="FlippyActionBar"
+        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/flippy_orange</item>
+
+        <!-- Support library compatibility -->
+        <item name="background">@color/flippy_orange</item>
+    </style>
+
+    <!--PopUp Menu Style-->
+    <!-- The beef: background color for Action Bar overflow menu -->
+    <style name="FlippyPopupMenu" parent="android:Widget.Holo.ListPopupWindow">
+        <item name="android:popupBackground">@color/flippy_orange_light</item>
+        <item name="android:textColor">@color/flippy_white</item>
+    </style>
+
+    <style name="FlippyPopup" parent="@style/Theme.AppCompat">
+        <item name="android:popupMenuStyle">@style/FlippyPopupMenu</item>
+        <item name="android:dropDownListViewStyle">@style/FlippyPopupMenu</item>
+    </style>
+</resources>

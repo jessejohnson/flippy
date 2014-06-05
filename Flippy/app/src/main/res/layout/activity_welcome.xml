@@ -18,29 +18,17 @@
         android:textColor="#ffffff"
         android:layout_marginTop="50dp"
         android:gravity="center" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/buttonSigninWithFacebook"
-        android:layout_above="@+id/buttonSigninWithTwitter"
-        android:layout_centerHorizontal="true" />
+
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/signin_with_twitter"
         android:id="@+id/buttonSigninWithTwitter"
         android:layout_above="@+id/buttonSigninWithEmail"
-        android:layout_alignLeft="@+id/buttonSigninWithEmail"
-        android:layout_alignStart="@+id/buttonSigninWithEmail"
         android:layout_marginBottom="20dp"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:layout_alignRight="@+id/buttonSigninWithEmail"
-        android:layout_alignEnd="@+id/buttonSigninWithEmail"
+        android:textStyle="bold"
+        android:padding="15dp"
         android:gravity="center"
         android:background="@drawable/flippy_button_twitter"
         android:textColor="@color/flippy_white"
@@ -48,22 +36,17 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/signin_with_email"
         android:id="@+id/buttonSigninWithEmail"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="95dp"
+        android:layout_marginBottom="50dp"
         android:gravity="center"
-        android:paddingLeft="15dp"
+        android:padding="15dp"
+        android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:paddingRight="15dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:textColor="#ffffff"
         android:background="@drawable/flippy_button_dark" />
-
-
-
 </RelativeLayout>
