@@ -98,7 +98,7 @@
         android:layout_height="wrap_content"
         android:text="@string/next"
         android:textColor="@color/flippy_white"
-        android:padding="15dp"
+        android:padding="@dimen/margin_fifteen"
         android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/registerNextButton"
