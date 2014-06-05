@@ -11,14 +11,14 @@ import com.jojo.flippy.app.R;
  */
 public class AlertDialogManager {
 
-    public void showAlertDialog(Context context, String title, String messgage, Boolean status){
+    public void showAlertDialog(Context context, String title, String message, Boolean status){
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle(title);
-        alertDialog.setMessage(messgage);
+        alertDialog.setMessage(message);
 
         if(status != null){
             //TODO change drawables from indicator circles to actual success/failure drawables
-            alertDialog.setIcon((status)? R.drawable.indicator_circle_active : R.drawable.indicator_circle);
+            //alertDialog.setIcon((status)? R.drawable.indicator_circle_active : R.drawable.indicator_circle);
         }
 
         alertDialog.setButton("Ok", new DialogInterface.OnClickListener(){

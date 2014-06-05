@@ -19,21 +19,24 @@
         android:layout_marginTop="50dp"
         android:gravity="center" />
 
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/btn_sign_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_above="@+id/buttonSigninWithTwitter"
+        android:layout_marginBottom="10dp"/>
+
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/signin_with_twitter"
         android:id="@+id/buttonSigninWithTwitter"
         android:layout_above="@+id/buttonSigninWithEmail"
-        android:layout_alignLeft="@+id/buttonSigninWithEmail"
-        android:layout_alignStart="@+id/buttonSigninWithEmail"
-        android:layout_marginBottom="20dp"
-        android:paddingLeft="15dp"
-        android:paddingTop="10dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:layout_alignRight="@+id/buttonSigninWithEmail"
-        android:layout_alignEnd="@+id/buttonSigninWithEmail"
+        android:layout_marginBottom="10dp"
+        android:textStyle="bold"
+        android:padding="@dimen/margin_ten"
         android:gravity="center"
         android:background="@drawable/flippy_button_twitter"
         android:textColor="@color/flippy_white"
@@ -41,20 +44,27 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/signin_with_email"
         android:id="@+id/buttonSigninWithEmail"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="95dp"
+        android:layout_marginBottom="50dp"
+        android:layout_above="@+id/textViewUserRight"
         android:gravity="center"
-        android:paddingLeft="15dp"
+        android:padding="@dimen/margin_ten"
+        android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:paddingRight="15dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:textColor="#ffffff"
         android:background="@drawable/flippy_button_dark" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/register_terms"
+        android:id="@+id/textViewUserRight"
+        android:textColor="@color/flippy_white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

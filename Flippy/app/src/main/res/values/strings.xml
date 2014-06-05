@@ -25,10 +25,33 @@
     <string name="welcome_text">Welcome to Flippy</string>
     <string name="signin_with_email">or sign in with your Email</string>
     <string name="signin_with_twitter">sign in with Twitter</string>
-    <string name="internet_connection_error_dialog_title">An Internet Connection Error Occured</string>
+    <string name="internet_connection_error_dialog_title">An Internet Connection Error Occurred</string>
     <string name="internet_connection_error_dialog_message">        It looks like there was a problem with your Internet connection. Connect and try again.</string>
-    <string name="twitter_auth_error_title">A Twitter Authentication Error Occured</string>
+    <string name="twitter_auth_error_title">A Twitter Authentication Error Occurred</string>
     <string name="twitter_auth_error_message">        Something went wrong while trying to authenticate with Twitter.</string>
-    <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_register">Getting Started</string>
+    <string name="register_title_few_things">a few things before we go</string>
+
+    <!-- the registration activity -->
+    <string name="register_title">Register with email</string>
+    <string name="email_phone_number_placeholder">email or phone number</string>
+    <string name="first_name">first name</string>
+    <string name="last_name">last name</string>
+    <string name="register_password">password</string>
+    <string name="register_terms">I have read and agreed with these terms</string>
+    <string name="sign_in_text">I already have an account</string>
+    <string name="next">next</string>
+
+    <!-- Sign In activity -->
+    <string name="title_activity_sign_in">Sign In</string>
+    <string name="start">get started</string>
+    <string name="new_user">I\'m a new user</string>
+    <string name="title_activity_select_community">Getting Started</string>
+
+    <!--the select community activity-->
+    <string name="last_step">the final step</string>
+    <string name="select_community">Select Your Community</string>
+    <string name="community_key">Where given a community key enter it here</string>
+    <string name="community_key_hint">community key (optional)</string>
 
 </resources>
