@@ -92,7 +92,7 @@
         android:layout_height="wrap_content"
         android:text="@string/start"
         android:textColor="@color/flippy_white"
-        android:padding="@dimen/margin_fifteen"
+        android:padding="@dimen/margin_ten"
         android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/signGetStartedButton"

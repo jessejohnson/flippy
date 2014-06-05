@@ -2,6 +2,7 @@ package com.jojo.flippy.app;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -20,11 +21,17 @@ import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
 
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.plus.Plus;
 import com.jojo.flippy.util.AlertDialogManager;
 import com.jojo.flippy.util.InternetConnectionDetector;
+import com.google.android.gms.common.ConnectionResult;
 
 
-public class WelcomeActivity extends Activity {
+public class WelcomeActivity extends Activity implements  GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
 
     static String TWITTER_CONSUMER_KEY = "PxDcIiGD7lNsWu4FolCUkYUCJ";
     static String TWITTER_CONSUMER_SECRET ="R0gR1YC2sHJ1xr6Sz7Fr9IUAPRblRLPtaZdfuO4aHBJxVqN6Wh";
@@ -45,9 +52,29 @@ public class WelcomeActivity extends Activity {
     private AccessToken accessToken;
     private User user;
 
-    private static SharedPreferences sharedPreferences;
+    private static SharedPreferences sharedPreferencesTwitter;
     private InternetConnectionDetector internetConnectionDetector;
     AlertDialogManager alert = new AlertDialogManager();
+
+    //g-plus section login
+    private SignInButton gplus;
+    private static final int RC_SIGN_IN = 0;
+    // Logcat tag
+    private static final String TAG = "WelcomeActivity";
+
+    // Profile pic image size in pixels
+    private static final int PROFILE_PIC_SIZE = 400;
+
+    // Google client to interact with Google API
+    private GoogleApiClient mGoogleApiClient;
+
+    /**
+     * A flag indicating that a PendingIntent is in progress and prevents us
+     * from starting further intents.
+     */
+    private boolean mIntentInProgress;
+    private boolean mSignInClicked;
+    private ConnectionResult mConnectionResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,25 +82,38 @@ public class WelcomeActivity extends Activity {
         setContentView(R.layout.activity_welcome);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+
+        // Initializing google plus api client
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API)
+                .addScope(Plus.SCOPE_PLUS_LOGIN)
+                .build();
+
         //check Internet connection state
         internetConnectionDetector = new InternetConnectionDetector(getApplicationContext());
 
 
-        //initialize signin buttons
+        //set shared preferences
+        sharedPreferencesTwitter = WelcomeActivity.this.getSharedPreferences("MyPref", 0);
+
+
+        //initialize sign in buttons
         Button SigninWithTwitter = (Button) findViewById(R.id.buttonSigninWithTwitter);
         Button SigninWithEmail = (Button) findViewById(R.id.buttonSigninWithEmail);
-        Button SigninWithFacebook = (Button)findViewById(R.id.buttonSigninWithEmail);
+        gplus = (SignInButton)findViewById(R.id.btn_sign_in);
 
-        //set shared preferences
-        sharedPreferences = WelcomeActivity.this.getSharedPreferences("MyPref", 0);
 
-        //Facebook button click event
-        SigninWithFacebook.setOnClickListener(new View.OnClickListener() {
+        //The g-plus login option
+        gplus.setSize(SignInButton.SIZE_WIDE);
+        gplus.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
+            public void onClick(View view) {
+                signInWithGplus();
             }
         });
+
 
         //The onclick listener for the email login
         SigninWithEmail.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +160,89 @@ public class WelcomeActivity extends Activity {
             }
         }
     }
+    //for the g-plus login section
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
+    }
+
+    public void onConnectionFailed(ConnectionResult result) {
+
+        if (!result.hasResolution()) {
+            GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this,
+                    0).show();
+            return;
+        }
+
+        if (!mIntentInProgress) {
+            // Store the ConnectionResult for later usage
+            mConnectionResult = result;
+
+            if (mSignInClicked) {
+                // The user has already clicked 'sign-in' so we attempt to
+                // resolve all
+                // errors until the user is signed in, or they cancel.
+                resolveSignInError();
+            }
+        }
+
+    }
+    /**
+     * Sign-in into google
+     * */
+    private void signInWithGplus() {
+        if (!mGoogleApiClient.isConnecting()) {
+            mSignInClicked = true;
+            resolveSignInError();
+        }
+    }
+    /**
+     * Method to resolve any sign in errors
+     * */
+     private void resolveSignInError() {
+        if (mConnectionResult.hasResolution()) {
+            try {
+                mIntentInProgress = true;
+                mConnectionResult.startResolutionForResult(this, RC_SIGN_IN);
+            } catch (IntentSender.SendIntentException e) {
+                mIntentInProgress = false;
+                mGoogleApiClient.connect();
+            }
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int responseCode,
+                                    Intent intent) {
+        if (requestCode == RC_SIGN_IN) {
+            if (responseCode != RESULT_OK) {
+                mSignInClicked = false;
+            }
+
+            mIntentInProgress = false;
+
+            if (!mGoogleApiClient.isConnecting()) {
+                mGoogleApiClient.connect();
+            }
+        }
+    }
+
+    @Override
+    public void onConnected(Bundle arg0) {
+        mSignInClicked = false;
+        Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
+        // Get user's information
+    }
+
+    public void onConnectionSuspended(int arg0) {
+        mGoogleApiClient.connect();
+    }
 
     private void signinWithTwitter() {
         if(!isTwitterLoggedInAlready()){
@@ -152,7 +275,7 @@ public class WelcomeActivity extends Activity {
     }
 
     private boolean isTwitterLoggedInAlready() {
-        return sharedPreferences.getBoolean(PREF_KEY_TWITTER_LOGIN, false);
+        return sharedPreferencesTwitter.getBoolean(PREF_KEY_TWITTER_LOGIN, false);
     }
 
     private class OAuthAccessTokenTask extends AsyncTask<String, Void, Exception>
@@ -205,7 +328,7 @@ public class WelcomeActivity extends Activity {
         else {
             try {
                 // Shared Preferences
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                SharedPreferences.Editor editor = sharedPreferencesTwitter.edit();
                 editor.putString(PREF_KEY_OAUTH_TOKEN, accessToken.getToken());
                 editor.putString(PREF_KEY_OAUTH_SECRET, accessToken.getTokenSecret());
                 editor.putBoolean(PREF_KEY_TWITTER_LOGIN, true);

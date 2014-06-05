@@ -80,7 +80,7 @@
             android:textColor="#ffffff"
             android:textStyle="bold"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:padding="@dimen/margin_fifteen"
+            android:padding="@dimen/margin_ten"
             android:layout_marginBottom="@dimen/margin_ten"
             android:background="@drawable/flippy_button_dark"/>
 
