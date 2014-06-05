@@ -1,7 +1,13 @@
 package com.jojo.flippy.util;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.Toast;
+
+import com.jojo.flippy.app.R;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
  * Created by bright on 6/4/14.

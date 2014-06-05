@@ -5,8 +5,8 @@
         parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/FlippyActionBar</item>
         <item name="android:popupMenuStyle">@style/FlippyPopupMenu</item>
-        <item name="android:actionBarWidgetTheme">@style/FlippyPopup</item>
-
+        <item name="actionBarWidgetTheme">@style/FlippyPopup</item>
+        <item name="android:spinnerDropDownItemStyle">@style/FlippySpinnerItemStyle</item>
         <!-- Support library compatibility -->
         <item name="actionBarStyle">@style/FlippyActionBar</item>
     </style>
@@ -30,5 +30,10 @@
     <style name="FlippyPopup" parent="@style/Theme.AppCompat">
         <item name="android:popupMenuStyle">@style/FlippyPopupMenu</item>
         <item name="android:dropDownListViewStyle">@style/FlippyPopupMenu</item>
+    </style>
+
+
+    <style name="FlippySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textColor">@color/flippy_white</item>
     </style>
 </resources>
