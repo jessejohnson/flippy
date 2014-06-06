@@ -8,12 +8,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import com.jojo.flippy.util.Validator;
 
 
 public class SignInActivity extends ActionBarActivity {
     private TextView textViewSignIn;
     private Button signGetStartedButton;
+    private EditText signInEmail, signInPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +31,29 @@ public class SignInActivity extends ActionBarActivity {
 
         textViewSignIn = (TextView) findViewById(R.id.textViewSignIn);
         signGetStartedButton = (Button)findViewById(R.id.signGetStartedButton);
+        signInEmail = (EditText) findViewById(R.id.editTextSigninEmail);
+        signInPassword = (EditText) findViewById(R.id.editTextSigninPassword);
 
         signGetStartedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SignInActivity.this,SelectCommunityActivity.class);
-                startActivity(intent);
+                boolean allFieldsValid = false;
+                if(!Validator.validateEmailOrPhoneNumber(signInEmail.getText().toString())){
+                    signInEmail.setError(getString(R.string.registration_error_email));
+                } else {
+                    signInEmail.setError(null);
+                    allFieldsValid = true;
+                }
+                if(signInPassword.getText().toString().length() == 0){
+                    signInPassword.setError(getString(R.string.registration_error_password));
+                } else {
+                    signInPassword.setError(null);
+                    allFieldsValid = true;
+                }
+                if(allFieldsValid){
+                    Intent intent = new Intent(SignInActivity.this,SelectCommunityActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -44,25 +65,5 @@ public class SignInActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.sign_in, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

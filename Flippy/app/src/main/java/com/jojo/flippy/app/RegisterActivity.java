@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jojo.flippy.util.ToastMessages;
+import com.jojo.flippy.util.Validator;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -59,51 +60,39 @@ public class RegisterActivity extends Activity {
         registrationNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO call the validation class here and post the data to the next activity
+                boolean allFieldsValid = false;
 
-                if (registerEmail.getText().toString().length() <= 0){
-                    registerEmail.setError("email or phone number required");
+                if (!Validator.validateEmail(registerEmail.getText().toString())){
+                    registerEmail.setError(getString(R.string.registration_error_email));
                  }else{
                     registerEmail.setError(null);
+                    allFieldsValid = true;
                 }
-                if (firstName.getText().toString().length() <= 0){
-                    firstName.setError("first name required");
+                if (!Validator.validateNameString(firstName.getText().toString())){
+                    firstName.setError(getString(R.string.registration_error_firstname));
                 }else{
                     firstName.setError(null);
+                    allFieldsValid = true;
                 }
-                if (lastName.getText().toString().length() <= 0){
-                    lastName.setError("last name required");
+                if (!Validator.validateNameString(lastName.getText().toString())){
+                    lastName.setError(getString(R.string.registration_error_lastname));
                 }else{
                     lastName.setError(null);
+                    allFieldsValid = true;
                 }
-                if (password.getText().toString().length() <= 0){
-                    password.setError("password required");
+                if (!Validator.validatePassword(password.getText().toString())){
+                    password.setError(getString(R.string.registration_error_password));
                 }else{
                     password.setError(null);
+                    allFieldsValid = true;
+                }
+
+                if(allFieldsValid){
+                    //Create intent to start next activity
                 }
             }
         });
 
 
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.register, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
