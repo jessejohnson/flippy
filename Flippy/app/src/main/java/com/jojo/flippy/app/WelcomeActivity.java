@@ -25,27 +25,23 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 import com.jojo.flippy.util.AlertDialogManager;
 import com.jojo.flippy.util.InternetConnectionDetector;
 import com.google.android.gms.common.ConnectionResult;
 
 
-public class WelcomeActivity extends Activity implements  GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class WelcomeActivity extends Activity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
 
     static String TWITTER_CONSUMER_KEY = "PxDcIiGD7lNsWu4FolCUkYUCJ";
-    static String TWITTER_CONSUMER_SECRET ="R0gR1YC2sHJ1xr6Sz7Fr9IUAPRblRLPtaZdfuO4aHBJxVqN6Wh";
+    static String TWITTER_CONSUMER_SECRET = "R0gR1YC2sHJ1xr6Sz7Fr9IUAPRblRLPtaZdfuO4aHBJxVqN6Wh";
 
-    static String PREFERENCE_NAME = "twitter_oauth";
     static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
     static final String PREF_KEY_OAUTH_SECRET = "oauth_secret";
     static final String PREF_KEY_TWITTER_LOGIN = "isTwitterLoggedIn";
-
     static final String TWITTER_CALLBACK_URL = "oauth://com.jojo.flippy.app";
-
-    static final String URL_TWITTER_AUTH = "auth_url";
     static final String URL_TWITTER_OAUTH_VERIFIER = "oauth_verifier";
-    static final String URL_TWITTER_OAUTH_TOKEN = "oauth_token";
 
     private static Twitter twitter;
     private static RequestToken requestToken;
@@ -59,12 +55,10 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
     //g-plus section login
     private SignInButton gplus;
     private static final int RC_SIGN_IN = 0;
-    // Logcat tag
+    // Log cat tag
     private static final String TAG = "WelcomeActivity";
-
     // Profile pic image size in pixels
     private static final int PROFILE_PIC_SIZE = 400;
-
     // Google client to interact with Google API
     private GoogleApiClient mGoogleApiClient;
 
@@ -93,8 +87,6 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
 
         //check Internet connection state
         internetConnectionDetector = new InternetConnectionDetector(getApplicationContext());
-
-
         //set shared preferences
         sharedPreferencesTwitter = WelcomeActivity.this.getSharedPreferences("MyPref", 0);
 
@@ -102,7 +94,7 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
         //initialize sign in buttons
         Button SigninWithTwitter = (Button) findViewById(R.id.buttonSigninWithTwitter);
         Button SigninWithEmail = (Button) findViewById(R.id.buttonSigninWithEmail);
-        gplus = (SignInButton)findViewById(R.id.btn_sign_in);
+        gplus = (SignInButton) findViewById(R.id.btn_sign_in);
 
 
         //The g-plus login option
@@ -119,16 +111,17 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
         SigninWithEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                  Intent emailIntent = new Intent(WelcomeActivity.this,RegisterActivity.class);
-                  startActivity(emailIntent);
+                Intent emailIntent = new Intent(WelcomeActivity.this, RegisterActivity.class);
+                startActivity(emailIntent);
 
-                }});
+            }
+        });
 
         //The onclick listener for the twitter button
         SigninWithTwitter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!internetConnectionDetector.isConnectingToInternet()){
+                if (!internetConnectionDetector.isConnectingToInternet()) {
                     alert.showAlertDialog(WelcomeActivity.this,
                             getString(R.string.internet_connection_error_dialog_title),
                             getString(R.string.internet_connection_error_dialog_message),
@@ -138,7 +131,7 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
                 }
 
                 //check if twitter keys are set
-                if(TWITTER_CONSUMER_KEY.trim().length() == 0 || TWITTER_CONSUMER_SECRET.trim().length() == 0){
+                if (TWITTER_CONSUMER_KEY.trim().length() == 0 || TWITTER_CONSUMER_SECRET.trim().length() == 0) {
                     alert.showAlertDialog(WelcomeActivity.this,
                             getString(R.string.twitter_auth_error_title),
                             getString(R.string.twitter_auth_error_message),
@@ -153,17 +146,17 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
         if (!isTwitterLoggedInAlready()) {
             Uri uri = getIntent().getData();
             if (uri != null && uri.toString().startsWith(TWITTER_CALLBACK_URL)) {
-
                 // oAuth verifier
                 String verifier = uri.getQueryParameter(URL_TWITTER_OAUTH_VERIFIER);
                 new OAuthAccessTokenTask().execute(verifier);
             }
         }
     }
+
     //for the g-plus login section
     protected void onStart() {
-        mGoogleApiClient.connect();
         super.onStart();
+        mGoogleApiClient.connect();
     }
 
     protected void onStop() {
@@ -174,7 +167,6 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
     }
 
     public void onConnectionFailed(ConnectionResult result) {
-
         if (!result.hasResolution()) {
             GooglePlayServicesUtil.getErrorDialog(result.getErrorCode(), this,
                     0).show();
@@ -194,19 +186,21 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
         }
 
     }
+
     /**
      * Sign-in into google
-     * */
+     */
     private void signInWithGplus() {
         if (!mGoogleApiClient.isConnecting()) {
             mSignInClicked = true;
             resolveSignInError();
         }
     }
+
     /**
      * Method to resolve any sign in errors
-     * */
-     private void resolveSignInError() {
+     */
+    private void resolveSignInError() {
         if (mConnectionResult.hasResolution()) {
             try {
                 mIntentInProgress = true;
@@ -217,6 +211,7 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
             }
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int responseCode,
                                     Intent intent) {
@@ -238,6 +233,41 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
         mSignInClicked = false;
         Toast.makeText(this, "User is connected!", Toast.LENGTH_LONG).show();
         // Get user's information
+        getProfileInformation();
+
+    }
+
+    /**
+     * Fetching user's information name, email, profile pic
+     */
+    private void getProfileInformation() {
+        try {
+            if (Plus.PeopleApi.getCurrentPerson(mGoogleApiClient) != null) {
+                Person currentPerson = Plus.PeopleApi
+                        .getCurrentPerson(mGoogleApiClient);
+                String personName = currentPerson.getDisplayName();
+                String personPhotoUrl = currentPerson.getImage().getUrl();
+                String personGooglePlusProfile = currentPerson.getUrl();
+                String email = Plus.AccountApi.getAccountName(mGoogleApiClient);
+
+                Log.e(TAG, "Name: " + personName + ", plusProfile: "
+                        + personGooglePlusProfile + ", email: " + email
+                        + ", Image: " + personPhotoUrl);
+                // by default the profile url gives 50x50 px image only
+                // we can replace the value with whatever dimension we want by
+                // replacing sz=X
+                personPhotoUrl = personPhotoUrl.substring(0,
+                        personPhotoUrl.length() - 2)
+                        + PROFILE_PIC_SIZE;
+
+
+            } else {
+                Toast.makeText(getApplicationContext(),
+                        "Person information is null", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void onConnectionSuspended(int arg0) {
@@ -245,7 +275,7 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
     }
 
     private void signinWithTwitter() {
-        if(!isTwitterLoggedInAlready()){
+        if (!isTwitterLoggedInAlready()) {
             ConfigurationBuilder builder = new ConfigurationBuilder();
             builder.setOAuthConsumerKey(TWITTER_CONSUMER_KEY);
             builder.setOAuthConsumerSecret(TWITTER_CONSUMER_SECRET);
@@ -253,7 +283,7 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
             TwitterFactory factory = new TwitterFactory(configuration);
             twitter = factory.getInstance();
 
-            Thread thread = new Thread(new Runnable(){
+            Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -278,15 +308,14 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
         return sharedPreferencesTwitter.getBoolean(PREF_KEY_TWITTER_LOGIN, false);
     }
 
-    private class OAuthAccessTokenTask extends AsyncTask<String, Void, Exception>
-    {
+    private class OAuthAccessTokenTask extends AsyncTask<String, Void, Exception> {
         @Override
         protected Exception doInBackground(String... params) {
             Exception toReturn = null;
             String verifier = null;
 
             Uri uri = getIntent().getData();
-            if(uri != null && uri.toString().startsWith(TWITTER_CALLBACK_URL)){
+            if (uri != null && uri.toString().startsWith(TWITTER_CALLBACK_URL)) {
                 verifier = uri.getQueryParameter(URL_TWITTER_OAUTH_VERIFIER);
             }
 
@@ -296,12 +325,10 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
                 accessToken = twitter.getOAuthAccessToken(requestToken, params[0]);
                 user = twitter.showUser(accessToken.getUserId());
 
-            }
-            catch(TwitterException e) {
+            } catch (TwitterException e) {
                 Log.e(WelcomeActivity.class.getName(), "TwitterError: " + e.getErrorMessage());
                 toReturn = e;
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 Log.e(WelcomeActivity.class.getName(), "Error: " + e.getMessage());
                 toReturn = e;
             }
@@ -323,9 +350,7 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
                     result.getMessage(),
                     Toast.LENGTH_LONG
             ).show();
-        }
-
-        else {
+        } else {
             try {
                 // Shared Preferences
                 SharedPreferences.Editor editor = sharedPreferencesTwitter.edit();
@@ -339,17 +364,16 @@ public class WelcomeActivity extends Activity implements  GoogleApiClient.Connec
 
                 // Getting user details from twitter
                 String username = user.getName();
-                String profileImageUrl= user.getBiggerProfileImageURL();
+                String profileImageUrl = user.getBiggerProfileImageURL();
                 String handle = user.getScreenName();
                 int followers = user.getFollowersCount();
 
 
                 Toast.makeText(WelcomeActivity.this,
-                        "Logged in " + username + " " + handle + " "+ followers+ " " + profileImageUrl+ "",
+                        "Logged in " + username + " " + handle + " " + followers + " " + profileImageUrl + "",
                         Toast.LENGTH_LONG).show();
 
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 // Check log for login errors
                 Log.e("Twitter Login Error", "> " + ex.getMessage());
                 ex.printStackTrace();

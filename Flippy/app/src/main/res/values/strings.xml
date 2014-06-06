@@ -48,10 +48,13 @@
     <string name="new_user">I\'m a new user</string>
     <string name="title_activity_select_community">Getting Started</string>
 
-    <!--the select community activity-->
+    <!-- the select community activity -->
     <string name="last_step">the final step</string>
     <string name="select_community">Select Your Community</string>
     <string name="community_key">Where given a community key enter it here</string>
     <string name="community_key_hint">community key (optional)</string>
+
+    <!--The community circle's strings-->
+    <string name="title_activity_community_circle">Community Circles</string>
 
 </resources>

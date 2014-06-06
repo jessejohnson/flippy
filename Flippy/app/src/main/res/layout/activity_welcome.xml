@@ -19,6 +19,8 @@
         android:layout_marginTop="50dp"
         android:gravity="center" />
 
+
+
     <com.google.android.gms.common.SignInButton
         android:id="@+id/btn_sign_in"
         android:layout_width="match_parent"
