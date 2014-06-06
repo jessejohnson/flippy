@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jojo.flippy.util.ToastMessages;
+import com.jojo.flippy.util.Validator;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -59,33 +60,44 @@ public class RegisterActivity extends Activity {
         registrationNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO call the validation class here and post the data to the next activity
+                boolean allFieldsValid = false;
 
-                if (registerEmail.getText().toString().length() <= 0){
-                    registerEmail.setError("email or phone number required");
+                if (!Validator.validateEmail(registerEmail.getText().toString())){
+                    registerEmail.setError(getString(R.string.registration_error_email));
                  }else{
                     registerEmail.setError(null);
+                    allFieldsValid = true;
                 }
-                if (firstName.getText().toString().length() <= 0){
-                    firstName.setError("first name required");
+                if (!Validator.validateNameString(firstName.getText().toString())){
+                    firstName.setError(getString(R.string.registration_error_firstname));
                 }else{
                     firstName.setError(null);
+                    allFieldsValid = true;
                 }
-                if (lastName.getText().toString().length() <= 0){
-                    lastName.setError("last name required");
+                if (!Validator.validateNameString(lastName.getText().toString())){
+                    lastName.setError(getString(R.string.registration_error_lastname));
                 }else{
                     lastName.setError(null);
+                    allFieldsValid = true;
                 }
-                if (password.getText().toString().length() <= 0){
-                    password.setError("password required");
+                if (!Validator.validatePassword(password.getText().toString())){
+                    password.setError(getString(R.string.registration_error_password));
                 }else{
                     password.setError(null);
+                    allFieldsValid = true;
+                }
+
+                if(allFieldsValid){
+                    //Create intent to start next activity
                 }
             }
         });
 
 
     }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 313861e0c48802ccc2a65567976d398619cb9292
 }

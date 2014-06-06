@@ -32,15 +32,20 @@
     <string name="title_activity_register">Getting Started</string>
     <string name="register_title_few_things">a few things before we go</string>
 
-    <!-- the registration activity -->
+    <!-- the registration activity strings -->
     <string name="register_title">Register with email</string>
-    <string name="email_phone_number_placeholder">email or phone number</string>
-    <string name="first_name">first name</string>
-    <string name="last_name">last name</string>
-    <string name="register_password">password</string>
+    <string name="register_email_phone_number_placeholder">email or phone number</string>
+    <string name="register_first_name_placeholder">first name</string>
+    <string name="register_last_name_placeholder">last name</string>
+    <string name="register_password_placeholder">password</string>
     <string name="register_terms">I have read and agreed with these terms</string>
-    <string name="sign_in_text">I already have an account</string>
-    <string name="next">next</string>
+    <string name="register_sign_in_text">I already have an account</string>
+    <string name="register_next">next</string>
+
+    <string name="registration_error_email">A valid email or phone number is required</string>
+    <string name="registration_error_firstname">Your first name is required</string>
+    <string name="registration_error_lastname">Your last name is required</string>
+    <string name="registration_error_password">A password is required</string>
 
     <!-- Sign In activity -->
     <string name="title_activity_sign_in">Sign In</string>

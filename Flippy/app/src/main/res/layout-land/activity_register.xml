@@ -58,28 +58,28 @@
 
            <EditText
                android:layout_width="match_parent"
-               android:hint="@string/email_phone_number_placeholder"
+               android:hint="@string/register_email_phone_number_placeholder"
                android:textColor="@color/flippy_white"
                android:singleLine="true"
                android:layout_height="wrap_content"
                android:id="@+id/registerEmailEditText" />
            <EditText
                android:layout_width="match_parent"
-               android:hint="@string/first_name"
+               android:hint="@string/register_first_name_placeholder"
                android:textColor="@color/flippy_white"
                android:singleLine="true"
                android:layout_height="wrap_content"
                android:id="@+id/editTextRegisterFirstName" />
            <EditText
                android:layout_width="match_parent"
-               android:hint="@string/last_name"
+               android:hint="@string/register_last_name_placeholder"
                android:textColor="@color/flippy_white"
                android:singleLine="true"
                android:layout_height="wrap_content"
                android:id="@+id/editTextRegisterLastName" />
            <EditText
                android:layout_width="match_parent"
-               android:hint="@string/register_password"
+               android:hint="@string/register_password_placeholder"
                android:textColor="@color/flippy_white"
                android:singleLine="true"
                android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
        <Button
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:text="@string/next"
+           android:text="@string/register_next"
            android:paddingTop="10dp"
            android:layout_marginTop="@dimen/margin_ten"
            android:layout_marginBottom="@dimen/margin_ten"
