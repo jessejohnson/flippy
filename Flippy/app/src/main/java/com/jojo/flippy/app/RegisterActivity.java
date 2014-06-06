@@ -37,7 +37,7 @@ public class RegisterActivity extends Activity {
         actionbar.setSubtitle(getString(R.string.register_title_few_things));
 
 
-        Crouton.showText( this,getString(R.string.app_name),Style.CONFIRM);
+        //Crouton.showText( this,getString(R.string.app_name),Style.CONFIRM);
 
         registerEmail = (EditText)findViewById(R.id.registerEmailEditText);
         firstName = (EditText)findViewById(R.id.editTextRegisterFirstName);
@@ -95,9 +95,4 @@ public class RegisterActivity extends Activity {
 
 
     }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 313861e0c48802ccc2a65567976d398619cb9292
 }

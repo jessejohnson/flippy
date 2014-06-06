@@ -3,7 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.jojo.flippy.community.CommunityCircleActivity" >
     <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+        android:title="@string/manage_circle"
+        android:icon="@drawable/ic_action_group"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
+    <item android:id="@+id/action_add"
+        android:title="@string/add_circle"
+        android:icon="@drawable/ic_action_new"
+        android:orderInCategory="200"
+        app:showAsAction="always" />
 </menu>

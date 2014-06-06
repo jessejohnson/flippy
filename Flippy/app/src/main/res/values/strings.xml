@@ -62,4 +62,12 @@
     <!--The community circle's strings-->
     <string name="title_activity_community_circle">Community Circles</string>
 
+
+   <!-- circle list view strings-->
+    <string name="default_circle_name">Circle name</string>
+    <string name="default_circle_status">Default</string>
+    <string name="default_circle_number">10 members</string>
+    <string name="manage_circle">Manage circles</string>
+    <string name="add_circle">Add circle</string>
+
 </resources>

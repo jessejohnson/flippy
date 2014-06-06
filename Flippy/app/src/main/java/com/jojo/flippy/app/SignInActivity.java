@@ -66,8 +66,4 @@ public class SignInActivity extends ActionBarActivity {
             }
         });
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 313861e0c48802ccc2a65567976d398619cb9292
 }
