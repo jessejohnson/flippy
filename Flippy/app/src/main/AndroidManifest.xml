@@ -72,7 +72,7 @@
             android:label="@string/title_activity_select_community" >
         </activity>
         <activity
-            android:name="com.jojo.flippy.community.CommunityCircleActivity"
+            android:name="com.jojo.flippy.community.CommunityChannelActivity"
             android:label="@string/title_activity_community_circle" >
         </activity>
         <meta-data

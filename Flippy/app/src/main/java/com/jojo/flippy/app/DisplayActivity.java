@@ -24,12 +24,14 @@ public class DisplayActivity extends Activity {
         String fullName = "";
         String username = "";
         String fbId = "";
+        String email ="";
 
         //Getting the passed data from intent
         if (intent != null) {
             fullName  = intent.getStringExtra("full_name");
             username = intent.getStringExtra("username");
             fbId = intent.getStringExtra("fbId");
+            email = intent.getStringExtra("fbEmail");
         }
 
         TextView fullNameView = (TextView) findViewById(R.id.full_name);
@@ -37,7 +39,7 @@ public class DisplayActivity extends Activity {
         ImageView pictureView = (ImageView) findViewById(R.id.picture);
 
         fullNameView.setText(fullName);
-        usernameView.setText(username);
+        usernameView.setText(username + " " + email);
 
         Ion.with(pictureView)
                 .placeholder(R.drawable.ic_launcher)

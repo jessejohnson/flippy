@@ -14,6 +14,8 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import com.jojo.flippy.util.AlertDialogManager;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -102,7 +104,7 @@ public class FacebookSigninFragment extends Fragment {
     public void onPause() {
         super.onPause();
         uiHelper.onPause();
-//	    finish
+        // finish
     }
 
     @Override
@@ -138,20 +140,18 @@ public class FacebookSigninFragment extends Fragment {
                         // If the response is successful
                         if (session == Session.getActiveSession()) {
                             if (user != null) {
-
                                 String fullName = user.getName();
                                 String firstName = user.getFirstName();
                                 String lastName = user.getLastName();
                                 String fbId = user.getId();
                                 String username = user.getUsername();
                                 String email = (String) user.asMap().get("email");
-
 	                    /*
 	                     * At this point you can do whatever you want with the data that you get
 	                     * Maybe sign up or sign in the user
 	                     * In this case I'll just start a new activity and display some of that data
 	                     */
-                                Intent intent = new Intent(mContext, DisplayActivity.class);
+                                Intent intent = new Intent(mContext, SelectCommunityActivity.class);
                                 intent.putExtra("username", username);
                                 intent.putExtra("full_name", fullName);
                                 intent.putExtra("fbId", fbId);
@@ -163,7 +163,9 @@ public class FacebookSigninFragment extends Fragment {
                             }
                         }
                         if (response.getError() != null) {
-                           // Handle errors, will do so later.
+                           // Handle errors, unable to log user in by facebook
+                            AlertDialogManager facebookSignInError = new AlertDialogManager();
+                            facebookSignInError.showAlertDialog(getActivity(),getString(R.string.facebook_error_tittle),getString(R.string.facebook_error_message),true);
                         }
                     }
                 });

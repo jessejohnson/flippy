@@ -72,5 +72,11 @@
 
   <!-- The facebook application id-->
     <string name="app_id">305971362902085</string>
+    <string name="facebook_error_tittle">Facebook sign in error</string>
+    <string name="facebook_error_message">Error while getting profile information, try later</string>
+
+    <!--Navigation drawer strings-->
+    <string name="drawer_open">Open drawer</string>
+    <string name="drawer_close">Close drawer</string>
 
 </resources>

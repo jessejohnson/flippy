@@ -87,7 +87,7 @@
         android:padding="@dimen/margin_ten"
         android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/registerNextButton"
+        android:id="@+id/buttonGetStartedCommunity"
         android:background="@drawable/flippy_button_default"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />

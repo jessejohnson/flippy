@@ -1,12 +1,17 @@
 package com.jojo.flippy.app;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+
+import com.jojo.flippy.community.ChannelFeeds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +19,7 @@ import java.util.List;
 
 public class SelectCommunityActivity extends ActionBarActivity {
     private Spinner spinnerSelectCommunity;
+    private Button buttonGetStartedFromCommunity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,9 +29,21 @@ public class SelectCommunityActivity extends ActionBarActivity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setSubtitle(getString(R.string.last_step));
 
+        buttonGetStartedFromCommunity = (Button) findViewById(R.id.buttonGetStartedCommunity);
+        buttonGetStartedFromCommunity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO load all the needed data and send it with the intent
+                Intent intent = new Intent(SelectCommunityActivity.this,ChannelFeeds.class);
+                startActivity(intent);
+            }
+        });
+
         //Identify the spinner from the layout and call the function to add items
         spinnerSelectCommunity = (Spinner) findViewById(R.id.spinnerSelectCommunity);
         addItemsOnCommunitySpinner();
+
+
 
     }
 
