@@ -1,4 +1,4 @@
-package com.jojo.flippy.community;
+package com.jojo.flippy.core;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,12 +8,12 @@ import android.view.MenuItem;
 import com.jojo.flippy.app.R;
 
 
-public class CommunityCircleActivity extends ActionBarActivity {
+public class CommunityCenterActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_community_circle);
+        setContentView(R.layout.activity_community_center);
     }
 
 
