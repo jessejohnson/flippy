@@ -70,4 +70,7 @@
     <string name="manage_circle">Manage circles</string>
     <string name="add_circle">Add circle</string>
 
+  <!-- The facebook application id-->
+    <string name="app_id">305971362902085</string>
+
 </resources>

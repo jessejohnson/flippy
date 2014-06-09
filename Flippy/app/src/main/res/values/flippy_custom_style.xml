@@ -35,5 +35,6 @@
 
     <style name="FlippySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">@color/flippy_white</item>
+        <item name="android:popupBackground">@color/flippy_orange</item>
     </style>
 </resources>
