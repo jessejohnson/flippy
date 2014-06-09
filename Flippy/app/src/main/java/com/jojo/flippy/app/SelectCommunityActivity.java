@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import com.jojo.flippy.core.ChannelFeeds;
+import com.jojo.flippy.core.CommunityCenterActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class SelectCommunityActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 //TODO load all the needed data and send it with the intent
-                Intent intent = new Intent(SelectCommunityActivity.this,ChannelFeeds.class);
+                Intent intent = new Intent(SelectCommunityActivity.this,CommunityCenterActivity.class);
                 startActivity(intent);
             }
         });
