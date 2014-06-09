@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jojo.flippy.community.CommunityCircleActivity;
+import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.util.Validator;
 
 
@@ -94,7 +94,7 @@ public class RegisterActivity extends Activity {
                     Toast.makeText(RegisterActivity.this,
                             "Good job!",
                             Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(RegisterActivity.this, CommunityCircleActivity.class);
+                    Intent intent = new Intent(RegisterActivity.this, CommunityCenterActivity.class);
                     startActivity(intent);
                 }
             }

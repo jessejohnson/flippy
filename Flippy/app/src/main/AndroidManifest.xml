@@ -72,8 +72,8 @@
             android:label="@string/title_activity_select_community" >
         </activity>
         <activity
-            android:name="com.jojo.flippy.community.CommunityCircleActivity"
-            android:label="@string/title_activity_community_circle" >
+            android:name="com.jojo.flippy.core.CommunityCenterActivity"
+            android:label="@string/title_activity_community_center" >
         </activity>
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

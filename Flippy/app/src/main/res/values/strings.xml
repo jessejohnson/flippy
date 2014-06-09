@@ -17,8 +17,8 @@
 
     <!-- actual onboarding text -->
     <string name="onboarding_slide_1">        Flippy lets you quickly share important information in your organization</string>
-    <string name="onboarding_slide_2">        Select your organization\'s Community and join a Circle, or you could create and manage your own.</string>
-    <string name="onboarding_slide_3">        Receive Notices from the Circles you join in real-time. You can save, share and set reminders on those that matter most.</string>
+    <string name="onboarding_slide_2">        Select your organization\'s Community and subscribe to a Channel, or you could create and manage your own.</string>
+    <string name="onboarding_slide_3">        Receive Notices from the Channels you subscribe to in real-time. You can save, share and set reminders on those that matter most.</string>
     <string name="onboarding_slide_4">        Ready, set, let\'s go!</string>
 
     <!-- welcome activity strings -->
@@ -58,18 +58,18 @@
     <string name="last_step">the final step</string>
     <string name="select_community">Select Your Community</string>
     <string name="community_key">Where given a community key enter it here</string>
-    <string name="community_key_hint">community key (optional)</string>
+    <string name="community_key_hint">private community key (optional)</string>
 
-    <!--The community circle's strings-->
-    <string name="title_activity_community_circle">Community Circles</string>
+    <!--The community center's strings-->
+    <string name="title_activity_community_center">Community Center</string>
 
 
-   <!-- circle list view strings-->
-    <string name="default_circle_name">Circle name</string>
-    <string name="default_circle_status">Default</string>
-    <string name="default_circle_number">10 members</string>
-    <string name="manage_circle">Manage circles</string>
-    <string name="add_circle">Add circle</string>
+   <!-- Channel list view strings-->
+    <string name="default_channel_name">Channel name</string>
+    <string name="default_channel_status">Default</string>
+    <string name="default_channel_number">10 members</string>
+    <string name="manage_channel">Manage Channels</string>
+    <string name="add_channel">Add A Channel</string>
 
   <!-- The facebook application id-->
     <string name="app_id">305971362902085</string>
