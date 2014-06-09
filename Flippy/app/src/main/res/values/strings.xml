@@ -57,7 +57,7 @@
     <!-- the select community activity -->
     <string name="last_step">the final step</string>
     <string name="select_community">Select Your Community</string>
-    <string name="community_key">Where given a community key enter it here</string>
+    <string name="community_key">Were you given a community key? Enter it here</string>
     <string name="community_key_hint">private community key (optional)</string>
 
     <!--The community center's strings-->

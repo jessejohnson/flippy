@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ public class SignInActivity extends ActionBarActivity {
     private TextView textViewSignIn;
     private Button signGetStartedButton;
     private EditText signInEmail, signInPassword;
+    private CheckBox signInCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,24 +33,35 @@ public class SignInActivity extends ActionBarActivity {
         signGetStartedButton = (Button)findViewById(R.id.signGetStartedButton);
         signInEmail = (EditText) findViewById(R.id.editTextSigninEmail);
         signInPassword = (EditText) findViewById(R.id.editTextSigninPassword);
+        signInCheckBox = (CheckBox) findViewById(R.id.checkBoxRegisterAgreement);
 
         signGetStartedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean allFieldsValid = false;
-                if(!Validator.isValidEmailOrPhoneNumber(signInEmail.getText().toString())){
-                    signInEmail.setError(getString(R.string.registration_error_email));
-                } else {
+                boolean allFieldsValid;
+                if(Validator.isValidEmailOrPhoneNumber(signInEmail.getText().toString())){
                     signInEmail.setError(null);
                     allFieldsValid = true;
-                }
-                if(signInPassword.getText().toString().length() == 0){
-                    signInPassword.setError(getString(R.string.registration_error_password));
                 } else {
+                    signInEmail.setError(getString(R.string.registration_error_email));
+                    allFieldsValid = false;
+                }
+                if(Validator.isValidPassword(signInPassword.getText().toString())){
                     signInPassword.setError(null);
                     allFieldsValid = true;
+                } else {
+                    signInPassword.setError(getString(R.string.registration_error_password));
+                    allFieldsValid = false;
                 }
-                if(allFieldsValid){
+                if(signInCheckBox.isChecked()){
+                    signInCheckBox.setError(null);
+                    allFieldsValid = true;
+                } else {
+                    signInCheckBox.setError(getString(R.string.registration_error_checkbox));
+                    allFieldsValid = false;
+                }
+
+                if(true){
                     Intent intent = new Intent(SignInActivity.this,SelectCommunityActivity.class);
                     startActivity(intent);
                 }
@@ -63,5 +76,11 @@ public class SignInActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 }
