@@ -77,10 +77,4 @@ public class SignInActivity extends ActionBarActivity {
             }
         });
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
-    }
 }
