@@ -9,16 +9,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.jojo.flippy.app.RegisterActivity">
 
-<<<<<<< HEAD
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:orientation="vertical">
+            android:orientation="vertical"/>
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -55,7 +54,7 @@
                 android:layout_below="@+id/linearLayout"
                 android:background="@color/flippy_light_header"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="10dp"/>
 
                 <EditText
                     android:id="@+id/registerEmailEditText"
@@ -64,34 +63,33 @@
                     android:hint="@string/register_email_phone_number_placeholder"
                     android:singleLine="true"
                     android:textColor="@color/flippy_white" />
-=======
    <ScrollView
        android:layout_width="match_parent"
        android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/register_form"
         android:layout_width="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:orientation="vertical"
         android:layout_height="wrap_content"
-        android:id="@+id/register_form">
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"/>
 
        <LinearLayout
-           android:orientation="vertical"
+           android:id="@+id/linearLayout_q"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:layout_alignParentTop="true"
            android:layout_alignParentLeft="true"
            android:layout_alignParentStart="true"
-           android:id="@+id/linearLayout">
+           android:layout_alignParentTop="true"
+           android:orientation="vertical"/>
 
            <LinearLayout
-               android:orientation="horizontal"
                android:layout_width="match_parent"
+               android:layout_height="fill_parent"
                android:background="@color/flippy_dark_header"
-               android:padding="10dp"
-               android:layout_height="fill_parent">
->>>>>>> 5a1adfdfaf723b1467ed445b6239420544e267e3
+               android:orientation="horizontal"
+               android:padding="10dp">
+
 
                 <EditText
                     android:id="@+id/editTextRegisterFirstName"
@@ -101,7 +99,6 @@
                     android:singleLine="true"
                     android:textColor="@color/flippy_white" />
 
-<<<<<<< HEAD
                 <EditText
                     android:id="@+id/editTextRegisterLastName"
                     android:layout_width="match_parent"
@@ -109,16 +106,15 @@
                     android:hint="@string/register_last_name_placeholder"
                     android:singleLine="true"
                     android:textColor="@color/flippy_white" />
-=======
        <LinearLayout
-           android:orientation="vertical"
+           android:id="@+id/register_form_fields"
            android:layout_width="match_parent"
            android:layout_height="match_parent"
            android:layout_below="@+id/linearLayout"
            android:background="@color/flippy_light_header"
-           android:padding="10dp"
-           android:id="@+id/register_form_fields">
->>>>>>> 5a1adfdfaf723b1467ed445b6239420544e267e3
+           android:orientation="vertical"
+           android:padding="10dp">
+
 
                 <EditText
                     android:id="@+id/editTextRegisterPassword"
@@ -136,7 +132,7 @@
                     android:textColor="@color/flippy_white" />
             </LinearLayout>
 
-<<<<<<< HEAD
+
             <Button
                 android:id="@+id/registerNextButton"
                 android:layout_width="match_parent"
@@ -151,34 +147,18 @@
                 android:paddingTop="10dp"
                 android:text="@string/register_next"
                 android:textColor="@color/flippy_white" />
-=======
+
         <TextView
+            android:id="@+id/textViewSignIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/register_sign_in_text"
-            android:textColor="@color/flippy_orange"
-            android:layout_marginTop="@dimen/margin_ten"
-            android:id="@+id/textViewSignIn"
             android:layout_below="@+id/linearLayout2"
             android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal" />
-
-       <Button
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:text="@string/register_next"
-           android:paddingTop="10dp"
-           android:layout_marginTop="@dimen/margin_ten"
-           android:layout_marginBottom="@dimen/margin_ten"
-           android:paddingBottom="10dp"
-           android:textColor="@color/flippy_white"
-           android:layout_marginLeft="@dimen/activity_horizontal_margin"
-           android:layout_marginRight="@dimen/activity_horizontal_margin"
-           android:id="@+id/registerNextButton"
-           android:background="@drawable/flippy_button_default"
-           android:layout_centerHorizontal="true" />
->>>>>>> 5a1adfdfaf723b1467ed445b6239420544e267e3
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_ten"
+            android:text="@string/register_sign_in_text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/flippy_orange" />
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>
