@@ -1,11 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-<<<<<<< HEAD
-    tools:context="com.jojo.flippy.community.CommunityChannelActivity" >
-=======
-    tools:context="com.jojo.flippy.core.CommunityCenterActivity" >
->>>>>>> 366478361338bdb14d2815a3911a8c2f9e8ac013
+    tools:context="com.jojo.flippy.core.CommunityChannelActivity" >
     <item android:id="@+id/action_settings"
         android:title="@string/manage_channel"
         android:icon="@drawable/ic_action_group"

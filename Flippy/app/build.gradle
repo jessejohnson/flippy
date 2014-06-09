@@ -29,7 +29,6 @@ dependencies {
     compile 'com.android.support:support-v4:19.0.+'
     compile 'com.android.support:appcompat-v7:19.+'
     compile 'com.facebook:facebook-android-sdk:3.14.1'
-    compile 'com.google.android.gms:play-services:4.4.52'
     compile 'de.keyboardsurfer.android.widget:crouton:1.8.4'
     compile 'com.android.support:appcompat-v7:19.+'
     compile "com.koushikdutta.ion:ion:1.1.5"

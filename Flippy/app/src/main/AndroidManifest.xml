@@ -13,11 +13,6 @@
         android:label="@string/app_name"
         android:theme="@style/FlippyActionBarTheme" >
 
-        <!-- the google play service section -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
         <activity
             android:name=".SplashScreenActivity"
             android:label="@string/app_name"
@@ -72,13 +67,12 @@
             android:label="@string/title_activity_select_community" >
         </activity>
         <activity
-<<<<<<< HEAD
-            android:name="com.jojo.flippy.community.CommunityChannelActivity"
-            android:label="@string/title_activity_community_circle" >
-=======
+            android:name="com.jojo.flippy.core.CommunityChannelActivity"
+            android:label="@string/title_activity_community_center" >
+        </activity>
+        <activity
             android:name="com.jojo.flippy.core.CommunityCenterActivity"
             android:label="@string/title_activity_community_center" >
->>>>>>> 366478361338bdb14d2815a3911a8c2f9e8ac013
         </activity>
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
