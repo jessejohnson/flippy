@@ -29,6 +29,7 @@ public class FacebookSigninFragment extends Fragment {
     private static final String TAG = "FacebookLogin";
     Context mContext;
     LoginButton mLoginBtn;
+    private Button signInWithEmail;
 
     //session status callback variable
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -49,7 +50,14 @@ public class FacebookSigninFragment extends Fragment {
 
         mContext = getActivity();
 
-
+        signInWithEmail= (Button) view.findViewById(R.id.buttonSigninWithEmail);
+         signInWithEmail.setOnClickListener(new OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 Intent intent = new Intent(mContext,RegisterActivity.class);
+                 startActivity(intent);
+             }
+         });
         mLoginBtn = (LoginButton) view.findViewById(R.id.authButton);
         mLoginBtn.setFragment(this);
         mLoginBtn.setReadPermissions(Arrays.asList("public_profile","email"));

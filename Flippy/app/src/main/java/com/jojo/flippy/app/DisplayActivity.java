@@ -7,7 +7,6 @@ package com.jojo.flippy.app;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,7 +25,7 @@ public class DisplayActivity extends Activity {
         String username = "";
         String fbId = "";
 
-//		Getting the passed data from intent
+        //Getting the passed data from intent
         if (intent != null) {
             fullName  = intent.getStringExtra("full_name");
             username = intent.getStringExtra("username");
