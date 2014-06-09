@@ -3,6 +3,9 @@ package com.jojo.flippy.app;
 /**
  * Created by bright on 6/9/14.
  */
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
 import java.util.Arrays;
 import com.facebook.Request;
 import com.facebook.Response;
@@ -15,8 +18,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +57,7 @@ public class FacebookSigninFragment extends Fragment {
         mContext = getActivity();
 
         signInWithEmail= (Button) view.findViewById(R.id.buttonSigninWithEmail);
-         signInWithEmail.setOnClickListener(new OnClickListener() {
+        signInWithEmail.setOnClickListener(new OnClickListener() {
              @Override
              public void onClick(View view) {
                  Intent intent = new Intent(mContext,RegisterActivity.class);
