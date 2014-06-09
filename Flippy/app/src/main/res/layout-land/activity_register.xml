@@ -11,17 +11,18 @@
 
    <ScrollView
        android:layout_width="match_parent"
-       android:layout_height="wrap_content">
+       android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_gravity="center_horizontal"
         android:orientation="vertical"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/register_form">
 
        <LinearLayout
            android:orientation="vertical"
-           android:layout_width="fill_parent"
+           android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:layout_alignParentTop="true"
            android:layout_alignParentLeft="true"
@@ -30,7 +31,7 @@
 
            <LinearLayout
                android:orientation="horizontal"
-               android:layout_width="fill_parent"
+               android:layout_width="match_parent"
                android:background="@color/flippy_dark_header"
                android:padding="10dp"
                android:layout_height="fill_parent">
@@ -48,13 +49,12 @@
 
        <LinearLayout
            android:orientation="vertical"
-           android:layout_width="fill_parent"
-           android:layout_height="wrap_content"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
            android:layout_below="@+id/linearLayout"
            android:background="@color/flippy_light_header"
            android:padding="10dp"
-           android:layout_alignParentLeft="true"
-           android:layout_alignParentStart="true">
+           android:id="@+id/register_form_fields">
 
            <EditText
                android:layout_width="match_parent"
@@ -92,6 +92,18 @@
                android:textColor="@color/flippy_white"
                android:id="@+id/checkBoxRegisterAgreement" />
        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/register_sign_in_text"
+            android:textColor="@color/flippy_orange"
+            android:layout_marginTop="@dimen/margin_ten"
+            android:id="@+id/textViewSignIn"
+            android:layout_below="@+id/linearLayout2"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal" />
 
        <Button
            android:layout_width="match_parent"
