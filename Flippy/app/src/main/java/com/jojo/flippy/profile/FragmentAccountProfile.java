@@ -18,8 +18,6 @@ public class FragmentAccountProfile extends Fragment {
     ImageView ivIcon;
     TextView tvItemName;
 
-    public static final String IMAGE_RESOURCE_ID = "iconResourceID";
-    public static final String ITEM_NAME = "itemName";
 
     public FragmentAccountProfile() {
 
@@ -35,9 +33,7 @@ public class FragmentAccountProfile extends Fragment {
         ivIcon = (ImageView) view.findViewById(R.id.frag1_icon);
         tvItemName = (TextView) view.findViewById(R.id.frag1_text);
 
-        tvItemName.setText(getArguments().getString(ITEM_NAME));
-        ivIcon.setImageDrawable(view.getResources().getDrawable(
-                getArguments().getInt(IMAGE_RESOURCE_ID)));
+
         return view;
     }
 
