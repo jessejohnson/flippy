@@ -46,6 +46,7 @@
     <string name="registration_error_firstname">Your first name is required</string>
     <string name="registration_error_lastname">Your last name is required</string>
     <string name="registration_error_password">A password is required</string>
+    <string name="registration_error_checkbox">You must agree to the terms first</string>
 
     <!-- Sign In activity -->
     <string name="title_activity_sign_in">Sign In</string>

@@ -4,8 +4,6 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,7 +36,7 @@ public class SignInActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 boolean allFieldsValid = false;
-                if(!Validator.validateEmailOrPhoneNumber(signInEmail.getText().toString())){
+                if(!Validator.isValidEmailOrPhoneNumber(signInEmail.getText().toString())){
                     signInEmail.setError(getString(R.string.registration_error_email));
                 } else {
                     signInEmail.setError(null);

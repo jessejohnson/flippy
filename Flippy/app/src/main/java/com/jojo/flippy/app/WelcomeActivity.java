@@ -384,4 +384,10 @@ public class WelcomeActivity extends Activity implements GoogleApiClient.Connect
     protected void onResume() {
         super.onResume();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
 }
