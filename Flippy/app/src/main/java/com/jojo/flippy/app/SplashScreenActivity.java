@@ -3,12 +3,13 @@ package com.jojo.flippy.app;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class SplashScreenActivity extends Activity {
+public class SplashScreenActivity extends ActionBarActivity {
 
     Timer timer = new Timer();
 
