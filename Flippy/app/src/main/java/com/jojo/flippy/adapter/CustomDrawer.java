@@ -57,6 +57,7 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
             drawerHolder.user_frame = (FrameLayout)view.findViewById(R.id.user_frame);
 
             drawerHolder.userImage = (ImageView) view.findViewById(R.id.user_pic);
+            drawerHolder.userEmail = (TextView) view.findViewById(R.id.text_user_email);
             drawerHolder.userName = (TextView)view.findViewById(R.id.text_user_name);
 
 
@@ -73,6 +74,7 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
             drawerHolder.itemLayout.setVisibility(View.GONE);
             drawerHolder.accountLayout.setVisibility(LinearLayout.VISIBLE);
             drawerHolder.userName.setText("Bright Ahedor");
+            drawerHolder.userEmail.setText("bright@gmail.com");
             drawerHolder.userImage.setImageResource(R.drawable.test);
         }else {
             //destroy all the other views if not in the item with the zeroth index
@@ -80,6 +82,7 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
             drawerHolder.userImage.setVisibility(View.GONE);
             drawerHolder.accountLayout.setVisibility(View.GONE);
             drawerHolder.userName.setVisibility(View.GONE);
+            drawerHolder.userEmail.setVisibility(view.GONE);
             //make visible the other layout and items
             drawerHolder.itemLayout.setVisibility(LinearLayout.VISIBLE);
             //Setting the parameters of the items in the view
@@ -92,10 +95,9 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
     }
 
     private static class DrawerItemHolder {
-        TextView ItemName;
+        TextView ItemName,userName,userEmail;
         ImageView icon;
         ImageView userImage;
-        TextView userName;
         LinearLayout itemLayout,accountLayout;
         FrameLayout user_frame;
     }
