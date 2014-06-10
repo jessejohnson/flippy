@@ -3,11 +3,14 @@ package com.jojo.flippy.core;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +19,7 @@ import android.widget.ListView;
 import com.jojo.flippy.adapter.CustomDrawer;
 import com.jojo.flippy.adapter.DrawerItem;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.profile.AccountProfileActivity;
 import com.jojo.flippy.profile.FragmentAccountProfile;
 
 import java.util.ArrayList;
@@ -51,11 +55,11 @@ public class CommunityCenterActivity extends Activity{
 
 
         // Add Drawer Item to dataList
-        dataList.add(new DrawerItem("Notices", R.drawable.ic_action_group));
-        dataList.add(new DrawerItem("Channels", R.drawable.ic_action_group));
-        dataList.add(new DrawerItem("Settings", R.drawable.ic_action_group));
-
-
+        dataList.add(new DrawerItem(getString(R.string.drawer_item_account), R.drawable.ic_action_group));
+        dataList.add(new DrawerItem(getString(R.string.drawer_item_notice), R.drawable.ic_action_mail));
+        dataList.add(new DrawerItem(getString(R.string.drawer_item_channel), R.drawable.ic_action_group));
+        dataList.add(new DrawerItem(getString(R.string.drawer_item_community), R.drawable.ic_action_group));
+        dataList.add(new DrawerItem(getString(R.string.drawer_item_settings), R.drawable.ic_action_settings));
         adapter = new CustomDrawer(this, R.layout.custom_drawer_item,
                 dataList);
         mDrawerList.setAdapter(adapter);
@@ -67,7 +71,7 @@ public class CommunityCenterActivity extends Activity{
        // getActionBar().setHomeButtonEnabled(true);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.drawable.ic_action_new, R.string.drawer_open,
+                R.drawable.ic_drawer, R.string.drawer_open,
                 R.string.drawer_close) {
             public void onDrawerClosed(View view) {
                 getActionBar().setTitle(mTitle);
@@ -79,14 +83,14 @@ public class CommunityCenterActivity extends Activity{
             public void onDrawerOpened(View drawerView) {
                 getActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu(); // creates call to
-                // onPrepareOptionsMenu()
+                //onPrepareOptionsMenu();
             }
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
-            SelectItem(0);
+            SelectItem(1);
         }
     }
     public void SelectItem(int position) {
@@ -96,11 +100,20 @@ public class CommunityCenterActivity extends Activity{
         switch (position) {
             case 0:
                 fragment = new FragmentAccountProfile();
+                //Starting a new activity to handle user account detail
+                Intent intent = new Intent(CommunityCenterActivity.this, AccountProfileActivity.class);
+                startActivity(intent);
                 break;
             case 1:
                 fragment = new FragmentAccountProfile();
                 break;
             case 2:
+                fragment = new FragmentAccountProfile();
+                break;
+            case 3:
+                fragment = new FragmentAccountProfile();
+                break;
+            case 4:
                 fragment = new FragmentAccountProfile();
                 break;
             default:
@@ -159,4 +172,12 @@ public class CommunityCenterActivity extends Activity{
 
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.community_center_menu, menu);
+        return true;
+    }
+
 }

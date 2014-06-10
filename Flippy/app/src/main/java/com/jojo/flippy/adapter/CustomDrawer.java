@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jojo.flippy.app.R;
@@ -47,6 +49,17 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
                     .findViewById(R.id.drawer_itemName);
             drawerHolder.icon = (ImageView) view.findViewById(R.id.drawer_icon);
 
+            drawerHolder.accountLayout = (LinearLayout) view
+                    .findViewById(R.id.accountLayout);
+            drawerHolder.itemLayout = (LinearLayout) view
+                    .findViewById(R.id.itemLayout);
+
+            drawerHolder.user_frame = (FrameLayout)view.findViewById(R.id.user_frame);
+
+            drawerHolder.userImage = (ImageView) view.findViewById(R.id.user_pic);
+            drawerHolder.userName = (TextView)view.findViewById(R.id.text_user_name);
+
+
             view.setTag(drawerHolder);
 
         } else {
@@ -55,10 +68,25 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
         }
 
         DrawerItem dItem = (DrawerItem) this.drawerItemList.get(position);
-
-        drawerHolder.icon.setImageDrawable(view.getResources().getDrawable(
-                dItem.getImgResID()));
-        drawerHolder.ItemName.setText(dItem.getItemName());
+        if(position==0){
+            //check if the drawer item is of index zero
+            drawerHolder.itemLayout.setVisibility(View.GONE);
+            drawerHolder.accountLayout.setVisibility(LinearLayout.VISIBLE);
+            drawerHolder.userName.setText("Bright Ahedor");
+            drawerHolder.userImage.setImageResource(R.drawable.test);
+        }else {
+            //destroy all the other views if not in the item with the zeroth index
+            drawerHolder.user_frame.setVisibility(View.GONE);
+            drawerHolder.userImage.setVisibility(View.GONE);
+            drawerHolder.accountLayout.setVisibility(View.GONE);
+            drawerHolder.userName.setVisibility(View.GONE);
+            //make visible the other layout and items
+            drawerHolder.itemLayout.setVisibility(LinearLayout.VISIBLE);
+            //Setting the parameters of the items in the view
+            drawerHolder.icon.setImageDrawable(view.getResources().getDrawable(
+                    dItem.getImgResID()));
+            drawerHolder.ItemName.setText(dItem.getItemName());
+        }
 
         return view;
     }
@@ -66,5 +94,9 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
     private static class DrawerItemHolder {
         TextView ItemName;
         ImageView icon;
+        ImageView userImage;
+        TextView userName;
+        LinearLayout itemLayout,accountLayout;
+        FrameLayout user_frame;
     }
 }

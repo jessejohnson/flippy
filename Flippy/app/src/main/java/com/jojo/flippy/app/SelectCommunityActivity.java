@@ -1,8 +1,8 @@
 package com.jojo.flippy.app;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SelectCommunityActivity extends ActionBarActivity {
+public class SelectCommunityActivity extends Activity {
     private Spinner spinnerSelectCommunity;
     private Button buttonGetStartedFromCommunity;
     @Override
