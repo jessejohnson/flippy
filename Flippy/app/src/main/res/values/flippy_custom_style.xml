@@ -20,6 +20,12 @@
         <!-- Support library compatibility -->
         <item name="background">@color/flippy_orange</item>
     </style>
+
+    <!--Custome fullscreen style-->
+    <style name="FlippyFullScreen" parent="Theme.AppCompat">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
    <!-- list selector view-->
     <style name="FlippyListView" parent="@android:style/Widget.ListView">
         <item name="android:listSelector">@drawable/drawer_list_selector</item>
