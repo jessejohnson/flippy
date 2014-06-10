@@ -69,15 +69,20 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
 
         DrawerItem dItem = (DrawerItem) this.drawerItemList.get(position);
         if(position==0){
-            drawerHolder.itemLayout.setVisibility(LinearLayout.INVISIBLE);
+            //check if the drawer item is of index zero
+            drawerHolder.itemLayout.setVisibility(View.GONE);
             drawerHolder.accountLayout.setVisibility(LinearLayout.VISIBLE);
             drawerHolder.userName.setText("Bright Ahedor");
             drawerHolder.userImage.setImageResource(R.drawable.test);
         }else {
+            //destroy all the other views if not in the item with the zeroth index
             drawerHolder.user_frame.setVisibility(View.GONE);
             drawerHolder.userImage.setVisibility(View.GONE);
             drawerHolder.accountLayout.setVisibility(View.GONE);
+            drawerHolder.userName.setVisibility(View.GONE);
+            //make visible the other layout and items
             drawerHolder.itemLayout.setVisibility(LinearLayout.VISIBLE);
+            //Setting the parameters of the items in the view
             drawerHolder.icon.setImageDrawable(view.getResources().getDrawable(
                     dItem.getImgResID()));
             drawerHolder.ItemName.setText(dItem.getItemName());

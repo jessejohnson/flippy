@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -52,10 +53,10 @@ public class CommunityCenterActivity extends Activity{
 
         // Add Drawer Item to dataList
         dataList.add(new DrawerItem(getString(R.string.drawer_item_account), R.drawable.ic_action_group));
-        dataList.add(new DrawerItem(getString(R.string.drawer_item_channel), R.drawable.ic_action_group));
         dataList.add(new DrawerItem(getString(R.string.drawer_item_notice), R.drawable.ic_action_group));
+        dataList.add(new DrawerItem(getString(R.string.drawer_item_channel), R.drawable.ic_action_group));
+        dataList.add(new DrawerItem(getString(R.string.drawer_item_community), R.drawable.ic_action_group));
         dataList.add(new DrawerItem(getString(R.string.drawer_item_settings), R.drawable.ic_action_group));
-
         adapter = new CustomDrawer(this, R.layout.custom_drawer_item,
                 dataList);
         mDrawerList.setAdapter(adapter);
@@ -104,6 +105,9 @@ public class CommunityCenterActivity extends Activity{
                 fragment = new FragmentAccountProfile();
                 break;
             case 3:
+                fragment = new FragmentAccountProfile();
+                break;
+            case 4:
                 fragment = new FragmentAccountProfile();
                 break;
             default:
@@ -161,5 +165,10 @@ public class CommunityCenterActivity extends Activity{
             SelectItem(position);
 
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
     }
 }

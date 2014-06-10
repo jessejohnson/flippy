@@ -7,6 +7,7 @@
         <item name="android:popupMenuStyle">@style/FlippyPopupMenu</item>
         <item name="actionBarWidgetTheme">@style/FlippyPopup</item>
         <item name="android:spinnerDropDownItemStyle">@style/FlippySpinnerItemStyle</item>
+        <item name="android:listViewStyle">@style/FlippyListView</item>
         <!-- Support library compatibility -->
         <item name="actionBarStyle">@style/FlippyActionBar</item>
     </style>
@@ -18,6 +19,10 @@
 
         <!-- Support library compatibility -->
         <item name="background">@color/flippy_orange</item>
+    </style>
+   <!-- list selector view-->
+    <style name="FlippyListView" parent="@android:style/Widget.ListView">
+        <item name="android:listSelector">@drawable/drawer_list_selector</item>
     </style>
 
     <!--PopUp Menu Style-->
@@ -31,7 +36,6 @@
         <item name="android:popupMenuStyle">@style/FlippyPopupMenu</item>
         <item name="android:dropDownListViewStyle">@style/FlippyPopupMenu</item>
     </style>
-
 
     <style name="FlippySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">@color/flippy_white</item>
