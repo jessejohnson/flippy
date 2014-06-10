@@ -3,6 +3,7 @@ package com.jojo.flippy.core;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -18,6 +19,7 @@ import android.widget.ListView;
 import com.jojo.flippy.adapter.CustomDrawer;
 import com.jojo.flippy.adapter.DrawerItem;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.profile.AccountProfileActivity;
 import com.jojo.flippy.profile.FragmentAccountProfile;
 
 import java.util.ArrayList;
@@ -98,6 +100,9 @@ public class CommunityCenterActivity extends Activity{
         switch (position) {
             case 0:
                 fragment = new FragmentAccountProfile();
+                //Starting a new activity to handle user account detail
+                Intent intent = new Intent(CommunityCenterActivity.this, AccountProfileActivity.class);
+                startActivity(intent);
                 break;
             case 1:
                 fragment = new FragmentAccountProfile();
