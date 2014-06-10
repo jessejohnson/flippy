@@ -16,7 +16,7 @@ public class AccountProfileActivity extends ActionBarActivity {
 
         ActionBar actionBar = getActionBar();
         actionBar.setTitle("Bright Profile");
-        actionBar.setSubtitle("A little note");
+        actionBar.setSubtitle(R.string.user_tap_to_edit);
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 

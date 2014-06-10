@@ -90,4 +90,13 @@
     <string name="menu_help">Help</string>
     <string name="title_activity_account_profile">Account Profile</string>
 
+
+  <!--  user profile activity string-->
+    <string name="user_tap_to_edit">tap to edit</string>
+    <string name="dummy_user_name">Bright Kwame Ahedor</string>
+    <string name="dummy_user_email">brightahedor@gmail.com</string>
+    <string name="dummy_user_number">(+233) 543400278</string>
+
+
+
 </resources>
