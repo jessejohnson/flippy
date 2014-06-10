@@ -9,6 +9,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -53,7 +54,7 @@ public class CommunityCenterActivity extends Activity{
 
         // Add Drawer Item to dataList
         dataList.add(new DrawerItem(getString(R.string.drawer_item_account), R.drawable.ic_action_group));
-        dataList.add(new DrawerItem(getString(R.string.drawer_item_notice), R.drawable.ic_action_group));
+        dataList.add(new DrawerItem(getString(R.string.drawer_item_notice), R.drawable.ic_action_mail));
         dataList.add(new DrawerItem(getString(R.string.drawer_item_channel), R.drawable.ic_action_group));
         dataList.add(new DrawerItem(getString(R.string.drawer_item_community), R.drawable.ic_action_group));
         dataList.add(new DrawerItem(getString(R.string.drawer_item_settings), R.drawable.ic_action_settings));
@@ -80,14 +81,14 @@ public class CommunityCenterActivity extends Activity{
             public void onDrawerOpened(View drawerView) {
                 getActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu(); // creates call to
-                // onPrepareOptionsMenu()
+                //onPrepareOptionsMenu();
             }
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
-            SelectItem(0);
+            SelectItem(1);
         }
     }
     public void SelectItem(int position) {
@@ -169,6 +170,9 @@ public class CommunityCenterActivity extends Activity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.community_center_menu, menu);
+        return true;
     }
+
 }
