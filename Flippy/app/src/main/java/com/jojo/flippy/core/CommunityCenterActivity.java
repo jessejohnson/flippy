@@ -20,7 +20,6 @@ import com.jojo.flippy.adapter.CustomDrawer;
 import com.jojo.flippy.adapter.DrawerItem;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.profile.AccountProfileActivity;
-import com.jojo.flippy.profile.FragmentAccountProfile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,22 +98,22 @@ public class CommunityCenterActivity extends Activity{
         Bundle args = new Bundle();
         switch (position) {
             case 0:
-                fragment = new FragmentAccountProfile();
+                fragment = new FragmentNotice();
                 //Starting a new activity to handle user account detail
                 Intent intent = new Intent(CommunityCenterActivity.this, AccountProfileActivity.class);
                 startActivity(intent);
                 break;
             case 1:
-                fragment = new FragmentAccountProfile();
+                fragment = new FragmentNotice();
                 break;
             case 2:
-                fragment = new FragmentAccountProfile();
+                fragment = new FragmentChannel();
                 break;
             case 3:
-                fragment = new FragmentAccountProfile();
+                fragment = new FragmentCommunities();
                 break;
             case 4:
-                fragment = new FragmentAccountProfile();
+                fragment = new FragmentSettings();
                 break;
             default:
                 break;

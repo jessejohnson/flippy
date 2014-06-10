@@ -5,14 +5,6 @@
     android:orientation="horizontal"
     >
 
-    <!--
-    **************************IMPORTANT***********************************
-     change this id attribute values as "frag2_icon" and "frag2_text" for
-     fragment_layout_two.xml and "frag3_icon" and "frag3_text" for
-     fragment_layout_three.xml
-    **********************************************************************
-      -->
-
     <ImageView
         android:id="@+id/frag1_icon"
         android:layout_width="wrap_content"

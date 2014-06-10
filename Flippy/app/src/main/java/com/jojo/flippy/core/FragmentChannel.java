@@ -1,8 +1,5 @@
-package com.jojo.flippy.profile;
+package com.jojo.flippy.core;
 
-/**
- * Created by bright on 6/9/14.
- */
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,13 +10,14 @@ import android.widget.TextView;
 
 import com.jojo.flippy.app.R;
 
-public class FragmentAccountProfile extends Fragment {
+/**
+ * Created by bright on 6/10/14.
+ */
 
-    ImageView ivIcon;
-    TextView tvItemName;
+public class FragmentChannel extends Fragment {
 
 
-    public FragmentAccountProfile() {
+    public FragmentChannel() {
 
     }
 
@@ -27,11 +25,8 @@ public class FragmentAccountProfile extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_account, container,
+        View view = inflater.inflate(R.layout.fragment_channel, container,
                 false);
-
-        ivIcon = (ImageView) view.findViewById(R.id.frag1_icon);
-        tvItemName = (TextView) view.findViewById(R.id.frag1_text);
 
 
         return view;
