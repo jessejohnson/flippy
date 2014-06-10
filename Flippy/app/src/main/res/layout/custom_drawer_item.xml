@@ -62,6 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/margin_five"
+                android:textColor="@color/flippy_white"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
         </LinearLayout>
 
@@ -71,6 +72,6 @@
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             android:layout_marginTop="1dp"
-            android:background="@color/flippy_accent_color"></View>
+            android:background="@color/flippy_white"></View>
     </LinearLayout>
 </RelativeLayout>

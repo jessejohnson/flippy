@@ -51,10 +51,10 @@ public class CommunityCenterActivity extends Activity{
 
 
         // Add Drawer Item to dataList
-        dataList.add(new DrawerItem("Notices", R.drawable.ic_action_group));
-        dataList.add(new DrawerItem("Channels", R.drawable.ic_action_group));
-        dataList.add(new DrawerItem("Settings", R.drawable.ic_action_group));
-
+        dataList.add(new DrawerItem(getString(R.string.drawer_item_account), R.drawable.ic_action_group));
+        dataList.add(new DrawerItem(getString(R.string.drawer_item_channel), R.drawable.ic_action_group));
+        dataList.add(new DrawerItem(getString(R.string.drawer_item_notice), R.drawable.ic_action_group));
+        dataList.add(new DrawerItem(getString(R.string.drawer_item_settings), R.drawable.ic_action_group));
 
         adapter = new CustomDrawer(this, R.layout.custom_drawer_item,
                 dataList);
@@ -101,6 +101,9 @@ public class CommunityCenterActivity extends Activity{
                 fragment = new FragmentAccountProfile();
                 break;
             case 2:
+                fragment = new FragmentAccountProfile();
+                break;
+            case 3:
                 fragment = new FragmentAccountProfile();
                 break;
             default:
