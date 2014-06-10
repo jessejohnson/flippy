@@ -97,6 +97,11 @@
     <string name="dummy_user_email">brightahedor@gmail.com</string>
     <string name="dummy_user_number">(+233) 543400278</string>
 
+    <!--the feedback strings-->
+    <string name="flippy_email">info@flippy.co</string>
+    <string name="flippy_email_subject">Flippy feedback</string>
+    <string name="flippy_email_body">Flippy is one of the best works I\'ve ever seen</string>
+
 
 
 </resources>

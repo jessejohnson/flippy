@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ShareActionProvider;
 
 import com.jojo.flippy.adapter.CustomDrawer;
 import com.jojo.flippy.adapter.DrawerItem;
@@ -31,6 +33,7 @@ public class CommunityCenterActivity extends Activity{
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+    private ShareActionProvider shareActionProvider;
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
@@ -149,8 +152,24 @@ public class CommunityCenterActivity extends Activity{
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                // write code to execute when clicked on this option
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.app_name));
+                sendIntent.setType("text/plain");
+                sendIntent.createChooser(sendIntent, getResources().getText(R.string.app_name));
+                startActivity(sendIntent);
+                return true;
+            case R.id.action_feedback:
+                sendFeedback();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
 
-        return false;
+
     }
 
     @Override
@@ -169,6 +188,7 @@ public class CommunityCenterActivity extends Activity{
                                 long id) {
             SelectItem(position);
 
+
         }
     }
 
@@ -176,7 +196,17 @@ public class CommunityCenterActivity extends Activity{
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.community_center_menu, menu);
+        // Return true to display menu
         return true;
+
+    }
+    public void sendFeedback(){
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        emailIntent.setType("plain/text");
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{getResources().getString(R.string.flippy_email)});
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.flippy_email_subject));
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, getResources().getString(R.string.flippy_email_body));
+        startActivity(Intent.createChooser(emailIntent, getResources().getString(R.string.flippy_email_subject)));
     }
 
 }
