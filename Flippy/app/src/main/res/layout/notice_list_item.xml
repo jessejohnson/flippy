@@ -51,7 +51,7 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="100dp"
         android:id="@+id/imageViewNoticeImage"
         android:src="@drawable/splash_bg"
         android:scaleType="centerCrop"
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/lorem_ipsum"
-        android:id="@+id/textView"
+        android:id="@+id/textViewNoticeText"
         android:layout_below="@+id/imageViewNoticeImage"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
