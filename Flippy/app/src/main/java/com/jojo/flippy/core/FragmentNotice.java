@@ -41,7 +41,7 @@ public class FragmentNotice extends Fragment {
         //populate noticeFeed with dummy values to test app
         noticeFeed.add(new Notice("1", "admin", "SRC2014", "Welcome Back!", "sub",
                 "We the SRC2014 welcome all freshers to school, and all continuing students" +
-                        " back to school", URI.create("")));
+                        " back to school", URI.create("http://www.citifmonline.com/wp-content/uploads/2014/05/UG-111.jpg")));
         noticeFeed.add(new Notice("2", "echo", "Echo Legon", "Fresher's Party!", "sub",
                 "The semester begins with the hottest freshers at Aphro, Friday night!",
                 URI.create("")));

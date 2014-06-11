@@ -53,7 +53,8 @@ public class NoticeListAdapter extends BaseAdapter {
         TextView content = (TextView) v.findViewById(R.id.textViewNoticeText);
 
         title.setText(noticeArrayList.get(i).getTitle());
-        subtitle.setText("from " + noticeArrayList.get(i).getCreatorId() + " in " + noticeArrayList.get(i).getChannelId());
+        subtitle.setText("from " + noticeArrayList.get(i).getCreatorId() + " @ " + noticeArrayList.get(i).getChannelId());
+
         content.setText(noticeArrayList.get(i).getContent());
 
         Ion.with(image).load(String.valueOf(noticeArrayList.get(i).getImageUrl()));
