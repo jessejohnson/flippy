@@ -97,6 +97,17 @@
     <string name="dummy_user_email">brightahedor@gmail.com</string>
     <string name="dummy_user_number">(+233) 543400278</string>
 
+    <!--notice list item strings-->
+    <string name="notice_title">Notice Title</string>
+    <string name="notice_subtitle">from channel @ time</string>
+    <string name="lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+        sed diam nonummy nibh euismod tincidunt ut laoreet dolore
+        magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
+        quis nostrud exerci tation ullamcorper suscipit lobortis nisl
+        ut aliquip ex
+    </string>
+
 
 
 </resources>
