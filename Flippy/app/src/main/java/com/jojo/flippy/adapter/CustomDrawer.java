@@ -73,9 +73,9 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
             //check if the drawer item is of index zero
             drawerHolder.itemLayout.setVisibility(View.GONE);
             drawerHolder.accountLayout.setVisibility(LinearLayout.VISIBLE);
-            drawerHolder.userName.setText("Bright Ahedor");
-            drawerHolder.userEmail.setText("bright@gmail.com");
-            drawerHolder.userImage.setImageResource(R.drawable.test);
+            drawerHolder.userName.setText(R.string.dummy_user_name);
+            drawerHolder.userEmail.setText(R.string.dummy_user_email);
+            drawerHolder.userImage.setImageResource(R.drawable.sample_user);
         }else {
             //destroy all the other views if not in the item with the zeroth index
             drawerHolder.user_frame.setVisibility(View.GONE);
