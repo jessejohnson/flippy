@@ -102,6 +102,8 @@
     <string name="flippy_email_subject">Flippy feedback</string>
     <string name="flippy_email_body">Flippy is one of the best works I\'ve ever seen</string>
 
-
+    <!--notice list item strings-->
+    <string name="notice_title">Notice Title</string>
+    <string name="notice_subtitle">from channel @ time</string>
 
 </resources>

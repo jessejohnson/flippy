@@ -1,72 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/margin_five"
-    android:paddingLeft="@dimen/margin_five"
-    android:paddingRight="@dimen/margin_five"
-    android:paddingTop="@dimen/margin_five"
-    tools:context="com.jojo.flippy.profile.AccountProfileActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.8">
+
+        <LinearLayout
+            android:id="@+id/seTaskActivityRoot"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/flippy_light_header"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_ten">
+
+                <ImageView
+                    android:id="@+id/imageViewUserPic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/sample_user"
+                    android:contentDescription="@string/app_name"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/textViewUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_ten"
+                    android:text="@string/dummy_user_name"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/flippy_white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_five"
+                android:layout_marginTop="@dimen/margin_ten"
+                android:background="@color/flippy_light_header"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewUserEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/margin_five"
+                    android:text="@string/dummy_user_email"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/flippy_white" />
+
+                <TextView
+                    android:id="@+id/textViewUserNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/margin_five"
+                    android:text="@string/dummy_user_number"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/flippy_white" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/flippy_light_header"
-        android:orientation="vertical"
-        android:padding="@dimen/margin_ten">
-
-        <ImageView
-            android:id="@+id/imageViewUserPic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sample_user"
-            android:contentDescription="@string/app_name"
-            android:scaleType="centerCrop" />
-
-        <TextView
-            android:id="@+id/textViewUsername"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_ten"
-            android:text="@string/dummy_user_name"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/flippy_white" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_five"
-        android:layout_marginTop="@dimen/margin_ten"
-        android:background="@color/flippy_light_header"
+        android:layout_height="0dip"
+        android:layout_weight="0.2"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textViewUserEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/margin_five"
-            android:text="@string/dummy_user_email"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/flippy_white" />
-
-        <TextView
-            android:id="@+id/textViewUserNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/margin_five"
-            android:text="@string/dummy_user_number"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/flippy_white" />
+        <ListView
+            android:id="@+id/listViewUserChannels"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/flippy_orange_light"
+            android:dividerHeight="1dp"
+            android:listSelector="@drawable/drawer_list_selector" />
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/listViewUserChannels"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:divider="@color/flippy_orange_light"
-        android:dividerHeight="1dp"
-        android:listSelector="@drawable/drawer_list_selector" />
-
 </LinearLayout>
+
