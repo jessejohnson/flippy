@@ -11,9 +11,6 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.jojo.flippy.adapter.ChannelItem;
-import com.jojo.flippy.adapter.CustomChannel;
 import com.jojo.flippy.adapter.SettingsAdapter;
 import com.jojo.flippy.adapter.SettingsItem;
 import com.jojo.flippy.app.R;
@@ -44,14 +41,16 @@ public class FragmentSettings extends Fragment {
 
         //Loading the list with a dummy data
         SettingsItems = new ArrayList<SettingsItem>();
-        SettingsItem settingHelp = new SettingsItem(R.drawable.ic_action_person, getResources().getString(R.string.settings_help), "200 members");
+        SettingsItem settingHelp = new SettingsItem(R.drawable.ic_action_help, getResources().getString(R.string.settings_help), "200 members");
         SettingsItem settingProfile = new SettingsItem(R.drawable.ic_action_settings, getResources().getString(R.string.settings_profile), "4000 members");
-        SettingsItem settingNotifications = new SettingsItem(R.drawable.ic_action_new, getResources().getString(R.string.settings_account), "200 members");
-        SettingsItem settingCommunity = new SettingsItem(R.drawable.ic_action_person, getResources().getString(R.string.settings_accessibility), "4000 members");
+        SettingsItem settingNotifications = new SettingsItem(R.drawable.ic_action_new, getResources().getString(R.string.settings_notifications), "200 members");
+        SettingsItem settingCommunity = new SettingsItem(R.drawable.ic_action_group, getResources().getString(R.string.settings_accessibility), "4000 members");
+        SettingsItem settingAbout = new SettingsItem(R.drawable.ic_action_about, getResources().getString(R.string.settings_about), "4000 members");
         SettingsItems.add(settingHelp);
         SettingsItems.add(settingProfile);
         SettingsItems.add(settingNotifications);
         SettingsItems.add(settingCommunity);
+        SettingsItems.add(settingAbout);
 
 
         listViewSettings = (ListView)view.findViewById(R.id.listViewSettings);

@@ -133,6 +133,7 @@
     <string name="settings_account">Account</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_accessibility">Flippy community</string>
+    <string name="settings_about">About Flippy</string>
 
 
 </resources>
