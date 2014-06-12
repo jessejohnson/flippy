@@ -24,6 +24,7 @@ import com.jojo.flippy.adapter.CustomDrawer;
 import com.jojo.flippy.adapter.DrawerItem;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.profile.AccountProfileActivity;
+import com.jojo.flippy.util.ToastMessages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -157,16 +158,14 @@ public class CommunityCenterActivity extends Activity{
         switch (item.getItemId()) {
             case R.id.action_share:
                 // write code to execute when clicked on this option
-                Intent sendIntent = new Intent();
-                sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.app_name));
-                sendIntent.setType("text/plain");
-                sendIntent.createChooser(sendIntent, getResources().getText(R.string.app_name));
-                startActivity(sendIntent);
+                shareFlippy();
                 return true;
             case R.id.action_feedback:
                 sendFeedback();
                 return true;
+            case R.id.action_add:
+                channelListDialog();
+                return  true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -202,6 +201,16 @@ public class CommunityCenterActivity extends Activity{
         return true;
 
     }
+
+    private void shareFlippy() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.app_name));
+        sendIntent.setType("text/plain");
+        sendIntent.createChooser(sendIntent, getResources().getText(R.string.app_name));
+        startActivity(sendIntent);
+    }
+    //The send feedback function
     public void sendFeedback(){
         final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
         emailIntent.setType("plain/text");
@@ -209,6 +218,22 @@ public class CommunityCenterActivity extends Activity{
         emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.flippy_email_subject));
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, getResources().getString(R.string.flippy_email_body));
         startActivity(Intent.createChooser(emailIntent, getResources().getString(R.string.flippy_email_subject)));
+    }
+    //Alert dialog showing a list of channel user belongs to
+    private void channelListDialog() {
+        //TODO this should line should return a list of user channels subscribed to
+        final CharSequence[] channelList = {"SRC channel", "Class of 2015, CS", "AAESS Group"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.choose_channel_list_dialog_title);
+        builder.setItems(channelList, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                // Do something with the selection
+                //get the selected option and pass it on to the next activity
+                ToastMessages.showToastLong(CommunityCenterActivity.this,channelList[item].toString());
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     @Override

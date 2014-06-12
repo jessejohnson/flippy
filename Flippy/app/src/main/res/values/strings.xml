@@ -111,6 +111,7 @@
     <string name="exit_message">Are you sure you want to exit Flippy ?</string>
     <string name="exit_positive">Yea, I want to</string>
     <string name="exit_negative">No, not now</string>
+    <string name="choose_channel_list_dialog_title">Choose a channel</string>
 
 
 </resources>
