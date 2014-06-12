@@ -63,4 +63,10 @@ public class SelectCommunityActivity extends Activity {
         super.onBackPressed();
         finish();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
 }

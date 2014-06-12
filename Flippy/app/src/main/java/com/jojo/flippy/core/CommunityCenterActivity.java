@@ -1,8 +1,10 @@
 package com.jojo.flippy.core;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -209,4 +211,20 @@ public class CommunityCenterActivity extends Activity{
         startActivity(Intent.createChooser(emailIntent, getResources().getString(R.string.flippy_email_subject)));
     }
 
+    @Override
+    public void onBackPressed() {
+       /* super.onBackPressed();*/
+        new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.exit_title)
+                .setMessage(R.string.exit_message)
+                .setPositiveButton(R.string.exit_positive, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                        intent.addCategory(Intent.CATEGORY_HOME);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+                }).setNegativeButton(R.string.exit_negative, null).show();
+    }
 }
