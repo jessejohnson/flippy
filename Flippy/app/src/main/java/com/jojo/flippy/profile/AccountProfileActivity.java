@@ -40,7 +40,7 @@ public class AccountProfileActivity extends ActionBarActivity {
 
         userChannelListView = (ListView) findViewById(R.id.listViewUserChannels);
         CustomUserChannel adapter = new CustomUserChannel(this,
-                R.layout.user_channel_listview, rowItems);
+                R.layout.user_channel_list_item, rowItems);
         userChannelListView.setAdapter(adapter);
 
 

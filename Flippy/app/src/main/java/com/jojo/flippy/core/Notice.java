@@ -14,6 +14,7 @@ public class Notice {
     String subtitle;
     String content;
     URI imageUrl;
+    boolean isStarred;
     Date timeStamp;
     Date reminderDate;
     String location;
@@ -27,6 +28,7 @@ public class Notice {
         this.subtitle = subtitle;
         this.content = content;
         this.imageUrl = imageUrl;
+        this.isStarred = false;
     }
 
     public String getId() {
@@ -83,5 +85,13 @@ public class Notice {
 
     public void setImageUrl(URI imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public boolean isStarred(){
+        return  this.isStarred;
+    }
+
+    public void setStarred(boolean starred){
+        this.isStarred = starred;
     }
 }

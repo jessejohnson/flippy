@@ -44,13 +44,26 @@ public class NoticeListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View v = inflater.inflate(R.layout.notice_list_item, viewGroup, false);
         TextView title = (TextView) v.findViewById(R.id.textViewNoticeTitle);
         TextView subtitle = (TextView) v.findViewById(R.id.textViewNoticeSubtitle);
         ImageView image = (ImageView) v.findViewById(R.id.imageViewNoticeImage);
         TextView content = (TextView) v.findViewById(R.id.textViewNoticeText);
+
+        final ImageView star = (ImageView) v.findViewById(R.id.imageViewStar);
+        star.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noticeArrayList.get(i).setStarred(!noticeArrayList.get(i).isStarred());
+                if(noticeArrayList.get(i).isStarred()){
+                    star.setImageResource(R.drawable.trans_star);
+                } else {
+                    star.setImageResource(R.drawable.trans_star_white);
+                }
+            }
+        });
 
         title.setText(noticeArrayList.get(i).getTitle());
         subtitle.setText("from " + noticeArrayList.get(i).getCreatorId() + " @ " + noticeArrayList.get(i).getChannelId());

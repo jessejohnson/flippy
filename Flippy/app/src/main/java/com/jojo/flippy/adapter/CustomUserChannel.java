@@ -40,7 +40,7 @@ public class CustomUserChannel extends ArrayAdapter<ChannelItem> {
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.user_channel_listview, null);
+            convertView = mInflater.inflate(R.layout.user_channel_list_item, null);
             holder = new ViewHolder();
             holder.textViewNumberOfMembers = (TextView) convertView.findViewById(R.id.textViewNumberOfMembers);
             holder.textViewChannelName = (TextView) convertView.findViewById(R.id.textViewChannelName);
