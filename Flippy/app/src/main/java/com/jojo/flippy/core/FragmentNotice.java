@@ -5,16 +5,14 @@ package com.jojo.flippy.core;
  */
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
+import com.jojo.flippy.adapter.Notice;
+import com.jojo.flippy.adapter.NoticeListAdapter;
 import com.jojo.flippy.app.R;
 
 import java.net.URI;
