@@ -12,6 +12,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -71,7 +72,6 @@ public class CommunityCenterActivity extends Activity{
 
         //setting the onclick listeners of the drawer items using the sub class
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -87,7 +87,7 @@ public class CommunityCenterActivity extends Activity{
 
             public void onDrawerOpened(View drawerView) {
                 getActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu(); // creates call to
+                invalidateOptionsMenu();
                 //onPrepareOptionsMenu();
             }
         };
@@ -172,6 +172,27 @@ public class CommunityCenterActivity extends Activity{
 
 
     }
+    //Setting the selection of the context menu
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
+                .getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.action_detail_notice:
+                //call the detail view activity passing all the intent to display
+                return true;
+            case  R.id.action_reminder_notice:
+                //call the alarm reminder of the system and set the alert
+            case R.id.action_share_notice:
+                //show the user his available options to share and display success toast
+            case R.id.action_favourite_notice:
+                //call the user favourite function
+            case R.id.action_remove_notice:
+                //remove the notice from the users board
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -200,6 +221,14 @@ public class CommunityCenterActivity extends Activity{
         // Return true to display menu
         return true;
 
+    }
+
+    //Inflating the notice context menu
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.notice_context_menu, menu);
     }
 
     private void shareFlippy() {

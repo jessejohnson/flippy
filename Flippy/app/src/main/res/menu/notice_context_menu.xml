@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.jojo.flippy.core.CommunityChannelActivity">
+    <item
+        android:id="@+id/action_remove_notice"
+        android:orderInCategory="500"
+        android:title="@string/notice_remove" />
+    <item
+        android:id="@+id/action_detail_notice"
+        android:orderInCategory="100"
+        android:title="@string/notice_detail" />
+    <item
+        android:id="@+id/action_reminder_notice"
+        android:orderInCategory="200"
+        android:title="@string/notice_reminder" />
+    <item
+        android:id="@+id/action_favourite_notice"
+        android:orderInCategory="300"
+        android:title="@string/notice_share" />
+    <item
+        android:id="@+id/action_share_notice"
+        android:orderInCategory="400"
+        android:title="@string/notice_favourite" />
+</menu>

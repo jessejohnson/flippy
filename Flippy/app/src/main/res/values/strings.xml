@@ -114,4 +114,12 @@
     <string name="choose_channel_list_dialog_title">Choose a channel</string>
 
 
+   <!-- notice context menu strings-->
+    <string name="notice_detail">View details</string>
+    <string name="notice_reminder">Set reminder</string>
+    <string name="notice_favourite">Favourite notice</string>
+    <string name="notice_share">Share notice</string>
+    <string name="notice_remove">Remove from board</string>
+
+
 </resources>

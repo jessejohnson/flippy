@@ -12,8 +12,6 @@
         android:id="@+id/listViewChannels"
         android:divider="@null"
         android:dividerHeight="@dimen/margin_ten"
-        android:listSelector="@android:color/transparent"
-        android:cacheColorHint="@android:color/transparent"
         android:headerDividersEnabled="true"
         android:footerDividersEnabled="true"
         android:choiceMode="singleChoice"

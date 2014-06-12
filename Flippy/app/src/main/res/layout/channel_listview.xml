@@ -19,7 +19,7 @@
         <ImageView
             android:id="@+id/imageViewCommunityChannel"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="100dp"
             android:scaleType="centerCrop"
             android:contentDescription="@string/app_name" />
 
@@ -73,6 +73,5 @@
                     android:textAppearance="?android:attr/textAppearanceMedium" />
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
 </RelativeLayout>
