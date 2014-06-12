@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,11 +21,13 @@ import java.util.List;
 public class CustomChannel extends ArrayAdapter<ChannelItem> {
 
     Context context;
+    private  boolean isUserChannel;
 
     public CustomChannel(Context context, int resourceId,
-                         List<ChannelItem> items) {
+                         List<ChannelItem> items,boolean isUserChannels) {
         super(context, resourceId, items);
         this.context = context;
+        this.isUserChannel=isUserChannels;
     }
 
     /*private view holder class*/
@@ -33,6 +36,7 @@ public class CustomChannel extends ArrayAdapter<ChannelItem> {
         TextView textViewChannelName;
         TextView textViewNumberOfMembers;
         TextView textViewStatus;
+        Button buttonSubscriptionState;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -48,6 +52,7 @@ public class CustomChannel extends ArrayAdapter<ChannelItem> {
             holder.textViewChannelName = (TextView) convertView.findViewById(R.id.textViewChannelNameCustom);
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageViewCommunityChannel);
             holder.textViewStatus =(TextView)convertView.findViewById(R.id.textViewChannelStatusCustom);
+            holder.buttonSubscriptionState = (Button)convertView.findViewById(R.id.buttonSubscriptionState);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -57,6 +62,10 @@ public class CustomChannel extends ArrayAdapter<ChannelItem> {
         holder.imageView.setImageResource(rowItem.getImageId());
         holder.textViewStatus.setText(rowItem.getStatus());
 
+        //check to see if the adapter displays only user channel, then set the subscription button to invisible state
+         if(isUserChannel){
+             holder.buttonSubscriptionState.setVisibility(convertView.GONE);
+         }
         return convertView;
     }
 }

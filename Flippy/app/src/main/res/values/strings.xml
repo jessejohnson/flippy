@@ -68,6 +68,8 @@
     <string name="default_channel_number">10 members</string>
     <string name="manage_channel">Manage Channels</string>
     <string name="add_channel">Add A Channel</string>
+    <string name="subscription_state_true">Subscribe</string>
+    <string name="subscription_state_false">Unsubscribe</string>
 
     <!-- The facebook application id -->
     <string name="app_id">305971362902085</string>

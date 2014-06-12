@@ -47,7 +47,7 @@ public class FragmentChannel extends Fragment {
 
         ChannelListView = (ListView)view.findViewById(R.id.listViewChannels);
         CustomChannel adapter = new CustomChannel(getActivity(),
-                R.layout.channel_listview, rowItems);
+                R.layout.channel_listview, rowItems,true);
         ChannelListView.setAdapter(adapter);
 
         return view;

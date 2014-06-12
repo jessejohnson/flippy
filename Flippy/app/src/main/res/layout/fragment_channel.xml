@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:id="@+id/listViewChannels"
         android:divider="@null"
-        android:dividerHeight="@dimen/margin_ten"
+        android:dividerHeight="@dimen/margin_five"
         android:headerDividersEnabled="true"
         android:footerDividersEnabled="true"
         android:choiceMode="singleChoice"
