@@ -98,6 +98,7 @@
     <string name="dummy_user_name">Bright Kwame Ahedor</string>
     <string name="dummy_user_email">brightahedor@gmail.com</string>
     <string name="dummy_user_number">(+233) 543400278</string>
+    <string name="profile_list_channels">My Channels</string>
 
     <!--the feedback strings-->
     <string name="flippy_email">info@flippy.co</string>
@@ -122,6 +123,16 @@
     <string name="notice_favourite">Favourite notice</string>
     <string name="notice_share">Share notice</string>
     <string name="notice_remove">Remove from board</string>
+
+
+    <!--fragment settings strings-->
+    <string name="settings_title">Settings title</string>
+    <string name="settings_subtitle">Settings subtitle</string>
+    <string name="settings_help">Help</string>
+    <string name="settings_profile">Profile</string>
+    <string name="settings_account">Account</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_accessibility">Flippy community</string>
 
 
 </resources>

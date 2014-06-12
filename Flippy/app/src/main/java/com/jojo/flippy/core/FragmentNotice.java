@@ -50,7 +50,7 @@ public class FragmentNotice extends Fragment {
         noticeList = (ListView) view.findViewById(R.id.listViewNoticeList);
         noticeList.setAdapter(listAdapter);
 
-        //registering the notice list for context menu action
+        //registering the list view for context menu actions
         registerForContextMenu(noticeList);
 
 

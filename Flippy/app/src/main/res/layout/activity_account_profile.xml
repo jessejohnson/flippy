@@ -78,11 +78,22 @@
         android:layout_height="0dip"
         android:layout_weight="0.3"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/flippy_dark_header"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:paddingBottom="@dimen/margin_two"
+            android:paddingLeft="@dimen/margin_ten"
+            android:text="@string/profile_list_channels"
+            android:id="@+id/textViewListProfileTitle" />
+
         <ListView
             android:id="@+id/listViewUserChannels"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@color/flippy_orange_light"
+            android:divider="@color/flippy_dark_header"
             android:dividerHeight="1dp"
             android:listSelector="@drawable/drawer_list_selector" />
     </LinearLayout>
