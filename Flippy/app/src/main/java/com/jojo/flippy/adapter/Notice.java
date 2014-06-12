@@ -1,4 +1,4 @@
-package com.jojo.flippy.core;
+package com.jojo.flippy.adapter;
 
 import java.net.URI;
 import java.util.Date;

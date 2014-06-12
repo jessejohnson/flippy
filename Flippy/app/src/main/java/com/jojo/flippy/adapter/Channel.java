@@ -1,25 +1,27 @@
 package com.jojo.flippy.adapter;
 
+import java.net.URI;
+
 /**
  * Created by bright on 6/11/14.
  */
-public class ChannelItem {
-    private int imageId;
+public class Channel {
+    private URI imageUrl;
     private String channelName;
     private String status;
     private String members;
 
-    public ChannelItem(int imageId, String channelName, String status,String members) {
-        this.imageId = imageId;
+    public Channel(URI imageUrl, String channelName, String status, String members) {
+        this.imageUrl = imageUrl;
         this.channelName = channelName;
         this.status = status;
         this.members = members;
     }
-    public int getImageId() {
-        return imageId;
+    public URI getImageUrl() {
+        return imageUrl;
     }
-    public void setImageId(int imageId) {
-        this.imageId = imageId;
+    public void setImageUrl(URI imageUrl) {
+        this.imageUrl = imageUrl;
     }
     public String getStatus() {
         return status;

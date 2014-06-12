@@ -14,13 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jojo.flippy.app.R;
+import com.koushikdutta.ion.Ion;
 
-public class CustomUserChannel extends ArrayAdapter<ChannelItem> {
+public class CustomUserChannel extends ArrayAdapter<Channel> {
 
     Context context;
 
     public CustomUserChannel(Context context, int resourceId,
-                                 List<ChannelItem> items) {
+                                 List<Channel> items) {
         super(context, resourceId, items);
         this.context = context;
     }
@@ -35,7 +36,7 @@ public class CustomUserChannel extends ArrayAdapter<ChannelItem> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        ChannelItem rowItem = getItem(position);
+        Channel rowItem = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -52,7 +53,7 @@ public class CustomUserChannel extends ArrayAdapter<ChannelItem> {
 
         holder.textViewNumberOfMembers.setText(rowItem.getMembers());
         holder.textViewChannelName.setText(rowItem.getChannelName());
-        holder.imageView.setImageResource(rowItem.getImageId());
+        Ion.with(holder.imageView).load(String.valueOf(rowItem.getImageUrl()));
         holder.textViewStatus.setText(rowItem.getStatus());
 
         return convertView;

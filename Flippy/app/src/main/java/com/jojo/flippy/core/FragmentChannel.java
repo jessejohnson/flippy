@@ -7,10 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.jojo.flippy.adapter.ChannelItem;
-import com.jojo.flippy.adapter.CustomChannel;
+import com.jojo.flippy.adapter.Channel;
+import com.jojo.flippy.adapter.ChannelAdapter;
 import com.jojo.flippy.app.R;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class FragmentChannel extends Fragment {
     //Instance of the user channel
     ListView ChannelListView;
     //Instance of the channel item
-    List<ChannelItem> rowItems;
+    List<Channel> rowItems;
 
 
     public FragmentChannel() {
@@ -38,15 +39,16 @@ public class FragmentChannel extends Fragment {
 
 
         //Loading the list with a dummy data
-        rowItems = new ArrayList<ChannelItem>();
-        ChannelItem item = new ChannelItem(R.drawable.sample_user, "GESA KNUST", "200 members","active");
-        ChannelItem item1 = new ChannelItem(R.drawable.user_profile, "SRC Legon, 2015", "4000 members","admin");
+        rowItems = new ArrayList<Channel>();
+        Channel item = new Channel(URI.create("http://images-mediawiki-sites.thefullwiki.org/02/1/0/0/73473104099591446.jpg"),
+                "GESA KNUST", "200 members","active");
+        Channel item1 = new Channel(URI.create("http://www.ugsrc.com/wp-content/uploads/2013/08/6.jpg"), "SRC Legon, 2015", "4000 members","admin");
         rowItems.add(item);
         rowItems.add(item1);
 
 
         ChannelListView = (ListView)view.findViewById(R.id.listViewChannels);
-        CustomChannel adapter = new CustomChannel(getActivity(),
+        ChannelAdapter adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems,true);
         ChannelListView.setAdapter(adapter);
 

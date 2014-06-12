@@ -7,10 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.jojo.flippy.adapter.ChannelItem;
+import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.CustomUserChannel;
 import com.jojo.flippy.app.R;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class AccountProfileActivity extends ActionBarActivity {
     //Instance of the user channel
     ListView userChannelListView;
     //Instance of the channel item
-    List<ChannelItem> rowItems;
+    List<Channel> rowItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +32,9 @@ public class AccountProfileActivity extends ActionBarActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
        //Loading the list with a dummy data
-        rowItems = new ArrayList<ChannelItem>();
-        ChannelItem item = new ChannelItem(R.drawable.sample_user, "GESA KNUST", "200 members","active");
-        ChannelItem item1 = new ChannelItem(R.drawable.sample_user, "SRC Legon, 2015", "4000 members","admin");
+        rowItems = new ArrayList<Channel>();
+        Channel item = new Channel(URI.create(""), "GESA KNUST", "200 members","active");
+        Channel item1 = new Channel(URI.create(""), "SRC Legon, 2015", "4000 members","admin");
         rowItems.add(item);
         rowItems.add(item1);
 

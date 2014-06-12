@@ -1,4 +1,4 @@
-package com.jojo.flippy.core;
+package com.jojo.flippy.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jojo.flippy.adapter.Notice;
 import com.jojo.flippy.app.R;
 import com.koushikdutta.ion.Ion;
 

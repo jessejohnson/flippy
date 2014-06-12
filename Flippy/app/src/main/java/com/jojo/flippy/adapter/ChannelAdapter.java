@@ -15,16 +15,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jojo.flippy.app.R;
+import com.koushikdutta.ion.Ion;
 
 import java.util.List;
 
-public class CustomChannel extends ArrayAdapter<ChannelItem> {
+public class ChannelAdapter extends ArrayAdapter<Channel> {
 
     Context context;
     private  boolean isUserChannel;
 
-    public CustomChannel(Context context, int resourceId,
-                         List<ChannelItem> items,boolean isUserChannels) {
+    public ChannelAdapter(Context context, int resourceId,
+                          List<Channel> items, boolean isUserChannels) {
         super(context, resourceId, items);
         this.context = context;
         this.isUserChannel=isUserChannels;
@@ -41,7 +42,7 @@ public class CustomChannel extends ArrayAdapter<ChannelItem> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        ChannelItem rowItem = getItem(position);
+        Channel rowItem = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -59,7 +60,7 @@ public class CustomChannel extends ArrayAdapter<ChannelItem> {
 
         holder.textViewNumberOfMembers.setText(rowItem.getMembers());
         holder.textViewChannelName.setText(rowItem.getChannelName());
-        holder.imageView.setImageResource(rowItem.getImageId());
+        Ion.with(holder.imageView).load(String.valueOf(rowItem.getImageUrl()));
         holder.textViewStatus.setText(rowItem.getStatus());
 
         //check to see if the adapter displays only user channel, then set the subscription button to invisible state
