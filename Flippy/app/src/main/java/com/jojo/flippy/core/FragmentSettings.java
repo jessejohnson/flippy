@@ -41,11 +41,11 @@ public class FragmentSettings extends Fragment {
 
         //Loading the list with a dummy data
         SettingsItems = new ArrayList<SettingsItem>();
-        SettingsItem settingHelp = new SettingsItem(R.drawable.ic_action_help, getResources().getString(R.string.settings_help), "200 members");
-        SettingsItem settingProfile = new SettingsItem(R.drawable.ic_action_settings, getResources().getString(R.string.settings_profile), "4000 members");
-        SettingsItem settingNotifications = new SettingsItem(R.drawable.ic_action_new, getResources().getString(R.string.settings_notifications), "200 members");
-        SettingsItem settingCommunity = new SettingsItem(R.drawable.ic_action_group, getResources().getString(R.string.settings_accessibility), "4000 members");
-        SettingsItem settingAbout = new SettingsItem(R.drawable.ic_action_about, getResources().getString(R.string.settings_about), "4000 members");
+        SettingsItem settingHelp = new SettingsItem(R.drawable.ic_action_help, getResources().getString(R.string.settings_help), getResources().getString(R.string.settings_help_subtitle));
+        SettingsItem settingProfile = new SettingsItem(R.drawable.ic_action_person_dark, getResources().getString(R.string.settings_profile), getResources().getString(R.string.settings_profile_subtitle));
+        SettingsItem settingNotifications = new SettingsItem(R.drawable.ic_action_alarms, getResources().getString(R.string.settings_notifications), getResources().getString(R.string.settings_notifications_subtitle));
+        SettingsItem settingCommunity = new SettingsItem(R.drawable.ic_action_group_dark, getResources().getString(R.string.settings_accessibility),getResources().getString(R.string.settings_accessibility_subtitle));
+        SettingsItem settingAbout = new SettingsItem(R.drawable.ic_action_about, getResources().getString(R.string.settings_about), getResources().getString(R.string.settings_about_subtitle));
         SettingsItems.add(settingHelp);
         SettingsItems.add(settingProfile);
         SettingsItems.add(settingNotifications);

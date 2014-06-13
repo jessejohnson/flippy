@@ -129,11 +129,19 @@
     <string name="settings_title">Settings title</string>
     <string name="settings_subtitle">Settings subtitle</string>
     <string name="settings_help">Help</string>
+    <string name="settings_help_subtitle">get help information</string>
     <string name="settings_profile">Profile</string>
-    <string name="settings_account">Account</string>
+    <string name="settings_profile_subtitle">edit your account details</string>
     <string name="settings_notifications">Notifications</string>
+    <string name="settings_notifications_subtitle">configure your notifications</string>
     <string name="settings_accessibility">Flippy community</string>
+    <string name="settings_accessibility_subtitle">manage flippy community accessibility</string>
     <string name="settings_about">About Flippy</string>
+    <string name="settings_about_subtitle">more about flippy</string>
+
+
+    <!--the channel members string-->
+    <string name="channel_members_activity_title">Channel members</string>
 
 
 </resources>
