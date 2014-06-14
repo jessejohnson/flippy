@@ -33,10 +33,14 @@ public class AccountProfileActivity extends ActionBarActivity {
 
        //Loading the list with a dummy data
         rowItems = new ArrayList<Channel>();
-        Channel item = new Channel(URI.create(""), "GESA KNUST", "200 members","active");
-        Channel item1 = new Channel(URI.create(""), "SRC Legon, 2015", "4000 members","admin");
+        Channel item = new Channel(URI.create("http://images-mediawiki-sites.thefullwiki.org/02/1/0/0/73473104099591446.jpg"), "GESA KNUST", "200 members","active");
+        Channel item1 = new Channel(URI.create("http://images-mediawiki-sites.thefullwiki.org/02/1/0/0/73473104099591446.jpg"), "SRC Legon, 2015", "4000 members","admin");
+        Channel item2 = new Channel(URI.create("http://images-mediawiki-sites.thefullwiki.org/02/1/0/0/73473104099591446.jpg"), "GESA KNUST", "200 members","active");
+        Channel item3 = new Channel(URI.create("http://images-mediawiki-sites.thefullwiki.org/02/1/0/0/73473104099591446.jpg"), "SRC Legon, 2015", "4000 members","admin");
         rowItems.add(item);
         rowItems.add(item1);
+        rowItems.add(item2);
+        rowItems.add(item3);
 
 
         userChannelListView = (ListView) findViewById(R.id.listViewUserChannels);

@@ -6,10 +6,5 @@
         android:id="@+id/action_edit_profile"
         android:orderInCategory="100"
         android:title="@string/profile_edit"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_my_channels"
-        android:orderInCategory="200"
-        android:title="@string/profile_list_channels"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 </menu>

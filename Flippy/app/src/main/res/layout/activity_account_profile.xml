@@ -7,11 +7,10 @@
     android:paddingLeft="@dimen/margin_two"
     android:paddingRight="@dimen/margin_two"
     android:paddingTop="@dimen/margin_two">
-
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="0dip"
-        android:layout_weight="0.7">
+        android:layout_weight="0.5">
 
         <LinearLayout
             android:id="@+id/seTaskActivityRoot"
@@ -28,8 +27,9 @@
 
                 <ImageView
                     android:id="@+id/imageViewUserPic"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center_horizontal"
                     android:background="@drawable/sample_user"
                     android:contentDescription="@string/app_name"
                     android:scaleType="centerCrop" />
@@ -76,7 +76,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
-        android:layout_weight="0.3"
+        android:layout_weight="0.5"
         android:orientation="vertical">
 
         <TextView
@@ -93,8 +93,6 @@
             android:id="@+id/listViewUserChannels"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@color/flippy_dark_header"
-            android:dividerHeight="1dp"
             android:listSelector="@drawable/drawer_list_selector" />
     </LinearLayout>
 </LinearLayout>
