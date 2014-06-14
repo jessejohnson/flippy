@@ -1,13 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.jojo.flippy.profile.AccountProfileActivity" >
-    <item android:id="@+id/action_edit_profile"
-        android:title="@string/profile_edit"
+    tools:context="com.jojo.flippy.profile.AccountProfileActivity">
+    <item
+        android:id="@+id/action_edit_profile"
         android:orderInCategory="100"
+        android:title="@string/profile_edit"
         app:showAsAction="never" />
-    <item android:id="@+id/action_my_channels"
-        android:title="@string/profile_list_channels"
+    <item
+        android:id="@+id/action_my_channels"
         android:orderInCategory="200"
+        android:title="@string/profile_list_channels"
         app:showAsAction="never" />
 </menu>
