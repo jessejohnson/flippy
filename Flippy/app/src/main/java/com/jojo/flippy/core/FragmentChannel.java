@@ -1,11 +1,14 @@
 package com.jojo.flippy.core;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.ChannelAdapter;
@@ -24,6 +27,10 @@ public class FragmentChannel extends Fragment {
     ListView ChannelListView;
     //Instance of the channel item
     List<Channel> rowItems;
+
+    private Intent intent;
+    private String channelName = "SRC channel";
+    private  String totalMembers = "125";
 
 
     public FragmentChannel() {
@@ -51,6 +58,21 @@ public class FragmentChannel extends Fragment {
         ChannelAdapter adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems,true);
         ChannelListView.setAdapter(adapter);
+
+        //Setting the click listener of the list view, if user clicks on a particular channel
+        ChannelListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+              //setting the click action for each of the items
+                intent = new Intent(getActivity(),ChannelMembers.class);
+                intent.putExtra("channelName",channelName);
+                intent.putExtra("totalMembers",totalMembers);
+                startActivity(intent);
+
+
+            }
+        });
 
         return view;
     }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayoutChannelMember"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/flippy_dark_header"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0.4"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/margin_ten">
+
+
+            <ImageView
+                android:id="@+id/imageViewMember"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:background="@drawable/image_round_corners"
+                android:contentDescription="@string/app_name"
+                android:padding="5dp"
+                android:scaleType="centerCrop" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_five"
+            android:layout_weight="0.6"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_ten">
+
+            <TextView
+                android:id="@+id/textViewMemberFirstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dummy_user_name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/flippy_white" />
+
+            <TextView
+                android:id="@+id/textViewMemberLastName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dummy_user_number"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/flippy_white" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -50,6 +50,7 @@
         </activity>
         <activity
             android:name="com.jojo.flippy.core.ChannelMembers"
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
             android:label="@string/channel_members_activity_title" >
         </activity>
         <activity

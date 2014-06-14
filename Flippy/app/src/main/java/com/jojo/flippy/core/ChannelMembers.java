@@ -6,7 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 
+import com.jojo.flippy.adapter.ChannelMemberAdapter;
+import com.jojo.flippy.adapter.SettingsAdapter;
+import com.jojo.flippy.adapter.SettingsItem;
 import com.jojo.flippy.app.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by bright on 6/12/14.
@@ -16,6 +22,8 @@ public class ChannelMembers extends Activity {
     private String channelName = null;
     private  String totalMembers = null;
     private ListView membershipList;
+    //Instance of the channel item
+    List<SettingsItem> ChannelMemberItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +39,22 @@ public class ChannelMembers extends Activity {
         if (channelName!=null && actionBar!=null && totalMembers != null){
             actionBar.setTitle(channelName);
             actionBar.setSubtitle(totalMembers + " members");
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+
+        //Loading the list with a dummy data
+        ChannelMemberItem = new ArrayList<SettingsItem>();
+        SettingsItem firstMember = new SettingsItem(R.drawable.sample_user, getResources().getString(R.string.dummy_user_name), getResources().getString(R.string.dummy_user_number));
+        SettingsItem secondMember = new SettingsItem(R.drawable.sample_user, getResources().getString(R.string.dummy_user_name), getResources().getString(R.string.dummy_user_number));
+        ChannelMemberItem.add(firstMember);
+        ChannelMemberItem.add(secondMember);
+
+
+        membershipList = (ListView)findViewById(R.id.listViewChannelMembers);
+        ChannelMemberAdapter adapter = new ChannelMemberAdapter(ChannelMembers.this,
+                R.layout.channel_members_listview, ChannelMemberItem);
+        membershipList.setAdapter(adapter);
 
     }
 }
