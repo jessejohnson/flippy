@@ -2,11 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="0dp"
     android:paddingLeft="@dimen/margin_two"
     android:paddingRight="@dimen/margin_two"
-    android:paddingTop="@dimen/margin_two"
-    android:orientation="vertical">
+    android:paddingTop="@dimen/margin_two">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -81,9 +81,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/profileChannelListView"
                 android:isScrollContainer="false" />
-
         </LinearLayout>
     </ScrollView>
-
 </RelativeLayout>
 
