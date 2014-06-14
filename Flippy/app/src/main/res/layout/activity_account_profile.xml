@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="0dp"
     android:paddingLeft="@dimen/margin_two"
     android:paddingRight="@dimen/margin_two"
-    android:paddingTop="@dimen/margin_two"
-    android:orientation="vertical">
+    android:paddingTop="@dimen/margin_two">
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -80,14 +80,14 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/textViewListProfileTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/flippy_dark_header"
-            android:textAppearance="?android:attr/textAppearanceMedium"
             android:paddingBottom="@dimen/margin_two"
             android:paddingLeft="@dimen/margin_ten"
             android:text="@string/profile_list_channels"
-            android:id="@+id/textViewListProfileTitle" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/flippy_dark_header" />
 
         <ListView
             android:id="@+id/listViewUserChannels"
