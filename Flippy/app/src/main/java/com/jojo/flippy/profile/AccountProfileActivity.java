@@ -1,6 +1,7 @@
 package com.jojo.flippy.profile;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +21,7 @@ public class AccountProfileActivity extends ActionBarActivity {
     ListView userChannelListView;
     //Instance of the channel item
     List<Channel> rowItems;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +51,6 @@ public class AccountProfileActivity extends ActionBarActivity {
         userChannelListView.setAdapter(adapter);
 
 
-
-
     }
 
 
@@ -63,11 +63,10 @@ public class AccountProfileActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_edit_profile) {
+            intent = new Intent(AccountProfileActivity.this,EditProfileActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

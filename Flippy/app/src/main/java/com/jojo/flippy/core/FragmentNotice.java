@@ -4,10 +4,12 @@ package com.jojo.flippy.core;
  * Created by bright on 6/9/14.
  */
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -23,6 +25,7 @@ public class FragmentNotice extends Fragment {
     ListView noticeList;
     ListAdapter listAdapter;
     ArrayList<Notice> noticeFeed = new ArrayList<Notice>();
+    private  Intent intent;
 
 
     public FragmentNotice() {
@@ -47,6 +50,20 @@ public class FragmentNotice extends Fragment {
         listAdapter = new NoticeListAdapter(this.getActivity(), noticeFeed);
         noticeList = (ListView) view.findViewById(R.id.listViewNoticeList);
         noticeList.setAdapter(listAdapter);
+
+
+        //Setting the click listener for the notice list
+        noticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                //setting the click action for each of the items
+                intent = new Intent(getActivity(),NoticeDetailActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
 
         //registering the list view for context menu actions
         registerForContextMenu(noticeList);

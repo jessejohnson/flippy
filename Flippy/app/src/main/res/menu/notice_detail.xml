@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.jojo.flippy.core.NoticeDetailActivity" >
+    <item android:id="@+id/action_settings"
+        android:title="@string/notice_menu_duplicate"
+        android:icon="@drawable/ic_action_share"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+    <item android:id="@+id/action_notice_alarm"
+        android:icon="@drawable/ic_action_add_alarm"
+        android:title="@string/notice_menu_add_alarm"
+        android:orderInCategory="200"
+        app:showAsAction="always" />
+    <item android:id="@+id/action_share_all"
+        android:icon="@drawable/ic_action_share"
+        android:title="@string/notice_menu_share"
+        android:orderInCategory="300"
+        app:showAsAction="always" />
+</menu>
