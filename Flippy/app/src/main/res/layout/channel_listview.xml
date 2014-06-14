@@ -30,7 +30,7 @@
             <Button
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
-                android:paddingTop="@dimen/margin_two"
+                android:paddingTop="0dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:paddingBottom="@dimen/margin_two"
                 android:paddingRight="@dimen/margin_five"
@@ -40,7 +40,7 @@
                 android:background="@android:drawable/screen_background_dark_transparent"
                 android:text="@string/subscription_state_true"
                 android:id="@+id/buttonSubscriptionState"
-                android:layout_gravity="left|bottom" />
+                android:layout_gravity="right|bottom" />
         </FrameLayout>
 
 

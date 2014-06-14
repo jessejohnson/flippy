@@ -92,8 +92,7 @@
     <string name="menu_help">Help</string>
     <string name="title_activity_account_profile">Account Profile</string>
 
-
-    <!--  user profile activity string-->
+    <!-- user profile activity string -->
     <string name="user_tap_to_edit">tap to edit</string>
     <string name="dummy_user_name">Bright Kwame Ahedor</string>
     <string name="dummy_user_email">brightahedor@gmail.com</string>
@@ -101,32 +100,30 @@
     <string name="profile_list_channels">My Channels</string>
     <string name="profile_edit">Edit profile</string>
 
-    <!--the feedback strings-->
+    <!-- the feedback strings -->
     <string name="flippy_email">info@flippy.co</string>
     <string name="flippy_email_subject">Flippy feedback</string>
     <string name="flippy_email_body">Flippy is one of the best works I\'ve ever seen</string>
 
-    <!--notice list item strings-->
+    <!-- notice list item strings -->
     <string name="notice_title">Notice Title</string>
     <string name="notice_subtitle">from channel @ time</string>
 
-    <!-- flippy exit alert dialog strings-->
+    <!-- flippy exit alert dialog strings -->
     <string name="exit_title">Exiting Flippy</string>
     <string name="exit_message">Are you sure you want to exit Flippy ?</string>
     <string name="exit_positive">Yea, I want to</string>
     <string name="exit_negative">No, not now</string>
     <string name="choose_channel_list_dialog_title">Choose a channel</string>
 
-
-    <!-- notice context menu strings-->
+    <!-- notice context menu strings -->
     <string name="notice_detail">View details</string>
     <string name="notice_reminder">Set reminder</string>
     <string name="notice_favourite">Favourite notice</string>
     <string name="notice_share">Share notice</string>
     <string name="notice_remove">Remove from board</string>
 
-
-    <!--fragment settings strings-->
+    <!-- fragment settings strings -->
     <string name="settings_title">Settings title</string>
     <string name="settings_subtitle">Settings subtitle</string>
     <string name="settings_help">Help</string>
@@ -140,9 +137,17 @@
     <string name="settings_about">About Flippy</string>
     <string name="settings_about_subtitle">more about flippy</string>
 
-
-    <!--the channel members string-->
+    <!-- the channel members string -->
     <string name="channel_members_activity_title">Channel members</string>
 
+    <!-- the notice detail string section -->
+    <string name="title_activity_notice_detail">Notice Detail</string>
+    <string name="notice_menu_share">Share</string>
+    <string name="notice_menu_duplicate">Re-flip notice</string>
+    <string name="notice_menu_add_alarm">Set as reminder</string>
+
+    <!--the edit profile activity-->
+    <string name="title_activity_edit_profile">Edit Profile Activity</string>
+    <string name="menu_profile_editing">Done</string>
 
 </resources>

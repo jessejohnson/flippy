@@ -50,8 +50,11 @@
         </activity>
         <activity
             android:name="com.jojo.flippy.core.ChannelMembers"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:label="@string/channel_members_activity_title" >
+            android:label="@string/channel_members_activity_title"
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
         <activity
             android:name="com.jojo.flippy.core.CommunityCenterActivity"
@@ -68,8 +71,27 @@
         </activity>
         <activity
             android:name="com.jojo.flippy.profile.AccountProfileActivity"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:label="@string/title_activity_account_profile" >
+            android:label="@string/title_activity_account_profile"
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
+        </activity>
+        <activity
+            android:name="com.jojo.flippy.core.NoticeDetailActivity"
+            android:label="@string/title_activity_notice_detail"
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
+        </activity>
+        <activity
+            android:name="com.jojo.flippy.profile.EditProfileActivity"
+            android:label="@string/title_activity_edit_profile"
+            android:parentActivityName="com.jojo.flippy.profile.AccountProfileActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.profile.AccountProfileActivity" />
         </activity>
     </application>
 

@@ -7,11 +7,15 @@
     android:paddingLeft="@dimen/margin_two"
     android:paddingRight="@dimen/margin_two"
     android:paddingTop="@dimen/margin_two">
-
     <ScrollView
         android:layout_width="fill_parent"
+<<<<<<< HEAD
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_five">
+=======
+        android:layout_height="0dip"
+        android:layout_weight="0.5">
+>>>>>>> faed05382c1a11eeff5f1bdb4488cd40c6aaec55
 
         <LinearLayout
             android:id="@+id/seTaskActivityRoot"
@@ -32,7 +36,12 @@
                     android:id="@+id/imageViewUserPic"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
+<<<<<<< HEAD
                     android:background="@drawable/user_profile"
+=======
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/sample_user"
+>>>>>>> faed05382c1a11eeff5f1bdb4488cd40c6aaec55
                     android:contentDescription="@string/app_name"
                     android:scaleType="centerCrop"
                     android:layout_gravity="center" />
@@ -83,5 +92,32 @@
                 android:isScrollContainer="false" />
         </LinearLayout>
     </ScrollView>
+<<<<<<< HEAD
 </RelativeLayout>
+=======
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewListProfileTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/margin_two"
+            android:paddingLeft="@dimen/margin_ten"
+            android:text="@string/profile_list_channels"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/flippy_dark_header" />
+
+        <ListView
+            android:id="@+id/listViewUserChannels"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:listSelector="@drawable/drawer_list_selector" />
+    </LinearLayout>
+</LinearLayout>
+>>>>>>> faed05382c1a11eeff5f1bdb4488cd40c6aaec55
 
