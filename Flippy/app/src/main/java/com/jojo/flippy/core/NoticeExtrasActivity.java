@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.util.ToastMessages;
 
 import java.util.Calendar;
 
@@ -73,6 +74,9 @@ public class NoticeExtrasActivity extends ActionBarActivity {
         public void onDateSet(DatePicker view, int year, int month, int day) {
             // Do something with the date chosen by the user
             reminderYear = year;
+            reminderMonth = month;
+            reminderDay = day;
+            ToastMessages.showToastLong(getActivity(),"Date picked is  " + year + ": " + month +" : "+ day);
             DialogFragment timer = new TimePickerFragment();
             timer.show(timerSupport,"timePicker");
 
@@ -95,7 +99,10 @@ public class NoticeExtrasActivity extends ActionBarActivity {
         }
 
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // Do something with the time chosen by the user
+            // collect the chosen date ready to be sent to server
+            reminderHour = hourOfDay;
+            reminderMinute = minute;
+            ToastMessages.showToastLong(getActivity(),"Time picked is  " + hourOfDay + ": " + minute);
         }
     }
 
