@@ -1,6 +1,8 @@
 package com.jojo.flippy.core;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.ChannelAdapter;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.profile.ManageChannelActivity;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -84,19 +87,36 @@ public class FragmentChannel extends Fragment {
         buttonAddChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.setClass(getActivity(),CreateChannelActivity.class);
+                intent.setClass(getActivity(), CreateChannelActivity.class);
                 startActivity(intent);
             }
         });
         buttonManageChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.setClass(getActivity(),ManageChannelActivity.class);
-                startActivity(intent);
+                final CharSequence[] channelList = {"GESA KNUST", "SRC Legon", "Flippy Group","Another Group"};
+                channelListDialog(channelList);
+                return;
             }
         });
 
         return view;
+    }
+    private void channelListDialog(final CharSequence[] channelList) {
+        //TODO this should line should return a list of user channels subscribed to
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.choose_channel_list_dialog_title);
+        builder.setItems(channelList, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                //get the selected option and pass it on to the next activity
+                String channelToCreateNotice = channelList[item].toString();
+                Intent intent = new Intent(getActivity(),ManageChannelActivity.class);
+                intent.putExtra("channelToCreateNotice",channelToCreateNotice);
+                startActivity(intent);
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 }

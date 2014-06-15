@@ -6,19 +6,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import com.jojo.flippy.app.R;
 
-public class ManageChannelActivity extends ActionBarActivity {
+public class ImagePreviewActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_channel);
+        setContentView(R.layout.activity_image_preview);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.manage_channel, menu);
+        getMenuInflater().inflate(R.menu.image_preview, menu);
         return true;
     }
 
@@ -28,7 +28,7 @@ public class ManageChannelActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_save_changes) {
+        if (id == R.id.action_settings) {
             return true;
         }
         return super.onOptionsItemSelected(item);

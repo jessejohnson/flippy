@@ -29,7 +29,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:padding="10dip"
+                android:padding="1dp"
                 android:scaleType="center"
                 android:src="@drawable/user_profile"
                 app:border_width="3dip"

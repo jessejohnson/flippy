@@ -163,7 +163,7 @@
     <string name="channel_channel_name">channel name</string>
     <string name="channel_warning">Channels are the heart of your community, be responsible if you create one</string>
     <string name="channel_create">Create a new Channel</string>
-    <string name="channel_image_upload_guide">Images are representatives of your channel, keep it as such</string>
+    <string name="channel_image_upload_guide">This images is a representative of your channel, keep it as such</string>
     <string name="channel_learn_guide">To learn more about how to create successful Channels, read our Channel\'s Guide</string>
 
     <!-- creating notice activity strings -->
@@ -186,5 +186,7 @@
     <string name="optional_notice_add_map">add Map</string>
     <string name="optional_notice_add_reminder">add Reminder</string>
     <string name="title_activity_manage_channel">Manage Channel</string>
+    <string name="title_activity_member_detail">Member Profile</string>
+    <string name="title_activity_image_preview">Image Preview</string>
 
 </resources>

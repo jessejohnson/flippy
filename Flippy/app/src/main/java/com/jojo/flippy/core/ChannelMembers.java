@@ -4,12 +4,15 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.jojo.flippy.adapter.ChannelMemberAdapter;
 import com.jojo.flippy.adapter.SettingsAdapter;
 import com.jojo.flippy.adapter.SettingsItem;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.profile.MemberDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +58,21 @@ public class ChannelMembers extends Activity {
         ChannelMemberAdapter adapter = new ChannelMemberAdapter(ChannelMembers.this,
                 R.layout.channel_members_listview, ChannelMemberItem);
         membershipList.setAdapter(adapter);
+
+
+
+        //Setting the click listener for the member list
+        membershipList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                //setting the click action for each of the items
+                intent.setClass(ChannelMembers.this,MemberDetailActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
 
     }
 }

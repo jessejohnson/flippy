@@ -34,6 +34,9 @@
             android:name=".RegisterActivity"
             android:label="@string/title_activity_select_community"
             android:parentActivityName=".SignUpOptionsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.app.SignUpOptionsActivity" />
         </activity>
         <activity
             android:name=".SelectCommunityActivity"
@@ -124,6 +127,18 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
+        </activity>
+        <activity
+            android:name="com.jojo.flippy.profile.MemberDetailActivity"
+            android:label="@string/title_activity_member_detail"
+            android:parentActivityName="com.jojo.flippy.core.ChannelMembers" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.core.ChannelMembers" />
+        </activity>
+        <activity
+            android:name="com.jojo.flippy.profile.ImagePreviewActivity"
+            android:label="@string/title_activity_image_preview" >
         </activity>
     </application>
 
