@@ -16,10 +16,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_detail);
 
-        TabHost tabHost = (TabHost)findViewById(android.R.id.tabhost);
-
-
-
     }
 
 

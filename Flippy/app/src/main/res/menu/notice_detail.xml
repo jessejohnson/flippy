@@ -4,7 +4,7 @@
     tools:context="com.jojo.flippy.core.NoticeDetailActivity" >
     <item android:id="@+id/action_settings"
         android:title="@string/notice_menu_duplicate"
-        android:icon="@drawable/ic_action_share"
+        android:icon="@drawable/ic_re_flip"
         android:orderInCategory="100"
         app:showAsAction="always" />
     <item android:id="@+id/action_notice_alarm"
@@ -16,5 +16,5 @@
         android:icon="@drawable/ic_action_share"
         android:title="@string/notice_menu_share"
         android:orderInCategory="300"
-        app:showAsAction="always" />
+        app:showAsAction="collapseActionView" />
 </menu>
