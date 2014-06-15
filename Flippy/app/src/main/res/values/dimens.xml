@@ -10,4 +10,6 @@
     <dimen name="margin_one">1dp</dimen>
     <dimen name="margin_hundred">100dp</dimen>
     <dimen name="margin_fifty">50dp</dimen>
+    <dimen name="margin_two_hundred">200dp</dimen>
+    <dimen name="margin_one_fifty">150dp</dimen>
 </resources>

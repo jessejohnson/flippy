@@ -95,8 +95,8 @@
 
     <!-- user profile activity string -->
     <string name="user_tap_to_edit">tap to edit</string>
-    <string name="dummy_user_name">Bright Kwame Ahedor</string>
-    <string name="dummy_user_email">brightahedor@gmail.com</string>
+    <string name="dummy_user_name">Flippy User Name</string>
+    <string name="dummy_user_email">info@flippy.co</string>
     <string name="dummy_user_number">(+233) 543400278</string>
     <string name="profile_list_channels">My Channels</string>
     <string name="profile_edit">Edit profile</string>
@@ -148,8 +148,14 @@
     <string name="notice_menu_add_alarm">Set as reminder</string>
 
     <!-- the edit profile activity -->
-    <string name="title_activity_edit_profile">Edit Profile Activity</string>
-    <string name="menu_profile_editing">Done</string>
+    <string name="title_activity_edit_profile">Edit Profile</string>
+    <string name="menu_profile_editing">Save</string>
+    <string name="edit_profile_username">Username</string>
+    <string name="edit_profile_first_name">First name</string>
+    <string name="edit_profile_last_name">Last name</string>
+    <string name="edit_profile_number">Phone number</string>
+    <string name="edit_profile_email">Email address</string>
+    <string name="edit_profile_message">we promise you that your information are safe and secured on flippy, cheers!</string>
 
     <!-- the create channel activity strings -->
     <string name="title_activity_create_channel">Create Channel</string>
