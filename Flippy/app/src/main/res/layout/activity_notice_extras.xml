@@ -1,0 +1,133 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/margin_five"
+    android:paddingRight="@dimen/margin_five"
+    android:paddingTop="@dimen/margin_five"
+    android:paddingBottom="@dimen/margin_two"
+    tools:context="com.jojo.flippy.core.NoticeExtrasActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/margin_fifty"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@color/flippy_dark_header"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/optional_notice_title"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:textColor="@color/flippy_white" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/linearLayout"
+                android:background="@color/flippy_light_header"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/textViewWarning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="@dimen/margin_ten"
+                    android:text="@string/optional_notice_help"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/flippy_white" />
+
+                <TextView
+                    android:id="@+id/textViewLearnChannelGuide"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="@dimen/margin_ten"
+                    android:text="@string/notice_new_learn"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/flippy_white" />
+
+                <Button
+                    android:id="@+id/buttonAddImageToNotice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/flippy_button_default"
+                    android:layout_margin="@dimen/margin_five"
+                    android:padding="@dimen/margin_ten"
+                    android:text="@string/optional_notice_add_image"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/flippy_white"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/buttonAddMapToNotice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/flippy_button_default"
+                    android:layout_margin="@dimen/margin_five"
+                    android:padding="@dimen/margin_ten"
+                    android:text="@string/optional_notice_add_map"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/flippy_white"
+                    android:textStyle="bold" />
+                <Button
+                    android:id="@+id/buttonAddReminderToNotice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/flippy_button_default"
+                    android:layout_margin="@dimen/margin_five"
+                    android:padding="@dimen/margin_ten"
+                    android:onClick="showDatePickerDialog"
+                    android:text="@string/optional_notice_add_reminder"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/flippy_white"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/buttonNextCreateNotice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/flippy_button_default"
+        android:padding="@dimen/margin_ten"
+        android:text="@string/final_step_create_notice"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/flippy_white"
+        android:textStyle="bold" />
+
+</RelativeLayout>

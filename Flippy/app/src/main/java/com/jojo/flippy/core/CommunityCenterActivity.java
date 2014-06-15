@@ -257,9 +257,11 @@ public class CommunityCenterActivity extends ActionBarActivity {
         builder.setTitle(R.string.choose_channel_list_dialog_title);
         builder.setItems(channelList, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                // Do something with the selection
                 //get the selected option and pass it on to the next activity
-                ToastMessages.showToastLong(CommunityCenterActivity.this,channelList[item].toString());
+                String channelToCreateNotice = channelList[item].toString();
+                Intent intent = new Intent(CommunityCenterActivity.this,CreateNoticeActivity.class);
+                intent.putExtra("channelToCreateNotice",channelToCreateNotice);
+                startActivity(intent);
             }
         });
         AlertDialog alert = builder.create();

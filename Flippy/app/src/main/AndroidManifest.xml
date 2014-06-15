@@ -101,6 +101,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
+        <activity
+            android:name="com.jojo.flippy.core.CreateNoticeActivity"
+            android:label="@string/title_activity_create_notice"
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
+        </activity>
+        <activity
+            android:name="com.jojo.flippy.core.NoticeExtrasActivity"
+            android:label="@string/title_activity_notice_extras"
+            android:parentActivityName="com.jojo.flippy.core.CreateNoticeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.core.CreateNoticeActivity" />
+        </activity>
     </application>
 
 </manifest>

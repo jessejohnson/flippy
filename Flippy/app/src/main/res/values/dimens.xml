@@ -9,4 +9,5 @@
     <dimen name="margin_twenty">20dp</dimen>
     <dimen name="margin_one">1dp</dimen>
     <dimen name="margin_hundred">100dp</dimen>
+    <dimen name="margin_fifty">50dp</dimen>
 </resources>

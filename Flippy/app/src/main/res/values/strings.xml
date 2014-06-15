@@ -57,7 +57,7 @@
     <string name="last_step">the final step</string>
     <string name="select_community">Select Your Community</string>
     <string name="community_key">Were you given a community key? Enter it here</string>
-    <string name="community_key_hint">private community key (optional)</string>
+    <string name="community_key_hint">private community key(optional)</string>
 
     <!-- The community center's strings -->
     <string name="title_activity_community_center">Community Center</string>
@@ -70,6 +70,7 @@
     <string name="add_channel">Add A Channel</string>
     <string name="subscription_state_true">Subscribe</string>
     <string name="subscription_state_false">Unsubscribe</string>
+    <string name="channel_manage">Manage channel</string>
 
     <!-- The facebook application id -->
     <string name="app_id">305971362902085</string>
@@ -150,13 +151,32 @@
     <string name="title_activity_edit_profile">Edit Profile Activity</string>
     <string name="menu_profile_editing">Done</string>
 
-
-    <!--the create channel activity strings-->
+    <!-- the create channel activity strings -->
     <string name="title_activity_create_channel">Create Channel</string>
     <string name="channel_create_done">create channel</string>
     <string name="channel_channel_name">channel name</string>
     <string name="channel_warning">Channels are the heart of your community, be responsible if you create one</string>
     <string name="channel_create">Create a new Channel</string>
-    <string name="channel_learn_guide">To learn more about how to create successful channels, read our Channel\'s Guide</string>
+    <string name="channel_learn_guide">To learn more about how to create successful Channels, read our Channel\'s Guide</string>
+
+    <!-- creating notice activity strings -->
+    <string name="title_activity_create_notice">Create Notice</string>
+    <string name="notice_new_title">Create a new Notice</string>
+    <string name="notice_new_warning">Notice are meant to be relevant to members of the channel you manage. It is your 
+    responsibility to keep them so.</string>
+    <string name="notice_new_learn">To learn more about creating successful Notice, read our Notice\'s Guide</string>
+    <string name="notice_new_title_field">notice title</string>
+    <string name="notice_new_content">notice content</string>
+    <string name="notice_new_next">next</string>
+
+   <!-- optional notice information strings-->
+    <string name="title_activity_notice_extras">Notice Optionals</string>
+    <string name="optional_notice_title">Optional Information</string>
+    <string name="optional_notice_help">Images, Maps and Reminders are great ways to give the members of your channel more
+    value from a notice</string>
+    <string name="final_step_create_notice">send to channel</string>
+    <string name="optional_notice_add_image">add Image</string>
+    <string name="optional_notice_add_map">add Map</string>
+    <string name="optional_notice_add_reminder">add Reminder</string>
 
 </resources>
