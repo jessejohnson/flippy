@@ -1,6 +1,7 @@
 package com.jojo.flippy.core;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.jojo.flippy.adapter.SettingsAdapter;
 import com.jojo.flippy.adapter.SettingsItem;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.profile.EditProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,8 @@ public class FragmentSettings extends Fragment {
     //Instance of the channel item
     List<SettingsItem> SettingsItems;
 
+    private Intent intent;
+
 
     public FragmentSettings() {
 
@@ -38,6 +42,8 @@ public class FragmentSettings extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_settings, container,
                 false);
+
+        intent = new Intent();
 
         //Loading the list with a dummy data
         SettingsItems = new ArrayList<SettingsItem>();
@@ -68,6 +74,9 @@ public class FragmentSettings extends Fragment {
                         Toast.makeText(getActivity(), position + "", Toast.LENGTH_LONG).show();
                         break;
                     case 1:
+                        intent.setClass(getActivity(), EditProfileActivity.class);
+                        //send all the appropriate data along
+                        startActivity(intent);
 
                     default:
                         break;

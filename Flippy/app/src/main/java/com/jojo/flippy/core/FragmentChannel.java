@@ -32,7 +32,7 @@ public class FragmentChannel extends Fragment {
     private Intent intent;
     private String channelName = "SRC channel";
     private  String totalMembers = "125";
-    private Button buttonAddChannel;
+    private Button buttonAddChannel,buttonManageChannel;
 
 
 
@@ -47,7 +47,7 @@ public class FragmentChannel extends Fragment {
         View view = inflater.inflate(R.layout.fragment_channel, container,
                 false);
 
-
+        intent = new Intent();
         //Loading the list with a dummy data
         rowItems = new ArrayList<Channel>();
         Channel item = new Channel(URI.create("http://images-mediawiki-sites.thefullwiki.org/02/1/0/0/73473104099591446.jpg"),
@@ -70,7 +70,7 @@ public class FragmentChannel extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
               //setting the click action for each of the items
-                intent = new Intent(getActivity(),ChannelMembers.class);
+                intent.setClass(getActivity(), ChannelMembers.class);
                 intent.putExtra("channelName",channelName);
                 intent.putExtra("totalMembers",totalMembers);
                 startActivity(intent);
@@ -80,10 +80,18 @@ public class FragmentChannel extends Fragment {
         });
 
         buttonAddChannel = (Button)view.findViewById(R.id.buttonAddChannel);
+        buttonManageChannel = (Button)view.findViewById(R.id.buttonManageChannel);
         buttonAddChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent = new Intent(getActivity(),CreateChannelActivity.class);
+                intent.setClass(getActivity(),CreateChannelActivity.class);
+                startActivity(intent);
+            }
+        });
+        buttonManageChannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent.setClass(getActivity(),ManageChannelActivity.class);
                 startActivity(intent);
             }
         });

@@ -49,12 +49,12 @@
 
                     <TextView
                         android:id="@+id/textViewEditProfileUsername"
-                        android:paddingLeft="@dimen/margin_ten"
-                        android:textColor="@color/flippy_orange"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/margin_ten"
                         android:text="@string/edit_profile_username"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/flippy_orange" />
 
                     <View
                         android:layout_width="match_parent"
@@ -74,11 +74,11 @@
                     <TextView
                         android:id="@+id/textViewEditProfileFirstName"
                         android:layout_width="match_parent"
-                        android:textColor="@color/flippy_orange"
-                        android:layout_marginLeft="@dimen/margin_ten"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_ten"
                         android:text="@string/edit_profile_first_name"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/flippy_orange" />
 
                     <View
                         android:layout_width="match_parent"
@@ -98,11 +98,11 @@
                     <TextView
                         android:id="@+id/textViewEditProfileLastName"
                         android:layout_width="match_parent"
-                        android:textColor="@color/flippy_orange"
-                        android:layout_marginLeft="@dimen/margin_ten"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_ten"
                         android:text="@string/edit_profile_last_name"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/flippy_orange" />
 
                     <View
                         android:layout_width="match_parent"
@@ -122,11 +122,11 @@
                     <TextView
                         android:id="@+id/textViewMemberNumber"
                         android:layout_width="match_parent"
-                        android:textColor="@color/flippy_orange"
-                        android:layout_marginLeft="@dimen/margin_ten"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_ten"
                         android:text="@string/edit_profile_number"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/flippy_orange" />
 
                     <View
                         android:layout_width="match_parent"
@@ -146,11 +146,11 @@
                     <TextView
                         android:id="@+id/textViewMemberEmail"
                         android:layout_width="match_parent"
-                        android:layout_marginLeft="@dimen/margin_ten"
-                        android:textColor="@color/flippy_orange"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_ten"
                         android:text="@string/edit_profile_email"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/flippy_orange" />
 
                     <View
                         android:layout_width="match_parent"
@@ -169,14 +169,14 @@
 
                     <TextView
                         android:id="@+id/textViewEditProfileMessage"
-                        android:layout_margin="@dimen/margin_ten"
                         android:layout_width="match_parent"
-                        android:textColor="@color/flippy_orange"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="@dimen/margin_ten"
+                        android:gravity="center_horizontal"
                         android:text="@string/edit_profile_message"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/flippy_orange" />
 
                 </LinearLayout>
             </LinearLayout>
