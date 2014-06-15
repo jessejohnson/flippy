@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,6 +32,8 @@ public class FragmentChannel extends Fragment {
     private Intent intent;
     private String channelName = "SRC channel";
     private  String totalMembers = "125";
+    private Button buttonAddChannel;
+
 
 
     public FragmentChannel() {
@@ -52,6 +55,8 @@ public class FragmentChannel extends Fragment {
         Channel item1 = new Channel(URI.create("http://www.ugsrc.com/wp-content/uploads/2013/08/6.jpg"), "SRC Legon, 2015", "4000 members","admin");
         rowItems.add(item);
         rowItems.add(item1);
+        rowItems.add(item);
+        rowItems.add(item1);
 
 
         ChannelListView = (ListView)view.findViewById(R.id.listViewChannels);
@@ -71,6 +76,15 @@ public class FragmentChannel extends Fragment {
                 startActivity(intent);
 
 
+            }
+        });
+
+        buttonAddChannel = (Button)view.findViewById(R.id.buttonAddChannel);
+        buttonAddChannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(getActivity(),CreateChannelActivity.class);
+                startActivity(intent);
             }
         });
 

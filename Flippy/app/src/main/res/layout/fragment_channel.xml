@@ -7,13 +7,26 @@
     android:orientation="horizontal"
     >
     <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/listViewChannels"
         android:divider="@null"
         android:dividerHeight="@dimen/margin_five"
         android:headerDividersEnabled="true"
         android:footerDividersEnabled="true"
         android:choiceMode="singleChoice"
+        android:layout_marginBottom="@dimen/margin_twenty"
         android:layout_weight="1" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_channel"
+        android:id="@+id/buttonAddChannel"
+        android:layout_marginTop="@dimen/margin_five"
+        android:background="@drawable/flippy_button_dark"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/flippy_white"
+        android:layout_alignParentLeft="true"
+         />
 </RelativeLayout>

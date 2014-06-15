@@ -146,8 +146,17 @@
     <string name="notice_menu_duplicate">Re-flip notice</string>
     <string name="notice_menu_add_alarm">Set as reminder</string>
 
-    <!--the edit profile activity-->
+    <!-- the edit profile activity -->
     <string name="title_activity_edit_profile">Edit Profile Activity</string>
     <string name="menu_profile_editing">Done</string>
+
+
+    <!--the create channel activity strings-->
+    <string name="title_activity_create_channel">Create Channel</string>
+    <string name="channel_create_done">create channel</string>
+    <string name="channel_channel_name">channel name</string>
+    <string name="channel_warning">channels are the heart of your community,be responsible if you create one</string>
+    <string name="channel_create">Create a new Channel</string>
+    <string name="channel_learn_guide">To learn more about how to create successful channels, read our Channel\'s Guide</string>
 
 </resources>

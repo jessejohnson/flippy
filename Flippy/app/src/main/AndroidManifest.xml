@@ -93,6 +93,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.profile.AccountProfileActivity" />
         </activity>
+        <activity
+            android:name="com.jojo.flippy.core.CreateChannelActivity"
+            android:label="@string/title_activity_create_channel"
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
+        </activity>
     </application>
 
 </manifest>
