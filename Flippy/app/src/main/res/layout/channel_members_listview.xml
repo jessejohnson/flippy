@@ -20,15 +20,22 @@
             android:gravity="center_horizontal"
             android:padding="@dimen/margin_ten">
 
-
-            <ImageView
+            <com.makeramen.RoundedImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/imageViewMember"
-                android:layout_width="95dp"
-                android:layout_height="95dp"
-                android:background="@drawable/image_round_corners"
-                android:contentDescription="@string/app_name"
-                android:padding="5dp"
-                android:scaleType="centerCrop" />
+                android:layout_width="@dimen/margin_hundred"
+                android:layout_height="@dimen/margin_hundred"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:padding="10dip"
+                android:scaleType="center"
+                android:src="@drawable/user_profile"
+                app:border_width="3dip"
+                app:corner_radius="10dip"
+                app:border_color="@color/border"
+                app:oval="false" />
 
         </LinearLayout>
 
@@ -56,8 +63,5 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/flippy_white" />
         </LinearLayout>
-
-
     </LinearLayout>
-
 </LinearLayout>
