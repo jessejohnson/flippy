@@ -20,14 +20,14 @@
             android:padding="@dimen/margin_five">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imageViewProfileImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/user_profile"
                 android:padding="@dimen/margin_five" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/textViewProfileUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/margin_five"
@@ -44,7 +44,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textViewProfileUsername"
+                android:id="@+id/textViewProfileUserEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/margin_five"
@@ -86,7 +86,7 @@
                 android:padding="@dimen/margin_five">
 
                 <ImageView
-                    android:id="@+id/imageViewSettingsIcon"
+                    android:id="@+id/imageViewChannelImage"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:scaleType="centerCrop"
@@ -101,7 +101,7 @@
                 android:padding="@dimen/margin_five">
 
                 <TextView
-                    android:id="@+id/textViewSettingsTitle"
+                    android:id="@+id/textViewProfileChannelName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
@@ -112,7 +112,7 @@
                     android:textColor="@color/flippy_dark_header" />
 
                 <TextView
-                    android:id="@+id/textViewSettingsSubtitle"
+                    android:id="@+id/textViewProfileChannelTotalMembers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/settings_subtitle"

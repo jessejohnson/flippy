@@ -16,12 +16,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_detail);
 
-<<<<<<< HEAD
 
-
-
-=======
->>>>>>> e316cc083cbbef073e17449d07cf6b4cb604e7fb
     }
 
 

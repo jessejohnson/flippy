@@ -10,6 +10,8 @@ import android.widget.ListView;
 
 import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.ChannelAdapter;
+import com.jojo.flippy.adapter.ProfileAdapter;
+import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
 
 import java.net.URI;
@@ -18,10 +20,13 @@ import java.util.List;
 
 public class AccountProfileActivity extends ActionBarActivity {
     //Instance of the user channel
-    ListView userChannelListView;
+    ListView profileChannelListView;
     //Instance of the channel item
-    List<Channel> rowItems;
+    List<ProfileItem> rowItems;
     private Intent intent;
+    private  String number;
+    private String username;
+    private String useremail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,22 +38,27 @@ public class AccountProfileActivity extends ActionBarActivity {
         actionBar.setSubtitle(R.string.user_tap_to_edit);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+
+        //assigning the values from the database
+        number = getResources().getString(R.string.dummy_user_number);
+        username= getResources().getString(R.string.dummy_user_name);
+        useremail = getResources().getString(R.string.dummy_user_email);
+
+
+
        //Loading the list with a dummy data
-        rowItems = new ArrayList<Channel>();
-        Channel item = new Channel(URI.create("http://images-mediawiki-sites.thefullwiki.org/02/1/0/0/73473104099591446.jpg"), "GESA KNUST", "200 members","active");
-        Channel item1 = new Channel(URI.create("http://images-mediawiki-sites.thefullwiki.org/02/1/0/0/73473104099591446.jpg"), "SRC Legon, 2015", "4000 members","admin");
-        Channel item2 = new Channel(URI.create("http://images-mediawiki-sites.thefullwiki.org/02/1/0/0/73473104099591446.jpg"), "GESA KNUST", "200 members","active");
-        Channel item3 = new Channel(URI.create("http://images-mediawiki-sites.thefullwiki.org/02/1/0/0/73473104099591446.jpg"), "SRC Legon, 2015", "4000 members","admin");
+        rowItems = new ArrayList<ProfileItem>();
+        ProfileItem item = new ProfileItem(R.drawable.user_profile,R.drawable.default_profile_picture,username,useremail,number,"GESA KNUST","200 members");
         rowItems.add(item);
-        rowItems.add(item1);
-        rowItems.add(item2);
-        rowItems.add(item3);
+        rowItems.add(item);
+        rowItems.add(item);
+        rowItems.add(item);
 
 
-        ListView profileChannelList = (ListView) findViewById(R.id.profileChannelListView);
-        ChannelAdapter channelAdapter = new ChannelAdapter(AccountProfileActivity.this,
-                R.layout.channel_listview, rowItems, true);
-        profileChannelList.setAdapter(channelAdapter);
+        profileChannelListView = (ListView) findViewById(R.id.profileChannelListView);
+        ProfileAdapter channelAdapter = new ProfileAdapter(AccountProfileActivity.this,
+                R.layout.profile_listview, rowItems);
+        profileChannelListView.setAdapter(channelAdapter);
     }
 
 
