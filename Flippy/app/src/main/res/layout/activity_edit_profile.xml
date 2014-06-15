@@ -172,6 +172,8 @@
                         android:layout_margin="@dimen/margin_ten"
                         android:layout_width="match_parent"
                         android:textColor="@color/flippy_orange"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
                         android:layout_height="wrap_content"
                         android:text="@string/edit_profile_message"
                         android:textAppearance="?android:attr/textAppearanceSmall" />
