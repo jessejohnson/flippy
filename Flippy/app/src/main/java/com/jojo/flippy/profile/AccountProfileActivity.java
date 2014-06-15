@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.jojo.flippy.adapter.Channel;
-import com.jojo.flippy.adapter.CustomUserChannel;
+import com.jojo.flippy.adapter.ChannelAdapter;
 import com.jojo.flippy.app.R;
 
 import java.net.URI;
@@ -45,12 +45,10 @@ public class AccountProfileActivity extends ActionBarActivity {
         rowItems.add(item3);
 
 
-        userChannelListView = (ListView) findViewById(R.id.listViewUserChannels);
-        CustomUserChannel adapter = new CustomUserChannel(this,
-                R.layout.user_channel_list_item, rowItems);
-        userChannelListView.setAdapter(adapter);
-
-
+        ListView profileChannelList = (ListView) findViewById(R.id.profileChannelListView);
+        ChannelAdapter channelAdapter = new ChannelAdapter(AccountProfileActivity.this,
+                R.layout.channel_listview, rowItems, true);
+        profileChannelList.setAdapter(channelAdapter);
     }
 
 

@@ -70,63 +70,24 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/sample_user" />
 
-
-            <TabHost
-                android:id="@+id/tabHost"
+            <TextView
+                android:id="@+id/textViewNoticeTextDetail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/imageViewNoticeImage"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignRight="@+id/imageViewNoticeImage"
+                android:layout_below="@+id/imageViewNoticeImage"
+                android:background="@color/flippy_light_header"
+                android:padding="10dp"
+                android:text="@string/dummy_user_name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/flippy_white" />
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical">
 
-                    <TabWidget
-                        android:id="@android:id/tabs"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"></TabWidget>
 
-                    <FrameLayout
-                        android:id="@android:id/tabcontent"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
 
-                        <LinearLayout
-                            android:id="@+id/tab1"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textViewNoticeTextDetail"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignEnd="@+id/imageViewNoticeImage"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentStart="true"
-                                android:layout_alignRight="@+id/imageViewNoticeImage"
-                                android:layout_below="@+id/imageViewNoticeImage"
-                                android:background="@color/flippy_light_header"
-                                android:padding="10dp"
-                                android:text="@string/dummy_user_name"
-                                android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:textColor="@color/flippy_white" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/tab2"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:orientation="vertical"></LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/tab3"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:orientation="vertical"></LinearLayout>
-                    </FrameLayout>
-                </LinearLayout>
-            </TabHost>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
