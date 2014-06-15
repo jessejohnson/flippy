@@ -61,4 +61,5 @@ public class ChannelMemberAdapter extends ArrayAdapter<SettingsItem> {
         return convertView;
     }
 
+
 }

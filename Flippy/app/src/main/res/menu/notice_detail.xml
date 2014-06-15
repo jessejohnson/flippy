@@ -16,5 +16,5 @@
         android:icon="@drawable/ic_action_share"
         android:title="@string/notice_menu_share"
         android:orderInCategory="300"
-        app:showAsAction="always" />
+        app:showAsAction="collapseActionView" />
 </menu>
