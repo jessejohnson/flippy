@@ -14,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentTop="true"
-        android:background="@color/flippy_dark_header"
         android:orientation="horizontal"
         android:weightSum="1">
 
@@ -38,8 +37,8 @@
 
             <ImageView
                 android:id="@+id/imageViewShareUserImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_action_share"
                 android:contentDescription="@string/app_name"
@@ -54,6 +53,6 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/linearLayoutUserImagePreview"
-        android:background="@color/flippy_light_header"
+        android:background="@color/flippy_dark_header"
         android:src="@drawable/sample_user" />
 </RelativeLayout>
