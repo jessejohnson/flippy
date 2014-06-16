@@ -36,7 +36,8 @@ public class MemberDetailActivity extends ActionBarActivity {
         buttonAddAsAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                final CharSequence[] channelList = {"GESA KNUST", "SRC Legon", "Flippy Group","Another Group"};
+                channelListDialog(channelList);
             }
         });
         imageViewMemberAnotherUserProfilePic = (ImageView)findViewById(R.id.imageViewMemberAnotherUserProfilePic);
@@ -57,9 +58,6 @@ public class MemberDetailActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_full_screen) {
             startActivity(intent);

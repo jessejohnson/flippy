@@ -186,8 +186,12 @@
     <string name="optional_notice_add_map">add Map</string>
     <string name="optional_notice_add_reminder">add Reminder</string>
     <string name="title_activity_manage_channel">Manage Channel</string>
-    <string name="title_activity_member_detail">Member Profile</string>
+
+
+
+   <!-- the image preview strings-->
     <string name="title_activity_image_preview">Image Preview</string>
+    <string name="image_preview_menu">Share photo</string>
 
 
     <!--manage channel strings-->
@@ -203,5 +207,6 @@
 
     <!--the member detail strings-->
     <string name="another_member_detail_add_as_admin">add as admin</string>
+    <string name="title_activity_member_detail">Member Profile</string>
 
 </resources>

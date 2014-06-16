@@ -9,53 +9,13 @@
     android:paddingTop="0dp"
     tools:context="com.jojo.flippy.profile.ImagePreviewActivity">
 
-    <LinearLayout
-        android:id="@+id/linearLayoutUserImagePreview"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentTop="true"
-        android:orientation="horizontal"
-        android:weightSum="1">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|center"
-            android:layout_weight="0.7"
-            android:gravity="center"
-            android:shadowColor="@color/flippy_white"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="2"
-            android:text="@string/dummy_user_name"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/flippy_white" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="0.3">
-
-            <ImageView
-                android:id="@+id/imageViewShareUserImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ic_action_share"
-                android:contentDescription="@string/app_name"
-                android:paddingLeft="@dimen/margin_ten"
-                android:paddingRight="@dimen/margin_ten" />
-        </LinearLayout>
-    </LinearLayout>
-
     <ImageView
         android:id="@+id/imageViewPreviewShare"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/linearLayoutUserImagePreview"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
         android:background="@color/flippy_dark_header"
         android:src="@drawable/sample_user" />
 </RelativeLayout>

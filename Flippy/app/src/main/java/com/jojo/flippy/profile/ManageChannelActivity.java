@@ -12,15 +12,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.core.ChannelMembers;
 
 public class ManageChannelActivity extends ActionBarActivity {
     private EditText editTextManageChannelChannelName, editTextFirstAdmin, editTextSecondAdmin, editTextThirdAdmin, editTextFourthAdmin;
     private ImageView imageViewEditChannelName, imageViewEditFirstAdmin, imageViewEditSecondAdmin, imageViewEditThirdAdmin, imageViewEditFourthAdmin;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_channel);
+
+        intent = getIntent();
+        intent.putExtra("isEditing", true);
 
         //the edit text views
         editTextManageChannelChannelName = (EditText) findViewById(R.id.editTextManageChannelChannelName);
@@ -80,6 +85,23 @@ public class ManageChannelActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void channelListDialog(final CharSequence[] channelList) {
+        //TODO this should line should return a list of user channels subscribed to
+        AlertDialog.Builder builder = new AlertDialog.Builder(ManageChannelActivity.this);
+        builder.setTitle(R.string.choose_channel_list_dialog_title);
+        builder.setItems(channelList, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                //get the selected option and pass it on to the next activity
+                String channelToCreateNotice = channelList[item].toString();
+                intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
+                intent.putExtra("channelToCreateNotice",channelToCreateNotice);
+                startActivity(intent);
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 
