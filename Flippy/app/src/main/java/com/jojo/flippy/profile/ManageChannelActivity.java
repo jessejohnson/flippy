@@ -1,5 +1,8 @@
 package com.jojo.flippy.profile;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,23 +14,28 @@ import android.widget.ImageView;
 import com.jojo.flippy.app.R;
 
 public class ManageChannelActivity extends ActionBarActivity {
-    private EditText editTextManageChannelChannelName,editTextFirstAdmin,editTextSecondAdmin,editTextThirdAdmin,editTextFourthAdmin;
-    private ImageView imageViewEditChannelName;
+    private EditText editTextManageChannelChannelName, editTextFirstAdmin, editTextSecondAdmin, editTextThirdAdmin, editTextFourthAdmin;
+    private ImageView imageViewEditChannelName, imageViewEditFirstAdmin, imageViewEditSecondAdmin, imageViewEditThirdAdmin, imageViewEditFourthAdmin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_channel);
 
         //the edit text views
-        editTextManageChannelChannelName = (EditText)findViewById(R.id.editTextManageChannelChannelName);
-        editTextFirstAdmin= (EditText)findViewById(R.id.editTextFirstAdmin);
-        editTextSecondAdmin = (EditText)findViewById(R.id.editTextSecondAdmin);
-        editTextThirdAdmin= (EditText)findViewById(R.id.editTextThirdAdmin);
-        editTextFourthAdmin =(EditText)findViewById(R.id.editTextFourthAdmin);
+        editTextManageChannelChannelName = (EditText) findViewById(R.id.editTextManageChannelChannelName);
+        editTextFirstAdmin = (EditText) findViewById(R.id.editTextFirstAdmin);
+        editTextSecondAdmin = (EditText) findViewById(R.id.editTextSecondAdmin);
+        editTextThirdAdmin = (EditText) findViewById(R.id.editTextThirdAdmin);
+        editTextFourthAdmin = (EditText) findViewById(R.id.editTextFourthAdmin);
 
 
         //the image views
-        imageViewEditChannelName= (ImageView)findViewById(R.id.imageViewEditChannelName);
+        imageViewEditChannelName = (ImageView) findViewById(R.id.imageViewEditChannelName);
+        imageViewEditFirstAdmin = (ImageView) findViewById(R.id.imageViewEditFirstAdmin);
+        imageViewEditSecondAdmin = (ImageView) findViewById(R.id.imageViewEditSecondAdmin);
+        imageViewEditThirdAdmin = (ImageView) findViewById(R.id.imageViewEditThirdAdmin);
+        imageViewEditFourthAdmin = (ImageView) findViewById(R.id.imageViewEditFourthAdmin);
 
 
         //disable all the fields
@@ -43,6 +51,12 @@ public class ManageChannelActivity extends ActionBarActivity {
             public void onClick(View view) {
                 editTextManageChannelChannelName.setEnabled(true);
                 editTextManageChannelChannelName.setFocusable(true);
+            }
+        });
+        imageViewEditFirstAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
 
@@ -67,4 +81,6 @@ public class ManageChannelActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

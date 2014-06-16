@@ -1,12 +1,15 @@
 package com.jojo.flippy.profile;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.jojo.flippy.app.R;
@@ -14,6 +17,7 @@ import com.jojo.flippy.app.R;
 public class MemberDetailActivity extends ActionBarActivity {
     private ImageView imageViewMemberAnotherUserProfilePic;
     private Intent intent;
+    private Button buttonAddAsAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +32,13 @@ public class MemberDetailActivity extends ActionBarActivity {
         intent = getIntent();
         intent.setClass(MemberDetailActivity.this,ImagePreviewActivity.class);
 
+        buttonAddAsAdmin = (Button)findViewById(R.id.buttonAddAsAdmin);
+        buttonAddAsAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
         imageViewMemberAnotherUserProfilePic = (ImageView)findViewById(R.id.imageViewMemberAnotherUserProfilePic);
         imageViewMemberAnotherUserProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +66,18 @@ public class MemberDetailActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void channelListDialog(final CharSequence[] channelList) {
+        //TODO this should line should return a list of user channels subscribed to
+        AlertDialog.Builder builder = new AlertDialog.Builder(MemberDetailActivity.this);
+        builder.setTitle(R.string.choose_channel_list_dialog_title);
+        builder.setItems(channelList, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                //get the selected option and pass it on to the next activity
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }
 

@@ -110,7 +110,7 @@ public class FragmentChannel extends Fragment {
             public void onClick(DialogInterface dialog, int item) {
                 //get the selected option and pass it on to the next activity
                 String channelToCreateNotice = channelList[item].toString();
-                Intent intent = new Intent(getActivity(),ManageChannelActivity.class);
+                Intent intent = new Intent(getActivity().getApplication(),ManageChannelActivity.class);
                 intent.putExtra("channelToCreateNotice",channelToCreateNotice);
                 startActivity(intent);
             }

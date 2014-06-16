@@ -70,7 +70,7 @@
     <string name="add_channel">Add A Channel</string>
     <string name="subscription_state_true">Subscribe</string>
     <string name="subscription_state_false">Unsubscribe</string>
-    <string name="channel_manage">Manage channel</string>
+
 
     <!-- The facebook application id -->
     <string name="app_id">305971362902085</string>
@@ -190,9 +190,18 @@
     <string name="title_activity_image_preview">Image Preview</string>
 
 
+    <!--manage channel strings-->
+    <string name="channel_manage">Manage channel</string>
+    <string name="manage_channel_remove">remove this channel</string>
+    <string name="select_member_from_list">choose member</string>
+
+
     <!-- temporal string section-->
     <string name="dummy_community">University of Cape coast</string>
-    <string name="dummy_user_number_of_channels_own">3 channels (admin)</string>
+    <string name="dummy_user_number_of_channels_own">admin (3)</string>
     <string name="dummy_user_number_channels_in">5 channels</string>
+
+    <!--the member detail strings-->
+    <string name="another_member_detail_add_as_admin">add as admin</string>
 
 </resources>

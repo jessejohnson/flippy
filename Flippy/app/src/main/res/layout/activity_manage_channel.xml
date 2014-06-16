@@ -11,6 +11,7 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/margin_fifty"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -53,7 +54,6 @@
                     android:layout_below="@+id/scrollView"
                     android:layout_weight="0.9"
                     android:ems="10"
-                    android:focusable="false"
                     android:inputType="textPersonName"
                     android:singleLine="true"
                     android:text="@string/default_channel_name" />
@@ -183,7 +183,18 @@
                     android:background="@android:drawable/ic_input_add" />
             </LinearLayout>
         </LinearLayout>
-
     </ScrollView>
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_marginRight="@dimen/margin_ten"
+        android:layout_marginLeft="@dimen/margin_ten"
+        android:layout_marginBottom="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/flippy_white"
+        android:background="@drawable/flippy_button_default"
+        android:text="@string/manage_channel_remove"
+        android:id="@+id/button" />
 </RelativeLayout>
