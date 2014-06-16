@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentTop="true"
-        android:background="@android:color/transparent"
+        android:background="@color/flippy_dark_header"
         android:orientation="horizontal"
         android:weightSum="1">
 
@@ -40,16 +40,16 @@
                 android:id="@+id/imageViewShareUserImage"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:paddingRight="@dimen/margin_ten"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_action_share"
                 android:contentDescription="@string/app_name"
-                android:paddingLeft="@dimen/margin_ten" />
+                android:paddingLeft="@dimen/margin_ten"
+                android:paddingRight="@dimen/margin_ten" />
         </LinearLayout>
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageViewPreview"
+        android:id="@+id/imageViewPreviewShare"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
