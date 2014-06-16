@@ -6,7 +6,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.ChannelAdapter;
@@ -28,6 +31,7 @@ public class AccountProfileActivity extends ActionBarActivity {
     private String username;
     private String useremail;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +43,7 @@ public class AccountProfileActivity extends ActionBarActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
 
+        intent = getIntent();
         //assigning the values from the database
         number = getResources().getString(R.string.dummy_user_number);
         username= getResources().getString(R.string.dummy_user_name);
@@ -59,6 +64,26 @@ public class AccountProfileActivity extends ActionBarActivity {
         ProfileAdapter channelAdapter = new ProfileAdapter(AccountProfileActivity.this,
                 R.layout.profile_listview, rowItems);
         profileChannelListView.setAdapter(channelAdapter);
+
+        profileChannelListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                //setting the click action for each of the items
+                switch(position){
+                    case 0:
+                        intent.setClass(AccountProfileActivity.this, EditProfileActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        break;
+                    default:
+                        break;
+
+                }
+
+            }
+        });
     }
 
 

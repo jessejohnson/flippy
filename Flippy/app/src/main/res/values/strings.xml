@@ -150,12 +150,12 @@
     <!-- the edit profile activity -->
     <string name="title_activity_edit_profile">Edit Profile</string>
     <string name="menu_profile_editing">Save</string>
-    <string name="edit_profile_username">Username</string>
+    <string name="edit_profile_username">Full name</string>
     <string name="edit_profile_first_name">First name</string>
     <string name="edit_profile_last_name">Last name</string>
     <string name="edit_profile_number">Phone number</string>
     <string name="edit_profile_email">Email address</string>
-    <string name="edit_profile_message">we promise you that your information are safe and secured on flippy, cheers!</string>
+    <string name="edit_profile_message">we promise to keep your information safe and secured on flippy, cheers!</string>
 
     <!-- the create channel activity strings -->
     <string name="title_activity_create_channel">Create Channel</string>
@@ -190,9 +190,9 @@
     <string name="title_activity_image_preview">Image Preview</string>
 
 
-   <!-- temporal string section-->
+    <!-- temporal string section-->
     <string name="dummy_community">University of Cape coast</string>
-    <string name="dummy_user_number_of_channels_own">3 channels</string>
+    <string name="dummy_user_number_of_channels_own">3 channels (admin)</string>
     <string name="dummy_user_number_channels_in">5 channels</string>
 
 </resources>

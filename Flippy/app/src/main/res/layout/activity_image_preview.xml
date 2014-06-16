@@ -23,8 +23,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|center"
             android:layout_weight="0.7"
-            android:gravity="left"
-            android:paddingLeft="@dimen/margin_ten"
+            android:gravity="center"
+            android:shadowColor="@color/flippy_white"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
             android:text="@string/dummy_user_name"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/flippy_white" />
