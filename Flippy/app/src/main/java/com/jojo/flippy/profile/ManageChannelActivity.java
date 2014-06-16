@@ -4,14 +4,48 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+
 import com.jojo.flippy.app.R;
 
 public class ManageChannelActivity extends ActionBarActivity {
-
+    private EditText editTextManageChannelChannelName,editTextFirstAdmin,editTextSecondAdmin,editTextThirdAdmin,editTextFourthAdmin;
+    private ImageView imageViewEditChannelName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_channel);
+
+        //the edit text views
+        editTextManageChannelChannelName = (EditText)findViewById(R.id.editTextManageChannelChannelName);
+        editTextFirstAdmin= (EditText)findViewById(R.id.editTextFirstAdmin);
+        editTextSecondAdmin = (EditText)findViewById(R.id.editTextSecondAdmin);
+        editTextThirdAdmin= (EditText)findViewById(R.id.editTextThirdAdmin);
+        editTextFourthAdmin =(EditText)findViewById(R.id.editTextFourthAdmin);
+
+
+        //the image views
+        imageViewEditChannelName= (ImageView)findViewById(R.id.imageViewEditChannelName);
+
+
+        //disable all the fields
+        editTextManageChannelChannelName.setEnabled(false);
+        editTextFirstAdmin.setEnabled(false);
+        editTextSecondAdmin.setEnabled(false);
+        editTextThirdAdmin.setEnabled(false);
+        editTextFourthAdmin.setEnabled(false);
+
+        //enable the edit text for the channel name on click
+        imageViewEditChannelName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editTextManageChannelChannelName.setEnabled(true);
+                editTextManageChannelChannelName.setFocusable(true);
+            }
+        });
+
     }
 
 

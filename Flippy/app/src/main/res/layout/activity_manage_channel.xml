@@ -11,8 +11,7 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/margin_fifty">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,7 +45,7 @@
                 android:weightSum="1">
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/editTextManageChannelChannelName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -54,12 +53,13 @@
                     android:layout_below="@+id/scrollView"
                     android:layout_weight="0.9"
                     android:ems="10"
+                    android:focusable="false"
                     android:inputType="textPersonName"
                     android:singleLine="true"
                     android:text="@string/default_channel_name" />
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/imageViewEditChannelName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="0.1"
-                    android:background="@drawable/ic_action_dark_edit" />
+                    android:background="@android:drawable/ic_input_add" />
             </LinearLayout>
 
             <LinearLayout
@@ -122,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="0.1"
-                    android:background="@drawable/ic_action_dark_edit" />
+                    android:background="@android:drawable/ic_input_add" />
             </LinearLayout>
 
             <LinearLayout
@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="0.1"
-                    android:background="@drawable/ic_action_dark_edit" />
+                    android:background="@android:drawable/ic_input_add" />
             </LinearLayout>
 
             <LinearLayout
@@ -180,7 +180,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="0.1"
-                    android:background="@drawable/ic_action_dark_edit" />
+                    android:background="@android:drawable/ic_input_add" />
             </LinearLayout>
         </LinearLayout>
 
