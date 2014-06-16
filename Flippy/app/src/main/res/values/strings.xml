@@ -189,4 +189,10 @@
     <string name="title_activity_member_detail">Member Profile</string>
     <string name="title_activity_image_preview">Image Preview</string>
 
+
+   <!-- temporal string section-->
+    <string name="dummy_community">University of Cape coast</string>
+    <string name="dummy_user_number_of_channels_own">3 channels</string>
+    <string name="dummy_user_number_channels_in">5 channels</string>
+
 </resources>

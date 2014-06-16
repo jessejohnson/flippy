@@ -138,6 +138,7 @@
         </activity>
         <activity
             android:name="com.jojo.flippy.profile.ImagePreviewActivity"
+            android:theme="@style/FlippyFullScreen"
             android:label="@string/title_activity_image_preview" >
         </activity>
     </application>

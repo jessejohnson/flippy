@@ -18,18 +18,17 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_marginTop="@dimen/margin_two"
                 android:layout_width="fill_parent"
-                android:orientation="vertical"
-                android:padding="@dimen/margin_ten"
-                android:background="@color/flippy_orange"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_two"
+                android:background="@color/flippy_orange"
                 android:gravity="center_horizontal"
-                android:layout_height="wrap_content">
+                android:orientation="vertical"
+                android:padding="@dimen/margin_ten">
 
-                <com.makeramen.RoundedImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/imageViewMember"
+                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/imageViewMemberAnotherUserProfilePic"
                     android:layout_width="@dimen/margin_one_fifty"
                     android:layout_height="@dimen/margin_one_fifty"
                     android:layout_alignParentBottom="true"
@@ -39,42 +38,115 @@
                     android:padding="1dp"
                     android:scaleType="center"
                     android:src="@drawable/user_profile"
+                    app:border_color="@color/border_white"
                     app:border_width="3dp"
                     app:corner_radius="150dp"
-                    app:border_color="@color/border_white"
                     app:oval="false" />
 
                 <TextView
-                    android:padding="@dimen/margin_ten"
-                    android:textColor="@color/flippy_white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/dummy_user_name"
                     android:id="@+id/textViewAnotherUserName"
-                    android:layout_gravity="center_horizontal" />
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/dummy_user_email"
-                    android:id="@+id/textViewAnotherUserEmail"
-                    android:textColor="@color/flippy_white"
-                    android:layout_gravity="center_horizontal" />
-
-                <TextView
+                    android:layout_gravity="center_horizontal"
                     android:padding="@dimen/margin_ten"
+                    android:text="@string/dummy_user_name"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/flippy_white" />
+
+                <TextView
+                    android:id="@+id/textViewAnotherUserEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/flippy_white"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:text="@string/dummy_user_number"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/dummy_user_email"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/flippy_white" />
+
+                <TextView
                     android:id="@+id/textViewAnotherUserNumber"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="@dimen/margin_ten"
+                    android:text="@string/dummy_user_number"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/flippy_white" />
+
+                <TextView
+                    android:id="@+id/textViewAnotherFirstName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="@dimen/margin_ten"
+                    android:text="@string/edit_profile_first_name"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/flippy_white" />
+
+                <TextView
+                    android:id="@+id/textViewAnotherUseLastName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="@dimen/margin_ten"
+                    android:text="@string/edit_profile_last_name"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/flippy_white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_twenty"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewUserCommunityName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/margin_two"
+                    android:background="@color/flippy_light_header"
+                    android:padding="@dimen/margin_twenty"
+                    android:text="@string/dummy_community"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/flippy_white" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginTop="@dimen/margin_five"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/margin_one"
+                        android:layout_weight="1"
+                        android:background="@color/flippy_light_header"
+                        android:padding="@dimen/margin_twenty"
+                        android:gravity="center_horizontal"
+                        android:text="@string/dummy_user_number_of_channels_own"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/flippy_white" />
+
+                    <TextView
+                        android:id="@+id/textViewUserTotalNumberOfCircles"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_one"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:background="@color/flippy_light_header"
+                        android:padding="@dimen/margin_twenty"
+                        android:text="@string/dummy_user_number_channels_in"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/flippy_white" />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
-
 </RelativeLayout>
