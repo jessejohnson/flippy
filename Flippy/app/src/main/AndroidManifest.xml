@@ -28,11 +28,13 @@
         <activity
             android:name=".SignInActivity"
             android:label="@string/title_activity_select_community"
+            android:windowSoftInputMode="adjustPan"
             android:parentActivityName=".RegisterActivity" >
         </activity>
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_select_community"
+            android:windowSoftInputMode="adjustPan"
             android:parentActivityName=".SignUpOptionsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -40,6 +42,7 @@
         </activity>
         <activity
             android:name=".SelectCommunityActivity"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_select_community" >
         </activity>
         <activity
@@ -91,6 +94,7 @@
         <activity
             android:name="com.jojo.flippy.profile.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
+            android:windowSoftInputMode="adjustPan"
             android:parentActivityName="com.jojo.flippy.profile.AccountProfileActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -99,6 +103,7 @@
         <activity
             android:name="com.jojo.flippy.core.CreateChannelActivity"
             android:label="@string/title_activity_create_channel"
+            android:windowSoftInputMode="adjustPan"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -106,6 +111,7 @@
         </activity>
         <activity
             android:name="com.jojo.flippy.core.CreateNoticeActivity"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_create_notice"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
             <meta-data
@@ -122,6 +128,7 @@
         </activity>
         <activity
             android:name="com.jojo.flippy.profile.ManageChannelActivity"
+            android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_manage_channel"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
             <meta-data

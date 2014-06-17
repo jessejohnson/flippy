@@ -38,7 +38,7 @@
     <string name="register_first_name_placeholder">first name</string>
     <string name="register_last_name_placeholder">last name</string>
     <string name="register_password_placeholder">password</string>
-    <string name="register_terms">I have read and agreed with these terms</string>
+    <string name="register_terms">I have read and agreed with the  terms and conditions of Flippy</string>
     <string name="register_sign_in_text">I already have an account</string>
     <string name="register_next">next</string>
     <string name="registration_error_email">A valid email or phone number is required</string>
@@ -57,7 +57,7 @@
     <string name="last_step">the final step</string>
     <string name="select_community">Select Your Community</string>
     <string name="community_key">Were you given a community key? Enter it here</string>
-    <string name="community_key_hint">private community key(optional)</string>
+    <string name="community_key_hint">private community key</string>
 
     <!-- The community center's strings -->
     <string name="title_activity_community_center">Community Center</string>
