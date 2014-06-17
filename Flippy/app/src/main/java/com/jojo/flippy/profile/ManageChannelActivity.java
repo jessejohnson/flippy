@@ -61,25 +61,52 @@ public class ManageChannelActivity extends ActionBarActivity {
         imageViewEditFirstAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
+                //adding something to the intent to detect at the other end
+                startActivity(intent);
 
             }
         });
+        imageViewEditSecondAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
+                //adding something to the intent to detect at the other end
+                startActivity(intent);
+
+            }
+        });
+        imageViewEditThirdAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
+                //adding something to the intent to detect at the other end
+                startActivity(intent);
+
+            }
+        });
+        imageViewEditFourthAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
+                //adding something to the intent to detect at the other end
+                startActivity(intent);
+
+            }
+        });
+
 
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.manage_channel, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_save_changes) {
             return true;
@@ -96,7 +123,7 @@ public class ManageChannelActivity extends ActionBarActivity {
                 //get the selected option and pass it on to the next activity
                 String channelToCreateNotice = channelList[item].toString();
                 intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
-                intent.putExtra("channelToCreateNotice",channelToCreateNotice);
+                intent.putExtra("channelToCreateNotice", channelToCreateNotice);
                 startActivity(intent);
             }
         });

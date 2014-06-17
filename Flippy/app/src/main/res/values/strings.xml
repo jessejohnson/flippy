@@ -146,6 +146,7 @@
     <string name="notice_menu_share">Share</string>
     <string name="notice_menu_duplicate">Re-flip notice</string>
     <string name="notice_menu_add_alarm">Set as reminder</string>
+    <string name="notice_detail_publish">publish notice</string>
 
     <!-- the edit profile activity -->
     <string name="title_activity_edit_profile">Edit Profile</string>
@@ -185,7 +186,9 @@
     <string name="optional_notice_add_image">add Image</string>
     <string name="optional_notice_add_map">add Map</string>
     <string name="optional_notice_add_reminder">add Reminder</string>
+    <string name="optional_notice_choose">take or upload image</string>
     <string name="title_activity_manage_channel">Manage Channel</string>
+
 
 
 

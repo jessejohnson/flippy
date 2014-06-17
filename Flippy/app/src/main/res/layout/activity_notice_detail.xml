@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -84,10 +84,17 @@
                 android:text="@string/dummy_user_name"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/flippy_white" />
-
-
-
-
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:background="@drawable/flippy_button_default"
+        android:textColor="@color/flippy_white"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/notice_detail_publish"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/buttonPublishNotice" />
+</RelativeLayout>

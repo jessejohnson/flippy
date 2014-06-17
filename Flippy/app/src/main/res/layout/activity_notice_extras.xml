@@ -2,16 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/margin_two"
     android:paddingLeft="@dimen/margin_five"
     android:paddingRight="@dimen/margin_five"
     android:paddingTop="@dimen/margin_five"
-    android:paddingBottom="@dimen/margin_two"
     tools:context="com.jojo.flippy.core.NoticeExtrasActivity">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_marginBottom="@dimen/margin_fifty"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_fifty">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,8 +80,8 @@
                     android:id="@+id/buttonAddImageToNotice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/flippy_button_default"
                     android:layout_margin="@dimen/margin_five"
+                    android:background="@drawable/flippy_button_default"
                     android:padding="@dimen/margin_ten"
                     android:text="@string/optional_notice_add_image"
                     android:textAppearance="?android:attr/textAppearanceMedium"
@@ -92,27 +92,26 @@
                     android:id="@+id/buttonAddMapToNotice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/flippy_button_default"
                     android:layout_margin="@dimen/margin_five"
+                    android:background="@drawable/flippy_button_default"
                     android:padding="@dimen/margin_ten"
                     android:text="@string/optional_notice_add_map"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/flippy_white"
                     android:textStyle="bold" />
+
                 <Button
                     android:id="@+id/buttonAddReminderToNotice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/flippy_button_default"
                     android:layout_margin="@dimen/margin_five"
-                    android:padding="@dimen/margin_ten"
+                    android:background="@drawable/flippy_button_default"
                     android:onClick="showDatePickerDialog"
+                    android:padding="@dimen/margin_ten"
                     android:text="@string/optional_notice_add_reminder"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/flippy_white"
                     android:textStyle="bold" />
-
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

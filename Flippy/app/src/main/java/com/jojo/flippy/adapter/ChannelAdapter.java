@@ -33,11 +33,11 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
 
     /*private view holder class*/
     private class ViewHolder {
-        ImageView imageView;
+        ImageView imageView,imageViewSubscribe;
         TextView textViewChannelName;
         TextView textViewNumberOfMembers;
         TextView textViewStatus;
-        Button buttonSubscriptionState;
+
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -53,7 +53,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             holder.textViewChannelName = (TextView) convertView.findViewById(R.id.textViewChannelNameCustom);
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageViewCommunityChannel);
             holder.textViewStatus =(TextView)convertView.findViewById(R.id.textViewChannelStatusCustom);
-            holder.buttonSubscriptionState = (Button)convertView.findViewById(R.id.buttonSubscriptionState);
+            holder.imageViewSubscribe = (ImageView)convertView.findViewById(R.id.imageViewSubscribe);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -65,7 +65,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
 
         //check to see if the adapter displays only user channel, then set the subscription button to invisible state
          if(isUserChannel){
-             holder.buttonSubscriptionState.setVisibility(convertView.GONE);
+             holder.imageViewSubscribe.setVisibility(convertView.GONE);
          }
         return convertView;
     }
