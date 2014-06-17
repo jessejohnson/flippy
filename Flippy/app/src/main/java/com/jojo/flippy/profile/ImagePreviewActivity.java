@@ -19,6 +19,7 @@ public class ImagePreviewActivity extends ActionBarActivity {
         setContentView(R.layout.activity_image_preview);
 
         imageViewPreviewShare = (ImageView)findViewById(R.id.imageViewPreviewShare);
+        imageToShare = Uri.parse("android.resource://com.jojo.flippy/drawable/sample_user");
 
     }
 
