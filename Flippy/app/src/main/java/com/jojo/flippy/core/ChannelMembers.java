@@ -13,6 +13,12 @@ import com.jojo.flippy.adapter.SettingsAdapter;
 import com.jojo.flippy.adapter.SettingsItem;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.profile.MemberDetailActivity;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +59,29 @@ public class ChannelMembers extends Activity {
         ChannelMemberItem.add(firstMember);
         ChannelMemberItem.add(secondMember);
 
+        AsyncHttpClient client = new AsyncHttpClient();
+        String request = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/";
+        client.get(request, null, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(JSONObject response) {
+                super.onSuccess(response);
+                try{
+                    JSONArray list = response.getJSONArray("results");
+                    for(int i = 0; i < list.length(); i++){
+                        JSONObject jsonObject = list.getJSONObject(i);
+                        ChannelMemberItem.add(createNewUser(jsonObject));
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable e, JSONObject errorResponse) {
+                super.onFailure(e, errorResponse);
+            }
+        });
+
 
         membershipList = (ListView)findViewById(R.id.listViewChannelMembers);
         ChannelMemberAdapter adapter = new ChannelMemberAdapter(ChannelMembers.this,
@@ -74,5 +103,21 @@ public class ChannelMembers extends Activity {
             }
         });
 
+    }
+
+    SettingsItem createNewUser(JSONObject object){
+        String title = "";
+        String sub = "";
+        try {
+            title = object.getString("first_name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try{
+            sub = object.getString("phone_number");
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+        return new SettingsItem(R.drawable.sample_user, title, sub);
     }
 }
