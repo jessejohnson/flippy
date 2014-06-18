@@ -60,7 +60,7 @@ public class ChannelMembers extends Activity {
         ChannelMemberItem.add(secondMember);
 
         AsyncHttpClient client = new AsyncHttpClient();
-        String request = "";
+        String request = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/";
         client.get(request, null, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(JSONObject response) {
