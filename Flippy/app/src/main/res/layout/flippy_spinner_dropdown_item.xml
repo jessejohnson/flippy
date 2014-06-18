@@ -8,5 +8,4 @@
     android:textColor="@color/flippy_white"
     android:background="@color/flippy_dark_header"
     android:padding="5dip">
-
 </CheckedTextView>

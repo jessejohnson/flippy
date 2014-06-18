@@ -5,7 +5,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+
 import com.jojo.flippy.app.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditProfileActivity extends ActionBarActivity {
 
@@ -13,6 +18,7 @@ public class EditProfileActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+
     }
 
 
@@ -25,12 +31,8 @@ public class EditProfileActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_profile_done) {
-
             //Save the data back to server
             return true;
         }

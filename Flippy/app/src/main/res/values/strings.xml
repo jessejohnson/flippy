@@ -156,6 +156,7 @@
     <string name="edit_profile_last_name">Last name</string>
     <string name="edit_profile_number">Phone number</string>
     <string name="edit_profile_email">Email address</string>
+    <string name="edit_profile_date">Date of birth</string>
     <string name="edit_profile_message">we promise to keep your information safe and secured on flippy, cheers!</string>
 
     <!-- the create channel activity strings -->
@@ -211,5 +212,12 @@
     <!--the member detail strings-->
     <string name="another_member_detail_add_as_admin">add as admin</string>
     <string name="title_activity_member_detail">Member Profile</string>
+
+
+  <!-- the spinner for the edit profile gender-->
+    <string-array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 
 </resources>

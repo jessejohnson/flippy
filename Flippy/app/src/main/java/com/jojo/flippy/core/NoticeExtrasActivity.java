@@ -39,7 +39,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
     private String noticeContent, noticeTitle;
     public static int reminderYear, reminderMonth, reminderDay, reminderHour, reminderMinute;
     protected static FragmentManager timerSupport;
-    private Button buttonAddImageToNotice;
+    private Button buttonAddImageToNotice,buttonPreviewCreateNotice;
     private AlertDialog levelDialog;
     private ImageView imageViewNoticeImageCaptured;
 
@@ -66,6 +66,17 @@ public class NoticeExtrasActivity extends ActionBarActivity {
 
 
         //the image upload button
+        buttonPreviewCreateNotice = (Button)findViewById(R.id.buttonPreviewCreateNotice);
+        buttonPreviewCreateNotice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent.putExtra("isPreview",true);
+                intent.putExtra("noticeTitle",noticeTitle);
+                intent.putExtra("noticeContent",noticeContent);
+                intent.setClass(NoticeExtrasActivity.this,NoticeDetailActivity.class);
+                startActivity(intent);
+            }
+        });
         buttonAddImageToNotice = (Button) findViewById(R.id.buttonAddImageToNotice);
         buttonAddImageToNotice.setOnClickListener(new View.OnClickListener() {
             @Override

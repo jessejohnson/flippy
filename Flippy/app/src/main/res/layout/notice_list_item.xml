@@ -50,7 +50,7 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/margin_one_fifty"
         android:id="@+id/imageViewNoticeImage"
         android:src="@drawable/splash_bg"
         android:scaleType="centerCrop"
