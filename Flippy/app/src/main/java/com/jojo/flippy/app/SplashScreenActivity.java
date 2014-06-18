@@ -10,7 +10,6 @@ import java.util.TimerTask;
 
 
 public class SplashScreenActivity extends ActionBarActivity {
-
     Timer timer = new Timer();
 
     @Override

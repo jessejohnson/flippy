@@ -29,10 +29,11 @@ import java.util.List;
 public class ChannelMembers extends Activity {
     private Intent intent;
     private String channelName = null;
-    private  String totalMembers = null;
+    private String totalMembers = null;
     private ListView membershipList;
     //Instance of the channel item
     List<SettingsItem> ChannelMemberItem;
+    private String isManageActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +43,11 @@ public class ChannelMembers extends Activity {
         intent = getIntent();
         channelName = intent.getStringExtra("channelName");
         totalMembers = intent.getStringExtra("totalMembers");
+        isManageActivity = intent.getStringExtra("isManageActivity");
 
 
         ActionBar actionBar = getActionBar();
-        if (channelName!=null && actionBar!=null && totalMembers != null){
+        if (channelName != null && actionBar != null && totalMembers != null) {
             actionBar.setTitle(channelName);
             actionBar.setSubtitle(totalMembers + " members");
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -61,17 +63,17 @@ public class ChannelMembers extends Activity {
 
         AsyncHttpClient client = new AsyncHttpClient();
         String request = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/";
-        client.get(request, null, new JsonHttpResponseHandler(){
+        client.get(request, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(JSONObject response) {
                 super.onSuccess(response);
-                try{
+                try {
                     JSONArray list = response.getJSONArray("results");
-                    for(int i = 0; i < list.length(); i++){
+                    for (int i = 0; i < list.length(); i++) {
                         JSONObject jsonObject = list.getJSONObject(i);
                         ChannelMemberItem.add(createNewUser(jsonObject));
                     }
-                }catch (JSONException e){
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
@@ -83,29 +85,43 @@ public class ChannelMembers extends Activity {
         });
 
 
-        membershipList = (ListView)findViewById(R.id.listViewChannelMembers);
+        membershipList = (ListView) findViewById(R.id.listViewChannelMembers);
         ChannelMemberAdapter adapter = new ChannelMemberAdapter(ChannelMembers.this,
                 R.layout.channel_members_listview, ChannelMemberItem);
         membershipList.setAdapter(adapter);
 
+        //checking if the intent came from the channel management activity, process and sent result
+        if (isManageActivity.toString().trim().equalsIgnoreCase("true")) {
+            membershipList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position,
+                                        long id) {
+                    //setting the click action for each of the items
+                    intent.setClass(ChannelMembers.this, MemberDetailActivity.class);
+                    // put the message in Intent
+                    intent.putExtra("EMAIL", position + "");
+                    setResult(1, intent);
+                    finish();
+                }
+            });
+        } else {
+            //Setting the click listener for the member list
+            membershipList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position,
+                                        long id) {
+                    //setting the click action for each of the items
+                    intent.setClass(ChannelMembers.this, MemberDetailActivity.class);
+                    startActivity(intent);
 
+                }
+            });
+        }
 
-        //Setting the click listener for the member list
-        membershipList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                //setting the click action for each of the items
-                intent.setClass(ChannelMembers.this,MemberDetailActivity.class);
-                startActivity(intent);
-
-
-            }
-        });
 
     }
 
-    SettingsItem createNewUser(JSONObject object){
+    SettingsItem createNewUser(JSONObject object) {
         String title = "";
         String sub = "";
         try {
@@ -113,9 +129,9 @@ public class ChannelMembers extends Activity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        try{
+        try {
             sub = object.getString("phone_number");
-        } catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return new SettingsItem(R.drawable.sample_user, title, sub);

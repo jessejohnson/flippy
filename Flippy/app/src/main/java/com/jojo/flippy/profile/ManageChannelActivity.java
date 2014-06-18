@@ -63,8 +63,8 @@ public class ManageChannelActivity extends ActionBarActivity {
             public void onClick(View view) {
                 intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
                 //adding something to the intent to detect at the other end
-                startActivity(intent);
-
+                intent.putExtra("isManageActivity","true");
+                startActivityForResult(intent, 1);
             }
         });
         imageViewEditSecondAdmin.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +129,19 @@ public class ManageChannelActivity extends ActionBarActivity {
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if (requestCode == 1) {
+            if (null != data) {
+                // fetch the message String
+                String adminEmail = data.getStringExtra("EMAIL");
+                editTextFirstAdmin.setText(adminEmail);
+            }
+        }
     }
 
 

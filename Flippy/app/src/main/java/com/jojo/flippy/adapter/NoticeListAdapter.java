@@ -71,7 +71,13 @@ public class NoticeListAdapter extends BaseAdapter {
 
         content.setText(noticeArrayList.get(i).getContent());
 
-        Ion.with(image).load(String.valueOf(noticeArrayList.get(i).getImageUrl()));
+        //if a notice came without an image or with image
+        if (String.valueOf(noticeArrayList.get(i).getImageUrl())== ""){
+            image.setVisibility(View.GONE);
+        }else {
+          Ion.with(image).load(String.valueOf(noticeArrayList.get(i).getImageUrl()));
+        }
+
         return v;
     }
 }

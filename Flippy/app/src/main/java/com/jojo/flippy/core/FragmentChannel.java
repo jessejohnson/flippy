@@ -36,6 +36,7 @@ public class FragmentChannel extends Fragment {
     private String channelName = "SRC channel";
     private  String totalMembers = "125";
     private Button buttonAddChannel,buttonManageChannel;
+    private String isManageActivity = "false";
 
 
 
@@ -76,6 +77,7 @@ public class FragmentChannel extends Fragment {
                 intent.setClass(getActivity(), ChannelMembers.class);
                 intent.putExtra("channelName",channelName);
                 intent.putExtra("totalMembers",totalMembers);
+                intent.putExtra("isManageActivity",isManageActivity);
                 startActivity(intent);
 
 

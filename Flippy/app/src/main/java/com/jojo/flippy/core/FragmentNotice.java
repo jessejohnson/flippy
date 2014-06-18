@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.jojo.flippy.adapter.Notice;
 import com.jojo.flippy.adapter.NoticeListAdapter;
@@ -60,7 +61,6 @@ public class FragmentNotice extends Fragment {
                 //setting the click action for each of the items
                 intent = new Intent(getActivity(),NoticeDetailActivity.class);
                 startActivity(intent);
-
 
             }
         });
