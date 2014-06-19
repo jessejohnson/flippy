@@ -1,5 +1,6 @@
 package com.jojo.flippy.profile;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,6 +19,7 @@ public class ManageChannelActivity extends ActionBarActivity {
     private EditText editTextManageChannelChannelName, editTextFirstAdmin, editTextSecondAdmin, editTextThirdAdmin, editTextFourthAdmin;
     private ImageView imageViewEditChannelName, imageViewEditFirstAdmin, imageViewEditSecondAdmin, imageViewEditThirdAdmin, imageViewEditFourthAdmin;
     private Intent intent;
+    private String channelToManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +27,11 @@ public class ManageChannelActivity extends ActionBarActivity {
         setContentView(R.layout.activity_manage_channel);
 
         intent = getIntent();
+        channelToManage = intent.getStringExtra("channelToManage");
         intent.putExtra("isEditing", true);
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setSubtitle(channelToManage);
 
         //the edit text views
         editTextManageChannelChannelName = (EditText) findViewById(R.id.editTextManageChannelChannelName);

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jojo.flippy.adapter.Notice;
@@ -27,6 +28,7 @@ public class FragmentNotice extends Fragment {
     ListAdapter listAdapter;
     ArrayList<Notice> noticeFeed = new ArrayList<Notice>();
     private  Intent intent;
+    private String noticeTitle;
 
 
     public FragmentNotice() {
@@ -59,6 +61,8 @@ public class FragmentNotice extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 //setting the click action for each of the items
+                TextView noticeTitleTextView =(TextView) view.findViewById(R.id.textViewNoticeTitle);
+                noticeTitle = noticeTitleTextView.getText().toString().trim();
                 intent = new Intent(getActivity(),NoticeDetailActivity.class);
                 startActivity(intent);
 

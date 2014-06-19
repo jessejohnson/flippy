@@ -2,56 +2,125 @@ package com.jojo.flippy.app;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
 import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.util.InternetConnectionDetector;
+import com.jojo.flippy.util.ToastMessages;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import de.keyboardsurfer.android.widget.crouton.Configuration;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 
 public class SelectCommunityActivity extends Activity {
     private Spinner spinnerSelectCommunity;
     private Button buttonGetStartedFromCommunity;
+    private String defaultSpinnerItem = "Choose a community";
+    private String baseURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/";
+    private ProgressDialog loadingCommunityDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_community);
 
+
         ActionBar actionbar = getActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setSubtitle(getString(R.string.last_step));
+        final ArrayList<String> communityListAdapt = new ArrayList<String>();
+        communityListAdapt.add(defaultSpinnerItem);
 
-        buttonGetStartedFromCommunity = (Button) findViewById(R.id.buttonGetStartedCommunity);
-        buttonGetStartedFromCommunity.setOnClickListener(new View.OnClickListener() {
+        loadingCommunityDialog = new ProgressDialog(SelectCommunityActivity.this);
+        InternetConnectionDetector internetConnectionDetector = new InternetConnectionDetector(this);
+
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(baseURL + "communities/", new AsyncHttpResponseHandler() {
+            public void onSuccess(String communities) {
+                loadingCommunityDialog.cancel();
+                Log.d("The output", communities.toString());
+                try {
+                    JSONObject communityObject = new JSONObject(communities);
+                    JSONArray communityList = communityObject.getJSONArray("results");
+                    for (int i = communityList.length() - 1; i > -1; i--) {
+                        JSONObject community = communityList.getJSONObject(i);
+                        communityListAdapt.add(community.getString("name"));
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
             @Override
-            public void onClick(View view) {
-                //TODO load all the needed data and send it with the intent
-                Intent intent = new Intent(SelectCommunityActivity.this,CommunityCenterActivity.class);
-                startActivity(intent);
+            public void onStart() {
+                ToastMessages.showToastLong(SelectCommunityActivity.this, "Request started");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                // Response failed
+                loadingCommunityDialog.cancel();
+                Crouton.makeText(SelectCommunityActivity.this, "Flippy, unable to load communities. Try later", Style.ALERT)
+                        .show();
+            }
+
+            @Override
+            public void onProgress(int bytesWritten, int totalSize) {
+                // Progress notification
+                loadingCommunityDialog = ProgressDialog.show(SelectCommunityActivity.this, "Flippy", "Fetching communities " + bytesWritten, true);
+
+            }
+
+            @Override
+            public void onFinish() {
+                // Completed the request (either success or failure)
+                loadingCommunityDialog.cancel();
             }
         });
 
         //Identify the spinner from the layout and call the function to add items
         spinnerSelectCommunity = (Spinner) findViewById(R.id.spinnerSelectCommunity);
-        addItemsOnCommunitySpinner();
+        addItemsOnCommunitySpinner(communityListAdapt);
 
 
-
+        buttonGetStartedFromCommunity = (Button) findViewById(R.id.buttonGetStartedCommunity);
+        buttonGetStartedFromCommunity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String communitySelected = (String) spinnerSelectCommunity.getSelectedItem();
+                if (communitySelected.equals(defaultSpinnerItem)) {
+                    Crouton.makeText(SelectCommunityActivity.this, "Flippy, please select a community", Style.ALERT)
+                            .show();
+                    return;
+                }
+                Intent intent = new Intent(SelectCommunityActivity.this, CommunityCenterActivity.class);
+                intent.putExtra("communitySelected", communitySelected);
+                startActivity(intent);
+            }
+        });
     }
 
     // add items into spinner dynamically
-    public void addItemsOnCommunitySpinner() {
-        List<String> communityList = new ArrayList<String>();
-        //TODO run a loop to add the list of communities available
-        communityList.add("University of Ghana");
-        communityList.add("KNUST");
-        communityList.add("University of Cape coast");
+    public void addItemsOnCommunitySpinner(ArrayList<String> communityList) {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 R.layout.flippy_spinner_item, communityList);
         dataAdapter.setDropDownViewResource(R.layout.flippy_spinner_dropdown_item);
@@ -69,4 +138,14 @@ public class SelectCommunityActivity extends Activity {
         super.onPause();
         finish();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Crouton.cancelAllCroutons();
+    }
+
+    ;
+
+
 }

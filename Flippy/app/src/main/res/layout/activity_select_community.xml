@@ -86,7 +86,6 @@
                     android:singleLine="true"
                     android:textColor="@color/flippy_white" />
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
 
@@ -102,5 +101,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/flippy_white"
         android:textStyle="bold" />
+
+
 
 </RelativeLayout>

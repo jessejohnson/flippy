@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jojo.flippy.app.R;
@@ -37,6 +38,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         TextView textViewChannelName;
         TextView textViewNumberOfMembers;
         TextView textViewStatus;
+        LinearLayout linearLayoutSubscribe;
 
     }
 
@@ -54,6 +56,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageViewCommunityChannel);
             holder.textViewStatus =(TextView)convertView.findViewById(R.id.textViewChannelStatusCustom);
             holder.imageViewSubscribe = (ImageView)convertView.findViewById(R.id.imageViewSubscribe);
+            holder.linearLayoutSubscribe = (LinearLayout)convertView.findViewById(R.id.linearLayoutSubscribe);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -66,6 +69,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         //check to see if the adapter displays only user channel, then set the subscription button to invisible state
          if(isUserChannel){
              holder.imageViewSubscribe.setVisibility(convertView.GONE);
+             holder.linearLayoutSubscribe.setVisibility(convertView.GONE);
          }
         return convertView;
     }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.jojo.flippy.adapter.ChannelMemberAdapter;
 import com.jojo.flippy.adapter.SettingsAdapter;
@@ -96,10 +97,9 @@ public class ChannelMembers extends Activity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position,
                                         long id) {
-                    //setting the click action for each of the items
+                    TextView memberEmail =(TextView) view.findViewById(R.id.textViewMemberFirstName);
                     intent.setClass(ChannelMembers.this, MemberDetailActivity.class);
-                    // put the message in Intent
-                    intent.putExtra("EMAIL", position + "");
+                    intent.putExtra("EMAIL", memberEmail.getText().toString());
                     setResult(1, intent);
                     finish();
                 }
