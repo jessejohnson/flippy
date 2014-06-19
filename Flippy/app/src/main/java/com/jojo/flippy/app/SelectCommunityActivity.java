@@ -2,14 +2,19 @@ package com.jojo.flippy.app;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.jojo.flippy.core.CommunityCenterActivity;
@@ -35,6 +40,7 @@ public class SelectCommunityActivity extends Activity {
     private String defaultSpinnerItem = "Choose a community";
     private String baseURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/";
     private ProgressDialog loadingCommunityDialog;
+    private EditText editTextCommunityKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +55,8 @@ public class SelectCommunityActivity extends Activity {
         communityListAdapt.add(defaultSpinnerItem);
 
         loadingCommunityDialog = new ProgressDialog(SelectCommunityActivity.this);
-        InternetConnectionDetector internetConnectionDetector = new InternetConnectionDetector(this);
+        editTextCommunityKey = (EditText) findViewById(R.id.editTextCommunityKey);
+        final InternetConnectionDetector internetConnectionDetector = new InternetConnectionDetector(this);
 
 
         AsyncHttpClient client = new AsyncHttpClient();
@@ -107,9 +114,13 @@ public class SelectCommunityActivity extends Activity {
             @Override
             public void onClick(View view) {
                 String communitySelected = (String) spinnerSelectCommunity.getSelectedItem();
-                if (communitySelected.equals(defaultSpinnerItem)) {
-                    Crouton.makeText(SelectCommunityActivity.this, "Flippy, please select a community", Style.ALERT)
+                if (communitySelected.equals(defaultSpinnerItem) || editTextCommunityKey.getText().toString().isEmpty()) {
+                    Crouton.makeText(SelectCommunityActivity.this, "Flippy, please select a community or enter a community key", Style.ALERT)
                             .show();
+                    return;
+                }
+                if (!internetConnectionDetector.isConnectingToInternet()) {
+                    onCreateDialog();
                     return;
                 }
                 Intent intent = new Intent(SelectCommunityActivity.this, CommunityCenterActivity.class);
@@ -145,7 +156,19 @@ public class SelectCommunityActivity extends Activity {
         Crouton.cancelAllCroutons();
     }
 
-    ;
-
+    public Dialog onCreateDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(SelectCommunityActivity.this);
+        // Get the layout inflater
+        LayoutInflater inflater = SelectCommunityActivity.this.getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.customize_alert_dialog, null))
+                // Add action buttons
+                .setPositiveButton(R.string.app_name, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // sign in the user ...
+                    }
+                });
+        return builder.create();
+    }
 
 }
