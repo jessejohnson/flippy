@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class Flippy  extends Application{
     public Dao<User, Integer> userDao;
+    public User thisUser ;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -22,12 +24,12 @@ public class Flippy  extends Application{
                 DatabaseHelper.class);
         try{
             userDao = databaseHelper.getUserDao();
-            User user = new User(System.currentTimeMillis()+"");
-            userDao.create(user);
-
             List<User> userList = userDao.queryForAll();
-
-            Log.e("userList", userList.get(0).toString()) ;
+            if(userList.isEmpty()){
+                thisUser = null;
+                return;
+            }
+            thisUser = userList.get(0);
 
         }catch(java.sql.SQLException sqlE){
             sqlE.printStackTrace();

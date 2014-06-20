@@ -26,7 +26,7 @@ public class SplashScreenActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         //TODO Load relevant resources from API here
-        
+
         /*onCreate variables*/
         int DELAY = 2000;
 

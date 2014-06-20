@@ -14,7 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
+import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.persistence.User;
+import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.jojo.flippy.util.Validator;
 import com.koushikdutta.async.future.FutureCallback;
@@ -28,6 +31,7 @@ import org.apache.http.HttpResponse;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -38,7 +42,7 @@ public class RegisterActivity extends Activity {
     private TextView textViewSignIn;
     private CheckBox checkBoxTerms;
     private String regURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/signup/";
-    private String regUserEmail,regUserAuthToken,regUserID;
+    private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName, regNumber;
     private ProgressDialog registerProgress;
     private Intent intent;
 
@@ -141,8 +145,7 @@ public class RegisterActivity extends Activity {
                                     if (e != null) {
                                         Log.e("Error", e.toString());
                                     } else {
-                                        Log.e("user exist",result.toString());
-                                        if(result.has("detail")){
+                                        if (result.has("detail")) {
                                             editTextRegisterEmail.setError("email already in use");
                                             Crouton.makeText(RegisterActivity.this, "email already in use", Style.ALERT)
                                                     .show();
@@ -154,9 +157,25 @@ public class RegisterActivity extends Activity {
                                         regUserEmail = result.get("email").getAsString();
                                         regUserAuthToken = result.get("auth_token").getAsString();
                                         regUserID = result.get("id").getAsString();
-                                        intent.putExtra("regUserEmail",regUserEmail);
-                                        intent.putExtra("regUserAuthToken",regUserAuthToken);
-                                        intent.putExtra("regUserID",regUserID);
+                                        regFirstName = result.get("first_name").getAsString();
+                                        regLastName = result.get("last_name").getAsString();
+
+
+                                        //Save the information in the database
+                                        try {
+                                            Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
+                                            User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName);
+                                            userDao.create(user);
+                                            List<User> userList = userDao.queryForAll();
+                                            Log.e("userList", userList.get(0).toString());
+
+                                        } catch (java.sql.SQLException sqlE) {
+                                            sqlE.printStackTrace();
+                                        }
+                                        //the end of the persistence
+                                        intent.putExtra("regUserEmail", regUserEmail);
+                                        intent.putExtra("regUserAuthToken", regUserAuthToken);
+                                        intent.putExtra("regUserID", regUserID);
                                         intent.setClass(RegisterActivity.this, SelectCommunityActivity.class);
                                         startActivity(intent);
                                     }

@@ -39,11 +39,10 @@ public class User {
     public String date_of_birth;
 
 
-    public User(String id, String user_auth, String user_email, String user_number, String first_name, String last_name) {
+    public User(String id, String user_auth, String user_email, String first_name, String last_name) {
         this.id = id;
         this.user_auth = user_auth;
         this.user_email = user_email;
-        this.user_number = user_number;
         this.first_name = first_name;
         this.last_name = last_name;
     }
@@ -53,6 +52,6 @@ public class User {
 
     @Override
     public String toString() {
-        return this.id;
+        return this.user_email;
     }
 }
