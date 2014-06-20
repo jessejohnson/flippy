@@ -17,9 +17,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.util.InternetConnectionDetector;
 import com.jojo.flippy.util.ToastMessages;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -38,7 +42,7 @@ public class SelectCommunityActivity extends Activity {
     private Spinner spinnerSelectCommunity;
     private Button buttonGetStartedFromCommunity;
     private String defaultSpinnerItem = "Choose a community";
-    private String baseURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/";
+    private String communitiesURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/communities/";
     private ProgressDialog loadingCommunityDialog;
     private EditText editTextCommunityKey;
 
@@ -59,50 +63,28 @@ public class SelectCommunityActivity extends Activity {
         final InternetConnectionDetector internetConnectionDetector = new InternetConnectionDetector(this);
 
 
-        AsyncHttpClient client = new AsyncHttpClient();
-        client.get(baseURL + "communities/", new AsyncHttpResponseHandler() {
-            public void onSuccess(String communities) {
-                loadingCommunityDialog.cancel();
-                Log.d("The output", communities.toString());
-                try {
-                    JSONObject communityObject = new JSONObject(communities);
-                    JSONArray communityList = communityObject.getJSONArray("results");
-                    for (int i = communityList.length() - 1; i > -1; i--) {
-                        JSONObject community = communityList.getJSONObject(i);
-                        communityListAdapt.add(community.getString("name"));
+        Ion.with(SelectCommunityActivity.this)
+                .load(communitiesURL)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if(result!=null){
+                            Log.e("response",result.toString());
+                            JsonArray communityArray = result.getAsJsonArray("results");
+                            for (int i=0 ; i<communityArray.size();i++){
+                                JsonObject item = communityArray.get(i).getAsJsonObject();
+                                communityListAdapt.add(item.get("name").getAsString());
+                                Log.e("Item",item.get("name").getAsString());
+                            }
+
+                        }
+                        if(e!=null){
+                            Log.e("error",e.toString());
+                        }
+
                     }
-
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onStart() {
-                ToastMessages.showToastLong(SelectCommunityActivity.this, "Request started");
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                // Response failed
-                loadingCommunityDialog.cancel();
-                Crouton.makeText(SelectCommunityActivity.this, "Flippy, unable to load communities. Try later", Style.ALERT)
-                        .show();
-            }
-
-            @Override
-            public void onProgress(int bytesWritten, int totalSize) {
-                // Progress notification
-                loadingCommunityDialog = ProgressDialog.show(SelectCommunityActivity.this, "Flippy", "Fetching communities " + bytesWritten, true);
-
-            }
-
-            @Override
-            public void onFinish() {
-                // Completed the request (either success or failure)
-                loadingCommunityDialog.cancel();
-            }
-        });
+                });
 
         //Identify the spinner from the layout and call the function to add items
         spinnerSelectCommunity = (Spinner) findViewById(R.id.spinnerSelectCommunity);
@@ -114,7 +96,7 @@ public class SelectCommunityActivity extends Activity {
             @Override
             public void onClick(View view) {
                 String communitySelected = (String) spinnerSelectCommunity.getSelectedItem();
-                if (communitySelected.equals(defaultSpinnerItem) || editTextCommunityKey.getText().toString().isEmpty()) {
+                if (communitySelected.equals(defaultSpinnerItem) || editTextCommunityKey.getText().toString()=="") {
                     Crouton.makeText(SelectCommunityActivity.this, "Flippy, please select a community or enter a community key", Style.ALERT)
                             .show();
                     return;
