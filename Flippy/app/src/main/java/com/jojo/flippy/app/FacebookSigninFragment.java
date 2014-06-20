@@ -104,7 +104,7 @@ public class FacebookSigninFragment extends Fragment {
     public void onPause() {
         super.onPause();
         uiHelper.onPause();
-        // finish
+
     }
 
     @Override
