@@ -105,8 +105,8 @@ public class SignInActivity extends ActionBarActivity {
                                     } else {
                                         Log.e("user exist", result.toString());
                                         if (result.has("detail")) {
-                                            signInEmail.setError("email or password incorrect");
-                                            Crouton.makeText(SignInActivity.this, "email or password incorrect", Style.ALERT)
+                                            signInEmail.setError(result.get("detail").getAsString());
+                                            Crouton.makeText(SignInActivity.this, result.get("detail").getAsString(), Style.ALERT)
                                                     .show();
                                             return;
                                         }

@@ -12,7 +12,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:name="com.jojo.flippy.util.Flippy"
         android:theme="@style/FlippyActionBarTheme" >
+
+
         <activity
             android:name=".SplashScreenActivity"
             android:label="@string/app_name"
