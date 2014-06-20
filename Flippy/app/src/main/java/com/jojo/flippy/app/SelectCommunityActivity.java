@@ -45,6 +45,7 @@ public class SelectCommunityActivity extends Activity {
     private String communitiesURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/communities/";
     private ProgressDialog loadingCommunityDialog;
     private EditText editTextCommunityKey;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,8 @@ public class SelectCommunityActivity extends Activity {
         actionbar.setSubtitle(getString(R.string.last_step));
         final ArrayList<String> communityListAdapt = new ArrayList<String>();
         communityListAdapt.add(defaultSpinnerItem);
+
+        intent = getIntent();
 
         loadingCommunityDialog = new ProgressDialog(SelectCommunityActivity.this);
         editTextCommunityKey = (EditText) findViewById(R.id.editTextCommunityKey);
@@ -105,7 +108,7 @@ public class SelectCommunityActivity extends Activity {
                     onCreateDialog();
                     return;
                 }
-                Intent intent = new Intent(SelectCommunityActivity.this, CommunityCenterActivity.class);
+                intent.setClass(SelectCommunityActivity.this, CommunityCenterActivity.class);
                 intent.putExtra("communitySelected", communitySelected);
                 startActivity(intent);
             }
