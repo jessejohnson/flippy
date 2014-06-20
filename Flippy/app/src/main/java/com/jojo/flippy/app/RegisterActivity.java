@@ -29,12 +29,16 @@ import org.apache.http.HttpResponse;
 import java.io.IOException;
 import java.net.URI;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 
 public class RegisterActivity extends Activity {
     private EditText editTextRegisterEmail, editTextFirstName, editTextLastName, editTextPassword;
     private TextView textViewSignIn;
     private CheckBox checkBoxTerms;
     private String regURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/signup/";
+    private String regUserEmail,regUserAuthToken,regUserID;
     private ProgressDialog registerProgress;
     private Intent intent;
 
@@ -110,14 +114,14 @@ public class RegisterActivity extends Activity {
                 }
 
                 if (allFieldsValid) {
-                    registerProgress.setMessage("Registering...");
-                    //show dialog
-                    registerProgress.show();
-
                     String userEmail = editTextRegisterEmail.getText().toString().trim();
                     String first_name = editTextFirstName.getText().toString().trim();
                     String last_name = editTextLastName.getText().toString().trim();
                     String password = editTextPassword.getText().toString().trim();
+
+                    registerProgress.setMessage("Registering... " + userEmail);
+                    //show dialog
+                    registerProgress.show();
                     //setting the user parameters
                     JsonObject json = new JsonObject();
                     json.addProperty("email", userEmail);
@@ -137,9 +141,23 @@ public class RegisterActivity extends Activity {
                                     if (e != null) {
                                         Log.e("Error", e.toString());
                                     } else {
-                                        
-                                        Log.e("result", result.toString());
-                                        intent.setClass(RegisterActivity.this, CommunityCenterActivity.class);
+                                        Log.e("user exist",result.toString());
+                                        if(result.has("detail")){
+                                            editTextRegisterEmail.setError("email already in use");
+                                            Crouton.makeText(RegisterActivity.this, "email already in use", Style.ALERT)
+                                                    .show();
+                                            return;
+                                        }
+                                        Log.e("result", result.get("id").getAsString());
+                                        Log.e("result", result.get("auth_token").getAsString());
+                                        Log.e("result", result.get("email").getAsString());
+                                        regUserEmail = result.get("email").getAsString();
+                                        regUserAuthToken = result.get("auth_token").getAsString();
+                                        regUserID = result.get("id").getAsString();
+                                        intent.putExtra("regUserEmail",regUserEmail);
+                                        intent.putExtra("regUserAuthToken",regUserAuthToken);
+                                        intent.putExtra("regUserID",regUserID);
+                                        intent.setClass(RegisterActivity.this, SelectCommunityActivity.class);
                                         startActivity(intent);
                                     }
                                 }
