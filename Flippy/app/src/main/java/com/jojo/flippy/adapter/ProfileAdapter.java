@@ -70,7 +70,7 @@ public class ProfileAdapter extends ArrayAdapter<ProfileItem> {
         holder.textViewProfileUsername.setText(rowItem.getUsername());
 
         holder.textViewProfileUserNumber.setText(rowItem.getUserNumber());
-        holder.imageViewChannelImage.setImageResource(rowItem.getProfileChannelItem());
+
 
 
         holder.textViewProfileUserNumber.setText(rowItem.getUserNumber());

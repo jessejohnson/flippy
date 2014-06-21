@@ -10,19 +10,11 @@ import java.net.URI;
 public class ProfileItem {
 
     private URI profileImageId;
-<<<<<<< HEAD
-    private int profileChannelItem;
+    private URI profileChannelItem;
     private String username,userEmail,userNumber,profileChannelName,profileChannelTotalNumber;
 
 
-    public ProfileItem(URI profileImageId,int profileChannelItem ,String userName, String userEmail,String userNumber,String profileChannelName,String profileChannelTotalNumber ) {
-=======
-    private URI profileChannelItem;
-    private String username,useremail,usernumber,profileChannelName,profileChannelTotalNumber;
-
-
-    public ProfileItem(URI profileImageId,URI profileChannelItem ,String username, String useremail,String usernumber,String profileChannelName,String profileChannelTotalNumber ) {
->>>>>>> f8f7be44b1d9442652df7bd87d46af858a263677
+    public ProfileItem(URI profileImageId,URI profileChannelItem ,String userName, String userEmail,String userNumber,String profileChannelName,String profileChannelTotalNumber ) {
         this.profileImageId = profileImageId;
         this.profileChannelItem = profileChannelItem;
         this.username = userName;
