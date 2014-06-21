@@ -35,7 +35,7 @@ public class FragmentChannel extends Fragment {
     private Intent intent;
     private String channelName = "SRC channel";
     private  String totalMembers = "125";
-    private Button buttonAddChannel,buttonManageChannel;
+    private Button buttonAddChannel;
     private String isManageActivity = "false";
 
 
@@ -85,7 +85,6 @@ public class FragmentChannel extends Fragment {
         });
 
         buttonAddChannel = (Button)view.findViewById(R.id.buttonAddChannel);
-        buttonManageChannel = (Button)view.findViewById(R.id.buttonManageChannel);
         buttonAddChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,32 +92,11 @@ public class FragmentChannel extends Fragment {
                 startActivity(intent);
             }
         });
-        buttonManageChannel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final CharSequence[] channelList = {"GESA KNUST", "SRC Legon", "Flippy Group","Another Group"};
-                channelListDialog(channelList);
-                return;
-            }
-        });
 
+
+
+        registerForContextMenu(ChannelListView);
         return view;
-    }
-    private void channelListDialog(final CharSequence[] channelList) {
-        //TODO this should line should return a list of user channels subscribed to
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.choose_channel_list_dialog_title);
-        builder.setItems(channelList, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                //get the selected option and pass it on to the next activity
-                String channelToManage = channelList[item].toString();
-                Intent intent = new Intent(getActivity().getApplication(),ManageChannelActivity.class);
-                intent.putExtra("channelToCreateNotice",channelToManage);
-                startActivity(intent);
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
     }
 
 }

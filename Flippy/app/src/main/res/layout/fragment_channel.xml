@@ -27,28 +27,15 @@
 
         <Button
             android:id="@+id/buttonAddChannel"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_marginRight="@dimen/margin_one"
             android:layout_marginTop="@dimen/margin_five"
-            android:layout_weight="0.5"
+            android:layout_weight="1"
             android:background="@drawable/flippy_button_dark"
             android:text="@string/add_channel"
-            android:textColor="@color/flippy_white" />
-
-        <Button
-            android:id="@+id/buttonManageChannel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="@dimen/margin_one"
-            android:layout_marginTop="@dimen/margin_five"
-            android:layout_weight="0.5"
-            android:background="@drawable/flippy_button_dark"
-            android:text="@string/channel_manage"
             android:textColor="@color/flippy_white" />
 
     </LinearLayout>

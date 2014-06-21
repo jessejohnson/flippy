@@ -109,15 +109,32 @@
                         app:corner_radius="2dip"
                         app:oval="false" />
 
-                    <TextView
-                        android:id="@+id/textViewCreateChannelImageGuide"
-                        android:layout_marginTop="@dimen/margin_twenty"
-                        android:layout_marginLeft="@dimen/margin_ten"
-                        android:layout_width="wrap_content"
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/flippy_white"
-                        android:text="@string/channel_image_upload_guide"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/textViewCreateChannelImageGuide"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_ten"
+                            android:layout_marginTop="@dimen/margin_twenty"
+                            android:text="@string/channel_image_upload_guide"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:textColor="@color/flippy_white" />
+
+                        <CheckBox
+                            android:id="@+id/checkBoxChannelIsPublic"
+                            android:layout_marginTop="@dimen/margin_five"
+                            android:textColor="@color/flippy_white"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/channel_is_public" />
+
+
+                    </LinearLayout>
                 </LinearLayout>
 
 

@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.jojo.flippy.core.CommunityChannelActivity">
+    <item
+        android:id="@+id/action_community_view_details"
+        android:orderInCategory="100"
+        android:title="@string/community_context_view_detail"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/action_community_view_members"
+        android:orderInCategory="200"
+        android:title="@string/community_context_view_members"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/action_community_subscribe"
+        android:orderInCategory="300"
+        android:title="@string/community_context_subscribe"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/action_community_un_subscribe"
+        android:orderInCategory="400"
+        android:title="@string/community_context_un_subscribe"
+        app:showAsAction="collapseActionView" />
+</menu>

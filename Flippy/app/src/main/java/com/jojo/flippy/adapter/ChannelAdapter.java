@@ -56,7 +56,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageViewCommunityChannel);
             holder.textViewStatus =(TextView)convertView.findViewById(R.id.textViewChannelStatusCustom);
             holder.imageViewSubscribe = (ImageView)convertView.findViewById(R.id.imageViewSubscribe);
-            holder.linearLayoutSubscribe = (LinearLayout)convertView.findViewById(R.id.linearLayoutSubscribe);
+           // holder.linearLayoutSubscribe = (LinearLayout)convertView.findViewById(R.id.linearLayoutSubscribe);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -69,7 +69,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         //check to see if the adapter displays only user channel, then set the subscription button to invisible state
          if(isUserChannel){
              holder.imageViewSubscribe.setVisibility(convertView.GONE);
-             holder.linearLayoutSubscribe.setVisibility(convertView.GONE);
+            // holder.linearLayoutSubscribe.setVisibility(convertView.GONE);
          }
         return convertView;
     }

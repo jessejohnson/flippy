@@ -124,6 +124,12 @@
     <string name="notice_share">Share notice</string>
     <string name="notice_remove">Remove from board</string>
 
+   <!-- community context menu-->
+    <string name="community_context_view_detail">Channel details</string>
+    <string name="community_context_view_members">Channel members</string>
+    <string name="community_context_subscribe">Subscribe</string>
+    <string name="community_context_un_subscribe">Un-subscribe</string>
+
     <!-- fragment settings strings -->
     <string name="settings_title">Settings title</string>
     <string name="settings_subtitle">Settings subtitle</string>
@@ -165,7 +171,8 @@
     <string name="channel_channel_name">channel name</string>
     <string name="channel_warning">Channels are the heart of your community, be responsible if you create one</string>
     <string name="channel_create">Create a new Channel</string>
-    <string name="channel_image_upload_guide">This images is a representative of your channel, keep it as such</string>
+    <string name="channel_image_upload_guide">This image is a representative of your channel, keep it as such</string>
+    <string name="channel_is_public">Is public</string>
     <string name="channel_learn_guide">To learn more about how to create successful Channels, read our Channel\'s Guide</string>
 
     <!-- creating notice activity strings -->

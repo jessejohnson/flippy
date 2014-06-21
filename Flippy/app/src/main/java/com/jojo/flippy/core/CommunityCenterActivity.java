@@ -1,6 +1,5 @@
 package com.jojo.flippy.core;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -10,7 +9,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.ContextMenu;
@@ -26,7 +24,6 @@ import com.jojo.flippy.adapter.CustomDrawer;
 import com.jojo.flippy.adapter.DrawerItem;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.profile.AccountProfileActivity;
-import com.jojo.flippy.util.ToastMessages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +36,9 @@ public class CommunityCenterActivity extends ActionBarActivity {
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private ShareActionProvider shareActionProvider;
+    private boolean notice = true;
+    private boolean community = false;
+    private boolean channel = false;
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
@@ -99,6 +99,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
             SelectItem(1);
         }
     }
+
     public void SelectItem(int position) {
 
         Fragment fragment = null;
@@ -112,12 +113,21 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 break;
             case 1:
                 fragment = new FragmentNotice();
+                notice = true;
+                community = false;
+                channel = false;
                 break;
             case 2:
                 fragment = new FragmentChannel();
+                notice = false;
+                community = false;
+                channel = true;
                 break;
             case 3:
                 fragment = new FragmentCommunities();
+                notice = false;
+                community = true;
+                channel = false;
                 break;
             case 4:
                 fragment = new FragmentSettings();
@@ -136,6 +146,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
         mDrawerLayout.closeDrawer(mDrawerList);
 
     }
+
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
@@ -166,13 +177,14 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 return true;
             case R.id.action_add:
                 channelListDialog();
-                return  true;
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
 
     }
+
     //Setting the selection of the context menu
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -182,7 +194,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
             case R.id.action_detail_notice:
                 //call the detail view activity passing all the intent to display
                 return true;
-            case  R.id.action_reminder_notice:
+            case R.id.action_reminder_notice:
                 //call the alarm reminder of the system and set the alert
             case R.id.action_share_notice:
                 //show the user his available options to share and display success toast
@@ -203,7 +215,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
     }
 
 
-   /* this class set the onclick listener for the various drawer items*/
+    /* this class set the onclick listener for the various drawer items*/
     private class DrawerItemClickListener implements
             ListView.OnItemClickListener {
         @Override
@@ -218,8 +230,8 @@ public class CommunityCenterActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
+
         inflater.inflate(R.menu.community_center_menu, menu);
-        // Return true to display menu
         return true;
 
     }
@@ -229,7 +241,14 @@ public class CommunityCenterActivity extends ActionBarActivity {
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.notice_context_menu, menu);
+        if (community) {
+            inflater.inflate(R.menu.community_context_menu, menu);
+        } else if(channel) {
+            inflater.inflate(R.menu.channel_context_menu, menu);
+        }else {
+            inflater.inflate(R.menu.notice_context_menu, menu);
+        }
+
     }
 
     private void shareFlippy() {
@@ -240,8 +259,9 @@ public class CommunityCenterActivity extends ActionBarActivity {
         sendIntent.createChooser(sendIntent, getResources().getText(R.string.app_name));
         startActivity(sendIntent);
     }
+
     //The send feedback function
-    public void sendFeedback(){
+    public void sendFeedback() {
         final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
         emailIntent.setType("plain/text");
         emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{getResources().getString(R.string.flippy_email)});
@@ -249,18 +269,19 @@ public class CommunityCenterActivity extends ActionBarActivity {
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, getResources().getString(R.string.flippy_email_body));
         startActivity(Intent.createChooser(emailIntent, getResources().getString(R.string.flippy_email_subject)));
     }
+
     //Alert dialog showing a list of channel user belongs to
     private void channelListDialog() {
         //TODO this should line should return a list of user channels subscribed to
         final CharSequence[] channelList = {"SRC channel", "Class of 2015, CS", "AAESS Group"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.choose_channel_list_dialog_title);
-        builder.setItems(channelList,new DialogInterface.OnClickListener() {
+        builder.setItems(channelList, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 //get the selected option and pass it on to the next activity
                 String channelToCreateNotice = channelList[item].toString();
-                Intent intent = new Intent(CommunityCenterActivity.this,CreateNoticeActivity.class);
-                intent.putExtra("channelToCreateNotice",channelToCreateNotice);
+                Intent intent = new Intent(CommunityCenterActivity.this, CreateNoticeActivity.class);
+                intent.putExtra("channelToCreateNotice", channelToCreateNotice);
                 startActivity(intent);
             }
         });

@@ -27,30 +27,19 @@
                 android:contentDescription="@string/app_name"
                 android:scaleType="centerCrop" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <ImageView
+                android:id="@+id/imageViewSubscribe"
+                android:padding="@dimen/margin_two"
                 android:layout_margin="@dimen/margin_five"
-                android:id="@+id/linearLayoutSubscribe"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right">
+                android:background="@drawable/round_bg_accept"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_action_accept" />
 
-                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/imageViewSubscribe"
-                    android:layout_width="@dimen/margin_fifty"
-                    android:layout_height="@dimen/margin_fifty"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_margin="@dimen/margin_five"
-                    android:background="@drawable/round_bg_accept"
-                    android:padding="1dp"
-                    android:scaleType="center"
-                    android:src="@drawable/ic_action_accept"
-                    app:border_color="@color/border"
-                    app:border_width="1dp"
-                    app:corner_radius="50dp"
-                    app:oval="false" />
-            </LinearLayout>
         </FrameLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

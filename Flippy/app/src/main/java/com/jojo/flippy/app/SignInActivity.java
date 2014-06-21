@@ -63,6 +63,7 @@ public class SignInActivity extends ActionBarActivity {
                 } else {
                     signInEmail.setError(getString(R.string.registration_error_email));
                     allFieldsValid = false;
+
                 }
                 if (Validator.isValidPassword(signInPassword.getText().toString())) {
                     signInPassword.setError(null);
@@ -70,13 +71,16 @@ public class SignInActivity extends ActionBarActivity {
                 } else {
                     signInPassword.setError(getString(R.string.registration_error_password));
                     allFieldsValid = false;
+
                 }
                 if (signInCheckBox.isChecked()) {
                     signInCheckBox.setError(null);
                     allFieldsValid = true;
+
                 } else {
                     signInCheckBox.setError(getString(R.string.registration_error_checkbox));
                     allFieldsValid = false;
+
                 }
 
                 if (true) {
