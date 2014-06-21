@@ -143,6 +143,7 @@ public class RegisterActivity extends Activity {
                                     //cancel the dialog
                                     registerProgress.cancel();
                                     if (e != null) {
+                                        ToastMessages.showToastLong(RegisterActivity.this,"Check internet connection");
                                         Log.e("Error", e.toString());
                                     } else {
                                         if (result.has("detail")) {

@@ -12,10 +12,12 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -46,6 +48,7 @@ public class SelectCommunityActivity extends Activity {
     private ProgressDialog loadingCommunityDialog;
     private EditText editTextCommunityKey;
     private Intent intent;
+    private String selectedCommunityID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +60,32 @@ public class SelectCommunityActivity extends Activity {
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setSubtitle(getString(R.string.last_step));
         final ArrayList<String> communityListAdapt = new ArrayList<String>();
+        final ArrayList<String> communityListId = new ArrayList<String>();
+        communityListId.add("flippy01");
         communityListAdapt.add(defaultSpinnerItem);
+        loadingCommunityDialog = new ProgressDialog(SelectCommunityActivity.this);
+        loadingCommunityDialog.setMessage("Loading communities...");
+        loadingCommunityDialog.show();
 
         intent = getIntent();
 
-        loadingCommunityDialog = new ProgressDialog(SelectCommunityActivity.this);
         editTextCommunityKey = (EditText) findViewById(R.id.editTextCommunityKey);
-        final InternetConnectionDetector internetConnectionDetector = new InternetConnectionDetector(this);
+        spinnerSelectCommunity = (Spinner) findViewById(R.id.spinnerSelectCommunity);
+        spinnerSelectCommunity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,
+                                       int position, long arg3) {
+                selectedCommunityID = communityListId.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+
+            }
+        });
+        final InternetConnectionDetector internetConnectionDetector = new InternetConnectionDetector(this);
 
         Ion.with(SelectCommunityActivity.this)
                 .load(communitiesURL)
@@ -72,34 +93,33 @@ public class SelectCommunityActivity extends Activity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if(result!=null){
-                            Log.e("response",result.toString());
+                        loadingCommunityDialog.dismiss();
+                        if (result != null) {
+                            Log.e("response", result.toString());
                             JsonArray communityArray = result.getAsJsonArray("results");
-                            for (int i=0 ; i<communityArray.size();i++){
+                            for (int i = 0; i < communityArray.size(); i++) {
                                 JsonObject item = communityArray.get(i).getAsJsonObject();
                                 communityListAdapt.add(item.get("name").getAsString());
-                                Log.e("Item",item.get("name").getAsString());
+                                communityListId.add(item.get("id").getAsString());
+                                Log.e("Item", item.get("name").getAsString());
+                                Log.e("Item", item.get("id").getAsString());
                             }
 
                         }
-                        if(e!=null){
-                            Log.e("error",e.toString());
+                        if (e != null) {
+                            ToastMessages.showToastLong(SelectCommunityActivity.this,"Check internet connection");
+                            Log.e("error", e.toString());
                         }
 
                     }
                 });
-
-        //Identify the spinner from the layout and call the function to add items
-        spinnerSelectCommunity = (Spinner) findViewById(R.id.spinnerSelectCommunity);
         addItemsOnCommunitySpinner(communityListAdapt);
-
-
         buttonGetStartedFromCommunity = (Button) findViewById(R.id.buttonGetStartedCommunity);
         buttonGetStartedFromCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String communitySelected = (String) spinnerSelectCommunity.getSelectedItem();
-                if (communitySelected.equals(defaultSpinnerItem) || editTextCommunityKey.getText().toString()=="") {
+                if (communitySelected.equals(defaultSpinnerItem) || editTextCommunityKey.getText().toString() == "") {
                     Crouton.makeText(SelectCommunityActivity.this, "Flippy, please select a community or enter a community key", Style.ALERT)
                             .show();
                     return;
@@ -110,7 +130,9 @@ public class SelectCommunityActivity extends Activity {
                 }
                 intent.setClass(SelectCommunityActivity.this, CommunityCenterActivity.class);
                 intent.putExtra("communitySelected", communitySelected);
+                intent.putExtra("selectedCommunityID", selectedCommunityID);
                 startActivity(intent);
+
             }
         });
     }
@@ -121,6 +143,7 @@ public class SelectCommunityActivity extends Activity {
                 R.layout.flippy_spinner_item, communityList);
         dataAdapter.setDropDownViewResource(R.layout.flippy_spinner_dropdown_item);
         spinnerSelectCommunity.setAdapter(dataAdapter);
+
     }
 
     @Override

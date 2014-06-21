@@ -20,6 +20,10 @@ public class ManageChannelActivity extends ActionBarActivity {
     private ImageView imageViewEditChannelName, imageViewEditFirstAdmin, imageViewEditSecondAdmin, imageViewEditThirdAdmin, imageViewEditFourthAdmin;
     private Intent intent;
     private String channelToManage;
+    private boolean firstAdmin = false;
+    private boolean secondAdmin = false;
+    private boolean thirdAdmin = false;
+    private boolean fourthAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,18 +71,29 @@ public class ManageChannelActivity extends ActionBarActivity {
         imageViewEditFirstAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                firstAdmin =true;
+                secondAdmin= false;
+                thirdAdmin=false;
+                fourthAdmin= false;
+
                 intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
                 //adding something to the intent to detect at the other end
-                intent.putExtra("isManageActivity","true");
+                intent.putExtra("isManageActivity", "true");
                 startActivityForResult(intent, 1);
             }
         });
         imageViewEditSecondAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                firstAdmin =false;
+                secondAdmin= true;
+                thirdAdmin=false;
+                fourthAdmin= false;
+
                 intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
                 //adding something to the intent to detect at the other end
-                startActivity(intent);
+                intent.putExtra("isManageActivity", "true");
+                startActivityForResult(intent, 1);
 
             }
         });
@@ -142,11 +157,18 @@ public class ManageChannelActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
         if (requestCode == 1) {
+            String adminEmail = data.getStringExtra("EMAIL");
             if (null != data) {
                 // fetch the message String
-                String adminEmail = data.getStringExtra("EMAIL");
-                editTextFirstAdmin.setText(adminEmail);
+                if (firstAdmin) {
+                    editTextFirstAdmin.setText(adminEmail);
+                }
+                if(secondAdmin){
+                    editTextSecondAdmin.setText(adminEmail);
+                }
+
             }
+
         }
     }
 

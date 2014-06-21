@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -93,11 +94,12 @@ public class ChannelMembers extends Activity {
 
         //checking if the intent came from the channel management activity, process and sent result
         if (isManageActivity.toString().trim().equalsIgnoreCase("true")) {
+            Log.e("Clicked","Clicked the item");
             membershipList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position,
                                         long id) {
-                    TextView memberEmail =(TextView) view.findViewById(R.id.textViewMemberFirstName);
+                    TextView memberEmail = (TextView) view.findViewById(R.id.textViewMemberFirstName);
                     intent.setClass(ChannelMembers.this, MemberDetailActivity.class);
                     intent.putExtra("EMAIL", memberEmail.getText().toString());
                     setResult(1, intent);
@@ -130,7 +132,7 @@ public class ChannelMembers extends Activity {
             e.printStackTrace();
         }
         try {
-            sub = object.getString("phone_number");
+            sub = object.getString("email");
         } catch (JSONException e) {
             e.printStackTrace();
         }

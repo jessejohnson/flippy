@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
+import com.jojo.flippy.util.ToastMessages;
 import com.jojo.flippy.util.Validator;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -84,7 +85,6 @@ public class SignInActivity extends ActionBarActivity {
                     String password = signInPassword.getText().toString();
                     //setting the user parameters
                     signInDialog.setMessage("Signing in... " + email);
-                    //show dialog
                     signInDialog.show();
 
                     JsonObject json = new JsonObject();
@@ -101,6 +101,7 @@ public class SignInActivity extends ActionBarActivity {
                                     //cancel the dialog
                                     signInDialog.cancel();
                                     if (e != null) {
+                                        ToastMessages.showToastLong(SignInActivity.this, "Check internet connection");
                                         Log.e("Error", e.toString());
                                     } else {
                                         Log.e("user exist", result.toString());
