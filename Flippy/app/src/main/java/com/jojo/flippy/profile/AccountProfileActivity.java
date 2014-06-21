@@ -53,7 +53,7 @@ public class AccountProfileActivity extends ActionBarActivity {
 
        //Loading the list with a dummy data
         rowItems = new ArrayList<ProfileItem>();
-        ProfileItem item = new ProfileItem(R.drawable.user_profile,R.drawable.default_profile_picture,username,useremail,number,"GESA KNUST","200 members");
+        ProfileItem item = new ProfileItem(URI.create("http://organicthemes.com/demo/profile/files/2012/12/profile_img.png"),R.drawable.default_profile_picture,username,useremail,number,"GESA KNUST","200 members");
         rowItems.add(item);
         rowItems.add(item);
         rowItems.add(item);

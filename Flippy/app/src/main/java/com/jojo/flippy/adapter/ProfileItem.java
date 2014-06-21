@@ -2,16 +2,19 @@ package com.jojo.flippy.adapter;
 
 import android.widget.ImageView;
 
+import java.net.URI;
+
 /**
  * Created by odette on 6/14/14.
  */
 public class ProfileItem {
 
-    private int profileImageId,profileChannelItem;
+    private URI profileImageId;
+    private int profileChannelItem;
     private String username,useremail,usernumber,profileChannelName,profileChannelTotalNumber;
 
 
-    public ProfileItem(int profileImageId,int profileChannelItem ,String username, String useremail,String usernumber,String profileChannelName,String profileChannelTotalNumber ) {
+    public ProfileItem(URI profileImageId,int profileChannelItem ,String username, String useremail,String usernumber,String profileChannelName,String profileChannelTotalNumber ) {
         this.profileImageId = profileImageId;
         this.profileChannelItem = profileChannelItem;
         this.username = username;
@@ -33,7 +36,7 @@ public class ProfileItem {
         this.profileChannelTotalNumber = profileChannelTotalNumber;
     }
 
-    public void setProfileImageId(int profileImageId) {
+    public void setProfileImageId(URI profileImageId) {
         this.profileImageId = profileImageId;
     }
 
@@ -53,7 +56,7 @@ public class ProfileItem {
         return profileChannelItem;
     }
 
-    public int getProfileImageId() {
+    public URI getProfileImageId() {
         return profileImageId;
     }
 

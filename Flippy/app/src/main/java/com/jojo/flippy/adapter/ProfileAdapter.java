@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jojo.flippy.app.R;
+import com.koushikdutta.ion.Ion;
 
 import java.util.List;
 
@@ -68,9 +69,9 @@ public class ProfileAdapter extends ArrayAdapter<ProfileItem> {
         holder.textViewProfileUserEmail.setText(rowItem.getUseremail());
         holder.textViewProfileUsername.setText(rowItem.getUsername());
         holder.textViewProfileUserNumber.setText(rowItem.getUsernumber());
-        holder.imageViewProfileImage.setImageResource(rowItem.getProfileImageId());
-        holder.imageViewChannelImage.setImageResource(rowItem.getProfileChannelItem());
-
+        Ion.with(holder.imageViewProfileImage)
+                .load(String.valueOf(rowItem.getProfileImageId()));
+//        holder.imageViewChannelImage.setImageResource(rowItem.getProfileChannelItem());
 
         return convertView;
     }

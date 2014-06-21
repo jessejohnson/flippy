@@ -45,6 +45,7 @@ public class SelectCommunityActivity extends Activity {
     private Button buttonGetStartedFromCommunity;
     private String defaultSpinnerItem = "Choose a community";
     private String communitiesURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/communities/";
+    //TODO get communityKeyURL
     private String communityKeyURL = "";
     private ProgressDialog loadingCommunityDialog;
     private EditText editTextCommunityKey;

@@ -81,10 +81,15 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
             drawerHolder.accountLayout.setVisibility(LinearLayout.VISIBLE);
             drawerHolder.userName.setText(CommunityCenterActivity.userFirstName +" "+ CommunityCenterActivity.userLastName);
             drawerHolder.userEmail.setText(CommunityCenterActivity.regUserEmail);
-            if(CommunityCenterActivity.UserAvatarURL.toString().equals("")){
-                drawerHolder.userImage.setImageResource(R.drawable.default_profile_picture);
-            }else{
-                Ion.with(drawerHolder.userImage).load(CommunityCenterActivity.UserAvatarURL.toString());
+            //TODO check for nullPointer
+            try {
+                if( CommunityCenterActivity.UserAvatarURL.toString().equals("")){
+                    drawerHolder.userImage.setImageResource(R.drawable.default_profile_picture);
+                }else{
+                    Ion.with(drawerHolder.userImage).load(CommunityCenterActivity.UserAvatarURL.toString());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
         }else {
