@@ -3,6 +3,7 @@ package com.jojo.flippy.adapter;
 /**
  * Created by bright on 6/9/14.
  */
+
 import java.util.List;
 
 import android.app.Activity;
@@ -27,7 +28,7 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
     int layoutResID;
 
     public CustomDrawer(Context context, int layoutResourceID,
-                               List<DrawerItem> listItems) {
+                        List<DrawerItem> listItems) {
         super(context, layoutResourceID, listItems);
         this.context = context;
         this.drawerItemList = listItems;
@@ -56,11 +57,11 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
             drawerHolder.itemLayout = (LinearLayout) view
                     .findViewById(R.id.itemLayout);
 
-            drawerHolder.user_frame = (FrameLayout)view.findViewById(R.id.user_frame);
+            drawerHolder.user_frame = (FrameLayout) view.findViewById(R.id.user_frame);
 
             drawerHolder.userImage = (ImageView) view.findViewById(R.id.user_pic);
             drawerHolder.userEmail = (TextView) view.findViewById(R.id.text_user_email);
-            drawerHolder.userName = (TextView)view.findViewById(R.id.text_user_name);
+            drawerHolder.userName = (TextView) view.findViewById(R.id.text_user_name);
 
 
             view.setTag(drawerHolder);
@@ -71,34 +72,21 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
         }
 
         DrawerItem dItem = (DrawerItem) this.drawerItemList.get(position);
-        if(position==0){
+        if (position == 0) {
             //check if the drawer item is of index zero
             drawerHolder.itemLayout.setVisibility(View.GONE);
             drawerHolder.accountLayout.setVisibility(LinearLayout.VISIBLE);
-            drawerHolder.userName.setText(CommunityCenterActivity.userFirstName +" "+ CommunityCenterActivity.userLastName);
+            drawerHolder.userName.setText(CommunityCenterActivity.userFirstName + " " + CommunityCenterActivity.userLastName);
             drawerHolder.userEmail.setText(CommunityCenterActivity.regUserEmail);
-<<<<<<< HEAD
-            if(CommunityCenterActivity.userAvatarURL ==null){
+            if (CommunityCenterActivity.userAvatarURL == null) {
                 drawerHolder.userImage.setImageResource(R.drawable.default_profile_picture);
-            }else{
+            } else {
                 Ion.with(drawerHolder.userImage)
                         .placeholder(R.drawable.default_profile_picture)
                         .error(R.drawable.default_profile_picture)
                         .load(CommunityCenterActivity.userAvatarURL.toString());
-=======
-            //TODO check for nullPointer
-            try {
-                if( CommunityCenterActivity.UserAvatarURL.toString().equals("")){
-                    drawerHolder.userImage.setImageResource(R.drawable.default_profile_picture);
-                }else{
-                    Ion.with(drawerHolder.userImage).load(CommunityCenterActivity.UserAvatarURL.toString());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
->>>>>>> 44e808e2374dff3d4fdc17cbe2b155538cab3172
             }
-
-        }else {
+        } else {
             //destroy all the other views if not in the item with the zeroth index
             drawerHolder.user_frame.setVisibility(View.GONE);
             drawerHolder.userImage.setVisibility(View.GONE);
@@ -116,11 +104,13 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
         return view;
     }
 
+
     private static class DrawerItemHolder {
-        TextView ItemName,userName,userEmail;
+        TextView ItemName, userName, userEmail;
         ImageView icon;
         ImageView userImage;
-        LinearLayout itemLayout,accountLayout;
+        LinearLayout itemLayout, accountLayout;
         FrameLayout user_frame;
     }
 }
+

@@ -155,11 +155,6 @@ public class SelectCommunityActivity extends Activity {
                                 }
                             });
                 }
-                if (!internetConnectionDetector.isConnectingToInternet()) {
-                    onCreateDialog();
-                    return;
-                }
-
                /* update the user with the selected community id and name*/
                 try {
                     Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;

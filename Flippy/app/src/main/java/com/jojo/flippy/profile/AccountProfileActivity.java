@@ -15,6 +15,7 @@ import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,11 +52,9 @@ public class AccountProfileActivity extends ActionBarActivity {
         intent = getIntent();
        //Loading the list with a dummy data
         rowItems = new ArrayList<ProfileItem>();
-<<<<<<< HEAD
-        ProfileItem item = new ProfileItem(R.drawable.user_profile,R.drawable.default_profile_picture, userFullName, userEmail, userFirstName,"GESA KNUST","200 members");
-=======
-        ProfileItem item = new ProfileItem(URI.create("http://organicthemes.com/demo/profile/files/2012/12/profile_img.png"),R.drawable.default_profile_picture,username,useremail,number,"GESA KNUST","200 members");
->>>>>>> 44e808e2374dff3d4fdc17cbe2b155538cab3172
+
+        ProfileItem item = new ProfileItem(URI.create("http://organicthemes.com/demo/profile/files/2012/12/profile_img.png"),R.drawable.default_profile_picture,userFullName,userEmail,userFirstName,"GESA KNUST","200 members");
+
         rowItems.add(item);
         rowItems.add(item);
         rowItems.add(item);

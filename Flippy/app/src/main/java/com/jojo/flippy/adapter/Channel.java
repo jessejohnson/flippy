@@ -43,6 +43,6 @@ public class Channel {
     }
     @Override
     public String toString() {
-        return channelName + "\n" + status + "\n" + " " + members;
+        return channelName + "\n" + imageUrl + "\n" + " " + members;
     }
 }

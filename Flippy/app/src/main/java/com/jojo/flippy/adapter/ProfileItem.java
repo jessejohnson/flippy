@@ -11,15 +11,15 @@ public class ProfileItem {
 
     private URI profileImageId;
     private int profileChannelItem;
-    private String username,useremail,usernumber,profileChannelName,profileChannelTotalNumber;
+    private String username,userEmail,userNumber,profileChannelName,profileChannelTotalNumber;
 
 
-    public ProfileItem(URI profileImageId,int profileChannelItem ,String username, String useremail,String usernumber,String profileChannelName,String profileChannelTotalNumber ) {
+    public ProfileItem(URI profileImageId,int profileChannelItem ,String userName, String userEmail,String userNumber,String profileChannelName,String profileChannelTotalNumber ) {
         this.profileImageId = profileImageId;
         this.profileChannelItem = profileChannelItem;
-        this.username = username;
-        this.useremail = useremail;
-        this.usernumber = usernumber;
+        this.username = userName;
+        this.userEmail = userEmail;
+        this.userNumber = userNumber;
         this.profileChannelName = profileChannelName;
         this.profileChannelTotalNumber = profileChannelTotalNumber;
     }
@@ -41,7 +41,7 @@ public class ProfileItem {
     }
 
     public void setUserEmail(String userEmail) {
-        this.useremail = useremail;
+        this.userEmail = userEmail;
     }
 
     public void setUsername(String username) {
@@ -49,7 +49,7 @@ public class ProfileItem {
     }
 
     public void setUserNumber(String userNumber) {
-        this.usernumber = usernumber;
+        this.userNumber = userNumber;
     }
 
     public int getProfileChannelItem() {
@@ -69,7 +69,7 @@ public class ProfileItem {
     }
 
     public String getUserEmail() {
-        return useremail;
+        return userEmail;
     }
 
     public String getUsername() {
@@ -77,7 +77,7 @@ public class ProfileItem {
     }
 
     public String getUserNumber() {
-        return usernumber;
+        return userNumber;
     }
 
 }

@@ -33,11 +33,12 @@ import java.util.List;
 public class FragmentCommunities extends Fragment {
     private ListView listViewCommunity;
     //Instance of the channel item
-    List<Channel> rowItems;
+
     private Intent intent;
     private String channelsURL= "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/channels/";
     private TextView textViewCommunityEmpty;
     private ProgressBar progressBarCommunityChannelLoader;
+
 
 
     public FragmentCommunities() {
@@ -52,15 +53,12 @@ public class FragmentCommunities extends Fragment {
                 false);
 
         intent = new Intent();
-
         textViewCommunityEmpty =(TextView)view.findViewById(R.id.textViewCommunityEmpty);
         progressBarCommunityChannelLoader = (ProgressBar)view.findViewById(R.id.progressBarCommunityChannelLoader);
         listViewCommunity = (ListView) view.findViewById(R.id.listViewCommunity);
         listViewCommunity.setEmptyView(textViewCommunityEmpty);
+        final List<Channel> rowItems = new ArrayList<Channel>();
         //Loading the list with a dummy data
-        rowItems = new ArrayList<Channel>();
-
-
         Ion.with(getActivity())
                 .load(channelsURL)
                 .asJsonObject()
@@ -69,15 +67,14 @@ public class FragmentCommunities extends Fragment {
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarCommunityChannelLoader.setVisibility(view.GONE);
                         if (result != null) {
-                            Log.e("response", result.toString());
                             JsonArray communityArray = result.getAsJsonArray("results");
                             for (int i = 0; i < communityArray.size(); i++) {
                                 JsonObject item = communityArray.get(i).getAsJsonObject();
-                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), item.get("name").getAsString(), "200 members", "active");
+                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), item.get("name").getAsString(),"200 members", "active");
                                 rowItems.add(channelItem);
-                                Log.e("item",item.get("image_url").getAsString());
-                                Log.e("item",item.get("name").getAsString());
                             }
+
+                          Log.e("List community",rowItems.toString());
 
                         }
                         if (e != null) {
@@ -93,10 +90,9 @@ public class FragmentCommunities extends Fragment {
         listViewCommunity.setAdapter(adapter);
 
 
+
         //registering the list view for context menu actions
         registerForContextMenu(listViewCommunity);
-
-
         return view;
     }
 
