@@ -45,6 +45,7 @@ public class SelectCommunityActivity extends Activity {
     private Button buttonGetStartedFromCommunity;
     private String defaultSpinnerItem = "Choose a community";
     private String communitiesURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/communities/";
+    private String communityKeyURL = "";
     private ProgressDialog loadingCommunityDialog;
     private EditText editTextCommunityKey;
     private Intent intent;
@@ -123,6 +124,29 @@ public class SelectCommunityActivity extends Activity {
                     Crouton.makeText(SelectCommunityActivity.this, "Flippy, please select a community or enter a community key", Style.ALERT)
                             .show();
                     return;
+                }
+                //TODO submit community key to API. On success, set communitySelected & selectedCommunityID
+                if (!editTextCommunityKey.getText().toString().equalsIgnoreCase("")){
+                    String communityKey = editTextCommunityKey.getText().toString();
+                    //TODO add parameters for POST
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("key", "value");
+
+                    Ion.with(SelectCommunityActivity.this)
+                            .load(communityKeyURL)
+                            .setJsonObjectBody(jsonObject)
+                            .asJsonObject()
+                            .setCallback(new FutureCallback<JsonObject>() {
+                                @Override
+                                public void onCompleted(Exception e, JsonObject result) {
+                                    if(e != null){
+                                        ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
+                                        Log.e("Error", e.toString());
+                                    } else {
+                                        //TODO set communitySelected & selectedCommunityID
+                                    }
+                                }
+                            });
                 }
                 if (!internetConnectionDetector.isConnectingToInternet()) {
                     onCreateDialog();
