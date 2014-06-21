@@ -77,6 +77,7 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
             drawerHolder.accountLayout.setVisibility(LinearLayout.VISIBLE);
             drawerHolder.userName.setText(CommunityCenterActivity.userFirstName +" "+ CommunityCenterActivity.userLastName);
             drawerHolder.userEmail.setText(CommunityCenterActivity.regUserEmail);
+<<<<<<< HEAD
             if(CommunityCenterActivity.userAvatarURL ==null){
                 drawerHolder.userImage.setImageResource(R.drawable.default_profile_picture);
             }else{
@@ -84,6 +85,17 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
                         .placeholder(R.drawable.default_profile_picture)
                         .error(R.drawable.default_profile_picture)
                         .load(CommunityCenterActivity.userAvatarURL.toString());
+=======
+            //TODO check for nullPointer
+            try {
+                if( CommunityCenterActivity.UserAvatarURL.toString().equals("")){
+                    drawerHolder.userImage.setImageResource(R.drawable.default_profile_picture);
+                }else{
+                    Ion.with(drawerHolder.userImage).load(CommunityCenterActivity.UserAvatarURL.toString());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+>>>>>>> 44e808e2374dff3d4fdc17cbe2b155538cab3172
             }
 
         }else {
