@@ -77,7 +77,8 @@ public class ProfileAdapter extends ArrayAdapter<ProfileItem> {
         Ion.with(holder.imageViewProfileImage)
                 .placeholder(R.drawable.default_profile_picture)
                 .load(String.valueOf(rowItem.getProfileImageId()));
-//        holder.imageViewChannelImage.setImageResource(rowItem.getProfileChannelItem());
+        Ion.with(holder.imageViewChannelImage)
+                .load(String.valueOf(rowItem.getProfileChannelItem()));
 
 
         return convertView;
