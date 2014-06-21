@@ -44,7 +44,13 @@ public class CommunityCenterActivity extends ActionBarActivity {
     private boolean community = false;
     private boolean channel = false;
     private Intent intent;
-    public static String regUserEmail, userFirstName, userLastName,userAvatarThumbURL,UserAvatarURL;
+    public static String regUserEmail="";
+    public static  String userFirstName ="";
+    public static  String userLastName ="";
+    public static  String userAvatarThumbURL ="";
+    public static  String userAvatarURL ="";
+    private static  String userCommunityId="";
+    private static  String userCommunityName="";
     private User currentUser;
 
 
@@ -74,7 +80,9 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 userFirstName = currentUser.first_name;
                 userLastName = currentUser.last_name;
                 userAvatarThumbURL =currentUser.avatar_thumb;
-                UserAvatarURL = currentUser.avatar;
+                userAvatarURL = currentUser.avatar;
+                userCommunityId =currentUser.community_id;
+                userCommunityName = currentUser.community_name;
             }
 
         } catch (java.sql.SQLException sqlE) {

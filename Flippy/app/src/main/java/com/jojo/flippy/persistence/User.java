@@ -37,6 +37,11 @@ public class User {
 
     @DatabaseField(columnName = "date_of_birth")
     public String date_of_birth;
+    @DatabaseField(columnName = "community_id")
+    public String community_id;
+
+    @DatabaseField(columnName = "community_name")
+    public  String community_name;
 
 
     public User(String id, String user_auth, String user_email, String first_name, String last_name) {

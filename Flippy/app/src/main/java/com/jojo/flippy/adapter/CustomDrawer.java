@@ -7,7 +7,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
-import com.jojo.flippy.persistence.User;
-import com.jojo.flippy.util.Flippy;
 import com.koushikdutta.ion.Ion;
 
 public class CustomDrawer extends ArrayAdapter<DrawerItem> {
@@ -81,10 +77,13 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
             drawerHolder.accountLayout.setVisibility(LinearLayout.VISIBLE);
             drawerHolder.userName.setText(CommunityCenterActivity.userFirstName +" "+ CommunityCenterActivity.userLastName);
             drawerHolder.userEmail.setText(CommunityCenterActivity.regUserEmail);
-            if(CommunityCenterActivity.UserAvatarURL.toString().equals("")){
+            if(CommunityCenterActivity.userAvatarURL ==null){
                 drawerHolder.userImage.setImageResource(R.drawable.default_profile_picture);
             }else{
-                Ion.with(drawerHolder.userImage).load(CommunityCenterActivity.UserAvatarURL.toString());
+                Ion.with(drawerHolder.userImage)
+                        .placeholder(R.drawable.default_profile_picture)
+                        .error(R.drawable.default_profile_picture)
+                        .load(CommunityCenterActivity.userAvatarURL.toString());
             }
 
         }else {

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/margin_five"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     >
-
     <ListView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/listViewCommunity"
         android:divider="@null"
@@ -16,4 +15,21 @@
         android:footerDividersEnabled="true"
         android:choiceMode="singleChoice"
         android:layout_weight="1" />
-</LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/community_no_data"
+        android:id="@+id/textViewCommunityEmpty"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBarCommunityChannelLoader"
+        android:layout_below="@+id/textViewCommunityEmpty"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

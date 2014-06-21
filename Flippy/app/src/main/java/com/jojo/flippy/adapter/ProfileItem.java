@@ -37,7 +37,7 @@ public class ProfileItem {
         this.profileImageId = profileImageId;
     }
 
-    public void setUseremail(String useremail) {
+    public void setUserEmail(String userEmail) {
         this.useremail = useremail;
     }
 
@@ -45,7 +45,7 @@ public class ProfileItem {
         this.username = username;
     }
 
-    public void setUsernumber(String usernumber) {
+    public void setUserNumber(String userNumber) {
         this.usernumber = usernumber;
     }
 
@@ -65,7 +65,7 @@ public class ProfileItem {
         return profileChannelTotalNumber;
     }
 
-    public String getUseremail() {
+    public String getUserEmail() {
         return useremail;
     }
 
@@ -73,7 +73,7 @@ public class ProfileItem {
         return username;
     }
 
-    public String getUsernumber() {
+    public String getUserNumber() {
         return usernumber;
     }
 

@@ -65,9 +65,9 @@ public class ProfileAdapter extends ArrayAdapter<ProfileItem> {
 
         holder.textViewProfileChannelName.setText(rowItem.getProfileChannelName());
         holder.textViewProfileChannelTotalMembers.setText(rowItem.getProfileChannelTotalNumber());
-        holder.textViewProfileUserEmail.setText(rowItem.getUseremail());
+        holder.textViewProfileUserEmail.setText(rowItem.getUserEmail());
         holder.textViewProfileUsername.setText(rowItem.getUsername());
-        holder.textViewProfileUserNumber.setText(rowItem.getUsernumber());
+        holder.textViewProfileUserNumber.setText(rowItem.getUserNumber());
         holder.imageViewProfileImage.setImageResource(rowItem.getProfileImageId());
         holder.imageViewChannelImage.setImageResource(rowItem.getProfileChannelItem());
 

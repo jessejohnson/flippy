@@ -29,6 +29,8 @@
                 android:id="@+id/textViewProfileUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:padding="@dimen/margin_five"
                 android:text="Medium Text"
                 android:textAppearance="?android:attr/textAppearanceMedium"

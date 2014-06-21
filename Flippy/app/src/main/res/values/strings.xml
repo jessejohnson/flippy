@@ -66,7 +66,7 @@
     <string name="default_channel_name">Channel name</string>
     <string name="default_channel_status">Default</string>
     <string name="default_channel_number">10 members</string>
-    <string name="manage_channel">Manage Channels</string>
+    <string name="manage_channel">Manage Channel</string>
     <string name="add_channel">Add A Channel</string>
     <string name="subscription_state_true">Subscribe</string>
     <string name="subscription_state_false">Unsubscribe</string>
@@ -128,7 +128,7 @@
     <string name="community_context_view_detail">Channel details</string>
     <string name="community_context_view_members">Channel members</string>
     <string name="community_context_subscribe">Subscribe</string>
-    <string name="community_context_un_subscribe">Un-subscribe</string>
+    <string name="community_context_un_subscribe">Unsubscribe</string>
 
     <!-- fragment settings strings -->
     <string name="settings_title">Settings title</string>
@@ -196,6 +196,10 @@
     <string name="optional_notice_add_reminder">add Reminder</string>
     <string name="optional_notice_choose">take or upload image</string>
     <string name="title_activity_manage_channel">Manage Channel</string>
+
+
+    <!--the community fragment strings-->
+    <string name="community_no_data">Sorry, no data retrieved</string>
 
 
 

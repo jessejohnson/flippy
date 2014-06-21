@@ -38,7 +38,6 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         TextView textViewChannelName;
         TextView textViewNumberOfMembers;
         TextView textViewStatus;
-        LinearLayout linearLayoutSubscribe;
 
     }
 
@@ -56,20 +55,21 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageViewCommunityChannel);
             holder.textViewStatus =(TextView)convertView.findViewById(R.id.textViewChannelStatusCustom);
             holder.imageViewSubscribe = (ImageView)convertView.findViewById(R.id.imageViewSubscribe);
-           // holder.linearLayoutSubscribe = (LinearLayout)convertView.findViewById(R.id.linearLayoutSubscribe);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
 
         holder.textViewNumberOfMembers.setText(rowItem.getMembers());
         holder.textViewChannelName.setText(rowItem.getChannelName());
-        Ion.with(holder.imageView).load(String.valueOf(rowItem.getImageUrl()));
+        Ion.with(holder.imageView)
+                .placeholder(R.drawable.default_profile_picture)
+                .error(R.drawable.default_profile_picture)
+                .load(String.valueOf(rowItem.getImageUrl()));
         holder.textViewStatus.setText(rowItem.getStatus());
 
         //check to see if the adapter displays only user channel, then set the subscription button to invisible state
          if(isUserChannel){
              holder.imageViewSubscribe.setVisibility(convertView.GONE);
-            // holder.linearLayoutSubscribe.setVisibility(convertView.GONE);
          }
         return convertView;
     }

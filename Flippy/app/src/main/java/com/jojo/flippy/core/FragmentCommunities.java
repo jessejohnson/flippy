@@ -3,16 +3,24 @@ package com.jojo.flippy.core;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.ChannelAdapter;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.util.ToastMessages;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -27,9 +35,9 @@ public class FragmentCommunities extends Fragment {
     //Instance of the channel item
     List<Channel> rowItems;
     private Intent intent;
-    private String channelName = "SRC channel";
-    private String totalMembers = "125";
-    private String isManageActivity = "false";
+    private String channelsURL= "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/channels/";
+    private TextView textViewCommunityEmpty;
+    private ProgressBar progressBarCommunityChannelLoader;
 
 
     public FragmentCommunities() {
@@ -40,20 +48,46 @@ public class FragmentCommunities extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_communities, container,
+        final View view = inflater.inflate(R.layout.fragment_communities, container,
                 false);
 
         intent = new Intent();
 
+        textViewCommunityEmpty =(TextView)view.findViewById(R.id.textViewCommunityEmpty);
+        progressBarCommunityChannelLoader = (ProgressBar)view.findViewById(R.id.progressBarCommunityChannelLoader);
+        listViewCommunity = (ListView) view.findViewById(R.id.listViewCommunity);
+        listViewCommunity.setEmptyView(textViewCommunityEmpty);
         //Loading the list with a dummy data
         rowItems = new ArrayList<Channel>();
-        Channel item = new Channel(URI.create("http://images-mediawiki-sites.thefullwiki.org/02/1/0/0/73473104099591446.jpg"), "GESA KNUST", "200 members", "active");
-        Channel item1 = new Channel(URI.create("http://www.ugsrc.com/wp-content/uploads/2013/08/6.jpg"), "SRC Legon, 2015", "4000 members", "admin");
-        rowItems.add(item);
-        rowItems.add(item1);
 
 
-        listViewCommunity = (ListView) view.findViewById(R.id.listViewCommunity);
+        Ion.with(getActivity())
+                .load(channelsURL)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        progressBarCommunityChannelLoader.setVisibility(view.GONE);
+                        if (result != null) {
+                            Log.e("response", result.toString());
+                            JsonArray communityArray = result.getAsJsonArray("results");
+                            for (int i = 0; i < communityArray.size(); i++) {
+                                JsonObject item = communityArray.get(i).getAsJsonObject();
+                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), item.get("name").getAsString(), "200 members", "active");
+                                rowItems.add(channelItem);
+                                Log.e("item",item.get("image_url").getAsString());
+                                Log.e("item",item.get("name").getAsString());
+                            }
+
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(getActivity(), "Check internet connection");
+                            Log.e("error", e.toString());
+                        }
+
+                    }
+                });
+
         ChannelAdapter adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems, false);
         listViewCommunity.setAdapter(adapter);

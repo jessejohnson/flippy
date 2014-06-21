@@ -21,7 +21,11 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.UpdateBuilder;
 import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.persistence.User;
+import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.InternetConnectionDetector;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
@@ -33,6 +37,7 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.sql.SQLDataException;
 import java.util.ArrayList;
 
 import de.keyboardsurfer.android.widget.crouton.Configuration;
@@ -49,6 +54,7 @@ public class SelectCommunityActivity extends Activity {
     private EditText editTextCommunityKey;
     private Intent intent;
     private String selectedCommunityID;
+    private String communitySelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +124,7 @@ public class SelectCommunityActivity extends Activity {
         buttonGetStartedFromCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String communitySelected = (String) spinnerSelectCommunity.getSelectedItem();
+                communitySelected = (String) spinnerSelectCommunity.getSelectedItem();
                 if (communitySelected.equals(defaultSpinnerItem) || editTextCommunityKey.getText().toString() == "") {
                     Crouton.makeText(SelectCommunityActivity.this, "Flippy, please select a community or enter a community key", Style.ALERT)
                             .show();
@@ -128,9 +134,20 @@ public class SelectCommunityActivity extends Activity {
                     onCreateDialog();
                     return;
                 }
+
+               /* update the user with the selected community id and name*/
+                try {
+                    Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
+                    UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
+                    updateBuilder.updateColumnValue("community_id", selectedCommunityID);
+                    updateBuilder.updateColumnValue("community_name", communitySelected);
+                    updateBuilder.update();
+                } catch (java.sql.SQLException sqlE) {
+                    sqlE.printStackTrace();
+                }
                 intent.setClass(SelectCommunityActivity.this, CommunityCenterActivity.class);
                 intent.putExtra("communitySelected", communitySelected);
-                intent.putExtra("selectedCommunityID", selectedCommunityID);
+                intent.putExtra("selectedCommunityID",selectedCommunityID);
                 startActivity(intent);
 
             }

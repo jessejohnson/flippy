@@ -9,15 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.jojo.flippy.adapter.Channel;
-import com.jojo.flippy.adapter.ChannelAdapter;
 import com.jojo.flippy.adapter.ProfileAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.core.CommunityCenterActivity;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +24,10 @@ public class AccountProfileActivity extends ActionBarActivity {
     //Instance of the channel item
     List<ProfileItem> rowItems;
     private Intent intent;
-    private  String number;
-    private String username;
-    private String useremail;
+    private  String userFirstName;
+    private String userLastName;
+    private String userEmail;
+    private String userFullName;
 
 
     @Override
@@ -37,23 +35,23 @@ public class AccountProfileActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_profile);
 
+
+        //assigning the values from the database
+        userFirstName = CommunityCenterActivity.userFirstName;
+        userLastName = CommunityCenterActivity.userLastName;
+        userEmail = CommunityCenterActivity.regUserEmail;
+        userFullName = userFirstName  + ", "+ userLastName;
+
         ActionBar actionBar = getActionBar();
-        actionBar.setTitle("Bright Profile");
+        actionBar.setTitle(userFirstName);
         actionBar.setSubtitle(R.string.user_tap_to_edit);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
 
         intent = getIntent();
-        //assigning the values from the database
-        number = getResources().getString(R.string.dummy_user_number);
-        username= getResources().getString(R.string.dummy_user_name);
-        useremail = getResources().getString(R.string.dummy_user_email);
-
-
-
        //Loading the list with a dummy data
         rowItems = new ArrayList<ProfileItem>();
-        ProfileItem item = new ProfileItem(R.drawable.user_profile,R.drawable.default_profile_picture,username,useremail,number,"GESA KNUST","200 members");
+        ProfileItem item = new ProfileItem(R.drawable.user_profile,R.drawable.default_profile_picture, userFullName, userEmail, userFirstName,"GESA KNUST","200 members");
         rowItems.add(item);
         rowItems.add(item);
         rowItems.add(item);
