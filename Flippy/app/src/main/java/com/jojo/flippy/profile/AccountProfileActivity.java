@@ -53,7 +53,11 @@ public class AccountProfileActivity extends ActionBarActivity {
 
        //Loading the list with a dummy data
         rowItems = new ArrayList<ProfileItem>();
-        ProfileItem item = new ProfileItem(URI.create("http://organicthemes.com/demo/profile/files/2012/12/profile_img.png"),R.drawable.default_profile_picture,username,useremail,number,"GESA KNUST","200 members");
+        ProfileItem item = new ProfileItem(URI.create("http://organicthemes.com/demo/profile/files/2012/12/profile_img.png"),
+                URI.create("http://facultyandstaff.colostate.edu/images/feature/campus1.jpg"),
+                username,useremail,number,"GESA KNUST","200 members");
+
+        //same item added multiple times
         rowItems.add(item);
         rowItems.add(item);
         rowItems.add(item);

@@ -71,7 +71,8 @@ public class ProfileAdapter extends ArrayAdapter<ProfileItem> {
         holder.textViewProfileUserNumber.setText(rowItem.getUsernumber());
         Ion.with(holder.imageViewProfileImage)
                 .load(String.valueOf(rowItem.getProfileImageId()));
-//        holder.imageViewChannelImage.setImageResource(rowItem.getProfileChannelItem());
+        Ion.with(holder.imageViewChannelImage)
+                .load(String.valueOf(rowItem.getProfileChannelItem()));
 
         return convertView;
     }
