@@ -12,11 +12,20 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.dao.Dao;
+import com.jojo.flippy.persistence.User;
+import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.jojo.flippy.util.Validator;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -33,6 +42,9 @@ public class SignInActivity extends ActionBarActivity {
     private String regUserEmail;
     private String regUserAuthToken;
     private String regUserID;
+    private String regFirstName;
+    private String regLastName;
+    private String avatar, avatar_thumb, date_of_birth, gender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +133,35 @@ public class SignInActivity extends ActionBarActivity {
                                         regUserEmail = result.get("email").getAsString();
                                         regUserAuthToken = result.get("auth_token").getAsString();
                                         regUserID = result.get("id").getAsString();
+                                        regFirstName = result.get("first_name").getAsString();
+                                        regLastName = result.get("last_name").getAsString();
+                                        if (result.get("avatar").isJsonNull()) {
+                                            avatar = "";
+                                        } else {
+                                            avatar = result.get("avatar").getAsString();
+                                        }
+                                        avatar_thumb = result.get("avatar_thumb").getAsString();
+                                        gender = result.get("gender").getAsString();
+                                        if (result.get("date_of_birth").isJsonNull()) {
+                                            date_of_birth = "";
+                                        } else {
+                                            date_of_birth = result.get("date_of_birth").getAsString();
+                                        }
+
+                                        //Save the information in the database
+                                        try {
+                                            Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
+                                            User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName, avatar, avatar_thumb, gender, date_of_birth);
+                                            userDao.create(user);
+                                            List<User> userList = userDao.queryForAll();
+                                            Log.e("userList", userList.get(0).toString());
+
+                                        } catch (java.sql.SQLException sqlE) {
+                                            sqlE.printStackTrace();
+                                            Crouton.makeText(SignInActivity.this, "Sorry, Try again later", Style.ALERT)
+                                                    .show();
+                                            return;
+                                        }
                                         intent.putExtra("regUserEmail", regUserEmail);
                                         intent.putExtra("regUserAuthToken", regUserAuthToken);
                                         intent.putExtra("regUserID", regUserID);

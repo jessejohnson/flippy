@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
@@ -20,19 +21,42 @@ import java.util.TimerTask;
 
 public class SplashScreenActivity extends ActionBarActivity {
     Timer timer = new Timer();
+    private User currentUser;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        //TODO Load relevant resources from API here
+        intent = new Intent();
+
+
+        try {
+            Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
+            List<User> userList = userDao.queryForAll();
+            if (userList.isEmpty()) {
+                currentUser = null;
+            } else {
+                currentUser = userList.get(0);
+             }
+
+
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+        }
 
         /*onCreate variables*/
         int DELAY = 2000;
 
         timer.schedule(new TimerTask() {
             public void run() {
-                startActivity(new Intent(SplashScreenActivity.this, OnboardingActivity.class));
+                if (currentUser == null) {
+                    intent.setClass(SplashScreenActivity.this, OnboardingActivity.class);
+                    startActivity(intent);
+                    return;
+                }
+                intent.setClass(SplashScreenActivity.this, CommunityCenterActivity.class);
+                startActivity(intent);
             }
         }, DELAY);
     }

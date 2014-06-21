@@ -11,6 +11,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,10 +21,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ShareActionProvider;
 
+import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.adapter.CustomDrawer;
 import com.jojo.flippy.adapter.DrawerItem;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.profile.AccountProfileActivity;
+import com.jojo.flippy.util.Flippy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +43,10 @@ public class CommunityCenterActivity extends ActionBarActivity {
     private boolean notice = true;
     private boolean community = false;
     private boolean channel = false;
+    private Intent intent;
+    public static String regUserEmail, userFirstName, userLastName,userAvatarThumbURL,UserAvatarURL;
+    private User currentUser;
+
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
@@ -50,6 +58,28 @@ public class CommunityCenterActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer_main);
+
+        intent = getIntent();
+
+
+        //get the current user from the database
+        try {
+            Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
+            List<User> userList = userDao.queryForAll();
+            if (userList.isEmpty()) {
+                currentUser = null;
+            } else {
+                currentUser = userList.get(0);
+                regUserEmail = currentUser.user_email;
+                userFirstName = currentUser.first_name;
+                userLastName = currentUser.last_name;
+                userAvatarThumbURL =currentUser.avatar_thumb;
+                UserAvatarURL = currentUser.avatar;
+            }
+
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+        }
 
         // Initializing
         dataList = new ArrayList<DrawerItem>();
@@ -243,9 +273,9 @@ public class CommunityCenterActivity extends ActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         if (community) {
             inflater.inflate(R.menu.community_context_menu, menu);
-        } else if(channel) {
+        } else if (channel) {
             inflater.inflate(R.menu.channel_context_menu, menu);
-        }else {
+        } else {
             inflater.inflate(R.menu.notice_context_menu, menu);
         }
 

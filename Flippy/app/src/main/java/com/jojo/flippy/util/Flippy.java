@@ -31,6 +31,7 @@ public class Flippy  extends Application{
             }
             thisUser = userList.get(0);
 
+
         }catch(java.sql.SQLException sqlE){
             sqlE.printStackTrace();
         }

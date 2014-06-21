@@ -46,6 +46,17 @@ public class User {
         this.first_name = first_name;
         this.last_name = last_name;
     }
+    public User(String id, String user_auth, String user_email, String first_name, String last_name,String avatar,String avatar_thumb,String gender,String date_of_birth) {
+        this.id = id;
+        this.user_auth = user_auth;
+        this.user_email = user_email;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.gender = gender;
+        this.date_of_birth=date_of_birth;
+        this.avatar = avatar;
+        this.avatar_thumb = avatar_thumb;
+    }
 
     User() {
     }

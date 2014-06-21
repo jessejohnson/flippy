@@ -27,7 +27,7 @@
                 android:layout_gravity="bottom"
                 android:background="@android:drawable/screen_background_dark_transparent"
                 android:orientation="vertical"
-                android:padding="@dimen/margin_two">
+                android:padding="@dimen/margin_five">
 
                 <TextView
                     android:id="@+id/text_user_name"

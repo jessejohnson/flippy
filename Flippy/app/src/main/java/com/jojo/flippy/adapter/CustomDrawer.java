@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.persistence.User;
+import com.jojo.flippy.util.Flippy;
+import com.koushikdutta.ion.Ion;
 
 public class CustomDrawer extends ArrayAdapter<DrawerItem> {
 
@@ -73,9 +79,14 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
             //check if the drawer item is of index zero
             drawerHolder.itemLayout.setVisibility(View.GONE);
             drawerHolder.accountLayout.setVisibility(LinearLayout.VISIBLE);
-            drawerHolder.userName.setText(R.string.dummy_user_name);
-            drawerHolder.userEmail.setText(R.string.dummy_user_email);
-            drawerHolder.userImage.setImageResource(R.drawable.sample_user);
+            drawerHolder.userName.setText(CommunityCenterActivity.userFirstName +" "+ CommunityCenterActivity.userLastName);
+            drawerHolder.userEmail.setText(CommunityCenterActivity.regUserEmail);
+            if(CommunityCenterActivity.UserAvatarURL.toString().equals("")){
+                drawerHolder.userImage.setImageResource(R.drawable.default_profile_picture);
+            }else{
+                Ion.with(drawerHolder.userImage).load(CommunityCenterActivity.UserAvatarURL.toString());
+            }
+
         }else {
             //destroy all the other views if not in the item with the zeroth index
             drawerHolder.user_frame.setVisibility(View.GONE);
