@@ -18,6 +18,7 @@ import com.google.gson.JsonObject;
 import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.ChannelAdapter;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -32,13 +33,11 @@ import java.util.List;
 
 public class FragmentCommunities extends Fragment {
     private ListView listViewCommunity;
-    //Instance of the channel item
-
+    List<Channel> rowItems;
     private Intent intent;
-    private String channelsURL= "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/channels/";
     private TextView textViewCommunityEmpty;
     private ProgressBar progressBarCommunityChannelLoader;
-
+    private ChannelAdapter adapter;
 
 
     public FragmentCommunities() {
@@ -53,18 +52,24 @@ public class FragmentCommunities extends Fragment {
                 false);
 
         intent = new Intent();
+        rowItems = new ArrayList<Channel>();
         textViewCommunityEmpty =(TextView)view.findViewById(R.id.textViewCommunityEmpty);
         progressBarCommunityChannelLoader = (ProgressBar)view.findViewById(R.id.progressBarCommunityChannelLoader);
         listViewCommunity = (ListView) view.findViewById(R.id.listViewCommunity);
         listViewCommunity.setEmptyView(textViewCommunityEmpty);
-        final List<Channel> rowItems = new ArrayList<Channel>();
-        //Loading the list with a dummy data
+        textViewCommunityEmpty.setVisibility(view.GONE);
+
+        adapter = new ChannelAdapter(getActivity(),
+                R.layout.channel_listview, rowItems, false);
+        listViewCommunity.setAdapter(adapter);
+        //Loading the list with data from Api call
         Ion.with(getActivity())
-                .load(channelsURL)
+                .load(Flippy.channelsURL)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
+                        textViewCommunityEmpty.setVisibility(View.VISIBLE);
                         progressBarCommunityChannelLoader.setVisibility(view.GONE);
                         if (result != null) {
                             JsonArray communityArray = result.getAsJsonArray("results");
@@ -73,27 +78,23 @@ public class FragmentCommunities extends Fragment {
                                 Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), item.get("name").getAsString(),"200 members", "active");
                                 rowItems.add(channelItem);
                             }
-
-                          Log.e("List community",rowItems.toString());
+                            updateListAdapter();
 
                         }
                         if (e != null) {
-                            ToastMessages.showToastLong(getActivity(), "Check internet connection");
-                            Log.e("error", e.toString());
+                            ToastMessages.showToastLong(getActivity(),getResources().getString(R.string.internet_connection_error_dialog_title));
                         }
 
                     }
                 });
 
-        ChannelAdapter adapter = new ChannelAdapter(getActivity(),
-                R.layout.channel_listview, rowItems, false);
-        listViewCommunity.setAdapter(adapter);
-
-
-
         //registering the list view for context menu actions
         registerForContextMenu(listViewCommunity);
         return view;
+    }
+
+    private void updateListAdapter() {
+        adapter.notifyDataSetChanged();
     }
 
 }

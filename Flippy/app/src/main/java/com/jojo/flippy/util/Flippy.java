@@ -15,7 +15,11 @@ import java.util.List;
  */
 public class Flippy  extends Application{
     public Dao<User, Integer> userDao;
-    public User thisUser ;
+    public User thisUser;
+    //make the url accessible to all the activities
+    public static String regURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/signup/";
+    public static String signInURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/users/login/";
+    public static String channelsURL= "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/channels/";
 
     @Override
     public void onCreate() {

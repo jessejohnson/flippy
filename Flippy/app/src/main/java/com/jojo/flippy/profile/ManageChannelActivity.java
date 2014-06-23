@@ -14,16 +14,13 @@ import android.widget.ImageView;
 
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.ChannelMembers;
+import com.jojo.flippy.util.ToastMessages;
 
 public class ManageChannelActivity extends ActionBarActivity {
     private EditText editTextManageChannelChannelName, editTextFirstAdmin, editTextSecondAdmin, editTextThirdAdmin, editTextFourthAdmin;
     private ImageView imageViewEditChannelName, imageViewEditFirstAdmin, imageViewEditSecondAdmin, imageViewEditThirdAdmin, imageViewEditFourthAdmin;
     private Intent intent;
     private String channelToManage;
-    private boolean firstAdmin = false;
-    private boolean secondAdmin = false;
-    private boolean thirdAdmin = false;
-    private boolean fourthAdmin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +57,9 @@ public class ManageChannelActivity extends ActionBarActivity {
         editTextThirdAdmin.setEnabled(false);
         editTextFourthAdmin.setEnabled(false);
 
+        intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
+        intent.putExtra("isManageActivity", true);
+
         //enable the edit text for the channel name on click
         imageViewEditChannelName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,50 +68,35 @@ public class ManageChannelActivity extends ActionBarActivity {
                 editTextManageChannelChannelName.setFocusable(true);
             }
         });
+
         imageViewEditFirstAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firstAdmin =true;
-                secondAdmin= false;
-                thirdAdmin=false;
-                fourthAdmin= false;
-
-                intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
-                //adding something to the intent to detect at the other end
-                intent.putExtra("isManageActivity", "true");
+                intent.putExtra("requestCode",1);
                 startActivityForResult(intent, 1);
             }
         });
         imageViewEditSecondAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                firstAdmin =false;
-                secondAdmin= true;
-                thirdAdmin=false;
-                fourthAdmin= false;
-
-                intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
-                //adding something to the intent to detect at the other end
-                intent.putExtra("isManageActivity", "true");
-                startActivityForResult(intent, 1);
+                intent.putExtra("requestCode",2);
+                startActivityForResult(intent, 2);
 
             }
         });
         imageViewEditThirdAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
-                //adding something to the intent to detect at the other end
-                startActivity(intent);
+                intent.putExtra("requestCode",3);
+                startActivityForResult(intent, 3);
 
             }
         });
         imageViewEditFourthAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
-                //adding something to the intent to detect at the other end
-                startActivity(intent);
+                intent.putExtra("requestCode",4);
+                startActivityForResult(intent, 4);
 
             }
         });
@@ -156,20 +141,55 @@ public class ManageChannelActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
+        if(data == null){
+            ToastMessages.showToastLong(ManageChannelActivity.this, "No member selected");
+            return;
+        }
+        String adminEmail = data.getStringExtra("EMAIL");
         if (requestCode == 1) {
-            String adminEmail = data.getStringExtra("EMAIL");
+
             if (null != data) {
-                // fetch the message String
-                if (firstAdmin) {
-                    editTextFirstAdmin.setText(adminEmail);
-                }
-                if(secondAdmin){
-                    editTextSecondAdmin.setText(adminEmail);
-                }
+                editTextFirstAdmin.setText(adminEmail);
+
+            } else {
+                ToastMessages.showToastLong(ManageChannelActivity.this, "No member selected");
 
             }
+            return;
 
         }
+        if (requestCode == 2) {
+            if (null != data) {
+                editTextSecondAdmin.setText(adminEmail);
+
+            } else {
+                ToastMessages.showToastLong(ManageChannelActivity.this, "No member selected");
+            }
+            return;
+
+        }
+        if (requestCode == 3) {
+            if (null != data) {
+                editTextThirdAdmin.setText(adminEmail);
+
+            } else {
+                ToastMessages.showToastLong(ManageChannelActivity.this, "No member selected");
+            }
+            return;
+
+        }
+        if (requestCode == 4) {
+            if (null != data) {
+                // fetch the message String
+                editTextFourthAdmin.setText(adminEmail);
+
+            } else {
+                ToastMessages.showToastLong(ManageChannelActivity.this, "No member selected");
+            }
+            return;
+
+        }
+        ToastMessages.showToastLong(ManageChannelActivity.this, "No member selected");
     }
 
 

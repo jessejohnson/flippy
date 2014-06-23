@@ -3,23 +3,22 @@
 
     <!-- generated strings. general -->
     <string name="app_name">Flippy</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
     <!-- splash screen strings -->
-    <string name="splash_screen_tagline">closer communities</string>
+    <string name="splash_screen_tag_line">closer communities</string>
     <string name="splash_screen_url">flippy.co</string>
 
-    <!-- onboarding strings -->
-    <string name="title_activity_onboarding">Flippy Onboarding</string>
+    <!-- on boarding strings -->
+    <string name="title_activity_on_boarding">On Boarding</string>
     <string name="get_started_button">Get Started</string>
     <string name="title_activity_welcome">Welcome</string>
 
-    <!-- actual onboarding text -->
-    <string name="onboarding_slide_1">        Flippy lets you quickly share important information in your organization</string>
-    <string name="onboarding_slide_2">        Select your organization\'s Community and subscribe to a Channel, or you could create and manage your own.</string>
-    <string name="onboarding_slide_3">        Receive Notices from the Channels you subscribe to in real-time. You can save, share and set reminders on those that matter most.</string>
-    <string name="onboarding_slide_4">        Ready, set, let\'s go!</string>
+    <!-- actual on boarding text -->
+    <string name="on_boarding_slide_1">        Flippy lets you quickly share important information in your organization</string>
+    <string name="on_boarding_slide_2">        Select your organization\'s Community and subscribe to a Channel, or you could create and manage your own.</string>
+    <string name="on_boarding_slide_3">        Receive Notices from the Channels you subscribe to in real-time. You can save, share and set reminders on those that matter most.</string>
+    <string name="on_boarding_slide_4">        Ready, set, let\'s go!</string>
 
     <!-- welcome activity strings -->
     <string name="welcome_text">Welcome to Flippy</string>
@@ -42,8 +41,8 @@
     <string name="register_sign_in_text">I already have an account</string>
     <string name="register_next">next</string>
     <string name="registration_error_email">A valid email or phone number is required</string>
-    <string name="registration_error_firstname">Your first name is required</string>
-    <string name="registration_error_lastname">Your last name is required</string>
+    <string name="registration_error_first_name">Your first name is required</string>
+    <string name="registration_error_last_name">Your last name is required</string>
     <string name="registration_error_password">A password is required</string>
     <string name="registration_error_checkbox">You must agree to the terms first</string>
 
@@ -70,7 +69,6 @@
     <string name="add_channel">Add A Channel</string>
     <string name="subscription_state_true">Subscribe</string>
     <string name="subscription_state_false">Unsubscribe</string>
-
 
     <!-- The facebook application id -->
     <string name="app_id">305971362902085</string>
@@ -113,7 +111,7 @@
     <!-- flippy exit alert dialog strings -->
     <string name="exit_title">Exiting Flippy</string>
     <string name="exit_message">Are you sure you want to exit Flippy ?</string>
-    <string name="exit_positive">Yea, I want to</string>
+    <string name="exit_positive">Yes, continue</string>
     <string name="exit_negative">No, not now</string>
     <string name="choose_channel_list_dialog_title">Choose a channel</string>
 
@@ -124,7 +122,7 @@
     <string name="notice_share">Share notice</string>
     <string name="notice_remove">Remove from board</string>
 
-   <!-- community context menu-->
+    <!-- community context menu -->
     <string name="community_context_view_detail">Channel details</string>
     <string name="community_context_view_members">Channel members</string>
     <string name="community_context_subscribe">Subscribe</string>
@@ -197,38 +195,34 @@
     <string name="optional_notice_choose">take or upload image</string>
     <string name="title_activity_manage_channel">Manage Channel</string>
 
-
-    <!--the community fragment strings-->
+    <!-- the community fragment strings -->
     <string name="community_no_data">Sorry, no data retrieved</string>
 
-
-
-
-   <!-- the image preview strings-->
+    <!-- the image preview strings -->
     <string name="title_activity_image_preview">Image Preview</string>
     <string name="image_preview_menu">Share photo</string>
 
-
-    <!--manage channel strings-->
+    <!-- manage channel strings -->
     <string name="channel_manage">Manage channel</string>
     <string name="manage_channel_remove">remove this channel</string>
     <string name="select_member_from_list">choose member</string>
 
-
-    <!-- temporal string section-->
+    <!-- temporal string section -->
     <string name="dummy_community">University of Cape coast</string>
     <string name="dummy_user_number_of_channels_own">admin (3)</string>
     <string name="dummy_user_number_channels_in">5 channels</string>
 
-    <!--the member detail strings-->
+    <!-- the member detail strings -->
     <string name="another_member_detail_add_as_admin">add as admin</string>
     <string name="title_activity_member_detail">Member Profile</string>
 
-
-  <!-- the spinner for the edit profile gender-->
+    <!-- the spinner for the edit profile gender -->
     <string-array name="gender_array">
         <item>Male</item>
         <item>Female</item>
     </string-array>
+
+    <string name="title_activity_pick_map_location">Map Location Activity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

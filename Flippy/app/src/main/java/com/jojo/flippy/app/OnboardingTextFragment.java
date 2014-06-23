@@ -1,6 +1,5 @@
 package com.jojo.flippy.app;
 
-import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,10 +24,10 @@ public class OnboardingTextFragment extends Fragment {
                 .inflate(R.layout.fragment_onboarding_text_layout, container, false);
 
         onboardingStringIds = new ArrayList<Integer>();
-        onboardingStringIds.add(R.string.onboarding_slide_1);
-        onboardingStringIds.add(R.string.onboarding_slide_2);
-        onboardingStringIds.add(R.string.onboarding_slide_3);
-        onboardingStringIds.add(R.string.onboarding_slide_4);
+        onboardingStringIds.add(R.string.on_boarding_slide_1);
+        onboardingStringIds.add(R.string.on_boarding_slide_2);
+        onboardingStringIds.add(R.string.on_boarding_slide_3);
+        onboardingStringIds.add(R.string.on_boarding_slide_4);
 
         TextView onboardingText = (TextView) rootView.findViewById(R.id.textViewOnboardingPageText);
         onboardingText.setText(getString(onboardingStringIds.get(mPageNumber)));

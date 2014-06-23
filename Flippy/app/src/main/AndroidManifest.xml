@@ -5,22 +5,26 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--  Add Google Map Library -->
-    <uses-library android:name="com.google.android.maps" />
+    <uses-permission android:name="com.google.android.providers.gsf.permissions.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
+        android:name="com.jojo.flippy.util.Flippy"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:name="com.jojo.flippy.util.Flippy"
         android:theme="@style/FlippyActionBarTheme" >
-
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyADoA__HU64nAq196hY0-E9MNUjWFROu2A" />
 
         <activity
             android:name=".SplashScreenActivity"
@@ -34,37 +38,33 @@
         </activity>
         <activity
             android:name=".OnboardingActivity"
-            android:label="@string/title_activity_onboarding"
+            android:label="@string/title_activity_on_boarding"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name=".SignInActivity"
             android:label="@string/title_activity_select_community"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".RegisterActivity" >
+            android:parentActivityName=".RegisterActivity"
+            android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_select_community"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".SignUpOptionsActivity" >
+            android:parentActivityName=".SignUpOptionsActivity"
+            android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.app.SignUpOptionsActivity" />
         </activity>
         <activity
             android:name=".SelectCommunityActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:label="@string/title_activity_select_community" >
+            android:label="@string/title_activity_select_community"
+            android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
             android:name=".SignUpOptionsActivity"
             android:label="@string/title_activity_select_community"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
-        </activity>
-        <activity
-            android:name=".DisplayActivity"
-            android:label="@string/title_activity_select_community" >
         </activity>
         <activity
             android:name="com.jojo.flippy.core.ChannelMembers"
@@ -106,8 +106,8 @@
         <activity
             android:name="com.jojo.flippy.profile.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName="com.jojo.flippy.profile.AccountProfileActivity" >
+            android:parentActivityName="com.jojo.flippy.profile.AccountProfileActivity"
+            android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.profile.AccountProfileActivity" />
@@ -115,17 +115,17 @@
         <activity
             android:name="com.jojo.flippy.core.CreateChannelActivity"
             android:label="@string/title_activity_create_channel"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
+            android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
         <activity
             android:name="com.jojo.flippy.core.CreateNoticeActivity"
-            android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_create_notice"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
+            android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -140,9 +140,9 @@
         </activity>
         <activity
             android:name="com.jojo.flippy.profile.ManageChannelActivity"
-            android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_manage_channel"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
+            android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -158,6 +158,10 @@
         <activity
             android:name="com.jojo.flippy.profile.ImagePreviewActivity"
             android:label="@string/title_activity_image_preview" >
+        </activity>
+        <activity
+            android:name="com.jojo.flippy.core.PickMapLocationActivity"
+            android:label="@string/title_activity_pick_map_location" >
         </activity>
     </application>
 

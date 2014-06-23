@@ -11,26 +11,16 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 import com.j256.ormlite.dao.Dao;
-import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.jojo.flippy.util.Validator;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.ResponseHandlerInterface;
 
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-
-import java.io.IOException;
-import java.net.URI;
 import java.util.List;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -41,7 +31,6 @@ public class RegisterActivity extends Activity {
     private EditText editTextRegisterEmail, editTextFirstName, editTextLastName, editTextPassword;
     private TextView textViewSignIn;
     private CheckBox checkBoxTerms;
-    private String regURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/signup/";
     private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName, regNumber;
     private ProgressDialog registerProgress;
     private Intent intent;
@@ -92,14 +81,14 @@ public class RegisterActivity extends Activity {
                     editTextFirstName.setError(null);
                     allFieldsValid = true;
                 } else {
-                    editTextFirstName.setError(getString(R.string.registration_error_firstname));
+                    editTextFirstName.setError(getString(R.string.registration_error_first_name));
                     allFieldsValid = false;
                 }
                 if (Validator.isValidNameString(editTextLastName.getText().toString())) {
                     editTextLastName.setError(null);
                     allFieldsValid = true;
                 } else {
-                    editTextLastName.setError(getString(R.string.registration_error_lastname));
+                    editTextLastName.setError(getString(R.string.registration_error_last_name));
                     allFieldsValid = false;
                 }
                 if (Validator.isValidPassword(editTextPassword.getText().toString())) {
@@ -134,7 +123,7 @@ public class RegisterActivity extends Activity {
                     json.addProperty("password", password);
 
                     Ion.with(RegisterActivity.this)
-                            .load(regURL)
+                            .load(Flippy.regURL)
                             .setJsonObjectBody(json)
                             .asJsonObject()
                             .setCallback(new FutureCallback<JsonObject>() {
@@ -143,7 +132,7 @@ public class RegisterActivity extends Activity {
                                     //cancel the dialog
                                     registerProgress.cancel();
                                     if (e != null) {
-                                        ToastMessages.showToastLong(RegisterActivity.this,"Check internet connection");
+                                        ToastMessages.showToastLong(RegisterActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
                                         Log.e("Error", e.toString());
                                     } else {
                                         if (result.has("detail")) {
@@ -152,10 +141,6 @@ public class RegisterActivity extends Activity {
                                                     .show();
                                             return;
                                         }
-                                        Log.e("result", result.get("id").getAsString());
-                                        Log.e("result", result.get("auth_token").getAsString());
-                                        Log.e("result", result.get("email").getAsString());
-                                        regUserEmail = result.get("email").getAsString();
                                         regUserAuthToken = result.get("auth_token").getAsString();
                                         regUserID = result.get("id").getAsString();
                                         regFirstName = result.get("first_name").getAsString();
@@ -184,6 +169,8 @@ public class RegisterActivity extends Activity {
 
                             });
 
+                }else{
+                    return;
                 }
             }
         });

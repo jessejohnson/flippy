@@ -14,6 +14,7 @@ import com.jojo.flippy.adapter.ChannelMemberAdapter;
 import com.jojo.flippy.adapter.SettingsAdapter;
 import com.jojo.flippy.adapter.SettingsItem;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.profile.MemberDetailActivity;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -35,7 +36,8 @@ public class ChannelMembers extends Activity {
     private ListView membershipList;
     //Instance of the channel item
     List<SettingsItem> ChannelMemberItem;
-    private String isManageActivity;
+    private boolean isManageActivity = false;
+    private int requestCode = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,8 @@ public class ChannelMembers extends Activity {
         intent = getIntent();
         channelName = intent.getStringExtra("channelName");
         totalMembers = intent.getStringExtra("totalMembers");
-        isManageActivity = intent.getStringExtra("isManageActivity");
+        isManageActivity = intent.getBooleanExtra("isManageActivity", false);
+        requestCode = intent.getIntExtra("requestCode", 0);
 
 
         ActionBar actionBar = getActionBar();
@@ -91,34 +94,16 @@ public class ChannelMembers extends Activity {
         ChannelMemberAdapter adapter = new ChannelMemberAdapter(ChannelMembers.this,
                 R.layout.channel_members_listview, ChannelMemberItem);
         membershipList.setAdapter(adapter);
+        membershipList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                //setting the click action for each of the items
+                intent.setClass(ChannelMembers.this, MemberDetailActivity.class);
+                startActivity(intent);
 
-        //checking if the intent came from the channel management activity, process and sent result
-        if (isManageActivity.toString().trim().equalsIgnoreCase("true")) {
-            Log.e("Clicked","Clicked the item");
-            membershipList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position,
-                                        long id) {
-                    TextView memberEmail = (TextView) view.findViewById(R.id.textViewMemberFirstName);
-                    intent.setClass(ChannelMembers.this, MemberDetailActivity.class);
-                    intent.putExtra("EMAIL", memberEmail.getText().toString());
-                    setResult(1, intent);
-                    finish();
-                }
-            });
-        } else {
-            //Setting the click listener for the member list
-            membershipList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position,
-                                        long id) {
-                    //setting the click action for each of the items
-                    intent.setClass(ChannelMembers.this, MemberDetailActivity.class);
-                    startActivity(intent);
-
-                }
-            });
-        }
+            }
+        });
 
 
     }

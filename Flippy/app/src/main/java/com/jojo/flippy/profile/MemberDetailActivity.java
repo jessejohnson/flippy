@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jojo.flippy.app.R;
 
@@ -18,6 +19,9 @@ public class MemberDetailActivity extends ActionBarActivity {
     private ImageView imageViewMemberAnotherUserProfilePic;
     private Intent intent;
     private Button buttonAddAsAdmin;
+    private int requestCode = 0;
+    private boolean isManageActivity= false;
+    private TextView textViewAnotherUserEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +34,11 @@ public class MemberDetailActivity extends ActionBarActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         intent = getIntent();
-        intent.setClass(MemberDetailActivity.this,ImagePreviewActivity.class);
+        requestCode = intent.getIntExtra("requestCode",0);
+        isManageActivity = intent.getBooleanExtra("isManageActivity", false);
 
+        intent.setClass(MemberDetailActivity.this,ImagePreviewActivity.class);
+        textViewAnotherUserEmail = (TextView)findViewById(R.id.textViewAnotherUserEmail);
         buttonAddAsAdmin = (Button)findViewById(R.id.buttonAddAsAdmin);
         buttonAddAsAdmin.setOnClickListener(new View.OnClickListener() {
             @Override

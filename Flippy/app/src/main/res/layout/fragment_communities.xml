@@ -22,6 +22,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/community_no_data"
         android:id="@+id/textViewCommunityEmpty"
+        android:textStyle="bold"
+        android:textColor="@color/flippy_orange"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 

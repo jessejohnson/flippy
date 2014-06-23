@@ -39,7 +39,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
     private String noticeContent, noticeTitle;
     public static int reminderYear, reminderMonth, reminderDay, reminderHour, reminderMinute;
     protected static FragmentManager timerSupport;
-    private Button buttonAddImageToNotice,buttonPreviewCreateNotice;
+    private Button buttonAddImageToNotice,buttonPreviewCreateNotice,buttonAddMapToNotice;
     private AlertDialog levelDialog;
     private ImageView imageViewNoticeImageCaptured;
 
@@ -82,6 +82,15 @@ public class NoticeExtrasActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 imageUploadOptions();
+            }
+        });
+
+        buttonAddMapToNotice = (Button)findViewById(R.id.buttonAddMapToNotice);
+        buttonAddMapToNotice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent.setClass(NoticeExtrasActivity.this,PickMapLocationActivity.class);
+                startActivity(intent);
             }
         });
     }

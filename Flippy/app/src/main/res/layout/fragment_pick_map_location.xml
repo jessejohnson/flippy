@@ -1,0 +1,19 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E0EEEE"
+    android:paddingBottom="@dimen/margin_ten"
+    android:paddingLeft="@dimen/margin_ten"
+    android:paddingRight="@dimen/margin_ten"
+    android:paddingTop="@dimen/margin_ten"
+    tools:context="com.jojo.flippy.core.PickMapLocationActivity$PlaceholderFragment">
+
+
+    <fragment
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:id="@+id/linearLayoutNoticeLocationCoordinate"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>

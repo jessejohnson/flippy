@@ -115,7 +115,7 @@ public class SelectCommunityActivity extends Activity {
 
                         }
                         if (e != null) {
-                            ToastMessages.showToastLong(SelectCommunityActivity.this,"Check internet connection");
+                            ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
                             Log.e("error", e.toString());
                         }
 
@@ -133,7 +133,7 @@ public class SelectCommunityActivity extends Activity {
                     return;
                 }
                 //TODO submit community key to API. On success, set communitySelected & selectedCommunityID
-                if (!editTextCommunityKey.getText().toString().equalsIgnoreCase("")){
+                if (!editTextCommunityKey.getText().toString().equalsIgnoreCase("")) {
                     String communityKey = editTextCommunityKey.getText().toString();
                     //TODO add parameters for POST
                     JsonObject jsonObject = new JsonObject();
@@ -146,7 +146,7 @@ public class SelectCommunityActivity extends Activity {
                             .setCallback(new FutureCallback<JsonObject>() {
                                 @Override
                                 public void onCompleted(Exception e, JsonObject result) {
-                                    if(e != null){
+                                    if (e != null) {
                                         ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
                                         Log.e("Error", e.toString());
                                     } else {
@@ -158,16 +158,17 @@ public class SelectCommunityActivity extends Activity {
                /* update the user with the selected community id and name*/
                 try {
                     Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
-                    UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
-                    updateBuilder.updateColumnValue("community_id", selectedCommunityID);
-                    updateBuilder.updateColumnValue("community_name", communitySelected);
-                    updateBuilder.update();
+                    //this user
+                    User thisUser = userDao.queryForAll().get(0);
+                    thisUser.community_id = selectedCommunityID;
+                    thisUser.community_name = communitySelected;
+                    userDao.update(thisUser);
                 } catch (java.sql.SQLException sqlE) {
                     sqlE.printStackTrace();
                 }
                 intent.setClass(SelectCommunityActivity.this, CommunityCenterActivity.class);
                 intent.putExtra("communitySelected", communitySelected);
-                intent.putExtra("selectedCommunityID",selectedCommunityID);
+                intent.putExtra("selectedCommunityID", selectedCommunityID);
                 startActivity(intent);
 
             }

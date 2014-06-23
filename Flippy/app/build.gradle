@@ -38,5 +38,5 @@ dependencies {
     compile 'com.koushikdutta.ion:ion:1.1.5'
     compile 'com.loopj.android:android-async-http:1.4.4'
     compile 'com.j256.ormlite:ormlite-android:4.47'
-    compile 'com.google.android.gms:play-services:4.4.52'
+    compile 'com.google.android.gms:play-services:+'
 }

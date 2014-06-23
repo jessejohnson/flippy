@@ -27,6 +27,7 @@ import com.jojo.flippy.adapter.DrawerItem;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.profile.AccountProfileActivity;
+import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.util.Flippy;
 
 import java.util.ArrayList;
@@ -240,6 +241,11 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 //call the user favourite function
             case R.id.action_remove_notice:
                 //remove the notice from the users board
+            case R.id.action_channel_manage_channel:
+                Intent intent1 = new Intent();
+                intent1.setClass(CommunityCenterActivity.this, ManageChannelActivity.class);
+                startActivity(intent1);
+                return  true;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -268,7 +274,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-
         inflater.inflate(R.menu.community_center_menu, menu);
         return true;
 

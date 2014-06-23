@@ -38,7 +38,6 @@ public class SignInActivity extends ActionBarActivity {
     private CheckBox signInCheckBox;
     private Intent intent;
     private ProgressDialog signInDialog;
-    private String signInURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/users/login/";
     private String regUserEmail;
     private String regUserAuthToken;
     private String regUserID;
@@ -108,7 +107,7 @@ public class SignInActivity extends ActionBarActivity {
                     json.addProperty("password", password);
 
                     Ion.with(SignInActivity.this)
-                            .load(signInURL)
+                            .load(Flippy.signInURL)
                             .setJsonObjectBody(json)
                             .asJsonObject()
                             .setCallback(new FutureCallback<JsonObject>() {
@@ -117,10 +116,11 @@ public class SignInActivity extends ActionBarActivity {
                                     //cancel the dialog
                                     signInDialog.cancel();
                                     if (e != null) {
-                                        ToastMessages.showToastLong(SignInActivity.this, "Check internet connection");
+                                        ToastMessages.showToastLong(SignInActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
                                         Log.e("Error", e.toString());
+                                        return;
                                     } else {
-                                        Log.e("user exist", result.toString());
+                                        //If there is no error returned
                                         if (result.has("detail")) {
                                             signInEmail.setError(result.get("detail").getAsString());
                                             Crouton.makeText(SignInActivity.this, result.get("detail").getAsString(), Style.ALERT)
@@ -150,6 +150,7 @@ public class SignInActivity extends ActionBarActivity {
 
                                         //Save the information in the database
                                         try {
+                                            //an instance of the userDao from the application class
                                             Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
                                             User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName, avatar, avatar_thumb, gender, date_of_birth);
                                             userDao.create(user);
