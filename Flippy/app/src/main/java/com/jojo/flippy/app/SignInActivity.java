@@ -121,31 +121,35 @@ public class SignInActivity extends ActionBarActivity {
                                         return;
                                     } else {
                                         //If there is no error returned
-                                        if (result.has("detail")) {
-                                            signInEmail.setError(result.get("detail").getAsString());
-                                            Crouton.makeText(SignInActivity.this, result.get("detail").getAsString(), Style.ALERT)
-                                                    .show();
-                                            return;
-                                        }
-                                        Log.e("result", result.get("id").getAsString());
-                                        Log.e("result", result.get("auth_token").getAsString());
-                                        Log.e("result", result.get("email").getAsString());
-                                        regUserEmail = result.get("email").getAsString();
-                                        regUserAuthToken = result.get("auth_token").getAsString();
-                                        regUserID = result.get("id").getAsString();
-                                        regFirstName = result.get("first_name").getAsString();
-                                        regLastName = result.get("last_name").getAsString();
-                                        if (result.get("avatar").isJsonNull()) {
-                                            avatar = "";
-                                        } else {
-                                            avatar = result.get("avatar").getAsString();
-                                        }
-                                        avatar_thumb = result.get("avatar_thumb").getAsString();
-                                        gender = result.get("gender").getAsString();
-                                        if (result.get("date_of_birth").isJsonNull()) {
-                                            date_of_birth = "";
-                                        } else {
-                                            date_of_birth = result.get("date_of_birth").getAsString();
+                                        try {
+                                            if (result.has("detail")) {
+                                                signInEmail.setError(result.get("detail").getAsString());
+                                                Crouton.makeText(SignInActivity.this, result.get("detail").getAsString(), Style.ALERT)
+                                                        .show();
+                                                return;
+                                            }
+                                            Log.e("result", result.get("id").getAsString());
+                                            Log.e("result", result.get("auth_token").getAsString());
+                                            Log.e("result", result.get("email").getAsString());
+                                            regUserEmail = result.get("email").getAsString();
+                                            regUserAuthToken = result.get("auth_token").getAsString();
+                                            regUserID = result.get("id").getAsString();
+                                            regFirstName = result.get("first_name").getAsString();
+                                            regLastName = result.get("last_name").getAsString();
+                                            if (result.get("avatar").isJsonNull()) {
+                                                avatar = "";
+                                            } else {
+                                                avatar = result.get("avatar").getAsString();
+                                            }
+                                            avatar_thumb = result.get("avatar_thumb").getAsString();
+                                            gender = result.get("gender").getAsString();
+                                            if (result.get("date_of_birth").isJsonNull()) {
+                                                date_of_birth = "";
+                                            } else {
+                                                date_of_birth = result.get("date_of_birth").getAsString();
+                                            }
+                                        } catch (UnsupportedOperationException e1) {
+                                            e1.printStackTrace();
                                         }
 
                                         //Save the information in the database
