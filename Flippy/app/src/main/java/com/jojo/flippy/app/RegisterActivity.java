@@ -152,8 +152,7 @@ public class RegisterActivity extends Activity {
                                             Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
                                             User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName);
                                             userDao.create(user);
-                                            List<User> userList = userDao.queryForAll();
-                                            Log.e("userList", userList.get(0).toString());
+
 
                                         } catch (java.sql.SQLException sqlE) {
                                             sqlE.printStackTrace();

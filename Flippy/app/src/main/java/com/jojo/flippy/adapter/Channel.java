@@ -10,12 +10,14 @@ public class Channel {
     private String channelName;
     private String status;
     private String members;
+    private String id;
 
-    public Channel(URI imageUrl, String channelName, String status, String members) {
+    public Channel(URI imageUrl,String id, String channelName, String status, String members) {
         this.imageUrl = imageUrl;
         this.channelName = channelName;
         this.status = status;
         this.members = members;
+        this.id=id;
     }
     public URI getImageUrl() {
         return imageUrl;
@@ -41,6 +43,15 @@ public class Channel {
     public void setMembers(String channelName) {
         this.members = members;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return channelName + "\n" + imageUrl + "\n" + " " + members;

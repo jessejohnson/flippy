@@ -61,6 +61,7 @@ public class FragmentCommunities extends Fragment {
         adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems, false);
         listViewCommunity.setAdapter(adapter);
+        //getting the user community url
         String url = Flippy.channelsInCommunityURL + CommunityCenterActivity.userCommunityId+"/channels/";
         //Loading the list with data from Api call
         Ion.with(getActivity())
@@ -75,7 +76,7 @@ public class FragmentCommunities extends Fragment {
                             JsonArray communityArray = result.getAsJsonArray("results");
                             for (int i = 0; i < communityArray.size(); i++) {
                                 JsonObject item = communityArray.get(i).getAsJsonObject();
-                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), item.get("name").getAsString(),"200 members", "active");
+                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()),item.get("id").getAsString(), item.get("name").getAsString(),"200 members", "active");
                                 rowItems.add(channelItem);
                             }
                             updateListAdapter();

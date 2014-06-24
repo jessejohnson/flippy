@@ -72,6 +72,7 @@ public class FragmentChannel extends Fragment {
         adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems, true);
         ChannelListView.setAdapter(adapter);
+        //get the request url
         String url = Flippy.userChannelsSubscribedURL + CommunityCenterActivity.regUserID + userChannels;
 
         //load the channels user subscribed to
@@ -87,7 +88,7 @@ public class FragmentChannel extends Fragment {
                             JsonArray communityArray = result.getAsJsonArray("results");
                             for (int i = 0; i < communityArray.size(); i++) {
                                 JsonObject item = communityArray.get(i).getAsJsonObject();
-                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), item.get("name").getAsString(), "200 members", "active");
+                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()),item.get("id").getAsString(), item.get("name").getAsString(), "200 members", "active");
                                 rowItems.add(channelItem);
                             }
                             updateAdapter();
@@ -105,6 +106,10 @@ public class FragmentChannel extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
+
+                TextView textViewChannelId = (TextView)view.findViewById(R.id.textViewChannelId);
+                String channelId = textViewChannelId.getText().toString();
+                intent.putExtra("channelId",channelId);
                 //setting the click action for each of the items
                 intent.setClass(getActivity(), ChannelMembers.class);
                 intent.putExtra("channelName", channelName);
@@ -115,6 +120,7 @@ public class FragmentChannel extends Fragment {
 
             }
         });
+
 
         buttonAddChannel = (Button) view.findViewById(R.id.buttonAddChannel);
         buttonAddChannel.setOnClickListener(new View.OnClickListener() {

@@ -38,6 +38,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         TextView textViewChannelName;
         TextView textViewNumberOfMembers;
         TextView textViewStatus;
+        TextView textViewChannelId;
 
     }
 
@@ -55,6 +56,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageViewCommunityChannel);
             holder.textViewStatus =(TextView)convertView.findViewById(R.id.textViewChannelStatusCustom);
             holder.imageViewSubscribe = (ImageView)convertView.findViewById(R.id.imageViewSubscribe);
+            holder.textViewChannelId = (TextView)convertView.findViewById(R.id.textViewChannelId);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
