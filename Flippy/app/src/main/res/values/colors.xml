@@ -8,4 +8,5 @@
     <color name="twitter_blue">#4099FF</color>
     <color name="twitter_blue_dark">#2F90FF</color>
     <color name="flippy_accent_color">#bf6518</color>
+    <color name="flippy_background_color">#E0EEEE</color>
 </resources>

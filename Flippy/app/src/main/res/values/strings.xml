@@ -222,7 +222,7 @@
         <item>Female</item>
     </string-array>
 
-    <string name="title_activity_pick_map_location">Map Location Activity</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_pick_map_location">Notice Location</string>
+    <string name="pick_location_add_location">Add location</string>
 
 </resources>
