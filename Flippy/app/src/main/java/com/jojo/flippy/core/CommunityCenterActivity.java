@@ -50,8 +50,9 @@ public class CommunityCenterActivity extends ActionBarActivity {
     public static  String userLastName ="";
     public static  String userAvatarThumbURL ="";
     public static  String userAvatarURL ="";
-    private static  String userCommunityId="";
-    private static  String userCommunityName="";
+    public static  String userCommunityId="";
+    public static  String userCommunityName="";
+    public static  String regUserID ;
     private User currentUser;
 
 
@@ -84,6 +85,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 userAvatarURL = currentUser.avatar;
                 userCommunityId =currentUser.community_id;
                 userCommunityName = currentUser.community_name;
+                regUserID = currentUser.id;
             }
 
         } catch (java.sql.SQLException sqlE) {

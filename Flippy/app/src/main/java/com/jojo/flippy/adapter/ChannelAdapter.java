@@ -62,8 +62,8 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         holder.textViewNumberOfMembers.setText(rowItem.getMembers());
         holder.textViewChannelName.setText(rowItem.getChannelName());
         Ion.with(holder.imageView)
-                .placeholder(R.drawable.default_profile_picture)
-                .error(R.drawable.default_profile_picture)
+                .placeholder(R.drawable.channel_placeholder)
+                .error(R.drawable.channel_placeholder)
                 .load(String.valueOf(rowItem.getImageUrl()));
         holder.textViewStatus.setText(rowItem.getStatus());
 

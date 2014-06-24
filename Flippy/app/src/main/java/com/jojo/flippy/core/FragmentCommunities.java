@@ -7,8 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,6 +38,7 @@ public class FragmentCommunities extends Fragment {
     private ChannelAdapter adapter;
 
 
+
     public FragmentCommunities() {
 
     }
@@ -62,9 +61,10 @@ public class FragmentCommunities extends Fragment {
         adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems, false);
         listViewCommunity.setAdapter(adapter);
+        String url = Flippy.channelsInCommunityURL + CommunityCenterActivity.userCommunityId+"/channels/";
         //Loading the list with data from Api call
         Ion.with(getActivity())
-                .load(Flippy.channelsURL)
+                .load(url)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

@@ -57,6 +57,7 @@ public class SelectCommunityActivity extends Activity {
     private Intent intent;
     private String selectedCommunityID;
     private String communitySelected;
+    private String regUserEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class SelectCommunityActivity extends Activity {
         loadingCommunityDialog.show();
 
         intent = getIntent();
+        regUserEmail = intent.getStringExtra("regUserEmail");
 
         editTextCommunityKey = (EditText) findViewById(R.id.editTextCommunityKey);
         spinnerSelectCommunity = (Spinner) findViewById(R.id.spinnerSelectCommunity);
@@ -159,10 +161,11 @@ public class SelectCommunityActivity extends Activity {
                 try {
                     Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
                     //this user
-                    User thisUser = userDao.queryForAll().get(0);
-                    thisUser.community_id = selectedCommunityID;
-                    thisUser.community_name = communitySelected;
-                    userDao.update(thisUser);
+                    UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
+                    updateBuilder.where().eq("user_email", regUserEmail);
+                    updateBuilder.updateColumnValue("community_id" , selectedCommunityID);
+                    updateBuilder.updateColumnValue("community_name" ,communitySelected);
+                    updateBuilder.update();
                 } catch (java.sql.SQLException sqlE) {
                     sqlE.printStackTrace();
                 }

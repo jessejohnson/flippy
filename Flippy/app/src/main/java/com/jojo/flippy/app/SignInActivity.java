@@ -154,10 +154,7 @@ public class SignInActivity extends ActionBarActivity {
                                             Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
                                             User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName, avatar, avatar_thumb, gender, date_of_birth);
                                             userDao.create(user);
-                                            List<User> userList = userDao.queryForAll();
-                                            Log.e("userList", userList.get(0).toString());
-
-                                        } catch (java.sql.SQLException sqlE) {
+                                           } catch (java.sql.SQLException sqlE) {
                                             sqlE.printStackTrace();
                                             Crouton.makeText(SignInActivity.this, "Sorry, Try again later", Style.ALERT)
                                                     .show();
