@@ -9,17 +9,12 @@ import java.net.URI;
  */
 public class ProfileItem {
 
-    private URI profileImageId;
     private URI profileChannelItem;
-    private String username,userEmail,userNumber,profileChannelName,profileChannelTotalNumber;
+    private String profileChannelName,profileChannelTotalNumber;
 
 
-    public ProfileItem(URI profileImageId,URI profileChannelItem ,String userName, String userEmail,String userNumber,String profileChannelName,String profileChannelTotalNumber ) {
-        this.profileImageId = profileImageId;
+    public ProfileItem(URI profileChannelItem ,String profileChannelName,String profileChannelTotalNumber ) {
         this.profileChannelItem = profileChannelItem;
-        this.username = userName;
-        this.userEmail = userEmail;
-        this.userNumber = userNumber;
         this.profileChannelName = profileChannelName;
         this.profileChannelTotalNumber = profileChannelTotalNumber;
     }
@@ -36,28 +31,8 @@ public class ProfileItem {
         this.profileChannelTotalNumber = profileChannelTotalNumber;
     }
 
-    public void setProfileImageId(URI profileImageId) {
-        this.profileImageId = profileImageId;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setUserNumber(String userNumber) {
-        this.userNumber = userNumber;
-    }
-
     public URI getProfileChannelItem() {
         return profileChannelItem;
-    }
-
-    public URI getProfileImageId() {
-        return profileImageId;
     }
 
     public String getProfileChannelName() {
@@ -66,18 +41,6 @@ public class ProfileItem {
 
     public String getProfileChannelTotalNumber() {
         return profileChannelTotalNumber;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getUserNumber() {
-        return userNumber;
     }
 
 }

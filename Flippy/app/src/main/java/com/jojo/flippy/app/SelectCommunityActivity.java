@@ -16,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -49,15 +51,15 @@ public class SelectCommunityActivity extends Activity {
     private Spinner spinnerSelectCommunity;
     private Button buttonGetStartedFromCommunity;
     private String defaultSpinnerItem = "Choose a community";
-    private String communitiesURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/communities/";
     //TODO get communityKeyURL
     private String communityKeyURL = "";
-    private ProgressDialog loadingCommunityDialog;
     private EditText editTextCommunityKey;
     private Intent intent;
     private String selectedCommunityID;
     private String communitySelected;
     private String regUserEmail;
+    private ProgressBar progressBarLoadCommunity;
+    private ScrollView scrollViewLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +74,11 @@ public class SelectCommunityActivity extends Activity {
         final ArrayList<String> communityListId = new ArrayList<String>();
         communityListId.add("flippy01");
         communityListAdapt.add(defaultSpinnerItem);
-        loadingCommunityDialog = new ProgressDialog(SelectCommunityActivity.this);
-        loadingCommunityDialog.setMessage("Loading communities...");
-        loadingCommunityDialog.show();
+        progressBarLoadCommunity = (ProgressBar)findViewById(R.id.progressBarLoadCommunity);
+        buttonGetStartedFromCommunity = (Button) findViewById(R.id.buttonGetStartedCommunity);
+        scrollViewLogin = (ScrollView)findViewById(R.id.scrollViewLogin);
+        scrollViewLogin.setVisibility(View.GONE);
+        buttonGetStartedFromCommunity.setVisibility(View.GONE);
 
         intent = getIntent();
         regUserEmail = intent.getStringExtra("regUserEmail");
@@ -98,21 +102,19 @@ public class SelectCommunityActivity extends Activity {
         final InternetConnectionDetector internetConnectionDetector = new InternetConnectionDetector(this);
 
         Ion.with(SelectCommunityActivity.this)
-                .load(communitiesURL)
+                .load(Flippy.communitiesURL)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        loadingCommunityDialog.dismiss();
+                        showViews();
+                        progressBarLoadCommunity.setVisibility(View.GONE);
                         if (result != null) {
-                            Log.e("response", result.toString());
                             JsonArray communityArray = result.getAsJsonArray("results");
                             for (int i = 0; i < communityArray.size(); i++) {
                                 JsonObject item = communityArray.get(i).getAsJsonObject();
                                 communityListAdapt.add(item.get("name").getAsString());
                                 communityListId.add(item.get("id").getAsString());
-                                Log.e("Item", item.get("name").getAsString());
-                                Log.e("Item", item.get("id").getAsString());
                             }
 
                         }
@@ -124,7 +126,6 @@ public class SelectCommunityActivity extends Activity {
                     }
                 });
         addItemsOnCommunitySpinner(communityListAdapt);
-        buttonGetStartedFromCommunity = (Button) findViewById(R.id.buttonGetStartedCommunity);
         buttonGetStartedFromCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,6 +219,12 @@ public class SelectCommunityActivity extends Activity {
                     }
                 });
         return builder.create();
+    }
+    private void showViews(){
+        buttonGetStartedFromCommunity.setVisibility(View.VISIBLE);
+        scrollViewLogin.setVisibility(View.VISIBLE);
+
+
     }
 
 }

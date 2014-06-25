@@ -8,12 +8,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.jojo.flippy.adapter.Channel;
+import com.jojo.flippy.adapter.ChannelAdapter;
 import com.jojo.flippy.adapter.ProfileAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.ToastMessages;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -25,10 +34,13 @@ public class AccountProfileActivity extends ActionBarActivity {
     //Instance of the channel item
     List<ProfileItem> rowItems;
     private Intent intent;
-    private  String userFirstName;
+    private String userFirstName;
     private String userLastName;
     private String userEmail;
     private String userFullName;
+    private String userChannels = "/subscriptions/";
+    private ProfileAdapter profileAdapter;
+    private ImageView imageViewProfilePic;
 
 
     @Override
@@ -41,39 +53,61 @@ public class AccountProfileActivity extends ActionBarActivity {
         userFirstName = CommunityCenterActivity.userFirstName;
         userLastName = CommunityCenterActivity.userLastName;
         userEmail = CommunityCenterActivity.regUserEmail;
-        userFullName = userFirstName  + ", "+ userLastName;
+        userFullName = userFirstName + ", " + userLastName;
 
         ActionBar actionBar = getActionBar();
         actionBar.setTitle(userFirstName);
         actionBar.setSubtitle(R.string.user_tap_to_edit);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        String url = Flippy.userChannelsSubscribedURL + CommunityCenterActivity.regUserID + userChannels;
+
 
         intent = getIntent();
-       //Loading the list with a dummy data
         rowItems = new ArrayList<ProfileItem>();
-
-        ProfileItem item = new ProfileItem(URI.create(CommunityCenterActivity.userAvatarURL),
-                URI.create("http://facultyandstaff.colostate.edu/images/feature/campus1.jpg"),
-                userFullName,userEmail,userFirstName,"GESA KNUST","200 members");
-
-        rowItems.add(item);
-        rowItems.add(item);
-        rowItems.add(item);
-        rowItems.add(item);
-
-
         profileChannelListView = (ListView) findViewById(R.id.profileChannelListView);
-        ProfileAdapter channelAdapter = new ProfileAdapter(AccountProfileActivity.this,
+        imageViewProfilePic = (ImageView) findViewById(R.id.imageViewProfilePic);
+        profileAdapter = new ProfileAdapter(AccountProfileActivity.this,
                 R.layout.profile_listview, rowItems);
-        profileChannelListView.setAdapter(channelAdapter);
+        profileChannelListView.setAdapter(profileAdapter);
+
+        //set the user profile
+        Ion.with(imageViewProfilePic)
+                .placeholder(R.color.flippy_light_header)
+                .load(CommunityCenterActivity.userAvatarURL);
+
+        //load the channels user subscribed to
+        Ion.with(AccountProfileActivity.this)
+                .load(url)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (result != null) {
+                            JsonArray profileArray = result.getAsJsonArray("results");
+                            for (int i = 0; i < profileArray.size(); i++) {
+                                JsonObject item = profileArray.get(i).getAsJsonObject();
+                                ProfileItem profileItem = new ProfileItem( URI.create(item.get("image_url").getAsString()),"", "200 members");
+                                rowItems.add(profileItem);
+                            }
+                            updateAdapter();
+
+
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(AccountProfileActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                        }
+
+                    }
+                });
+
 
         profileChannelListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 //setting the click action for each of the items
-                switch(position){
+                switch (position) {
                     case 0:
                         intent.setClass(AccountProfileActivity.this, EditProfileActivity.class);
                         startActivity(intent);
@@ -89,6 +123,10 @@ public class AccountProfileActivity extends ActionBarActivity {
         });
     }
 
+    private void updateAdapter() {
+        profileAdapter.notifyDataSetChanged();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -101,7 +139,7 @@ public class AccountProfileActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_edit_profile) {
-            intent = new Intent(AccountProfileActivity.this,EditProfileActivity.class);
+            intent = new Intent(AccountProfileActivity.this, EditProfileActivity.class);
             startActivity(intent);
             return true;
         }

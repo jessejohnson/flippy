@@ -82,8 +82,8 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
                 drawerHolder.userImage.setImageResource(R.drawable.default_profile_picture);
             } else {
                 Ion.with(drawerHolder.userImage)
-                        .placeholder(R.drawable.default_profile_picture)
-                        .error(R.drawable.default_profile_picture)
+                        .placeholder(R.color.flippy_light_header)
+                        .error(R.color.flippy_light_header)
                         .load(CommunityCenterActivity.userAvatarURL.toString());
             }
         } else {

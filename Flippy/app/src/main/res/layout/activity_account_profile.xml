@@ -8,10 +8,47 @@
     android:paddingRight="@dimen/margin_two"
     android:paddingTop="@dimen/margin_two">
 
+    <LinearLayout
+        android:id="@+id/linearLayoutUserProfile"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="0dp"
+        android:background="@color/flippy_dark_header"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/imageViewProfilePic"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_one_fifty" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/flippy_white"
+            android:padding="@dimen/margin_five"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/dummy_user_name"
+            android:id="@+id/textViewProfileUserNameNew" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:padding="@dimen/margin_five"
+            android:layout_height="wrap_content"
+            android:textColor="@color/flippy_white"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/dummy_user_email"
+            android:id="@+id/textViewProfileUserEmailNew" />
+    </LinearLayout>
+
 
     <ListView
         android:id="@+id/profileChannelListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-       />
+        android:layout_below="@+id/linearLayoutUserProfile" />
+
 </RelativeLayout>

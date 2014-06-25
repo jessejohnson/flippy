@@ -23,6 +23,7 @@ public class Flippy  extends Application{
     public static  String channelsInCommunityURL ="http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/communities/";
     public static  String userChannelsSubscribedURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/users/";
     public static  String channelDetailURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/channels/";
+    public static String communitiesURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/communities/";
 
 
     @Override
@@ -38,8 +39,6 @@ public class Flippy  extends Application{
                 return;
             }
             thisUser = userList.get(0);
-
-
         }catch(java.sql.SQLException sqlE){
             sqlE.printStackTrace();
         }

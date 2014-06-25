@@ -10,6 +10,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        android:id="@+id/scrollViewLogin"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -85,9 +86,19 @@
                     android:selectAllOnFocus="true"
                     android:singleLine="true"
                     android:textColor="@color/flippy_white" />
-            </LinearLayout>
+
+                 </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBarLoadCommunity"
+        android:indeterminateDrawable="@drawable/progress_bar_bg"
+        android:minHeight="48dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal" />
 
     <Button
         android:id="@+id/buttonGetStartedCommunity"
@@ -101,7 +112,6 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/flippy_white"
         android:textStyle="bold" />
-
 
 
 </RelativeLayout>
