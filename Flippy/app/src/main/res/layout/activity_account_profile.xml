@@ -20,28 +20,34 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_gravity="center_horizontal"
             android:id="@+id/imageViewProfilePic"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/margin_one_fifty" />
+            android:layout_height="@dimen/margin_one_fifty"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/flippy_orange"
+            android:scaleType="centerCrop" />
 
         <TextView
+            android:id="@+id/textViewProfileUserNameNew"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/flippy_white"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
             android:padding="@dimen/margin_five"
-            android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/dummy_user_name"
-            android:id="@+id/textViewProfileUserNameNew" />
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/flippy_white" />
 
         <TextView
+            android:id="@+id/textViewProfileUserEmailNew"
             android:layout_width="match_parent"
-            android:padding="@dimen/margin_five"
             android:layout_height="wrap_content"
-            android:textColor="@color/flippy_white"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/margin_five"
             android:text="@string/dummy_user_email"
-            android:id="@+id/textViewProfileUserEmailNew" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/flippy_white" />
     </LinearLayout>
 
 
@@ -49,6 +55,7 @@
         android:id="@+id/profileChannelListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/linearLayoutUserProfile" />
+        android:layout_below="@+id/linearLayoutUserProfile"
+        android:layout_margin="@dimen/margin_five" />
 
 </RelativeLayout>

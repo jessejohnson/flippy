@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -41,6 +42,8 @@ public class AccountProfileActivity extends ActionBarActivity {
     private String userChannels = "/subscriptions/";
     private ProfileAdapter profileAdapter;
     private ImageView imageViewProfilePic;
+    private TextView textViewProfileUserNameNew;
+    private TextView textViewProfileUserEmailNew;
 
 
     @Override
@@ -66,6 +69,8 @@ public class AccountProfileActivity extends ActionBarActivity {
         intent = getIntent();
         rowItems = new ArrayList<ProfileItem>();
         profileChannelListView = (ListView) findViewById(R.id.profileChannelListView);
+        textViewProfileUserEmailNew = (TextView)findViewById(R.id.textViewProfileUserEmailNew);
+        textViewProfileUserNameNew = (TextView)findViewById(R.id.textViewProfileUserNameNew);
         imageViewProfilePic = (ImageView) findViewById(R.id.imageViewProfilePic);
         profileAdapter = new ProfileAdapter(AccountProfileActivity.this,
                 R.layout.profile_listview, rowItems);
@@ -75,6 +80,9 @@ public class AccountProfileActivity extends ActionBarActivity {
         Ion.with(imageViewProfilePic)
                 .placeholder(R.color.flippy_light_header)
                 .load(CommunityCenterActivity.userAvatarURL);
+
+        textViewProfileUserNameNew.setText(userFullName);
+        textViewProfileUserEmailNew.setText(userEmail);
 
         //load the channels user subscribed to
         Ion.with(AccountProfileActivity.this)
@@ -87,7 +95,8 @@ public class AccountProfileActivity extends ActionBarActivity {
                             JsonArray profileArray = result.getAsJsonArray("results");
                             for (int i = 0; i < profileArray.size(); i++) {
                                 JsonObject item = profileArray.get(i).getAsJsonObject();
-                                ProfileItem profileItem = new ProfileItem( URI.create(item.get("image_url").getAsString()),"", "200 members");
+                                JsonObject creator = item.getAsJsonObject("creator");
+                                ProfileItem profileItem = new ProfileItem( URI.create(item.get("image_url").getAsString()),item.get("name").getAsString(), creator.get("email").getAsString());
                                 rowItems.add(profileItem);
                             }
                             updateAdapter();
@@ -106,18 +115,6 @@ public class AccountProfileActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                //setting the click action for each of the items
-                switch (position) {
-                    case 0:
-                        intent.setClass(AccountProfileActivity.this, EditProfileActivity.class);
-                        startActivity(intent);
-                        break;
-                    case 1:
-                        break;
-                    default:
-                        break;
-
-                }
 
             }
         });

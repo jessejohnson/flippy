@@ -2,12 +2,14 @@ package com.jojo.flippy.core;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +22,8 @@ import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.makeramen.RoundedImageView;
+import com.makeramen.RoundedTransformationBuilder;
 
 
 public class ChannelDetailActivity extends ActionBarActivity {
@@ -27,7 +31,9 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private String name;
     private String id;
     private String bio;
-    private String creator;
+    private String creatorName;
+    private String creatorAvatarURL = "";
+    private String creatorEmail;
     private String communityId;
     private String image_thumbnail_url;
     private String image_url;
@@ -36,10 +42,10 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private String channelName;
     String channelCommunityDetail = Flippy.channelsInCommunityURL;
 
-    private ImageView imageViewChannelLarge;
+    private ImageView imageViewChannelLarge,imageViewCreator;
     private TextView textViewChannelNameDetail;
     private TextView textViewChannelBio;
-    private TextView textViewLikes,textViewChannelCreator;
+    private TextView  textViewNameChannelDetailFullName, textViewChannelCreatorEmail;
     private LinearLayout linearLayoutChannelDetailContent;
     private ProgressBar progressBarLoadChannelDetail;
     private Button buttonSubscribeToChannel;
@@ -61,20 +67,27 @@ public class ChannelDetailActivity extends ActionBarActivity {
 
 
         imageViewChannelLarge = (ImageView) findViewById(R.id.imageViewChannelLarge);
+        imageViewCreator = (ImageView) findViewById(R.id.imageViewCreator);
         textViewChannelNameDetail = (TextView) findViewById(R.id.textViewChannelNameDetail);
         textViewChannelBio = (TextView) findViewById(R.id.textViewChannelBio);
-        textViewLikes = (TextView) findViewById(R.id.textViewStatus);
-        textViewChannelCreator = (TextView) findViewById(R.id.textViewChannelCreator);
-        linearLayoutChannelDetailContent = (LinearLayout)findViewById(R.id.linearLayoutChannelDetailContent);
-        progressBarLoadChannelDetail = (ProgressBar)findViewById(R.id.progressBarLoadChannelDetail);
-        buttonSubscribeToChannel = (Button)findViewById(R.id.buttonSubscribeToChannel);
+        textViewNameChannelDetailFullName = (TextView) findViewById(R.id.textViewNameChannelDetailFullName);
+        textViewChannelCreatorEmail = (TextView) findViewById(R.id.textViewChannelCreatorEmail);
+        linearLayoutChannelDetailContent = (LinearLayout) findViewById(R.id.linearLayoutChannelDetailContent);
+        progressBarLoadChannelDetail = (ProgressBar) findViewById(R.id.progressBarLoadChannelDetail);
+        buttonSubscribeToChannel = (Button) findViewById(R.id.buttonSubscribeToChannel);
         linearLayoutChannelDetailContent.setVisibility(View.GONE);
         buttonSubscribeToChannel.setVisibility(View.GONE);
+        textViewNameChannelDetailFullName.setVisibility(View.GONE);
+        textViewChannelCreatorEmail.setVisibility(View.GONE);
+        imageViewCreator.setVisibility(View.GONE);
 
         textViewChannelBio.setText("");
-        textViewLikes.setText("");
-        textViewChannelCreator.setText("");
         textViewChannelNameDetail.setText(channelName);
+
+
+
+
+
 
 
         //load the details of a channel
@@ -87,7 +100,12 @@ public class ChannelDetailActivity extends ActionBarActivity {
                         if (result != null) {
                             name = result.get("name").getAsString();
                             id = result.get("id").getAsString();
-                            creator = result.get("creator").getAsString();
+                            JsonObject creator = result.getAsJsonObject("creator");
+                            creatorName = creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString();
+                            creatorEmail = creator.get("email").getAsString();
+                            if (!creator.get("avatar").isJsonNull()) {
+                                creatorAvatarURL = creator.get("avatar").getAsString();
+                            }
                             bio = result.get("bio").getAsString();
                             communityId = result.get("community").getAsString();
                             image_thumbnail_url = result.get("image_thumbnail_url").getAsString();
@@ -131,11 +149,19 @@ public class ChannelDetailActivity extends ActionBarActivity {
         Ion.with(imageViewChannelLarge)
                 .placeholder(R.color.flippy_light_header)
                 .load(image_url);
-
-        textViewChannelNameDetail.setText(channelName);
+        Ion.with(imageViewCreator)
+                .placeholder(R.color.flippy_light_header)
+                .load(creatorAvatarURL);
+        textViewChannelNameDetail.setText(channelName + " @ " + communityName);
+        textViewNameChannelDetailFullName.setText(creatorName);
+        textViewChannelCreatorEmail.setText(creatorEmail);
         textViewChannelBio.setText(bio);
-        textViewLikes.setText("In " + communityName);
-        textViewChannelCreator.setText(creator);
+
+        textViewChannelNameDetail.setVisibility(View.VISIBLE);
+        textViewNameChannelDetailFullName.setVisibility(View.VISIBLE);
+        textViewChannelCreatorEmail.setVisibility(View.VISIBLE);
+        textViewChannelBio.setVisibility(View.VISIBLE);
+        imageViewCreator.setVisibility(View.VISIBLE);
     }
 
 

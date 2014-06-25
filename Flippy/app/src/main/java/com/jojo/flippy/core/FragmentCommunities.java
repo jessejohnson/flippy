@@ -77,7 +77,8 @@ public class FragmentCommunities extends Fragment {
                             JsonArray communityArray = result.getAsJsonArray("results");
                             for (int i = 0; i < communityArray.size(); i++) {
                                 JsonObject item = communityArray.get(i).getAsJsonObject();
-                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()),item.get("id").getAsString(), item.get("name").getAsString(),"200 members", "active");
+                                JsonObject creator = item.getAsJsonObject("creator");
+                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()),item.get("id").getAsString(), item.get("name").getAsString(),creator.get("email").getAsString(), creator.get("first_name").getAsString()+" "+creator.get("last_name").getAsString());
                                 rowItems.add(channelItem);
                             }
                             updateListAdapter();
