@@ -128,13 +128,10 @@ public class SignInActivity extends ActionBarActivity {
                                                         .show();
                                                 return;
                                             }
-                                            Log.e("result", result.get("id").getAsString());
-                                            Log.e("result", result.get("auth_token").getAsString());
-                                            Log.e("result", result.get("email").getAsString());
-                                            regUserEmail = result.get("email").getAsString();
                                             regUserAuthToken = result.get("auth_token").getAsString();
                                             regUserID = result.get("id").getAsString();
                                             regFirstName = result.get("first_name").getAsString();
+                                            regUserEmail = result.get("email").getAsString();
                                             regLastName = result.get("last_name").getAsString();
                                             if (result.get("avatar").isJsonNull()) {
                                                 avatar = "";
@@ -156,6 +153,10 @@ public class SignInActivity extends ActionBarActivity {
                                         try {
                                             //an instance of the userDao from the application class
                                             Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
+                                            List<User> userList = userDao.queryForAll();
+                                            if(!userList.isEmpty()){
+                                               userDao.delete(userList);
+                                            }
                                             User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName, avatar, avatar_thumb, gender, date_of_birth);
                                             userDao.create(user);
                                            } catch (java.sql.SQLException sqlE) {

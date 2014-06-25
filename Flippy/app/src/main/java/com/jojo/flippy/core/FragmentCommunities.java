@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -88,6 +89,28 @@ public class FragmentCommunities extends Fragment {
 
                     }
                 });
+
+
+        //Setting the click listener of the list view, if user clicks on a particular channel
+        listViewCommunity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+
+                TextView textViewChannelId = (TextView)view.findViewById(R.id.textViewChannelId);
+                TextView textViewChannelName = (TextView)view.findViewById(R.id.textViewChannelNameCustom);
+                String channelId = textViewChannelId.getText().toString();
+                String channelName = textViewChannelName.getText().toString();
+                intent.setClass(getActivity(),ChannelDetailActivity.class);
+                intent.putExtra("channelId",channelId);
+                intent.putExtra("channelName", channelName);
+                getActivity().startActivity(intent);
+
+
+            }
+        });
+
+
 
         //registering the list view for context menu actions
         registerForContextMenu(listViewCommunity);

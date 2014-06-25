@@ -211,6 +211,8 @@
     <string name="dummy_community">University of Cape coast</string>
     <string name="dummy_user_number_of_channels_own">admin (3)</string>
     <string name="dummy_user_number_channels_in">5 channels</string>
+    <string name="channel_detail_bio">A brief of the channel information</string>
+    <string name="channel_detail_members">122 members</string>
 
     <!-- the member detail strings -->
     <string name="another_member_detail_add_as_admin">add as admin</string>
@@ -224,5 +226,6 @@
 
     <string name="title_activity_pick_map_location">Notice Location</string>
     <string name="pick_location_add_location">Add location</string>
+    <string name="title_activity_channel_detail">Channel Detail</string>
 
 </resources>

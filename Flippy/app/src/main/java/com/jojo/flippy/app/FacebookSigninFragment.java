@@ -51,7 +51,8 @@ public class FacebookSigninFragment extends Fragment {
     Context mContext;
     LoginButton mLoginBtn;
     private Button signInWithEmail;
-    private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName, regAvatar,regGender,regAvatarURL,regDateOfBirth;
+    private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName, regAvatar,regGender,regAvatarURL;
+    private String regDateOfBirth="";
 
     //session status callback variable
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -155,10 +156,10 @@ public class FacebookSigninFragment extends Fragment {
                             if (user != null) {
                                 String fullName = user.getName();
                                 String username = user.getUsername();
-                                String first_name = user.getFirstName();
-                                String last_name = user.getLastName();
-                                String fbId = user.getId();
-                                String userEmail = (String) user.asMap().get("email");
+                                final String first_name = user.getFirstName();
+                                final String last_name = user.getLastName();
+                                final String fbId = user.getId();
+                                final String userEmail = (String) user.asMap().get("email");
                                 final String profilePic = "http://graph.facebook.com/" + fbId + "/picture?type=large";
                                 final String profilePicSmall = "http://graph.facebook.com/" + fbId + "/picture?type=small";
                                 final String gender = user.asMap().get("gender").toString();
@@ -189,7 +190,9 @@ public class FacebookSigninFragment extends Fragment {
                                                     Log.e("Error", e.toString());
                                                 } else {
                                                     if (result.has("detail")) {
+                                                        createUser(fbId,fbId,userEmail,first_name,last_name,profilePic,profilePicSmall,gender,regDateOfBirth);
                                                         Intent intent = new Intent(getActivity(), SelectCommunityActivity.class);
+                                                        intent.putExtra("regUserEmail",userEmail);
                                                         startActivity(intent);
                                                         return;
                                                     }
@@ -199,17 +202,7 @@ public class FacebookSigninFragment extends Fragment {
                                                     regLastName = result.get("last_name").getAsString();
                                                     regUserEmail =result.get("email").getAsString();
                                                     regGender = gender;
-                                                    //regAvatarURL = result.get("avatar").getAsString();
-                                                   // regDateOfBirth = result.get("date_of_birth").getAsString();
-                                                    //Save the information in the database
-                                                    try {
-                                                        Dao<User, Integer> userDao = ((Flippy) getActivity().getApplication()).userDao;
-                                                        User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName,profilePic,profilePicSmall,regGender,"");
-                                                        userDao.create(user);
-
-                                                    } catch (java.sql.SQLException sqlE) {
-                                                        sqlE.printStackTrace();
-                                                    }
+                                                    createUser(regUserID,regUserAuthToken,regUserEmail,regFirstName,regLastName,profilePic,profilePicSmall,regGender,regDateOfBirth);
                                                     //the end of the persistence
                                                     Intent intent = new Intent(getActivity(), SelectCommunityActivity.class);
                                                     intent.putExtra("regUserEmail", regUserEmail);
@@ -236,6 +229,21 @@ public class FacebookSigninFragment extends Fragment {
         );
 
         request.executeAsync();
+    }
+
+    private void createUser(String userID,String userToken,String userEmail,String userFirstName,String userLastName,String profilePic, String profilePicSmall,String gender,String dateOfBirth ) {
+        try {
+            Dao<User, Integer> userDao = ((Flippy) getActivity().getApplication()).userDao;
+            List<User> userList = userDao.queryForAll();
+            if(!userList.isEmpty()){
+                userDao.delete(userList);
+            }
+            User user = new User(userID, userToken, userEmail, userFirstName, userLastName,profilePic,profilePicSmall,gender,dateOfBirth);
+            userDao.create(user);
+
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+        }
     }
 
 }

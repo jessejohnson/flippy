@@ -64,10 +64,11 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         holder.textViewNumberOfMembers.setText(rowItem.getMembers());
         holder.textViewChannelName.setText(rowItem.getChannelName());
         Ion.with(holder.imageView)
-                .placeholder(R.drawable.channel_placeholder)
-                .error(R.drawable.channel_placeholder)
+                .placeholder(R.color.flippy_light_header)
+                .error(R.color.flippy_orange)
                 .load(String.valueOf(rowItem.getImageUrl()));
         holder.textViewStatus.setText(rowItem.getStatus());
+        holder.textViewChannelId.setText(rowItem.getId());
 
         //check to see if the adapter displays only user channel, then set the subscription button to invisible state
          if(isUserChannel){

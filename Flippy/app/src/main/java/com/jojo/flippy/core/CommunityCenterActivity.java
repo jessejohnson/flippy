@@ -81,6 +81,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 regUserEmail = currentUser.user_email;
                 userFirstName = currentUser.first_name;
                 userLastName = currentUser.last_name;
+
                 userAvatarThumbURL =currentUser.avatar_thumb;
                 userAvatarURL = currentUser.avatar;
                 userCommunityId =currentUser.community_id;

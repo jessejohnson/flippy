@@ -144,18 +144,23 @@ public class RegisterActivity extends Activity {
                                         regUserAuthToken = result.get("auth_token").getAsString();
                                         regUserID = result.get("id").getAsString();
                                         regFirstName = result.get("first_name").getAsString();
+                                        regUserEmail = result.get("email").getAsString();
                                         regLastName = result.get("last_name").getAsString();
-
 
                                         //Save the information in the database
                                         try {
                                             Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
+                                            List<User> userList = userDao.queryForAll();
+                                            if(!userList.isEmpty()){
+                                                userDao.delete(userList);
+                                            }
                                             User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName);
                                             userDao.create(user);
 
-
                                         } catch (java.sql.SQLException sqlE) {
                                             sqlE.printStackTrace();
+                                            ToastMessages.showToastLong(RegisterActivity.this,"Sorry, Unable to create user account");
+                                            return;
                                         }
                                         //the end of the persistence
                                         intent.putExtra("regUserEmail", regUserEmail);

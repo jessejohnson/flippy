@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/margin_five"
-    android:background="#E9EAED"
+    android:background="@color/flippy_white"
     android:orientation="horizontal">
     <ListView
         android:id="@+id/listViewChannels"
@@ -53,7 +53,10 @@
 
     <ProgressBar
         android:layout_width="wrap_content"
+        android:indeterminateDrawable="@drawable/progress_bar_bg"
+        android:minHeight="48dp"
         android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleLarge"
         android:id="@+id/progressBarChannelDataLoad"
         android:layout_below="@+id/textViewChannelNoData"
         android:layout_centerHorizontal="true" />

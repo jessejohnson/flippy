@@ -1,0 +1,150 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/flippy_white"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/margin_five"
+    android:paddingLeft="@dimen/margin_five"
+    android:paddingRight="@dimen/margin_five"
+    android:paddingTop="@dimen/margin_five"
+    tools:context="com.jojo.flippy.core.ChannelDetailActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutChannelDetailContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imageViewChannelLarge"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/margin_two_hundred"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/textViewChannelBio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|bottom"
+                        android:background="@android:drawable/screen_background_dark_transparent"
+                        android:gravity="left"
+                        android:paddingBottom="@dimen/margin_twenty"
+                        android:paddingLeft="@dimen/margin_five"
+                        android:paddingRight="@dimen/margin_five"
+                        android:paddingTop="@dimen/margin_twenty"
+                        android:shadowColor="@color/flippy_dark_header"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="2"
+                        android:text="@string/channel_detail_bio"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/flippy_white" />
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textViewChannelNameDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|bottom"
+                    android:gravity="left"
+                    android:paddingBottom="@dimen/margin_ten"
+                    android:paddingLeft="@dimen/margin_five"
+                    android:paddingRight="@dimen/margin_five"
+                    android:paddingTop="@dimen/margin_twenty"
+                    android:shadowColor="@color/flippy_white"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="2"
+                    android:text="@string/default_channel_name"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/flippy_orange" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/margin_five">
+
+                        <TextView
+                            android:id="@+id/textViewChannelCreator"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:paddingLeft="@dimen/margin_five"
+                            android:paddingTop="@dimen/margin_five"
+                            android:text="@string/flippy_email"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <TextView
+                            android:id="@+id/textViewStatus"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|bottom"
+                            android:gravity="left"
+                            android:paddingLeft="@dimen/margin_five"
+                            android:paddingRight="@dimen/margin_five"
+                            android:shadowColor="@color/flippy_white"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="2"
+                            android:text="@string/channel_detail_members"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/flippy_dark_header" />
+
+                        <TextView
+                            android:id="@+id/textViewCommunityName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left|bottom"
+                            android:gravity="left"
+                            android:paddingLeft="@dimen/margin_five"
+                            android:paddingRight="@dimen/margin_five"
+                            android:shadowColor="@color/flippy_white"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="2"
+                            android:text="@string/channel_detail_members"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/flippy_dark_header" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonSubscribeToChannel"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/flippy_button_default"
+        android:text="@string/subscription_state_true"
+        android:textColor="@color/flippy_white" />
+
+
+    <ProgressBar
+        android:indeterminateDrawable="@drawable/progress_bar_bg"
+        android:minHeight="48dp"
+        android:id="@+id/progressBarLoadChannelDetail"
+        android:background="@color/flippy_white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+</RelativeLayout>

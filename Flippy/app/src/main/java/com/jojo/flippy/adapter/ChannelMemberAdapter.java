@@ -58,6 +58,7 @@ public class ChannelMemberAdapter extends ArrayAdapter<SettingsItem> {
         holder.imageView.setImageResource(rowItem.getSettingIcon());
         holder.getTextViewChannelMemberSecondName.setText(rowItem.getSettingSubTitle());
 
+
         return convertView;
     }
 

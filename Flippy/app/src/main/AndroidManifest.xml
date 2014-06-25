@@ -163,6 +163,15 @@
             android:name="com.jojo.flippy.core.PickMapLocationActivity"
             android:label="@string/title_activity_pick_map_location" >
         </activity>
+        <activity
+            android:name="com.jojo.flippy.core.ChannelDetailActivity"
+            android:label="@string/title_activity_channel_detail"
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
+            android:windowSoftInputMode="adjustPan" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
+        </activity>
     </application>
 
 </manifest>

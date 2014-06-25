@@ -43,8 +43,7 @@ public class FragmentChannel extends Fragment {
     private ProgressBar progressBarChannelDataLoad;
 
     private Intent intent;
-    private String channelName = "SRC channel";
-    private String totalMembers = "125";
+    private String totalMembers = "";
     private Button buttonAddChannel;
     private String isManageActivity = "false";
     private String userChannels = "/subscriptions/";
@@ -108,14 +107,16 @@ public class FragmentChannel extends Fragment {
                                     long id) {
 
                 TextView textViewChannelId = (TextView)view.findViewById(R.id.textViewChannelId);
+                TextView textViewChannelName = (TextView)view.findViewById(R.id.textViewChannelNameCustom);
                 String channelId = textViewChannelId.getText().toString();
+                String channelName = textViewChannelName.getText().toString();
+                intent.setClass(getActivity(),ChannelDetailActivity.class);
                 intent.putExtra("channelId",channelId);
-                //setting the click action for each of the items
-                intent.setClass(getActivity(), ChannelMembers.class);
                 intent.putExtra("channelName", channelName);
+                //setting the click action for each of the items
                 intent.putExtra("totalMembers", totalMembers);
                 intent.putExtra("isManageActivity", isManageActivity);
-                startActivity(intent);
+                getActivity().startActivity(intent);
 
 
             }

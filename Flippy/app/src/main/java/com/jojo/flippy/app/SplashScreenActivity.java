@@ -34,6 +34,7 @@ public class SplashScreenActivity extends ActionBarActivity {
         try {
             Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
             List<User> userList = userDao.queryForAll();
+            Log.e("users",userList.toString());
             if (userList.isEmpty()) {
                 currentUser = null;
             } else {
