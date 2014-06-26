@@ -41,18 +41,14 @@ public class CommunityCenterActivity extends ActionBarActivity {
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private ShareActionProvider shareActionProvider;
-    private boolean notice = true;
-    private boolean community = false;
-    private boolean channel = false;
-    private Intent intent;
-    public static String regUserEmail="";
-    public static  String userFirstName ="";
-    public static  String userLastName ="";
-    public static  String userAvatarThumbURL ="";
-    public static  String userAvatarURL ="";
-    public static  String userCommunityId="";
-    public static  String userCommunityName="";
-    public static  String regUserID ;
+    public static String regUserEmail = "";
+    public static String userFirstName = "";
+    public static String userLastName = "";
+    public static String userAvatarThumbURL = "";
+    public static String userAvatarURL = "";
+    public static String userCommunityId = "";
+    public static String userCommunityName = "";
+    public static String regUserID;
     private User currentUser;
 
 
@@ -67,8 +63,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer_main);
 
-        intent = getIntent();
-
 
         //get the current user from the database
         try {
@@ -82,9 +76,9 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 userFirstName = currentUser.first_name;
                 userLastName = currentUser.last_name;
 
-                userAvatarThumbURL =currentUser.avatar_thumb;
+                userAvatarThumbURL = currentUser.avatar_thumb;
                 userAvatarURL = currentUser.avatar;
-                userCommunityId =currentUser.community_id;
+                userCommunityId = currentUser.community_id;
                 userCommunityName = currentUser.community_name;
                 regUserID = currentUser.id;
             }
@@ -155,21 +149,12 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 break;
             case 1:
                 fragment = new FragmentNotice();
-                notice = true;
-                community = false;
-                channel = false;
                 break;
             case 2:
                 fragment = new FragmentChannel();
-                notice = false;
-                community = false;
-                channel = true;
                 break;
             case 3:
                 fragment = new FragmentCommunities();
-                notice = false;
-                community = true;
-                channel = false;
                 break;
             case 4:
                 fragment = new FragmentSettings();
@@ -244,11 +229,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 //call the user favourite function
             case R.id.action_remove_notice:
                 //remove the notice from the users board
-            case R.id.action_channel_manage_channel:
-                Intent intent1 = new Intent();
-                intent1.setClass(CommunityCenterActivity.this, ManageChannelActivity.class);
-                startActivity(intent1);
-                return  true;
+                return true;
             default:
                 return super.onContextItemSelected(item);
         }
@@ -287,13 +268,9 @@ public class CommunityCenterActivity extends ActionBarActivity {
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
-        if (community) {
-            inflater.inflate(R.menu.community_context_menu, menu);
-        } else if (channel) {
-            inflater.inflate(R.menu.channel_context_menu, menu);
-        } else {
-            inflater.inflate(R.menu.notice_context_menu, menu);
-        }
+
+        inflater.inflate(R.menu.notice_context_menu, menu);
+
 
     }
 

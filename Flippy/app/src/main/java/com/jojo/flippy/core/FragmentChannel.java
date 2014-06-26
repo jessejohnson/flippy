@@ -83,7 +83,7 @@ public class FragmentChannel extends Fragment {
                     public void onCompleted(Exception e, JsonObject result) {
                         textViewChannelNoData.setVisibility(View.VISIBLE);
                         progressBarChannelDataLoad.setVisibility(view.GONE);
-                        if (result != null) {
+                        if (!result.isJsonNull()) {
                             JsonArray communityArray = result.getAsJsonArray("results");
                             for (int i = 0; i < communityArray.size(); i++) {
                                 JsonObject item = communityArray.get(i).getAsJsonObject();
@@ -133,8 +133,6 @@ public class FragmentChannel extends Fragment {
             }
         });
 
-
-        registerForContextMenu(ChannelListView);
         return view;
     }
 

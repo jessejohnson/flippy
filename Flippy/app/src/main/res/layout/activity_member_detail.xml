@@ -10,6 +10,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        android:id="@+id/scrollViewUserDetail"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -62,15 +63,6 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/flippy_white" />
 
-                <TextView
-                    android:id="@+id/textViewAnotherUserNumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:padding="@dimen/margin_ten"
-                    android:text="@string/dummy_user_number"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/flippy_white" />
 
                 <TextView
                     android:id="@+id/textViewAnotherFirstName"

@@ -8,14 +8,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.jojo.flippy.adapter.ChannelMemberAdapter;
+import com.jojo.flippy.adapter.ProfileAdapter;
+import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.adapter.SettingsAdapter;
 import com.jojo.flippy.adapter.SettingsItem;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.profile.MemberDetailActivity;
+import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.ToastMessages;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -23,6 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +41,17 @@ import java.util.List;
  */
 public class ChannelMembers extends Activity {
     private Intent intent;
-    private String channelName = null;
-    private String totalMembers = null;
+    private String channelName;
+    private String channelId;
+    private String memberId;
+    private String memberFirstName;
+    private String totalMembers = "";
     private ListView membershipList;
-    //Instance of the channel item
-    List<SettingsItem> ChannelMemberItem;
-    private boolean isManageActivity = false;
-    private int requestCode = 0;
+    private ChannelMemberAdapter channelMemberAdapter;
+    List<ProfileItem> ChannelMemberItem;
+    private String membersURL = "/members/";
+    private ActionBar actionBar;
+    private ProgressBar progressBarMemberChannelLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,60 +60,67 @@ public class ChannelMembers extends Activity {
 
         intent = getIntent();
         channelName = intent.getStringExtra("channelName");
-        totalMembers = intent.getStringExtra("totalMembers");
-        isManageActivity = intent.getBooleanExtra("isManageActivity", false);
-        requestCode = intent.getIntExtra("requestCode", 0);
+        channelId = intent.getStringExtra("channelId");
+        String channelDetailsURL = Flippy.channelMembersURL + channelId + membersURL;
 
 
-        ActionBar actionBar = getActionBar();
+        actionBar = getActionBar();
         if (channelName != null && actionBar != null && totalMembers != null) {
             actionBar.setTitle(channelName);
-            actionBar.setSubtitle(totalMembers + " members");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
 
         //Loading the list with a dummy data
-        ChannelMemberItem = new ArrayList<SettingsItem>();
-        SettingsItem firstMember = new SettingsItem(R.drawable.sample_user, getResources().getString(R.string.dummy_user_name), getResources().getString(R.string.dummy_user_number));
-        SettingsItem secondMember = new SettingsItem(R.drawable.sample_user, getResources().getString(R.string.dummy_user_name), getResources().getString(R.string.dummy_user_number));
-        ChannelMemberItem.add(firstMember);
-        ChannelMemberItem.add(secondMember);
-
-        AsyncHttpClient client = new AsyncHttpClient();
-        String request = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/";
-        client.get(request, null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(JSONObject response) {
-                super.onSuccess(response);
-                try {
-                    JSONArray list = response.getJSONArray("results");
-                    for (int i = 0; i < list.length(); i++) {
-                        JSONObject jsonObject = list.getJSONObject(i);
-                        ChannelMemberItem.add(createNewUser(jsonObject));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable e, JSONObject errorResponse) {
-                super.onFailure(e, errorResponse);
-            }
-        });
-
-
+        ChannelMemberItem = new ArrayList<ProfileItem>();
         membershipList = (ListView) findViewById(R.id.listViewChannelMembers);
-        ChannelMemberAdapter adapter = new ChannelMemberAdapter(ChannelMembers.this,
+        progressBarMemberChannelLoader = (ProgressBar)findViewById(R.id.progressBarMemberChannelLoader);
+        channelMemberAdapter = new ChannelMemberAdapter(ChannelMembers.this,
                 R.layout.channel_members_listview, ChannelMemberItem);
-        membershipList.setAdapter(adapter);
+        membershipList.setAdapter(channelMemberAdapter);
+
+
+        //load the channels members
+        Ion.with(ChannelMembers.this)
+                .load(channelDetailsURL)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        progressBarMemberChannelLoader.setVisibility(View.GONE);
+                        if (!result.isJsonNull()) {
+                            JsonArray profileArray = result.getAsJsonArray("results");
+                            totalMembers = profileArray.size() + "";
+                            for (int i = 0; i < profileArray.size(); i++) {
+                                JsonObject item = profileArray.get(i).getAsJsonObject();
+                                memberId = item.get("id").getAsString();
+                                String url = "";
+                                if (!item.get("avatar").isJsonNull()) {
+                                    url = item.get("avatar").getAsString();
+                                }
+                                memberFirstName = item.get("first_name").getAsString();
+                                ProfileItem profileItem = new ProfileItem(URI.create(url), item.get("email").getAsString(), memberFirstName + ", " + item.get("last_name").getAsString());
+                                ChannelMemberItem.add(profileItem);
+                            }
+                            updateAdapter();
+
+
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(ChannelMembers.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                        }
+
+                    }
+                });
+
         membershipList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 //setting the click action for each of the items
                 intent.setClass(ChannelMembers.this, MemberDetailActivity.class);
+                intent.putExtra("memberId",memberId);
+                intent.putExtra("memberFirstName",memberFirstName);
                 startActivity(intent);
 
             }
@@ -108,19 +129,22 @@ public class ChannelMembers extends Activity {
 
     }
 
-    SettingsItem createNewUser(JSONObject object) {
-        String title = "";
-        String sub = "";
-        try {
-            title = object.getString("first_name");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            sub = object.getString("email");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return new SettingsItem(R.drawable.sample_user, title, sub);
+    private void updateAdapter() {
+        channelMemberAdapter.notifyDataSetChanged();
+        actionBar.setSubtitle(totalMembers + " " + "member(s)");
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+    }
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }

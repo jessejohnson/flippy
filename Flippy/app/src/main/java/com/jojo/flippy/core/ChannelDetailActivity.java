@@ -48,7 +48,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private TextView  textViewNameChannelDetailFullName, textViewChannelCreatorEmail;
     private LinearLayout linearLayoutChannelDetailContent;
     private ProgressBar progressBarLoadChannelDetail;
-    private Button buttonSubscribeToChannel;
+    private Button buttonSubscribeToChannel,buttonManageToChannel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +75,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         linearLayoutChannelDetailContent = (LinearLayout) findViewById(R.id.linearLayoutChannelDetailContent);
         progressBarLoadChannelDetail = (ProgressBar) findViewById(R.id.progressBarLoadChannelDetail);
         buttonSubscribeToChannel = (Button) findViewById(R.id.buttonSubscribeToChannel);
+        buttonManageToChannel = (Button) findViewById(R.id.buttonManageToChannel);
         linearLayoutChannelDetailContent.setVisibility(View.GONE);
         buttonSubscribeToChannel.setVisibility(View.GONE);
         textViewNameChannelDetailFullName.setVisibility(View.GONE);
@@ -84,12 +85,6 @@ public class ChannelDetailActivity extends ActionBarActivity {
         textViewChannelBio.setText("");
         textViewChannelNameDetail.setText(channelName);
 
-
-
-
-
-
-
         //load the details of a channel
         Ion.with(ChannelDetailActivity.this)
                 .load(channelDetailsURL)
@@ -97,7 +92,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
+                        if (!result.isJsonNull()) {
                             name = result.get("name").getAsString();
                             id = result.get("id").getAsString();
                             JsonObject creator = result.getAsJsonObject("creator");
@@ -129,7 +124,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
+                        if (!result.isJsonNull()) {
                             communityName = result.get("name").getAsString();
                             showViews();
 
@@ -145,7 +140,6 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private void showViews() {
         linearLayoutChannelDetailContent.setVisibility(View.VISIBLE);
         progressBarLoadChannelDetail.setVisibility(View.GONE);
-        buttonSubscribeToChannel.setVisibility(View.VISIBLE);
         Ion.with(imageViewChannelLarge)
                 .placeholder(R.color.flippy_light_header)
                 .load(image_url);
@@ -162,6 +156,15 @@ public class ChannelDetailActivity extends ActionBarActivity {
         textViewChannelCreatorEmail.setVisibility(View.VISIBLE);
         textViewChannelBio.setVisibility(View.VISIBLE);
         imageViewCreator.setVisibility(View.VISIBLE);
+
+        if(CommunityCenterActivity.regUserEmail.equals(creatorEmail)){
+            buttonManageToChannel.setVisibility(View.VISIBLE);
+            buttonSubscribeToChannel.setVisibility(View.GONE);
+        }else {
+            buttonSubscribeToChannel.setVisibility(View.VISIBLE);
+        }
+
+
     }
 
 
@@ -174,9 +177,17 @@ public class ChannelDetailActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_subscribe) {
+        if (id == R.id.action_channel_members) {
+            intent.setClass(ChannelDetailActivity.this,ChannelMembers.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
     }
 }

@@ -106,11 +106,11 @@
         <activity
             android:name="com.jojo.flippy.profile.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
-            android:parentActivityName="com.jojo.flippy.profile.AccountProfileActivity"
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
             android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jojo.flippy.profile.AccountProfileActivity" />
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
         <activity
             android:name="com.jojo.flippy.core.CreateChannelActivity"
@@ -133,10 +133,10 @@
         <activity
             android:name="com.jojo.flippy.core.NoticeExtrasActivity"
             android:label="@string/title_activity_notice_extras"
-            android:parentActivityName="com.jojo.flippy.core.CreateNoticeActivity" >
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jojo.flippy.core.CreateNoticeActivity" />
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
         <activity
             android:name="com.jojo.flippy.profile.ManageChannelActivity"
@@ -150,10 +150,10 @@
         <activity
             android:name="com.jojo.flippy.profile.MemberDetailActivity"
             android:label="@string/title_activity_member_detail"
-            android:parentActivityName="com.jojo.flippy.core.ChannelMembers" >
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jojo.flippy.core.ChannelMembers" />
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
         <activity
             android:name="com.jojo.flippy.profile.ImagePreviewActivity"

@@ -38,6 +38,9 @@ public class FragmentCommunities extends Fragment {
     private ProgressBar progressBarCommunityChannelLoader;
     private ChannelAdapter adapter;
 
+    public static String channelId;
+    public static String channelName;
+
 
 
     public FragmentCommunities() {
@@ -73,7 +76,7 @@ public class FragmentCommunities extends Fragment {
                     public void onCompleted(Exception e, JsonObject result) {
                         textViewCommunityEmpty.setVisibility(View.VISIBLE);
                         progressBarCommunityChannelLoader.setVisibility(view.GONE);
-                        if (result != null) {
+                        if (!result.isJsonNull()) {
                             JsonArray communityArray = result.getAsJsonArray("results");
                             for (int i = 0; i < communityArray.size(); i++) {
                                 JsonObject item = communityArray.get(i).getAsJsonObject();
@@ -100,8 +103,8 @@ public class FragmentCommunities extends Fragment {
 
                 TextView textViewChannelId = (TextView)view.findViewById(R.id.textViewChannelId);
                 TextView textViewChannelName = (TextView)view.findViewById(R.id.textViewChannelNameCustom);
-                String channelId = textViewChannelId.getText().toString();
-                String channelName = textViewChannelName.getText().toString();
+                channelId = textViewChannelId.getText().toString();
+                channelName = textViewChannelName.getText().toString();
                 intent.setClass(getActivity(),ChannelDetailActivity.class);
                 intent.putExtra("channelId",channelId);
                 intent.putExtra("channelName", channelName);
@@ -111,10 +114,6 @@ public class FragmentCommunities extends Fragment {
             }
         });
 
-
-
-        //registering the list view for context menu actions
-        registerForContextMenu(listViewCommunity);
         return view;
     }
 

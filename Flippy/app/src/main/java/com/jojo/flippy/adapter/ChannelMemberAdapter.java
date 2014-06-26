@@ -11,17 +11,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jojo.flippy.app.R;
+import com.koushikdutta.ion.Ion;
 
 import java.util.List;
 
 /**
  * Created by bright on 6/13/14.
  */
-public class ChannelMemberAdapter extends ArrayAdapter<SettingsItem> {
+public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> {
     Context context;
 
     public ChannelMemberAdapter(Context context, int resourceId,
-                                List<SettingsItem> items) {
+                                List<ProfileItem> items) {
         super(context, resourceId, items);
         this.context = context;
     }
@@ -36,7 +37,7 @@ public class ChannelMemberAdapter extends ArrayAdapter<SettingsItem> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        SettingsItem rowItem = getItem(position);
+        ProfileItem rowItem = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -54,9 +55,12 @@ public class ChannelMemberAdapter extends ArrayAdapter<SettingsItem> {
         if (position % 2 ==0) {
           holder.linearLayoutChannelMember.setBackgroundResource(R.drawable.flippy_background_light_dark);
         }
-        holder.textViewChannelMemberFirstName.setText(rowItem.getSettingTitle());
-        holder.imageView.setImageResource(rowItem.getSettingIcon());
-        holder.getTextViewChannelMemberSecondName.setText(rowItem.getSettingSubTitle());
+        holder.textViewChannelMemberFirstName.setText(rowItem.getProfileChannelName());
+        holder.getTextViewChannelMemberSecondName.setText(rowItem.getProfileChannelTotalNumber());
+
+        Ion.with(holder.imageView)
+                .placeholder(R.color.flippy_orange)
+                .load(String.valueOf(rowItem.getProfileChannelItem()));
 
 
         return convertView;

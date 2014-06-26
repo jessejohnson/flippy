@@ -146,6 +146,19 @@
         android:text="@string/subscription_state_true"
         android:textColor="@color/flippy_white" />
 
+    <Button
+        android:id="@+id/buttonManageToChannel"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/flippy_button_default"
+        android:text="@string/manage_channel"
+        android:textColor="@color/flippy_white" />
+
 
     <ProgressBar
         android:id="@+id/progressBarLoadChannelDetail"
