@@ -94,7 +94,7 @@ public class ChannelMembers extends Activity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarMemberChannelLoader.setVisibility(View.GONE);
-                        if (!result.isJsonNull()) {
+                        if (result != null) {
                             JsonArray profileArray = result.getAsJsonArray("results");
                             totalMembers = profileArray.size() + "";
                             for (int i = 0; i < profileArray.size(); i++) {

@@ -20,7 +20,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ShareActionProvider;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.j256.ormlite.dao.Dao;
+import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.CustomDrawer;
 import com.jojo.flippy.adapter.DrawerItem;
 import com.jojo.flippy.app.R;
@@ -28,7 +31,10 @@ import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.profile.AccountProfileActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,9 +54,12 @@ public class CommunityCenterActivity extends ActionBarActivity {
     public static String userCommunityId = "";
     public static String userCommunityName = "";
     public static String regUserID;
-    public static String userDateOfBirth="";
-    public static String userGender="";
+    public static String userDateOfBirth = "";
+    public static String userGender = "";
     private User currentUser;
+    private String userChannels = "/subscriptions/";
+
+    private ArrayList<String> channelListArray;
 
 
     private CharSequence mDrawerTitle;
@@ -64,6 +73,8 @@ public class CommunityCenterActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer_main);
 
+        //a new instance of the list of channel
+        channelListArray = new ArrayList<String>();
 
         //get the current user from the database
         try {
@@ -87,8 +98,9 @@ public class CommunityCenterActivity extends ActionBarActivity {
 
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
-            ToastMessages.showToastLong(CommunityCenterActivity.this,"Unfortunately a system error occurred");
+            ToastMessages.showToastLong(CommunityCenterActivity.this, "Unfortunately a system error occurred");
         }
+
 
         // Initializing
         dataList = new ArrayList<DrawerItem>();
@@ -295,7 +307,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
 
     //Alert dialog showing a list of channel user belongs to
     private void channelListDialog() {
-        //TODO this should line should return a list of user channels subscribed to
+        //final CharSequence[] channelList = channelListArray.toArray(new CharSequence[channelListArray.size()]);
         final CharSequence[] channelList = {"SRC channel", "Class of 2015, CS", "AAESS Group"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.choose_channel_list_dialog_title);

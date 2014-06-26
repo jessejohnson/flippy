@@ -76,7 +76,7 @@ public class FragmentCommunities extends Fragment {
                     public void onCompleted(Exception e, JsonObject result) {
                         textViewCommunityEmpty.setVisibility(View.VISIBLE);
                         progressBarCommunityChannelLoader.setVisibility(view.GONE);
-                        if (!result.isJsonNull()) {
+                        if (result != null) {
                             JsonArray communityArray = result.getAsJsonArray("results");
                             for (int i = 0; i < communityArray.size(); i++) {
                                 JsonObject item = communityArray.get(i).getAsJsonObject();

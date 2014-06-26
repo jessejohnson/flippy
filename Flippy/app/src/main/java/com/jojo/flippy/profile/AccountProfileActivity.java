@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
@@ -45,9 +46,11 @@ public class AccountProfileActivity extends ActionBarActivity {
     private ImageView imageViewProfilePic;
     private TextView textViewProfileUserNameNew;
     private TextView textViewProfileUserEmailNew;
+    private TextView textViewEmptyUserChannel;
 
 
     private LinearLayout linearLayoutUserProfile;
+    private ProgressBar progressBarUserChannelLoad;
 
 
     @Override
@@ -72,11 +75,15 @@ public class AccountProfileActivity extends ActionBarActivity {
 
         intent = getIntent();
         rowItems = new ArrayList<ProfileItem>();
+        textViewEmptyUserChannel = (TextView) findViewById(R.id.textViewEmptyUserChannel);
         profileChannelListView = (ListView) findViewById(R.id.profileChannelListView);
+        profileChannelListView.setEmptyView(textViewEmptyUserChannel);
         textViewProfileUserEmailNew = (TextView) findViewById(R.id.textViewProfileUserEmailNew);
         textViewProfileUserNameNew = (TextView) findViewById(R.id.textViewProfileUserNameNew);
         linearLayoutUserProfile = (LinearLayout) findViewById(R.id.linearLayoutUserProfile);
         imageViewProfilePic = (ImageView) findViewById(R.id.imageViewProfilePic);
+        progressBarUserChannelLoad= (ProgressBar)findViewById(R.id.progressBarUserChannelLoad);
+
         profileAdapter = new ProfileAdapter(AccountProfileActivity.this,
                 R.layout.profile_listview, rowItems);
         profileChannelListView.setAdapter(profileAdapter);
@@ -135,6 +142,8 @@ public class AccountProfileActivity extends ActionBarActivity {
 
     private void updateAdapter() {
         profileAdapter.notifyDataSetChanged();
+        textViewEmptyUserChannel.setVisibility(View.GONE);
+        progressBarUserChannelLoad.setVisibility(View.GONE);
     }
 
 

@@ -84,7 +84,7 @@ public class MemberDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (!result.isJsonNull()) {
+                        if (result != null) {
                             memberEmail = result.get("email").getAsString();
                             memberCommunity = result.get("community").getAsString();
                             memberFirstNameNew = result.get("first_name").getAsString();

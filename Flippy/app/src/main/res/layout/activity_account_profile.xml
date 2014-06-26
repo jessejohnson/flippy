@@ -55,9 +55,29 @@
     <ListView
         android:id="@+id/profileChannelListView"
         android:layout_width="match_parent"
-        android:divider="@null"
+        android:divider="@color/flippy_orange"
+        android:dividerHeight="@dimen/margin_one"
         android:layout_height="match_parent"
         android:layout_below="@+id/linearLayoutUserProfile"
         android:layout_margin="@dimen/margin_five" />
+
+    <TextView
+        android:id="@+id/textViewEmptyUserChannel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_twenty"
+        android:layout_below="@+id/linearLayoutUserProfile"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/margin_five"
+        android:text="@string/community_no_data"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/flippy_orange" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBarUserChannelLoad"
+        android:layout_below="@+id/textViewEmptyUserChannel"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

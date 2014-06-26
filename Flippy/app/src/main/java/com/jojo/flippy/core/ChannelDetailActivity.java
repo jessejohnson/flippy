@@ -87,7 +87,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (!result.isJsonNull()) {
+                        if (result != null) {
                             name = result.get("name").getAsString();
                             id = result.get("id").getAsString();
                             JsonObject creator = result.getAsJsonObject("creator");
@@ -119,7 +119,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (!result.isJsonNull()) {
+                        if (result != null) {
                             communityName = result.get("name").getAsString();
                             showViews();
 
