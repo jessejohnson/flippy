@@ -10,9 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jojo.flippy.app.R;
@@ -61,15 +59,14 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        holder.textViewNumberOfMembers.setText(rowItem.getMembers());
+        holder.textViewNumberOfMembers.setText(rowItem.getCreatorFullName());
         holder.textViewChannelName.setText(rowItem.getChannelName());
         Ion.with(holder.imageView)
                 .placeholder(R.color.flippy_light_header)
                 .error(R.color.flippy_orange)
                 .load(String.valueOf(rowItem.getImageUrl()));
-        holder.textViewStatus.setText(rowItem.getStatus());
+        holder.textViewStatus.setText(rowItem.getCreatorEmail());
         holder.textViewChannelId.setText(rowItem.getId());
-
         //check to see if the adapter displays only user channel, then set the subscription button to invisible state
          if(isUserChannel){
              holder.imageViewSubscribe.setVisibility(convertView.GONE);

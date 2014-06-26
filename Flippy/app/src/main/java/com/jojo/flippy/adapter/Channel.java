@@ -8,15 +8,15 @@ import java.net.URI;
 public class Channel {
     private URI imageUrl;
     private String channelName;
-    private String status;
-    private String members;
+    private String creatorEmail;
+    private String creatorFullName;
     private String id;
 
-    public Channel(URI imageUrl,String id, String channelName, String status, String members) {
+    public Channel(URI imageUrl,String id, String channelName, String creatorEmail, String creatorFullName) {
         this.imageUrl = imageUrl;
         this.channelName = channelName;
-        this.status = status;
-        this.members = members;
+        this.creatorEmail = creatorEmail;
+        this.creatorFullName = creatorFullName;
         this.id=id;
     }
     public URI getImageUrl() {
@@ -25,11 +25,11 @@ public class Channel {
     public void setImageUrl(URI imageUrl) {
         this.imageUrl = imageUrl;
     }
-    public String getStatus() {
-        return status;
+    public String getCreatorEmail() {
+        return creatorEmail;
     }
-    public void setStatus(String status) {
-        this.status = status;
+    public void setCreatorEmail(String creatorEmail) {
+        this.creatorEmail = creatorEmail;
     }
     public String getChannelName() {
         return channelName;
@@ -37,11 +37,11 @@ public class Channel {
     public void setChannelName(String channelName) {
         this.channelName = channelName;
     }
-    public String getMembers() {
-        return members;
+    public String getCreatorFullName() {
+        return creatorFullName;
     }
-    public void setMembers(String channelName) {
-        this.members = members;
+    public void setCreatorFullName(String channelName) {
+        this.creatorFullName = creatorFullName;
     }
 
     public void setId(String id) {
@@ -54,6 +54,6 @@ public class Channel {
 
     @Override
     public String toString() {
-        return channelName + "\n" + imageUrl + "\n" + " " + members;
+        return channelName + "\n" + imageUrl + "\n" + " " + creatorFullName;
     }
 }

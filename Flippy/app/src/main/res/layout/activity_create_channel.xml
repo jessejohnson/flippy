@@ -117,7 +117,6 @@
                         android:layout_height="@dimen/margin_hundred"
                         android:layout_alignParentTop="true"
                         android:background="@color/flippy_orange"
-                        android:padding="10dip"
                         android:scaleType="center"
                         app:border_color="@color/border_white"
                         app:border_width="3dip"

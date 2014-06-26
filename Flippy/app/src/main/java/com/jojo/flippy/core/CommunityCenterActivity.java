@@ -11,7 +11,6 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,8 +26,8 @@ import com.jojo.flippy.adapter.DrawerItem;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.profile.AccountProfileActivity;
-import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.ToastMessages;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +74,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 regUserEmail = currentUser.user_email;
                 userFirstName = currentUser.first_name;
                 userLastName = currentUser.last_name;
-
                 userAvatarThumbURL = currentUser.avatar_thumb;
                 userAvatarURL = currentUser.avatar;
                 userCommunityId = currentUser.community_id;
@@ -85,6 +83,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
 
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
+            ToastMessages.showToastLong(CommunityCenterActivity.this,"Unfortunately a system error occurred");
         }
 
         // Initializing
@@ -118,14 +117,11 @@ public class CommunityCenterActivity extends ActionBarActivity {
             public void onDrawerClosed(View view) {
                 getActionBar().setTitle(mTitle);
                 invalidateOptionsMenu();
-                // creates call to
-                // onPrepareOptionsMenu()
             }
 
             public void onDrawerOpened(View drawerView) {
                 getActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu();
-                //onPrepareOptionsMenu();
             }
         };
 

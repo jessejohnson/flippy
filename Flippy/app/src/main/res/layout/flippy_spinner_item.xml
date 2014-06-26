@@ -2,8 +2,8 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:textSize="20dip"
+    android:textAppearance="?android:attr/textAppearanceMedium"
     android:gravity="left"
     android:textColor="@color/flippy_white"
-    android:padding="5dip">
+    android:padding="@dimen/margin_two">
 </TextView>

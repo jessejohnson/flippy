@@ -64,7 +64,7 @@
     <!-- Channel list view strings -->
     <string name="default_channel_name">Channel name</string>
     <string name="default_channel_status">Default</string>
-    <string name="default_channel_number">10 members</string>
+    <string name="default_channel_number">10 creatorFullName</string>
     <string name="manage_channel">Manage Channel</string>
     <string name="add_channel">Add A Channel</string>
     <string name="subscription_state_true">Subscribe</string>
@@ -124,7 +124,7 @@
 
     <!-- community context menu -->
     <string name="community_context_view_detail">Channel details</string>
-    <string name="community_context_view_members">Channel members</string>
+    <string name="community_context_view_members">Channel creatorFullName</string>
     <string name="community_context_subscribe">Subscribe</string>
     <string name="community_context_un_subscribe">Unsubscribe</string>
 
@@ -142,8 +142,8 @@
     <string name="settings_about">About Flippy</string>
     <string name="settings_about_subtitle">more about flippy</string>
 
-    <!-- the channel members string -->
-    <string name="channel_members_activity_title">Channel members</string>
+    <!-- the channel creatorFullName string -->
+    <string name="channel_members_activity_title">Channel creatorFullName</string>
 
 
     <!-- the notice detail string section -->
@@ -178,7 +178,7 @@
     <!-- creating notice activity strings -->
     <string name="title_activity_create_notice">Create Notice</string>
     <string name="notice_new_title">Create a new Notice</string>
-    <string name="notice_new_warning">Notice are meant to be relevant to members of the channel you manage. It is your 
+    <string name="notice_new_warning">Notice are meant to be relevant to creatorFullName of the channel you manage. It is your
     responsibility to keep them so.</string>
     <string name="notice_new_learn">To learn more about creating successful Notice, read our Notice\'s Guide</string>
     <string name="notice_new_title_field">notice title</string>
@@ -188,7 +188,7 @@
     <!-- optional notice information strings -->
     <string name="title_activity_notice_extras">Notice Optionals</string>
     <string name="optional_notice_title">Optional Information</string>
-    <string name="optional_notice_help">Images, Maps and Reminders are great ways to give the members of your channel more
+    <string name="optional_notice_help">Images, Maps and Reminders are great ways to give the creatorFullName of your channel more
     value from a notice</string>
     <string name="final_step_create_notice">send to channel</string>
     <string name="optional_notice_add_image">add Image</string>
@@ -214,7 +214,9 @@
     <string name="dummy_user_number_of_channels_own">admin (3)</string>
     <string name="dummy_user_number_channels_in">5 channels</string>
     <string name="channel_detail_bio">A brief of the channel information</string>
-    <string name="channel_detail_members">122 members</string>
+    <string name="channel_detail_members">122 creatorFullName</string>
+    <string name="custom_flippy_alert">Flippy notification</string>
+    <string name="custom_flippy_ok">Ok</string>
 
     <!-- the member detail strings -->
     <string name="another_member_detail_add_as_admin">add as admin</string>

@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/margin_five"
-                android:text="@string/dummy_user_number"
+                android:text="@string/dummy_user_email"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/flippy_white" />
         </LinearLayout>

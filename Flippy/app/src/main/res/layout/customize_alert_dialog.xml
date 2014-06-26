@@ -18,7 +18,7 @@
             android:layout_gravity="center_horizontal"
             android:background="@color/flippy_orange"
             android:gravity="center_horizontal"
-            android:text="Medium Text"
+            android:text="@string/custom_flippy_alert"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/flippy_white" />
     </LinearLayout>
@@ -39,5 +39,13 @@
         android:text="Small Text"
         android:id="@+id/textViewDialogContent" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/flippy_white"
+        android:background="@drawable/flippy_button_default"
+        android:text="@string/custom_flippy_ok"
+        android:id="@+id/button" />
 
 </LinearLayout>

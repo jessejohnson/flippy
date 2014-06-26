@@ -24,6 +24,7 @@
                 android:id="@+id/imageViewCommunityChannel"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:background="@color/flippy_light_header"
                 android:contentDescription="@string/app_name"
                 android:scaleType="centerCrop" />
 
