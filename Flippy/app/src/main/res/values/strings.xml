@@ -145,6 +145,7 @@
     <!-- the channel members string -->
     <string name="channel_members_activity_title">Channel members</string>
 
+
     <!-- the notice detail string section -->
     <string name="title_activity_notice_detail">Notice Detail</string>
     <string name="notice_menu_share">Share</string>
@@ -166,6 +167,7 @@
     <!-- the create channel activity strings -->
     <string name="title_activity_create_channel">Create Channel</string>
     <string name="channel_create_done">create channel</string>
+    <string name="channel_one_liner">Channel description</string>
     <string name="channel_channel_name">channel name</string>
     <string name="channel_warning">Channels are the heart of your community, be responsible if you create one</string>
     <string name="channel_create">Create a new Channel</string>

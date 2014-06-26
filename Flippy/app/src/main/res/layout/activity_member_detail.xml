@@ -28,17 +28,14 @@
                 android:orientation="vertical"
                 android:padding="@dimen/margin_ten">
 
-                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.makeramen.RoundedImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/imageViewMemberAnotherUserProfilePic"
                     android:layout_width="@dimen/margin_one_fifty"
                     android:layout_height="@dimen/margin_one_fifty"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:padding="1dp"
                     android:scaleType="center"
-                    android:src="@drawable/user_profile"
                     app:border_color="@color/border_white"
                     app:border_width="3dp"
                     app:corner_radius="150dp"

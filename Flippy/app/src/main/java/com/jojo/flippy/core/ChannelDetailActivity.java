@@ -2,14 +2,11 @@ package com.jojo.flippy.core;
 
 import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,8 +19,6 @@ import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.makeramen.RoundedImageView;
-import com.makeramen.RoundedTransformationBuilder;
 
 
 public class ChannelDetailActivity extends ActionBarActivity {

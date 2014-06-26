@@ -8,7 +8,7 @@
         android:useLevel="true" >
         <stroke
             android:color="@color/flippy_orange"
-            android:width="@dimen/margin_one"
+            android:width="0.1dp"
             />
         <size
             android:height="48dip"

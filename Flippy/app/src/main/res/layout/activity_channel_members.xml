@@ -21,4 +21,14 @@
         android:layout_centerInParent="true"
         android:indeterminateDrawable="@drawable/progress_bar_bg"
         android:minHeight="48dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/community_no_data"
+        android:textColor="@color/flippy_orange"
+        android:id="@+id/textViewNoMember"
+        android:layout_above="@+id/progressBarMemberChannelLoader"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

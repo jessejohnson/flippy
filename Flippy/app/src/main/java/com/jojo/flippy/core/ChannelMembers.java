@@ -40,18 +40,22 @@ import java.util.List;
  * Created by bright on 6/12/14.
  */
 public class ChannelMembers extends Activity {
-    private Intent intent;
+
     private String channelName;
     private String channelId;
     private String memberId;
     private String memberFirstName;
     private String totalMembers = "";
-    private ListView membershipList;
+
     private ChannelMemberAdapter channelMemberAdapter;
-    List<ProfileItem> ChannelMemberItem;
+
+    private Intent intent;
+    private ListView membershipList;
+    private List<ProfileItem> ChannelMemberItem;
     private String membersURL = "/members/";
     private ActionBar actionBar;
     private ProgressBar progressBarMemberChannelLoader;
+    private TextView textViewNoMember;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +75,12 @@ public class ChannelMembers extends Activity {
         }
 
 
-        //Loading the list with a dummy data
+        //finding all the views with their appropriate ids
         ChannelMemberItem = new ArrayList<ProfileItem>();
         membershipList = (ListView) findViewById(R.id.listViewChannelMembers);
-        progressBarMemberChannelLoader = (ProgressBar)findViewById(R.id.progressBarMemberChannelLoader);
+        textViewNoMember = (TextView) findViewById(R.id.textViewNoMember);
+        membershipList.setEmptyView(textViewNoMember);
+        progressBarMemberChannelLoader = (ProgressBar) findViewById(R.id.progressBarMemberChannelLoader);
         channelMemberAdapter = new ChannelMemberAdapter(ChannelMembers.this,
                 R.layout.channel_members_listview, ChannelMemberItem);
         membershipList.setAdapter(channelMemberAdapter);
@@ -108,6 +114,7 @@ public class ChannelMembers extends Activity {
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(ChannelMembers.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            return;
                         }
 
                     }
@@ -119,8 +126,8 @@ public class ChannelMembers extends Activity {
                                     long id) {
                 //setting the click action for each of the items
                 intent.setClass(ChannelMembers.this, MemberDetailActivity.class);
-                intent.putExtra("memberId",memberId);
-                intent.putExtra("memberFirstName",memberFirstName);
+                intent.putExtra("memberId", memberId);
+                intent.putExtra("memberFirstName", memberFirstName);
                 startActivity(intent);
 
             }
@@ -133,16 +140,18 @@ public class ChannelMembers extends Activity {
         channelMemberAdapter.notifyDataSetChanged();
         actionBar.setSubtitle(totalMembers + " " + "member(s)");
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
 
     }
+
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
