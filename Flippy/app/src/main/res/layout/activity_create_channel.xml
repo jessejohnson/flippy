@@ -10,7 +10,6 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:paddingBottom="@dimen/margin_ten"
         android:layout_marginBottom="@dimen/margin_fifty"
         android:layout_height="match_parent">
 
@@ -117,10 +116,10 @@
                         android:layout_height="@dimen/margin_hundred"
                         android:layout_alignParentTop="true"
                         android:background="@color/flippy_orange"
-                        android:scaleType="center"
+                        android:scaleType="centerCrop"
                         app:border_color="@color/border_white"
-                        app:border_width="3dip"
-                        app:corner_radius="2dip"
+                        app:border_width="1dp"
+                        app:corner_radius="1dp"
                         app:oval="false" />
 
                     <LinearLayout

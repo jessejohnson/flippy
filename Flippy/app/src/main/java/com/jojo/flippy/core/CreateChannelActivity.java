@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.util.ToastMessages;
 
 public class CreateChannelActivity extends ActionBarActivity {
     private ImageView imageViewCreateChannel;
@@ -40,6 +41,8 @@ public class CreateChannelActivity extends ActionBarActivity {
 
 
         imageViewCreateChannel = (ImageView) findViewById(R.id.imageViewCreateChannel);
+        checkBoxChannelIsPublic = (CheckBox)findViewById(R.id.checkBoxChannelIsPublic);
+        checkBoxChannelIsPublic.setChecked(true);
 
 
         imageViewCreateChannel.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +70,8 @@ public class CreateChannelActivity extends ActionBarActivity {
                 Bitmap bm = BitmapFactory.decodeFile(imagePath);
                 imageViewCreateChannel.setImageBitmap(bm);
 
+            }else{
+                ToastMessages.showToastLong(CreateChannelActivity.this,"Image not uploaded");
             }
 
         }

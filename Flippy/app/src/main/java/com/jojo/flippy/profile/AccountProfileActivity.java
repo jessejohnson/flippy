@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -46,6 +47,9 @@ public class AccountProfileActivity extends ActionBarActivity {
     private TextView textViewProfileUserEmailNew;
 
 
+    private LinearLayout linearLayoutUserProfile;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +73,21 @@ public class AccountProfileActivity extends ActionBarActivity {
         intent = getIntent();
         rowItems = new ArrayList<ProfileItem>();
         profileChannelListView = (ListView) findViewById(R.id.profileChannelListView);
-        textViewProfileUserEmailNew = (TextView)findViewById(R.id.textViewProfileUserEmailNew);
-        textViewProfileUserNameNew = (TextView)findViewById(R.id.textViewProfileUserNameNew);
+        textViewProfileUserEmailNew = (TextView) findViewById(R.id.textViewProfileUserEmailNew);
+        textViewProfileUserNameNew = (TextView) findViewById(R.id.textViewProfileUserNameNew);
+        linearLayoutUserProfile = (LinearLayout) findViewById(R.id.linearLayoutUserProfile);
         imageViewProfilePic = (ImageView) findViewById(R.id.imageViewProfilePic);
         profileAdapter = new ProfileAdapter(AccountProfileActivity.this,
                 R.layout.profile_listview, rowItems);
         profileChannelListView.setAdapter(profileAdapter);
+
+        linearLayoutUserProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(AccountProfileActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //set the user profile
         Ion.with(imageViewProfilePic)
@@ -96,7 +109,7 @@ public class AccountProfileActivity extends ActionBarActivity {
                             for (int i = 0; i < profileArray.size(); i++) {
                                 JsonObject item = profileArray.get(i).getAsJsonObject();
                                 JsonObject creator = item.getAsJsonObject("creator");
-                                ProfileItem profileItem = new ProfileItem( URI.create(item.get("image_url").getAsString()),item.get("name").getAsString(), creator.get("email").getAsString());
+                                ProfileItem profileItem = new ProfileItem(URI.create(item.get("image_url").getAsString()), item.get("name").getAsString(), creator.get("email").getAsString());
                                 rowItems.add(profileItem);
                             }
                             updateAdapter();

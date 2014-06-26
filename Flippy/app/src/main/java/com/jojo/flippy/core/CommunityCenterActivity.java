@@ -48,6 +48,8 @@ public class CommunityCenterActivity extends ActionBarActivity {
     public static String userCommunityId = "";
     public static String userCommunityName = "";
     public static String regUserID;
+    public static String userDateOfBirth="";
+    public static String userGender="";
     private User currentUser;
 
 
@@ -79,6 +81,8 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 userCommunityId = currentUser.community_id;
                 userCommunityName = currentUser.community_name;
                 regUserID = currentUser.id;
+                userDateOfBirth = currentUser.date_of_birth;
+                userGender = currentUser.gender;
             }
 
         } catch (java.sql.SQLException sqlE) {

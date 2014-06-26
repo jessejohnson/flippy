@@ -95,7 +95,7 @@
     <string name="user_tap_to_edit">tap to edit</string>
     <string name="dummy_user_name">Flippy User Name</string>
     <string name="dummy_user_email">info@flippy.co</string>
-    <string name="dummy_user_number">(+233) 543400278</string>
+    <string name="dummy_user_number">(+233) 0000000</string>
     <string name="profile_list_channels">My Channels</string>
     <string name="profile_edit">Edit profile</string>
 
@@ -224,6 +224,7 @@
 
     <!-- the spinner for the edit profile gender -->
     <string-array name="gender_array">
+        <item>Choose gender</item>
         <item>Male</item>
         <item>Female</item>
     </string-array>
