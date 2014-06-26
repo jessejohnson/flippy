@@ -22,8 +22,7 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 public class MemberDetailActivity extends ActionBarActivity {
-    private Intent intent;
-    private Button buttonAddAsAdmin;
+
     private String memberId;
     private String memberFirstName;
     private String memberFirstNameNew;
@@ -34,7 +33,8 @@ public class MemberDetailActivity extends ActionBarActivity {
     private String memberCommunityName;
     private String avatar = "";
 
-
+    private Intent intent;
+    private Button buttonAddAsAdmin;
     private ScrollView scrollViewUserDetail;
     private ImageView imageViewMemberAnotherUserProfilePic;
     private TextView textViewAnotherUserEmail;
@@ -88,7 +88,7 @@ public class MemberDetailActivity extends ActionBarActivity {
                             memberEmail = result.get("email").getAsString();
                             memberCommunity = result.get("community").getAsString();
                             memberFirstNameNew = result.get("first_name").getAsString();
-                            memberLastNameNew = result.get("first_name").getAsString();
+                            memberLastNameNew = result.get("last_name").getAsString();
                             if (!result.get("avatar").isJsonNull()) {
                                 avatar = result.get("avatar").getAsString();
                             }
@@ -111,6 +111,8 @@ public class MemberDetailActivity extends ActionBarActivity {
         imageViewMemberAnotherUserProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                intent.setClass(MemberDetailActivity.this,ImagePreviewActivity.class);
+                intent.putExtra("avatar",avatar);
                 startActivity(intent);
             }
         });
@@ -119,7 +121,6 @@ public class MemberDetailActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.member_detail, menu);
         return true;
     }
@@ -128,6 +129,8 @@ public class MemberDetailActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_full_screen) {
+            intent.setClass(MemberDetailActivity.this,ImagePreviewActivity.class);
+            intent.putExtra("avatar",avatar);
             startActivity(intent);
             return true;
         }

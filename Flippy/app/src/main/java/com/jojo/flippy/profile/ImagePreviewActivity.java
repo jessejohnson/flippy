@@ -9,17 +9,24 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.jojo.flippy.app.R;
+import com.koushikdutta.ion.Ion;
 
 public class ImagePreviewActivity extends ActionBarActivity {
     private ImageView imageViewPreviewShare;
     private Uri imageToShare =null;
+    private Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_preview);
 
+        intent = getIntent();
+        String avatar = intent.getStringExtra("avatar");
         imageViewPreviewShare = (ImageView)findViewById(R.id.imageViewPreviewShare);
-        imageToShare = Uri.parse("android.resource://com.jojo.flippy/drawable/sample_user");
+        Ion.with(imageViewPreviewShare)
+                .placeholder(R.color.flippy_light_header)
+                .load(avatar);
+        imageToShare = Uri.parse(avatar);
 
     }
 
