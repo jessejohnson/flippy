@@ -28,16 +28,16 @@
 
                 <com.makeramen.RoundedImageView
                     xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/imageViewMemberEdit"
+                    android:id="@+id/imageViewChannelManageEdit"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_two_hundred"
                     android:layout_alignParentTop="true"
                     android:padding="@dimen/margin_two"
-                    android:scaleType="center"
+                    android:scaleType="centerCrop"
                     android:background="@color/flippy_dark_header"
                     app:border_color="@color/border"
-                    app:border_width="3dip"
-                    app:corner_radius="10dip"
+                    app:border_width="3dp"
+                    app:corner_radius="0dp"
                     app:oval="false" />
             </LinearLayout>
 

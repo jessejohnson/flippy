@@ -68,6 +68,6 @@ public class User {
 
     @Override
     public String toString() {
-        return this.user_email;
+        return this.user_email + " "+ this.user_auth;
     }
 }

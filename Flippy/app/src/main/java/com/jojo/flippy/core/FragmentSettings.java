@@ -75,8 +75,20 @@ public class FragmentSettings extends Fragment {
                         break;
                     case 1:
                         intent.setClass(getActivity(), EditProfileActivity.class);
-                        //send all the appropriate data along
                         startActivity(intent);
+                        break;
+                    case 2:
+                        intent.setClass(getActivity(), NotificationSettingsActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 3:
+                        intent.setClass(getActivity(), ChannelSettingsActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 4:
+                        intent.setClass(getActivity(), AboutActivity.class);
+                        startActivity(intent);
+                        break;
 
                     default:
                         break;

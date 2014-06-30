@@ -44,6 +44,10 @@ public class MemberDetailActivity extends ActionBarActivity {
     private TextView textViewUserCommunityName;
 
 
+    private boolean isManageActivity =false;
+    private int requestCode =0;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +58,8 @@ public class MemberDetailActivity extends ActionBarActivity {
 
         intent = getIntent();
         memberId = intent.getStringExtra("memberId");
+        isManageActivity = intent.getBooleanExtra("isManageActivity",false);
+        requestCode = intent.getIntExtra("requestCode",0);
         memberFirstName = intent.getStringExtra("memberFirstName");
         actionBar.setTitle(memberFirstName + "'s profile");
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -103,6 +109,13 @@ public class MemberDetailActivity extends ActionBarActivity {
         buttonAddAsAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(isManageActivity){
+                    intent.putExtra("memberEmail",memberEmail);
+                    intent.setClass(MemberDetailActivity.this,ManageChannelActivity.class);
+                    setResult(requestCode,intent);
+                    return;
+
+                }
                 final CharSequence[] channelList = {"GESA KNUST", "SRC Legon", "Flippy Group", "Another Group"};
                 channelListDialog(channelList);
             }

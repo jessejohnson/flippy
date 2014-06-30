@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
@@ -37,13 +38,13 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private String channelName;
     String channelCommunityDetail = Flippy.channelsInCommunityURL;
 
-    private ImageView imageViewChannelLarge,imageViewCreator;
+    private ImageView imageViewChannelLarge, imageViewCreator;
     private TextView textViewChannelNameDetail;
     private TextView textViewChannelBio;
-    private TextView  textViewNameChannelDetailFullName, textViewChannelCreatorEmail;
+    private TextView textViewNameChannelDetailFullName, textViewChannelCreatorEmail;
     private LinearLayout linearLayoutChannelDetailContent;
     private ProgressBar progressBarLoadChannelDetail;
-    private Button buttonSubscribeToChannel,buttonManageToChannel;
+    private Button buttonSubscribeToChannel, buttonManageToChannel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +109,14 @@ public class ChannelDetailActivity extends ActionBarActivity {
 
                     }
                 });
+        buttonManageToChannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent.putExtra("image_url",image_url);
+                intent.setClass(ChannelDetailActivity.this, ManageChannelActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -152,10 +161,10 @@ public class ChannelDetailActivity extends ActionBarActivity {
         textViewChannelBio.setVisibility(View.VISIBLE);
         imageViewCreator.setVisibility(View.VISIBLE);
 
-        if(CommunityCenterActivity.regUserEmail.equals(creatorEmail)){
+        if (CommunityCenterActivity.regUserEmail.equals(creatorEmail)) {
             buttonManageToChannel.setVisibility(View.VISIBLE);
             buttonSubscribeToChannel.setVisibility(View.GONE);
-        }else {
+        } else {
             buttonSubscribeToChannel.setVisibility(View.VISIBLE);
         }
 
@@ -173,7 +182,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_channel_members) {
-            intent.setClass(ChannelDetailActivity.this,ChannelMembers.class);
+            intent.setClass(ChannelDetailActivity.this, ChannelMembers.class);
             startActivity(intent);
             return true;
         }

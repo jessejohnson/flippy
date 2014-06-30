@@ -137,14 +137,13 @@
     <string name="settings_profile_subtitle">edit your account details</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_notifications_subtitle">configure your notifications</string>
-    <string name="settings_accessibility">Flippy community</string>
-    <string name="settings_accessibility_subtitle">manage flippy community accessibility</string>
+    <string name="settings_accessibility">Flippy channels</string>
+    <string name="settings_accessibility_subtitle">manage flippy channel accessibility</string>
     <string name="settings_about">About Flippy</string>
     <string name="settings_about_subtitle">more about flippy</string>
 
     <!-- the channel creatorFullName string -->
     <string name="channel_members_activity_title">Channel creatorFullName</string>
-
 
     <!-- the notice detail string section -->
     <string name="title_activity_notice_detail">Notice Detail</string>
@@ -232,5 +231,24 @@
     <string name="title_activity_pick_map_location">Notice Location</string>
     <string name="pick_location_add_location">Add location</string>
     <string name="title_activity_channel_detail">Channel Detail</string>
+
+    <!-- about flippy section and strings -->
+    <string name="title_activity_about">About Flippy</string>
+    <string name="about_message_one">            Flippy is an app that allows you to share information among people in a community.
+            At Flippy, a community is simply an established entity like a university or workplace.</string>
+    <string name="about_message_two">Within a community, there are channels that you can subscribe to in order to get information from. These channels can simply be a class or a department.
+            You can subscribe to channels that are outside of your community and you can also create a channel yourself.
+            When you create a channel, you become the editor of the channel and you can assign four other people the role of an editor so that they help in posting information in the channel.</string>
+    <string name="about_message_three">            Flippy is not a chat application but rather a notice board that information, gossip and announcement are posted on.
+            Now, create channels and start posting.</string>
+    <string name="about_more_info_email">email</string>
+    <string name="about_more_info_web">email</string>
+    <string name="title_activity_channel_settings">Channel Settings</string>
+
+    
+   <!-- the channel settings strings-->
+    <string name="channel_settings_configuration">Channel configuration</string>
+    <string name="channel_settings_channel_is_public">Is Public</string>
+    <string name="channel_settings_channel_is_public_summary">declare all channels to to be created as public</string>
 
 </resources>
