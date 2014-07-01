@@ -71,7 +71,8 @@ public class FragmentSettings extends Fragment {
                 //setting the click action for each of the items
                 switch(position){
                     case 0:
-                        Toast.makeText(getActivity(), position + "", Toast.LENGTH_LONG).show();
+                        intent.setClass(getActivity(), HelpActivity.class);
+                        startActivity(intent);
                         break;
                     case 1:
                         intent.setClass(getActivity(), EditProfileActivity.class);
