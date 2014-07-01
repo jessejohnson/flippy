@@ -213,9 +213,10 @@
     <string name="dummy_user_number_of_channels_own">admin (3)</string>
     <string name="dummy_user_number_channels_in">5 channels</string>
     <string name="channel_detail_bio">A brief of the channel information</string>
-    <string name="channel_detail_members">122 creatorFullName</string>
+    <string name="channel_detail_members">122 creator FullName</string>
     <string name="custom_flippy_alert">Flippy notification</string>
     <string name="custom_flippy_ok">Ok</string>
+    <string name="dummy_flippy_likes">12 likes</string>
 
     <!-- the member detail strings -->
     <string name="another_member_detail_add_as_admin">add as admin</string>
@@ -249,6 +250,6 @@
    <!-- the channel settings strings-->
     <string name="channel_settings_configuration">Channel configuration</string>
     <string name="channel_settings_channel_is_public">Is Public</string>
-    <string name="channel_settings_channel_is_public_summary">Decalre all channels to to be created as public</string>
+    <string name="channel_settings_channel_is_public_summary">Declare all channels to to be created as public</string>
 
 </resources>

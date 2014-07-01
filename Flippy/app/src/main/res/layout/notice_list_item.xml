@@ -38,6 +38,9 @@
                 android:textAppearance="?android:attr/textAppearanceSmallInverse"
                 android:text="@string/notice_title"
                 android:textStyle="bold"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:id="@+id/textViewNoticeTitle"
                 android:textColor="@color/flippy_white" />
 
@@ -46,6 +49,9 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/notice_subtitle"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:id="@+id/textViewNoticeSubtitle"
                 android:textColor="@color/flippy_white"
                 android:textStyle="italic" />
@@ -55,6 +61,9 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/notice_subtitle"
                 android:id="@+id/textViewNoticeDateInfo"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:textColor="@color/flippy_orange"
                 android:textStyle="italic" />
         </LinearLayout>
@@ -72,7 +81,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_one_fifty"
         android:id="@+id/imageViewNoticeImage"
-        android:src="@drawable/splash_bg"
         android:scaleType="centerCrop"
         android:layout_below="@+id/linearLayout"
         android:layout_alignParentLeft="true"
@@ -89,6 +97,8 @@
         android:shadowColor="@color/flippy_dark_header"
         android:shadowDx="1"
         android:shadowDy="1"
+        android:ellipsize="end"
+        android:maxLines="5"
         android:shadowRadius="2"
         android:layout_alignRight="@+id/imageViewNoticeImage"
         android:layout_alignEnd="@+id/imageViewNoticeImage"

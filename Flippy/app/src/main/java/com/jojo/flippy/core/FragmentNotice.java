@@ -40,10 +40,9 @@ public class FragmentNotice extends Fragment {
     private Intent intent;
     private String noticeTitle;
     private String noticeSubtitle;
-    private String noticeID;
+    private String noticeId;
     private String noticeBody;
     private String noticeAvatar;
-    private boolean isAttachedWithImage = true;
     private ProgressBar progressBarCommunityCenterLoader;
     private String channelName;
 
@@ -114,15 +113,12 @@ public class FragmentNotice extends Fragment {
                 noticeTitle = noticeTitleTextView.getText().toString().trim();
                 noticeSubtitle = textViewNoticeSubtitle.getText().toString().trim();
                 noticeBody = textViewNoticeText.getText().toString().trim();
-                noticeID = textViewNoticeId.getText().toString().trim();
+                noticeId = textViewNoticeId.getText().toString().trim();
                 intent = new Intent(getActivity(), NoticeDetailActivity.class);
                 intent.putExtra("noticeTitle", noticeTitle);
                 intent.putExtra("noticeSubtitle", noticeSubtitle);
                 intent.putExtra("noticeBody", noticeBody);
-                if (imageViewNoticeImage.getVisibility() == view.GONE) {
-                    isAttachedWithImage = false;
-                }
-                intent.putExtra("isAttachedWithImage", isAttachedWithImage);
+                intent.putExtra("noticeId",noticeId);
                 startActivity(intent);
 
             }
@@ -130,11 +126,8 @@ public class FragmentNotice extends Fragment {
 
         //registering the list view for context menu actions
         registerForContextMenu(noticeList);
-
-
         return view;
     }
-
 
     private void updateListAdapter() {
         listAdapter.notifyDataSetChanged();
