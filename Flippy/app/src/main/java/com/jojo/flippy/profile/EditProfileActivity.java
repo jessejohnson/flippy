@@ -77,14 +77,18 @@ public class EditProfileActivity extends ActionBarActivity {
         editTextEditProfileEmail.setText(CommunityCenterActivity.regUserEmail);
         editTextEditProfileDateOfBirth.setText(CommunityCenterActivity.userDateOfBirth);
 
-        if(CommunityCenterActivity.userGender.isEmpty()){
-            genderSpinner.setSelection(0);
-        }
-        if(CommunityCenterActivity.userGender.equalsIgnoreCase("male")){
-            genderSpinner.setSelection(1);
-        }
-        if(CommunityCenterActivity.userGender.equalsIgnoreCase("female")){
-            genderSpinner.setSelection(2);
+        try {
+            if(CommunityCenterActivity.userGender.isEmpty()){
+                genderSpinner.setSelection(0);
+            }
+            if(CommunityCenterActivity.userGender.equalsIgnoreCase("male")){
+                genderSpinner.setSelection(1);
+            }
+            if(CommunityCenterActivity.userGender.equalsIgnoreCase("female")){
+                genderSpinner.setSelection(2);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
 
