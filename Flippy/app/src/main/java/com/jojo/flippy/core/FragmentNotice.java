@@ -42,7 +42,6 @@ public class FragmentNotice extends Fragment {
     private String noticeSubtitle;
     private String noticeId;
     private String noticeBody;
-    private String noticeAvatar;
     private ProgressBar progressBarCommunityCenterLoader;
     private String channelName;
 
