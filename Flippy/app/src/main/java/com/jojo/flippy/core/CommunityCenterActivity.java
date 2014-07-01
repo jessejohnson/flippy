@@ -210,7 +210,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
         }
         switch (item.getItemId()) {
             case R.id.action_share:
-                // write code to execute when clicked on this option
                 shareFlippy();
                 return true;
             case R.id.action_feedback:
@@ -219,6 +218,9 @@ public class CommunityCenterActivity extends ActionBarActivity {
             case R.id.action_add:
                 channelListDialog();
                 return true;
+            case R.id.action_settings:
+                Intent intent = new Intent(CommunityCenterActivity.this, HelpActivity.class);
+                startActivity(intent);
             default:
                 return super.onOptionsItemSelected(item);
         }
