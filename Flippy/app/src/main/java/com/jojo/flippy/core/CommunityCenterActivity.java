@@ -56,6 +56,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
     public static String regUserID;
     public static String userDateOfBirth = "";
     public static String userGender = "";
+    public  static String userAuthToken;
     private User currentUser;
     private String userChannels = "/subscriptions/";
 
@@ -94,6 +95,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 regUserID = currentUser.id;
                 userDateOfBirth = currentUser.date_of_birth;
                 userGender = currentUser.gender;
+                userAuthToken = currentUser.user_auth;
             }
 
         } catch (java.sql.SQLException sqlE) {

@@ -58,6 +58,7 @@ public class ProfileAdapter extends ArrayAdapter<ProfileItem> {
 
         Ion.with(holder.imageViewChannelImage)
                 .placeholder(R.color.flippy_orange)
+                .animateIn(R.anim.fade_in)
                 .load(String.valueOf(rowItem.getProfileChannelItem()));
 
 

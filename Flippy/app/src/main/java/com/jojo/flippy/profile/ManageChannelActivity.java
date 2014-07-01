@@ -38,6 +38,7 @@ public class ManageChannelActivity extends ActionBarActivity {
 
         //the edit text views
         editTextManageChannelChannelName = (EditText) findViewById(R.id.editTextManageChannelChannelName);
+        editTextManageChannelChannelName.setText(channelName);
         editTextFirstAdmin = (EditText) findViewById(R.id.editTextFirstAdmin);
         editTextSecondAdmin = (EditText) findViewById(R.id.editTextSecondAdmin);
         editTextThirdAdmin = (EditText) findViewById(R.id.editTextThirdAdmin);
@@ -54,6 +55,7 @@ public class ManageChannelActivity extends ActionBarActivity {
 
         Ion.with(imageViewChannelManageEdit)
                 .placeholder(R.color.flippy_light_header)
+                .animateIn(R.anim.fade_in)
                 .load(image_url);
 
         imageViewChannelManageEdit.setOnClickListener(new View.OnClickListener() {

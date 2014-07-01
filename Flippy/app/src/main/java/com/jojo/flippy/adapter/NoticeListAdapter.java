@@ -52,6 +52,8 @@ public class NoticeListAdapter extends BaseAdapter {
         TextView subtitle = (TextView) v.findViewById(R.id.textViewNoticeSubtitle);
         ImageView image = (ImageView) v.findViewById(R.id.imageViewNoticeImage);
         TextView content = (TextView) v.findViewById(R.id.textViewNoticeText);
+        TextView id = (TextView) v.findViewById(R.id.textViewNoticeId);
+        TextView textViewNoticeDateInfo = (TextView) v.findViewById(R.id.textViewNoticeDateInfo);
 
         final ImageView star = (ImageView) v.findViewById(R.id.imageViewStar);
         star.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +69,8 @@ public class NoticeListAdapter extends BaseAdapter {
         });
 
         title.setText(noticeArrayList.get(i).getTitle());
+        id.setText(noticeArrayList.get(i).getId());
+        textViewNoticeDateInfo.setText(noticeArrayList.get(i).getDateInfo());
         subtitle.setText("from " + noticeArrayList.get(i).getCreatorId() + " @ " + noticeArrayList.get(i).getChannelId());
 
         content.setText(noticeArrayList.get(i).getContent());
@@ -75,7 +79,9 @@ public class NoticeListAdapter extends BaseAdapter {
         if (String.valueOf(noticeArrayList.get(i).getImageUrl())== ""){
             image.setVisibility(View.GONE);
         }else {
-          Ion.with(image).load(String.valueOf(noticeArrayList.get(i).getImageUrl()));
+          Ion.with(image)
+                  .animateIn(R.anim.fade_in)
+                  .load(String.valueOf(noticeArrayList.get(i).getImageUrl()));
         }
 
         return v;

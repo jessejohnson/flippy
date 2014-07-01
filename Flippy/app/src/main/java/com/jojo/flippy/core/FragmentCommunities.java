@@ -65,8 +65,8 @@ public class FragmentCommunities extends Fragment {
         adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems, false);
         listViewCommunity.setAdapter(adapter);
-        //getting the user community url
         String url = Flippy.channelsInCommunityURL + CommunityCenterActivity.userCommunityId+"/channels/";
+
         //Loading the list with data from Api call
         Ion.with(getActivity())
                 .load(url)

@@ -70,6 +70,7 @@ public class EditProfileActivity extends ActionBarActivity {
 
         Ion.with(imageViewMemberEdit)
                 .placeholder(R.color.flippy_orange)
+                .animateIn(R.anim.fade_in)
                 .load(CommunityCenterActivity.userAvatarURL);
         editTextEditProfileFirstName.setText(CommunityCenterActivity.userFirstName);
         editTextEditProfileLastName.setText(CommunityCenterActivity.userLastName);

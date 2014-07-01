@@ -55,6 +55,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         channelName = intent.getStringExtra("channelName");
         channelId = intent.getStringExtra("channelId");
         String channelDetailsURL = Flippy.channelDetailURL + channelId + "/";
+        final String channelDetailSubscribeURL = Flippy.channelSubscribeURL + channelId + "/subscribe/";
 
 
         ActionBar actionBar = getActionBar();
@@ -88,6 +89,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
+                        progressBarLoadChannelDetail.setVisibility(View.GONE);
                         if (result != null) {
                             name = result.get("name").getAsString();
                             id = result.get("id").getAsString();
@@ -112,12 +114,40 @@ public class ChannelDetailActivity extends ActionBarActivity {
         buttonManageToChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.putExtra("image_url",image_url);
+                intent.putExtra("image_url", image_url);
                 intent.setClass(ChannelDetailActivity.this, ManageChannelActivity.class);
                 startActivity(intent);
             }
         });
 
+        buttonSubscribeToChannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                JsonObject json = new JsonObject();
+                json.addProperty("id", CommunityCenterActivity.regUserID);
+                Ion.with(ChannelDetailActivity.this)
+                        .load(channelDetailSubscribeURL)
+                        .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                        .setJsonObjectBody(json)
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                if (result != null) {
+                                    ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("detail").getAsString());
+                                    if (e != null) {
+                                        ToastMessages.showToastLong(ChannelDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                                    }
+
+                                }
+                            }
+
+                            ;
+                        });
+            }
+
+        });
     }
 
     private void secondAsyncTask(String communityURL) {
@@ -128,6 +158,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
+                        progressBarLoadChannelDetail.setVisibility(View.GONE);
                         if (result != null) {
                             communityName = result.get("name").getAsString();
                             showViews();
@@ -146,9 +177,11 @@ public class ChannelDetailActivity extends ActionBarActivity {
         progressBarLoadChannelDetail.setVisibility(View.GONE);
         Ion.with(imageViewChannelLarge)
                 .placeholder(R.color.flippy_light_header)
+                .animateIn(R.anim.fade_in)
                 .load(image_url);
         Ion.with(imageViewCreator)
                 .placeholder(R.color.flippy_light_header)
+                .animateIn(R.anim.fade_in)
                 .load(creatorAvatarURL);
         textViewChannelNameDetail.setText(channelName + " @ " + communityName);
         textViewNameChannelDetailFullName.setText(creatorName);

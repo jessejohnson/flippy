@@ -249,6 +249,6 @@
    <!-- the channel settings strings-->
     <string name="channel_settings_configuration">Channel configuration</string>
     <string name="channel_settings_channel_is_public">Is Public</string>
-    <string name="channel_settings_channel_is_public_summary">declare all channels to to be created as public</string>
+    <string name="channel_settings_channel_is_public_summary">Decalre all channels to to be created as public</string>
 
 </resources>

@@ -25,6 +25,8 @@ public class Flippy  extends Application{
     public static  String channelDetailURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/channels/";
     public static String communitiesURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/communities/";
     public static String channelMembersURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/channels/";
+    public static String channelSubscribeURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/channels/";
+    public static String allPostURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/posts/";
 
 
 

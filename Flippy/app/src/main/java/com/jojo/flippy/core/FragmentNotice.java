@@ -3,6 +3,7 @@ package com.jojo.flippy.core;
 /**
  * Created by bright on 6/9/14.
  */
+
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,14 +11,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.Notice;
 import com.jojo.flippy.adapter.NoticeListAdapter;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.ToastMessages;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -25,10 +35,17 @@ import java.util.ArrayList;
 public class FragmentNotice extends Fragment {
 
     ListView noticeList;
-    ListAdapter listAdapter;
+    NoticeListAdapter listAdapter;
     ArrayList<Notice> noticeFeed = new ArrayList<Notice>();
-    private  Intent intent;
+    private Intent intent;
     private String noticeTitle;
+    private String noticeSubtitle;
+    private String noticeID;
+    private String noticeBody;
+    private String noticeAvatar;
+    private boolean isAttachedWithImage = true;
+
+    private ProgressBar progressBarCommunityCenterLoader;
 
 
     public FragmentNotice() {
@@ -39,20 +56,44 @@ public class FragmentNotice extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_notice, container,
+        final View view = inflater.inflate(R.layout.fragment_notice, container,
                 false);
 
-        //populate noticeFeed with dummy values to test app
-        noticeFeed.add(new Notice("1", "admin", "SRC2014", "Welcome Back!", "sub",
-                "We the SRC2014 welcome all freshers to school, and all continuing students" +
-                        " back to school", URI.create("http://www.citifmonline.com/wp-content/uploads/2014/05/UG-111.jpg")));
-        noticeFeed.add(new Notice("2", "echo", "Echo Legon", "Fresher's Party!", "sub",
-                "The semester begins with the hottest freshers at Aphro, Friday night!",
-                URI.create("")));
 
         listAdapter = new NoticeListAdapter(this.getActivity(), noticeFeed);
         noticeList = (ListView) view.findViewById(R.id.listViewNoticeList);
+        progressBarCommunityCenterLoader = (ProgressBar)view.findViewById(R.id.progressBarLoadNoticeData);
         noticeList.setAdapter(listAdapter);
+
+
+        String url = Flippy.allPostURL;
+        //Loading the list with data from Api call
+        Ion.with(getActivity())
+                .load(url)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        progressBarCommunityCenterLoader.setVisibility(view.GONE);
+                        if (result != null) {
+                            JsonArray communityArray = result.getAsJsonArray("results");
+                            for (int i = 0; i < communityArray.size(); i++) {
+                                JsonObject item = communityArray.get(i).getAsJsonObject();
+                                JsonObject author = item.getAsJsonObject("author");
+                                String timestampRaw = item.get("timestamp").getAsString().replace("Z","");
+                                String[] timestampArray = timestampRaw.split("T");
+                                String timestamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0,8);
+                                noticeFeed.add(new Notice(item.get("id").getAsString(),author.get("id").getAsString(),item.get("channel").getAsString(),item.get("title").getAsString(),"sub",item.get("content").getAsString(),timestamp,URI.create(item.get("image_url").getAsString())));
+                            }
+                            updateListAdapter();
+
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(getActivity(), getResources().getString(R.string.internet_connection_error_dialog_title));
+                        }
+
+                    }
+                });
 
 
         //Setting the click listener for the notice list
@@ -61,9 +102,23 @@ public class FragmentNotice extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 //setting the click action for each of the items
-                TextView noticeTitleTextView =(TextView) view.findViewById(R.id.textViewNoticeTitle);
+                ImageView imageViewNoticeImage = (ImageView) view.findViewById(R.id.imageViewNoticeImage);
+                TextView noticeTitleTextView = (TextView) view.findViewById(R.id.textViewNoticeTitle);
+                TextView textViewNoticeSubtitle = (TextView) view.findViewById(R.id.textViewNoticeSubtitle);
+                TextView textViewNoticeText = (TextView) view.findViewById(R.id.textViewNoticeText);
+                TextView textViewNoticeId = (TextView) view.findViewById(R.id.textViewNoticeId);
                 noticeTitle = noticeTitleTextView.getText().toString().trim();
-                intent = new Intent(getActivity(),NoticeDetailActivity.class);
+                noticeSubtitle = textViewNoticeSubtitle.getText().toString().trim();
+                noticeBody = textViewNoticeText.getText().toString().trim();
+                noticeID = textViewNoticeId.getText().toString().trim();
+                intent = new Intent(getActivity(), NoticeDetailActivity.class);
+                intent.putExtra("noticeTitle", noticeTitle);
+                intent.putExtra("noticeSubtitle", noticeSubtitle);
+                intent.putExtra("noticeBody", noticeBody);
+                if (imageViewNoticeImage.getVisibility() == view.GONE) {
+                    isAttachedWithImage = false;
+                }
+                intent.putExtra("isAttachedWithImage", isAttachedWithImage);
                 startActivity(intent);
 
             }
@@ -74,6 +129,10 @@ public class FragmentNotice extends Fragment {
 
 
         return view;
+    }
+
+    private void updateListAdapter() {
+       listAdapter.notifyDataSetChanged();
     }
 
 }

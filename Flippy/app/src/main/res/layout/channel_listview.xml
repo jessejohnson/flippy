@@ -88,6 +88,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:text="@string/default_channel_status"
+                    android:singleLine="true"
+                    android:maxLength="@android:integer/config_shortAnimTime"
+                    android:maxEms="20"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit ="marquee_forever"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/flippy_white" />
 
@@ -95,6 +100,11 @@
                     android:id="@+id/textViewChannelMembersCustom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:maxLength="@android:integer/config_shortAnimTime"
+                    android:maxEms="20"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit ="marquee_forever"
                     android:layout_gravity="right"
                     android:text="@string/default_channel_number"
                     android:textAppearance="?android:attr/textAppearanceSmall"

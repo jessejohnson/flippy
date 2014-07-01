@@ -63,6 +63,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         holder.textViewChannelName.setText(rowItem.getChannelName());
         Ion.with(holder.imageView)
                 .placeholder(R.color.flippy_light_header)
+                .animateIn(R.anim.fade_in)
                 .error(R.color.flippy_orange)
                 .load(String.valueOf(rowItem.getImageUrl()));
         holder.textViewStatus.setText(rowItem.getCreatorEmail());

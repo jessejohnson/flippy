@@ -39,13 +39,14 @@ public class NoticeExtrasActivity extends ActionBarActivity {
     private String noticeContent, noticeTitle;
     public static int reminderYear, reminderMonth, reminderDay, reminderHour, reminderMinute;
     protected static FragmentManager timerSupport;
-    private Button buttonAddImageToNotice,buttonPreviewCreateNotice,buttonAddMapToNotice;
+    private Button buttonAddImageToNotice, buttonPreviewCreateNotice, buttonAddMapToNotice;
     private AlertDialog levelDialog;
     private ImageView imageViewNoticeImageCaptured;
 
 
     private static final int BROWSE_IMAGE = 1;
     private static final int TAKE_PHOTO = 2;
+    private static final int START_MAP = 3;
     private Bitmap bitmapNotice;
     Uri imageUri;
 
@@ -66,14 +67,14 @@ public class NoticeExtrasActivity extends ActionBarActivity {
 
 
         //the image upload button
-        buttonPreviewCreateNotice = (Button)findViewById(R.id.buttonPreviewCreateNotice);
+        buttonPreviewCreateNotice = (Button) findViewById(R.id.buttonPreviewCreateNotice);
         buttonPreviewCreateNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.putExtra("isPreview",true);
-                intent.putExtra("noticeTitle",noticeTitle);
-                intent.putExtra("noticeContent",noticeContent);
-                intent.setClass(NoticeExtrasActivity.this,NoticeDetailActivity.class);
+                intent.putExtra("isPreview", true);
+                intent.putExtra("noticeTitle", noticeTitle);
+                intent.putExtra("noticeContent", noticeContent);
+                intent.setClass(NoticeExtrasActivity.this, NoticeDetailActivity.class);
                 startActivity(intent);
             }
         });
@@ -85,12 +86,12 @@ public class NoticeExtrasActivity extends ActionBarActivity {
             }
         });
 
-        buttonAddMapToNotice = (Button)findViewById(R.id.buttonAddMapToNotice);
+        buttonAddMapToNotice = (Button) findViewById(R.id.buttonAddMapToNotice);
         buttonAddMapToNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.setClass(NoticeExtrasActivity.this,PickMapLocationActivity.class);
-                startActivity(intent);
+                intent.setClass(NoticeExtrasActivity.this, PickMapLocationActivity.class);
+                startActivityForResult(intent, START_MAP);
             }
         });
     }
@@ -228,6 +229,12 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                     Toast.makeText(this, "Picture was not taken", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case START_MAP:
+                if (resultCode == RESULT_OK) {
+
+                } else {
+                    Toast.makeText(this, "No location selected", Toast.LENGTH_SHORT).show();
+                }
         }
 
         if (selectedImageUri != null) {

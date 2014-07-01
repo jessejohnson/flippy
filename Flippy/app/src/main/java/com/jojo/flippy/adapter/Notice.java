@@ -13,6 +13,7 @@ public class Notice {
     String title;
     String subtitle;
     String content;
+    String dateInfo;
     URI imageUrl;
     boolean isStarred;
     Date timeStamp;
@@ -20,7 +21,7 @@ public class Notice {
     String location;
     int Starts;
 
-    public Notice(String id, String creatorId, String channelId, String title, String subtitle, String content, URI imageUrl) {
+    public Notice(String id, String creatorId, String channelId, String title, String subtitle, String content, String dateInfo,URI imageUrl) {
         this.id = id;
         this.creatorId = creatorId;
         this.channelId = channelId;
@@ -29,6 +30,7 @@ public class Notice {
         this.content = content;
         this.imageUrl = imageUrl;
         this.isStarred = false;
+        this.dateInfo = dateInfo;
     }
 
     public String getId() {
@@ -93,5 +95,13 @@ public class Notice {
 
     public void setStarred(boolean starred){
         this.isStarred = starred;
+    }
+
+    public void setDateInfo(String dateInfo) {
+        this.dateInfo = dateInfo;
+    }
+
+    public String getDateInfo() {
+        return dateInfo;
     }
 }

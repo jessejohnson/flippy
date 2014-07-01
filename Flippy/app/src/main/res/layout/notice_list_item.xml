@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/margin_ten"
+    android:padding="@dimen/margin_five"
     android:paddingRight="0dp">
 
     <LinearLayout
@@ -24,8 +24,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textAppearance="?android:attr/textAppearanceSmallInverse"
                 android:text="@string/notice_title"
+                android:id="@+id/textViewNoticeId"
+                android:visibility="gone"
+                android:textColor="@color/flippy_white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmallInverse"
+                android:text="@string/notice_title"
+                android:textStyle="bold"
                 android:id="@+id/textViewNoticeTitle"
                 android:textColor="@color/flippy_white" />
 
@@ -35,6 +45,14 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/notice_subtitle"
                 android:id="@+id/textViewNoticeSubtitle"
+                android:textColor="@color/flippy_white"
+                android:textStyle="italic" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/notice_subtitle"
+                android:id="@+id/textViewNoticeDateInfo"
                 android:textColor="@color/flippy_white"
                 android:textStyle="italic" />
         </LinearLayout>
@@ -61,14 +79,14 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/textViewNoticeText"
         android:layout_below="@+id/imageViewNoticeImage"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/imageViewNoticeImage"
         android:layout_alignEnd="@+id/imageViewNoticeImage"
-        android:padding="10dp"
+        android:padding="@dimen/margin_five"
         android:textColor="@color/flippy_white"
         android:background="@color/flippy_light_header" />
 

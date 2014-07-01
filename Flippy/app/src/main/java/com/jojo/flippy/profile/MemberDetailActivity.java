@@ -214,6 +214,7 @@ public class MemberDetailActivity extends ActionBarActivity {
         imageViewMemberAnotherUserProfilePic.setVisibility(View.VISIBLE);
         Ion.with(imageViewMemberAnotherUserProfilePic)
                 .placeholder(R.color.flippy_white)
+                .animateIn(R.anim.fade_in)
                 .load(avatar);
 
     }

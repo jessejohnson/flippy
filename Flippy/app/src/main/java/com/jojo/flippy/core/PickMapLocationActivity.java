@@ -1,13 +1,19 @@
 package com.jojo.flippy.core;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -20,16 +26,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.util.ToastMessages;
 
-public class PickMapLocationActivity extends FragmentActivity {
+public class PickMapLocationActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
     private GoogleMap googleMap;
-    double latitude = 17.385044;
-    double longitude = 78.486671;
-    private Location location;
+    private Location mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pick_map_location);
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.linearLayoutNoticeLocationCoordinate))
                 .getMap();
@@ -38,24 +45,11 @@ public class PickMapLocationActivity extends FragmentActivity {
             if (googleMap == null) {
                 googleMap = ((SupportMapFragment) getSupportFragmentManager().
                         findFragmentById(R.id.linearLayoutNoticeLocationCoordinate)).getMap();
+
             }
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            //googleMap.setMyLocationEnabled(true);
-            MarkerOptions mp = new MarkerOptions();
-            mp.position(new LatLng(location.getLatitude(), location.getLongitude()));
-            mp.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher));
-            mp.title("Flippy office");
-            mp.snippet("Flippy office");
-            googleMap.addMarker(mp);
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(location.getLatitude(), location.getLongitude()), 16));
-
-            googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng latLng) {
-                    ToastMessages.showToastShort(PickMapLocationActivity.this,"You clicked");
-                }
-            });
+            googleMap.setMyLocationEnabled(true);
+            mLocation = googleMap.getMyLocation();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -80,4 +74,41 @@ public class PickMapLocationActivity extends FragmentActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onMapClick(LatLng point) {
+        googleMap.addMarker(new MarkerOptions()
+                .snippet("Pick a location for the notice")
+                .title("Notice location")
+                .position(point)
+                .draggable(true));
+        Log.e("On clicked","Fired");
+
+        googleMap.animateCamera(CameraUpdateFactory.newLatLng(point));
+    }
+
+    @Override
+    public void onMapLongClick(LatLng point) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 }

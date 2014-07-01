@@ -83,6 +83,7 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
             } else {
                 Ion.with(drawerHolder.userImage)
                         .placeholder(R.color.flippy_light_header)
+                        .animateIn(R.anim.fade_in)
                         .error(R.color.flippy_light_header)
                         .load(CommunityCenterActivity.userAvatarURL.toString());
             }
