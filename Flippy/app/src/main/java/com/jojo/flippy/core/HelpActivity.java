@@ -1,36 +1,71 @@
 package com.jojo.flippy.core;
 
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import com.jojo.flippy.core.R;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.widget.ImageView;
 
-public class HelpActivity extends ActionBarActivity {
+import com.jojo.flippy.app.R;
+
+import java.util.ArrayList;
+
+public class HelpActivity extends FragmentActivity {
+
+    private static final int NUMBER_OF_PAGES = 4;
+    private ViewPager pager;
+    private PagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
+        
+        pager = (ViewPager) findViewById(R.id.pagerHelp);
+        pagerAdapter = new HelpPagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(pagerAdapter);
+
+        final ArrayList<ImageView> indicators = new ArrayList<ImageView>();
+        indicators.add((ImageView) findViewById(R.id.imageViewHelpIndicatorOne));
+        indicators.add((ImageView) findViewById(R.id.imageViewHelpIndicatorTwo));
+        indicators.add((ImageView) findViewById(R.id.imageViewHelpIndicatorThree));
+        indicators.add((ImageView) findViewById(R.id.imageViewHelpIndicatorFour));
+
+        pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                setPageIndicator(indicators, position);
+            }
+        });
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.help, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+    private void setPageIndicator(ArrayList<ImageView> indicatorList, int position) {
+        indicatorList.get(position).setImageResource(R.drawable.indicator_circle_active);
+        for(int i = 0; i < indicatorList.size(); i++){
+            if(i == position){
+                continue;
+            }
+            indicatorList.get(i).setImageResource(R.drawable.indicator_circle);
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    private class HelpPagerAdapter extends FragmentStatePagerAdapter {
+        public HelpPagerAdapter(FragmentManager supportFragmentManager) {
+            super(supportFragmentManager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return HelpTextFragment.create(position);
+        }
+
+        @Override
+        public int getCount() {
+            return NUMBER_OF_PAGES;
+        }
     }
 }
