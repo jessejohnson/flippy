@@ -46,7 +46,7 @@ public class AccountProfileActivity extends ActionBarActivity {
     private ImageView imageViewProfilePic;
     private TextView textViewProfileUserNameNew;
     private TextView textViewProfileUserEmailNew;
-    private TextView textViewEmptyUserChannel;
+
 
 
     private LinearLayout linearLayoutUserProfile;
@@ -75,9 +75,7 @@ public class AccountProfileActivity extends ActionBarActivity {
 
         intent = getIntent();
         rowItems = new ArrayList<ProfileItem>();
-        textViewEmptyUserChannel = (TextView) findViewById(R.id.textViewEmptyUserChannel);
         profileChannelListView = (ListView) findViewById(R.id.profileChannelListView);
-        profileChannelListView.setEmptyView(textViewEmptyUserChannel);
         textViewProfileUserEmailNew = (TextView) findViewById(R.id.textViewProfileUserEmailNew);
         textViewProfileUserNameNew = (TextView) findViewById(R.id.textViewProfileUserNameNew);
         linearLayoutUserProfile = (LinearLayout) findViewById(R.id.linearLayoutUserProfile);
@@ -143,7 +141,6 @@ public class AccountProfileActivity extends ActionBarActivity {
 
     private void updateAdapter() {
         profileAdapter.notifyDataSetChanged();
-        textViewEmptyUserChannel.setVisibility(View.GONE);
         progressBarUserChannelLoad.setVisibility(View.GONE);
     }
 

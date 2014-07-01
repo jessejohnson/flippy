@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/margin_five"
     android:orientation="horizontal"
     android:baselineAligned="false">
 
@@ -9,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listViewNoticeList"
+        android:divider="@null"
+        android:dividerHeight="@dimen/margin_two"
         android:layout_gravity="center_vertical"
         android:layout_weight="1" />
 

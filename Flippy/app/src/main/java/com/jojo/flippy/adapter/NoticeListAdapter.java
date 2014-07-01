@@ -71,7 +71,7 @@ public class NoticeListAdapter extends BaseAdapter {
         title.setText(noticeArrayList.get(i).getTitle());
         id.setText(noticeArrayList.get(i).getId());
         textViewNoticeDateInfo.setText(noticeArrayList.get(i).getDateInfo());
-        subtitle.setText("from " + noticeArrayList.get(i).getCreatorId() + " @ " + noticeArrayList.get(i).getChannelId());
+        subtitle.setText(noticeArrayList.get(i).getCreatorId() + " @ " + noticeArrayList.get(i).getChannelId());
 
         content.setText(noticeArrayList.get(i).getContent());
 

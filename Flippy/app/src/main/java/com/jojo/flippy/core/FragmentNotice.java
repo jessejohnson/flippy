@@ -44,8 +44,8 @@ public class FragmentNotice extends Fragment {
     private String noticeBody;
     private String noticeAvatar;
     private boolean isAttachedWithImage = true;
-
     private ProgressBar progressBarCommunityCenterLoader;
+    private String channelName;
 
 
     public FragmentNotice() {
@@ -62,7 +62,7 @@ public class FragmentNotice extends Fragment {
 
         listAdapter = new NoticeListAdapter(this.getActivity(), noticeFeed);
         noticeList = (ListView) view.findViewById(R.id.listViewNoticeList);
-        progressBarCommunityCenterLoader = (ProgressBar)view.findViewById(R.id.progressBarLoadNoticeData);
+        progressBarCommunityCenterLoader = (ProgressBar) view.findViewById(R.id.progressBarLoadNoticeData);
         noticeList.setAdapter(listAdapter);
 
 
@@ -80,10 +80,14 @@ public class FragmentNotice extends Fragment {
                             for (int i = 0; i < communityArray.size(); i++) {
                                 JsonObject item = communityArray.get(i).getAsJsonObject();
                                 JsonObject author = item.getAsJsonObject("author");
-                                String timestampRaw = item.get("timestamp").getAsString().replace("Z","");
-                                String[] timestampArray = timestampRaw.split("T");
-                                String timestamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0,8);
-                                noticeFeed.add(new Notice(item.get("id").getAsString(),author.get("id").getAsString(),item.get("channel").getAsString(),item.get("title").getAsString(),"sub",item.get("content").getAsString(),timestamp,URI.create(item.get("image_url").getAsString())));
+                                String[] timestampArray = item.get("timestamp").getAsString().replace("Z", "").split("T");
+                                String timestamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0, 8);
+                                String image_link = "";
+                                if (!item.get("image_url").isJsonNull()) {
+                                    image_link = item.get("image_url").getAsString();
+                                }
+                                noticeFeed.add(new Notice(item.get("id").getAsString(), author.get("first_name").getAsString(), channelName, item.get("title").getAsString(), "sub", item.get("content").getAsString(), timestamp, URI.create(image_link)));
+
                             }
                             updateListAdapter();
 
@@ -131,8 +135,29 @@ public class FragmentNotice extends Fragment {
         return view;
     }
 
+
     private void updateListAdapter() {
-       listAdapter.notifyDataSetChanged();
+        listAdapter.notifyDataSetChanged();
+    }
+
+    private void getChannelName(String id) {
+        //load the channel name using the channel id
+        Ion.with(getActivity())
+                .load(Flippy.channelDetailURL + id + "/")
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception ex, JsonObject nameResult) {
+
+                        if (nameResult != null) {
+                            channelName = nameResult.get("name").getAsString();
+                        }
+                        if (ex != null) {
+                            ToastMessages.showToastLong(getActivity(), getResources().getString(R.string.internet_connection_error_dialog_title));
+                        }
+
+                    }
+                });
     }
 
 }

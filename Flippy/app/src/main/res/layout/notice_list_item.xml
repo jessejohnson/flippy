@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/margin_five"
-    android:paddingRight="0dp">
+    android:padding="@dimen/margin_two"
+    android:background="@drawable/round_edge"
+    android:layout_margin="@dimen/margin_five">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -53,7 +55,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/notice_subtitle"
                 android:id="@+id/textViewNoticeDateInfo"
-                android:textColor="@color/flippy_white"
+                android:textColor="@color/flippy_orange"
                 android:textStyle="italic" />
         </LinearLayout>
 
@@ -84,6 +86,10 @@
         android:layout_below="@+id/imageViewNoticeImage"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:shadowColor="@color/flippy_dark_header"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
         android:layout_alignRight="@+id/imageViewNoticeImage"
         android:layout_alignEnd="@+id/imageViewNoticeImage"
         android:padding="@dimen/margin_five"
