@@ -246,10 +246,18 @@
     <string name="about_more_info_web">email</string>
     <string name="title_activity_channel_settings">Channel Settings</string>
 
-    
-   <!-- the channel settings strings-->
+    <!-- the channel settings strings -->
     <string name="channel_settings_configuration">Channel configuration</string>
     <string name="channel_settings_channel_is_public">Is Public</string>
     <string name="channel_settings_channel_is_public_summary">Declare all channels to to be created as public</string>
+    <string name="title_activity_help">Help</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--Help Activity Strings-->
+    <string name="help_string_one">Help String One</string>
+    <string name="help_string_two">Help String Two</string>
+    <string name="help_string_three">Help String Three</string>
+    <string name="help_string_four">Help String Four</string>
 
 </resources>
