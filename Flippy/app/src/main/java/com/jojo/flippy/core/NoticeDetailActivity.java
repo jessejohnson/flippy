@@ -147,8 +147,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
                             }
                             getChannelName(channelId);
                             showView();
-
-
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
@@ -166,16 +164,18 @@ public class NoticeDetailActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 String ratingURL = Flippy.allPostURL + noticeId + "/star/";
+                JsonObject json = new JsonObject();
+                json.addProperty("id", noticeId);
                 Ion.with(NoticeDetailActivity.this)
                         .load(ratingURL)
                         .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                        .setJsonObjectBody(json)
                         .asJsonObject()
                         .setCallback(new FutureCallback<JsonObject>() {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
                                 if (result != null) {
                                     ToastMessages.showToastLong(NoticeDetailActivity.this, result.get("results").getAsString());
-                                    return;
                                 }
                                 if (e != null) {
                                     ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));

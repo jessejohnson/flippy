@@ -102,7 +102,6 @@ public class FragmentNotice extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 //setting the click action for each of the items
-                ImageView imageViewNoticeImage = (ImageView) view.findViewById(R.id.imageViewNoticeImage);
                 TextView noticeTitleTextView = (TextView) view.findViewById(R.id.textViewNoticeTitle);
                 TextView textViewNoticeSubtitle = (TextView) view.findViewById(R.id.textViewNoticeSubtitle);
                 TextView textViewNoticeText = (TextView) view.findViewById(R.id.textViewNoticeText);
@@ -111,12 +110,22 @@ public class FragmentNotice extends Fragment {
                 noticeSubtitle = textViewNoticeSubtitle.getText().toString().trim();
                 noticeBody = textViewNoticeText.getText().toString().trim();
                 noticeId = textViewNoticeId.getText().toString().trim();
+                ImageView imageViewNoticeImage = (ImageView) view.findViewById(R.id.imageViewNoticeImage);
+                ImageView imageViewStar = (ImageView) view.findViewById(R.id.imageViewStar);
+                imageViewStar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        rateNotice(noticeId);
+                    }
+                });
+
                 intent = new Intent(getActivity(), NoticeDetailActivity.class);
                 intent.putExtra("noticeTitle", noticeTitle);
                 intent.putExtra("noticeSubtitle", noticeSubtitle);
                 intent.putExtra("noticeBody", noticeBody);
-                intent.putExtra("noticeId",noticeId);
+                intent.putExtra("noticeId", noticeId);
                 startActivity(intent);
+
 
             }
         });
@@ -130,6 +139,30 @@ public class FragmentNotice extends Fragment {
         listAdapter.notifyDataSetChanged();
     }
 
+    private void rateNotice(String Id) {
+        String ratingURL = Flippy.allPostURL + Id + "/star/";
+        JsonObject json = new JsonObject();
+        json.addProperty("id", noticeId);
+        Ion.with(getActivity())
+                .load(ratingURL)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (result != null) {
+                            ToastMessages.showToastLong(getActivity(), result.get("results").getAsString());
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(getActivity(), getResources().getString(R.string.internet_connection_error_dialog_title));
+                        }
+
+                    }
+
+                });
+
+    }
 
 
 }

@@ -9,21 +9,33 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
+import com.google.gson.JsonObject;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.ProgressCallback;
+
+import java.io.File;
 
 public class CreateChannelActivity extends ActionBarActivity {
     private ImageView imageViewCreateChannel;
     private EditText editTextNewChannelName;
     private EditText editTextNewChannelOneLiner;
     private CheckBox checkBoxChannelIsPublic;
+    private Button buttonCreateNewChannel;
+    private ProgressBar progressBarCreateChannel;
 
 
     private static final int SELECT_PICTURE = 1;
@@ -41,8 +53,13 @@ public class CreateChannelActivity extends ActionBarActivity {
 
 
         imageViewCreateChannel = (ImageView) findViewById(R.id.imageViewCreateChannel);
-        checkBoxChannelIsPublic = (CheckBox)findViewById(R.id.checkBoxChannelIsPublic);
+        checkBoxChannelIsPublic = (CheckBox) findViewById(R.id.checkBoxChannelIsPublic);
         checkBoxChannelIsPublic.setChecked(true);
+
+        editTextNewChannelName = (EditText) findViewById(R.id.editTextNewChannelName);
+        editTextNewChannelOneLiner = (EditText) findViewById(R.id.editTextNewChannelOneLiner);
+        buttonCreateNewChannel = (Button) findViewById(R.id.buttonCreateNewChannel);
+        progressBarCreateChannel = (ProgressBar) findViewById(R.id.progressBarCreateChannel);
 
 
         imageViewCreateChannel.setOnClickListener(new View.OnClickListener() {
@@ -53,6 +70,55 @@ public class CreateChannelActivity extends ActionBarActivity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent,
                         "Select Picture"), SELECT_PICTURE);
+            }
+        });
+
+        buttonCreateNewChannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String channelName = editTextNewChannelName.getText().toString().trim();
+                String channelBio = editTextNewChannelOneLiner.getText().toString().trim();
+                if (channelName.isEmpty()) {
+                    editTextNewChannelName.setError("Channel name is required");
+                    return;
+                }
+                if (channelBio.isEmpty()) {
+                    editTextNewChannelOneLiner.setError("Provide a brief description here");
+                    return;
+                }
+                if (selectedImagePath == null) {
+                    ToastMessages.showToastLong(CreateChannelActivity.this, "Image is required");
+                    return;
+                }
+                buttonCreateNewChannel.setText("Please wait ...");
+                buttonCreateNewChannel.setEnabled(false);
+                progressBarCreateChannel.setVisibility(View.VISIBLE);
+                Ion.with(CreateChannelActivity.this, Flippy.channelsURL)
+                        .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                        .uploadProgressBar(progressBarCreateChannel)
+                        .setMultipartParameter("community", CommunityCenterActivity.userCommunityId)
+                        .setMultipartParameter("bio", channelBio)
+                        .setMultipartParameter("creator", CommunityCenterActivity.regUserID)
+                        .setMultipartParameter("name", channelName)
+                        .setMultipartFile("image_url", new File(selectedImagePath))
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                Log.e("file", selectedImagePath);
+                                buttonCreateNewChannel.setEnabled(true);
+                                buttonCreateNewChannel.setText(getText(R.string.channel_create));
+                                progressBarCreateChannel.setVisibility(View.INVISIBLE);
+                                if (result != null) {
+                                    ToastMessages.showToastLong(CreateChannelActivity.this, result.get("detail").getAsString());
+                                }
+                                if (e != null) {
+                                    ToastMessages.showToastLong(CreateChannelActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                                }
+
+                            }
+
+                        });
             }
         });
     }
@@ -70,10 +136,12 @@ public class CreateChannelActivity extends ActionBarActivity {
                 Bitmap bm = BitmapFactory.decodeFile(imagePath);
                 imageViewCreateChannel.setImageBitmap(bm);
 
-            }else{
-                ToastMessages.showToastLong(CreateChannelActivity.this,"Image not uploaded");
+            } else {
+                ToastMessages.showToastLong(CreateChannelActivity.this, "No image selected");
             }
 
+        } else {
+            ToastMessages.showToastLong(CreateChannelActivity.this, "No image selected");
         }
 
     }

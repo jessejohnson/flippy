@@ -10,13 +10,20 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_marginBottom="@dimen/margin_fifty"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_fifty">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/progressBarCreateChannel"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -33,6 +40,7 @@
                     android:background="@color/flippy_dark_header"
                     android:orientation="horizontal"
                     android:padding="10dp">
+
 
                     <TextView
                         android:id="@+id/textView"
@@ -108,11 +116,10 @@
                     android:layout_marginLeft="@dimen/margin_ten"
                     android:orientation="vertical">
 
-                    <com.makeramen.RoundedImageView
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/imageViewCreateChannel"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/margin_hundred"
+                        android:layout_height="@dimen/margin_one_fifty"
                         android:layout_alignParentTop="true"
                         android:background="@color/flippy_orange"
                         android:scaleType="centerCrop"
@@ -150,7 +157,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/signGetStartedButton"
+        android:id="@+id/buttonCreateNewChannel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
