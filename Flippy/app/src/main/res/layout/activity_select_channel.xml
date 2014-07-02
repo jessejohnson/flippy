@@ -18,29 +18,31 @@
         android:layout_alignParentTop="true" />
 
     <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/progressBarLoadUserChannels"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/activity_select_channel_empty_view"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
+    <TextView
         android:id="@+id/textViewNoChannel"
-        android:layout_below="@+id/progressBarLoadUserChannels"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/activity_select_channel_empty_view_help"
+        android:layout_below="@+id/progressBarLoadUserChannels"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:text="@string/activity_select_channel_empty_view"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
         android:id="@+id/textViewNoChannelHelp"
-        android:textStyle="bold"
-        android:textColor="@color/flippy_orange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/textViewNoChannel"
-        android:layout_centerHorizontal="true" />
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:text="@string/activity_select_channel_empty_view_help"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/flippy_orange"
+        android:textStyle="bold" />
 </RelativeLayout>
