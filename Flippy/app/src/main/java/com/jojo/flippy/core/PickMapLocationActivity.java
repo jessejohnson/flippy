@@ -26,9 +26,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.util.ToastMessages;
 
-public class PickMapLocationActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
+public class PickMapLocationActivity extends FragmentActivity {
     private GoogleMap googleMap;
     private Location mLocation;
+    private LatLng position;
+
+    private Marker marker ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,17 @@ public class PickMapLocationActivity extends FragmentActivity implements GoogleM
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        marker = googleMap.addMarker(new MarkerOptions()
+                        .title("Notice location")
+                        .snippet("Choose the location for the notice")
+                        .position(new LatLng(4.000, -5.00))
+        );
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                marker.setPosition(latLng);
+            }
+        });
 
     }
 
@@ -69,43 +82,13 @@ public class PickMapLocationActivity extends FragmentActivity implements GoogleM
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add_location) {
+            position = marker.getPosition();
+
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onMapClick(LatLng point) {
-        googleMap.addMarker(new MarkerOptions()
-                .snippet("Pick a location for the notice")
-                .title("Notice location")
-                .position(point)
-                .draggable(true));
-        Log.e("On clicked","Fired");
-
-        googleMap.animateCamera(CameraUpdateFactory.newLatLng(point));
-    }
-
-    @Override
-    public void onMapLongClick(LatLng point) {
-
-    }
-
-    @Override
-    public void onMarkerDrag(Marker marker) {
-
-    }
-
-    @Override
-    public void onMarkerDragEnd(Marker marker) {
-
-    }
-
-    @Override
-    public void onMarkerDragStart(Marker marker) {
-
-
-    }
 
     @Override
     protected void onResume() {

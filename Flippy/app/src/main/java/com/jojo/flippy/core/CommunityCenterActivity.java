@@ -216,7 +216,9 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 sendFeedback();
                 return true;
             case R.id.action_add:
-                channelListDialog();
+                Intent intentChooseChannel = new Intent(CommunityCenterActivity.this, SelectChannelActivity.class);
+                intentChooseChannel.putExtra("userId",regUserID);
+                startActivity(intentChooseChannel);
                 return true;
             case R.id.action_settings:
                 Intent intent = new Intent(CommunityCenterActivity.this, HelpActivity.class);
@@ -307,25 +309,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
         emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getResources().getString(R.string.flippy_email_subject));
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, getResources().getString(R.string.flippy_email_body));
         startActivity(Intent.createChooser(emailIntent, getResources().getString(R.string.flippy_email_subject)));
-    }
-
-    //Alert dialog showing a list of channel user belongs to
-    private void channelListDialog() {
-        //final CharSequence[] channelList = channelListArray.toArray(new CharSequence[channelListArray.size()]);
-        final CharSequence[] channelList = {"SRC channel", "Class of 2015, CS", "AAESS Group"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.choose_channel_list_dialog_title);
-        builder.setItems(channelList, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                //get the selected option and pass it on to the next activity
-                String channelToCreateNotice = channelList[item].toString();
-                Intent intent = new Intent(CommunityCenterActivity.this, CreateNoticeActivity.class);
-                intent.putExtra("channelToCreateNotice", channelToCreateNotice);
-                startActivity(intent);
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
     }
 
     @Override

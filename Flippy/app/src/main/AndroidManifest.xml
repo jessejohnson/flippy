@@ -208,6 +208,14 @@
             android:name="com.jojo.flippy.core.HelpActivity"
             android:label="@string/title_activity_help" >
         </activity>
+        <activity
+            android:name="com.jojo.flippy.core.SelectChannelActivity"
+            android:label="@string/title_activity_select_channel"
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
+        </activity>
     </application>
 
 </manifest>
