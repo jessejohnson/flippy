@@ -48,6 +48,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private TextView textViewNoticeLocation;
     private TextView textViewAuthorEmailAddress;
     private TextView textViewNoticeTimeStamp;
+    private TextView textViewNoticeSubtitleChannelName;
     private ImageView imageViewNoticeImageDetail;
     private ImageView imageViewNoticeCreatorImage;
     private ImageView imageViewStarDetail;
@@ -60,6 +61,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private String locationName = "";
     private String locationLat = "";
     private String locationLon = "";
+    private String channelId = "";
 
     private LinearLayout linearLayoutMapView;
 
@@ -91,9 +93,11 @@ public class NoticeDetailActivity extends ActionBarActivity {
         textViewAuthorEmailAddress = (TextView) findViewById(R.id.textViewAuthorEmailAddress);
         textViewNoticeSubtitleDetail = (TextView) findViewById(R.id.textViewNoticeSubtitleDetail);
         textViewNoticeTextDetail = (TextView) findViewById(R.id.textViewNoticeTextDetail);
+        textViewNoticeSubtitleChannelName = (TextView) findViewById(R.id.textViewNoticeSubtitleChannelName);
         textViewNoticeTitleDetail.setText(noticeTitle);
         textViewNoticeTextDetail.setText(noticeBody);
         textViewNoticeSubtitleDetail.setText(noticeSubtitle);
+        textViewNoticeSubtitleChannelName.setText("");
 
 
         //place holder texts
@@ -102,6 +106,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         textViewLikes.setText("");
         textViewNoticeLocation.setText("");
         imageViewNoticeImageDetail.setVisibility(View.GONE);
+        textViewNoticeSubtitleChannelName.setVisibility(View.GONE);
 
 
         googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.linearLayoutNoticeShowLocation))
@@ -132,6 +137,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                             if (!item.get("avatar").isJsonNull()) {
                                 author_profile = item.get("avatar").getAsString();
                             }
+                            channelId = result.get("channel").getAsString();
                             String[] timestampArray = result.get("timestamp").getAsString().replace("Z", "").split("T");
                             time_stamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0, 8);
                             image_link = "";
@@ -139,7 +145,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                 imageViewNoticeImageDetail.setVisibility(View.VISIBLE);
                                 image_link = result.get("image_url").getAsString();
                             }
-
+                            getChannelName(channelId);
                             showView();
 
 
@@ -155,14 +161,33 @@ public class NoticeDetailActivity extends ActionBarActivity {
         getPostCount(noticeId);
         getPostLocation(noticeId);
 
+        //rating a notice on the click of the the star button
         imageViewStarDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String ratingURL = Flippy.allPostURL + noticeId + "/star/";
+                Ion.with(NoticeDetailActivity.this)
+                        .load(ratingURL)
+                        .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                if (result != null) {
+                                    ToastMessages.showToastLong(NoticeDetailActivity.this, result.get("results").getAsString());
+                                    return;
+                                }
+                                if (e != null) {
+                                    ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                                }
+                                getPostCount(noticeId);
 
+                            }
+
+                        });
             }
+
         });
-
-
     }
 
 
@@ -176,7 +201,16 @@ public class NoticeDetailActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_edit_profile) {
+        if (id == R.id.action_settings_re_flip) {
+            ToastMessages.showToastLong(NoticeDetailActivity.this,"sharing in other channels");
+            return true;
+        }
+        if (id == R.id.action_notice_alarm) {
+            ToastMessages.showToastLong(NoticeDetailActivity.this,"setting an alarm for notice");
+            return true;
+        }
+        if (id == R.id.action_share_all) {
+            ToastMessages.showToastLong(NoticeDetailActivity.this,"share with other apps");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -270,5 +304,26 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 .draggable(false));
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(locationLat), Double.parseDouble(locationLon)), 5));
+    }
+
+    private void getChannelName(String id) {
+        //load the channel name using the channel id
+        Ion.with(NoticeDetailActivity.this)
+                .load(Flippy.channelDetailURL + id + "/")
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception ex, JsonObject nameResult) {
+
+                        if (nameResult != null) {
+                            textViewNoticeSubtitleChannelName.setVisibility(View.VISIBLE);
+                            textViewNoticeSubtitleChannelName.setText(nameResult.get("name").getAsString());
+                        }
+                        if (ex != null) {
+                            ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                        }
+
+                    }
+                });
     }
 }

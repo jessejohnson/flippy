@@ -123,7 +123,10 @@ public class ChannelDetailActivity extends ActionBarActivity {
         buttonSubscribeToChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(CommunityCenterActivity.userAuthToken==""){
+                  ToastMessages.showToastLong(ChannelDetailActivity.this,"Sorry, request cannot be made");
+                  return;
+                }
                 JsonObject json = new JsonObject();
                 json.addProperty("id", CommunityCenterActivity.regUserID);
                 Ion.with(ChannelDetailActivity.this)
@@ -134,6 +137,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                         .setCallback(new FutureCallback<JsonObject>() {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
+
                                 if (result != null) {
                                     ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("detail").getAsString());
                                     if (e != null) {

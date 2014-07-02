@@ -43,8 +43,6 @@ public class FragmentNotice extends Fragment {
     private String noticeId;
     private String noticeBody;
     private ProgressBar progressBarCommunityCenterLoader;
-    private String channelName;
-
 
     public FragmentNotice() {
 
@@ -84,7 +82,7 @@ public class FragmentNotice extends Fragment {
                                 if (!item.get("image_url").isJsonNull()) {
                                     image_link = item.get("image_url").getAsString();
                                 }
-                                noticeFeed.add(new Notice(item.get("id").getAsString(), author.get("first_name").getAsString(), channelName, item.get("title").getAsString(), "sub", item.get("content").getAsString(), timestamp, URI.create(image_link)));
+                                noticeFeed.add(new Notice(item.get("id").getAsString(), author.get("first_name").getAsString(), author.get("last_name").getAsString(), item.get("title").getAsString(), "sub", item.get("content").getAsString(), timestamp, URI.create(image_link)));
 
                             }
                             updateListAdapter();
@@ -132,24 +130,6 @@ public class FragmentNotice extends Fragment {
         listAdapter.notifyDataSetChanged();
     }
 
-    private void getChannelName(String id) {
-        //load the channel name using the channel id
-        Ion.with(getActivity())
-                .load(Flippy.channelDetailURL + id + "/")
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception ex, JsonObject nameResult) {
 
-                        if (nameResult != null) {
-                            channelName = nameResult.get("name").getAsString();
-                        }
-                        if (ex != null) {
-                            ToastMessages.showToastLong(getActivity(), getResources().getString(R.string.internet_connection_error_dialog_title));
-                        }
-
-                    }
-                });
-    }
 
 }

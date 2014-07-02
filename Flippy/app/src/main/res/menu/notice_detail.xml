@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.jojo.flippy.core.NoticeDetailActivity" >
-    <item android:id="@+id/action_settings"
+    <item android:id="@+id/action_settings_re_flip"
         android:title="@string/notice_menu_duplicate"
         android:icon="@drawable/ic_re_flip"
         android:orderInCategory="100"

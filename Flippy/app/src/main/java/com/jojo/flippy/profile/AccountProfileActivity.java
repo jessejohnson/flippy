@@ -123,6 +123,7 @@ public class AccountProfileActivity extends ActionBarActivity {
 
                         }
                         if (e != null) {
+                            progressBarUserChannelLoad.setVisibility(View.GONE);
                             ToastMessages.showToastLong(AccountProfileActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
                         }
 
