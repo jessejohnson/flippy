@@ -7,6 +7,7 @@ package com.jojo.flippy.core;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,12 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.net.URI;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class FragmentNotice extends Fragment {
 
@@ -78,6 +84,17 @@ public class FragmentNotice extends Fragment {
                                 JsonObject author = item.getAsJsonObject("author");
                                 String[] timestampArray = item.get("timestamp").getAsString().replace("Z", "").split("T");
                                 String timestamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0, 8);
+
+                                try {
+                                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                    SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+                                    Date dateConverted = dateFormat.parse(timestampArray[0].toString());
+                                    timestamp = formatter.format(dateConverted)+ " @ " + timestampArray[1].substring(0, 8);
+
+                                } catch (Exception error) {
+                                    //maintain the first format
+                                }
+
                                 String image_link = "";
                                 if (!item.get("image_url").isJsonNull()) {
                                     image_link = item.get("image_url").getAsString();

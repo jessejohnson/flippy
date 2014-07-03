@@ -1,7 +1,8 @@
 package com.jojo.flippy.core;
 
 import android.app.ActionBar;
-import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -12,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,21 +20,25 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.jojo.flippy.adapter.Notice;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.FlippyReceiver;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import java.net.URI;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class NoticeDetailActivity extends ActionBarActivity {
     private Button buttonPublishNotice;
     private GoogleMap googleMap;
     private Intent intent;
+    private PendingIntent pendingIntent;
     private String noticeTitle;
     private String noticeId;
     private String noticeBody;
@@ -211,7 +215,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_notice_alarm) {
-            ToastMessages.showToastLong(NoticeDetailActivity.this,"setting an alarm for notice");
+            setAlarm();
             return true;
         }
         if (id == R.id.action_share_all) {
@@ -221,19 +225,47 @@ public class NoticeDetailActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
+    private void setAlarm() {
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+        if(noReminder!=null){
+            ToastMessages.showToastLong(NoticeDetailActivity.this,"This notice has no reminder date");
+            return;
+        }
+        if(startDate==null){
+            ToastMessages.showToastLong(NoticeDetailActivity.this,"setting an alarm for notice");
+            return;
+        }
+        String actualDate[] = startDate.replace("Z","").trim().split("T");
+        String date = actualDate[0];
+        String time = actualDate[1];
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date dateConverted = dateFormat.parse(date);
+            Log.e("converted date",dateConverted+"");
+            Log.e("Date ",dateConverted.getYear()+"");
+            dateConverted.getDay();
+            dateConverted.getMonth();
+        }catch (Exception e){
+
+        }
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.MONTH, 7);
+        calendar.set(Calendar.YEAR, 2014);
+        calendar.set(Calendar.DAY_OF_MONTH, 3);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 13);
+        calendar.set(Calendar.MINUTE, 23);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.AM_PM,Calendar.PM);
+
+        Intent myIntent = new Intent(NoticeDetailActivity.this, FlippyReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(NoticeDetailActivity.this, 0, myIntent, 0);
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+        Log.e("alarm object", alarmManager.toString());
     }
 
     private void showView() {
@@ -355,5 +387,20 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 }
