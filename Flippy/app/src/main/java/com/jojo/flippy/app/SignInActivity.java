@@ -37,7 +37,6 @@ public class SignInActivity extends ActionBarActivity {
     private EditText signInEmail, signInPassword;
     private CheckBox signInCheckBox;
     private Intent intent;
-    private ProgressDialog signInDialog;
     private String regUserEmail;
     private String regUserAuthToken;
     private String regUserID;
@@ -62,7 +61,6 @@ public class SignInActivity extends ActionBarActivity {
         signInCheckBox = (CheckBox) findViewById(R.id.checkBoxRegisterAgreement);
 
         intent = new Intent();
-        signInDialog = new ProgressDialog(SignInActivity.this);
 
         signGetStartedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,13 +92,13 @@ public class SignInActivity extends ActionBarActivity {
 
                 }
 
-                if (true) {
+                if (allFieldsValid) {
 
                     String email = signInEmail.getText().toString();
                     String password = signInPassword.getText().toString();
-                    //setting the user parameters
-                    signInDialog.setMessage("Signing in... " + email);
-                    signInDialog.show();
+
+                    signGetStartedButton.setEnabled(false);
+                    signGetStartedButton.setText("Signing in ...");
 
                     JsonObject json = new JsonObject();
                     json.addProperty("email", email);
@@ -113,8 +111,9 @@ public class SignInActivity extends ActionBarActivity {
                             .setCallback(new FutureCallback<JsonObject>() {
                                 @Override
                                 public void onCompleted(Exception e, JsonObject result) {
-                                    //cancel the dialog
-                                    signInDialog.cancel();
+
+                                    signGetStartedButton.setEnabled(true);
+                                    signGetStartedButton.setText(getText(R.string.start));
                                     if (e != null) {
                                         ToastMessages.showToastLong(SignInActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
                                         Log.e("Error", e.toString());

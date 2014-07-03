@@ -103,7 +103,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                             communityId = result.get("community").getAsString();
                             image_thumbnail_url = result.get("image_thumbnail_url").getAsString();
                             image_url = result.get("image_url").getAsString();
-                            secondAsyncTask(communityId);
+                            getCommunityName(communityId);
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(ChannelDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
@@ -154,7 +154,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         });
     }
 
-    private void secondAsyncTask(String communityURL) {
+    private void getCommunityName(String communityURL) {
         //load the creator of the channel
         Ion.with(ChannelDetailActivity.this)
                 .load(channelCommunityDetail + communityURL + "/")

@@ -62,6 +62,10 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private String locationLat = "";
     private String locationLon = "";
     private String channelId = "";
+    private String startDate;
+    private String endDate;
+    private int reminderInterval;
+    private String noReminder;
 
     private LinearLayout linearLayoutMapView;
 
@@ -158,6 +162,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         //loads the post rating from the api
         getPostCount(noticeId);
         getPostLocation(noticeId);
+        getNoticeReminder(noticeId);
 
         //rating a notice on the click of the the star button
         imageViewStarDetail.setOnClickListener(new View.OnClickListener() {
@@ -280,6 +285,31 @@ public class NoticeDetailActivity extends ActionBarActivity {
                             locationLat = item.get("latitude").getAsString();
                             locationLon = item.get("longitude").getAsString();
                             showMap();
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                        }
+
+                    }
+                });
+    }
+    private void getNoticeReminder(String id) {
+        String postReminderURL = Flippy.allPostURL + id + "/reminder/";
+        Ion.with(NoticeDetailActivity.this)
+                .load(postReminderURL)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (result != null) {
+                            if(result.has("detail")){
+                                noReminder = result.get("detail").getAsString();
+                                return;
+                            }
+                            JsonObject item = result.getAsJsonObject("results");
+                            startDate = item.get("start_date").getAsString();
+                            endDate = item.get("end_date").getAsString();
+                            reminderInterval = item.get("repeat_interval").getAsInt();
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));

@@ -32,7 +32,6 @@ public class RegisterActivity extends Activity {
     private TextView textViewSignIn;
     private CheckBox checkBoxTerms;
     private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName, regNumber;
-    private ProgressDialog registerProgress;
     private Intent intent;
 
     @Override
@@ -45,7 +44,6 @@ public class RegisterActivity extends Activity {
         actionbar.setSubtitle(getString(R.string.register_title_few_things));
 
         intent = new Intent();
-        registerProgress = new ProgressDialog(RegisterActivity.this);
 
         editTextRegisterEmail = (EditText) findViewById(R.id.registerEmailEditText);
         editTextFirstName = (EditText) findViewById(R.id.editTextRegisterFirstName);
@@ -64,7 +62,7 @@ public class RegisterActivity extends Activity {
         });
 
 
-        Button registrationNext = (Button) findViewById(R.id.registerNextButton);
+        final Button registrationNext = (Button) findViewById(R.id.registerNextButton);
         registrationNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,10 +110,10 @@ public class RegisterActivity extends Activity {
                     String last_name = editTextLastName.getText().toString().trim();
                     String password = editTextPassword.getText().toString().trim();
 
-                    registerProgress.setMessage("Registering... " + userEmail);
-                    //show dialog
-                    registerProgress.show();
-                    //setting the user parameters
+                    registrationNext.setEnabled(false);
+                    registrationNext.setText("Registering ...");
+
+
                     JsonObject json = new JsonObject();
                     json.addProperty("email", userEmail);
                     json.addProperty("first_name", first_name);
@@ -129,8 +127,8 @@ public class RegisterActivity extends Activity {
                             .setCallback(new FutureCallback<JsonObject>() {
                                 @Override
                                 public void onCompleted(Exception e, JsonObject result) {
-                                    //cancel the dialog
-                                    registerProgress.cancel();
+                                    registrationNext.setEnabled(true);
+                                    registrationNext.setText(getText(R.string.register_next));
                                     if (e != null) {
                                         ToastMessages.showToastLong(RegisterActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
                                         Log.e("Error", e.toString());

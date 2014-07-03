@@ -23,7 +23,6 @@
     <!-- welcome activity strings -->
     <string name="welcome_text">Welcome to Flippy</string>
     <string name="signin_with_email">or sign in with your Email</string>
-    <string name="signin_with_twitter">sign in with Twitter</string>
     <string name="internet_connection_error_dialog_title">An Internet Connection Error Occurred</string>
     <string name="internet_connection_error_dialog_message">        It looks like there was a problem with your Internet connection. Connect and try again.</string>
     <string name="twitter_auth_error_title">A Twitter Authentication Error Occurred</string>
