@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="flippy_rainbow">
+        <item>@color/flippy_orange</item>
+        <item>@color/flippy_dark_header</item>
+        <item>@color/flippy_light_header</item>
+        <item>@color/flippy_white</item>
+    </array>
+</resources>

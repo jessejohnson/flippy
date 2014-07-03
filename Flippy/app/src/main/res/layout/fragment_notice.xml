@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:gpb="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/margin_five"
-    android:orientation="horizontal"
-    android:baselineAligned="false">
+    android:baselineAligned="false"
+    android:orientation="horizontal">
 
     <ListView
+        android:id="@+id/listViewNoticeList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/listViewNoticeList"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
         android:divider="@null"
         android:dividerHeight="@dimen/margin_two"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1" />
+        android:scrollbarStyle="outsideOverlay" />
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
         android:id="@+id/progressBarLoadNoticeData"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        gpb:type="folding_circles"
+        gpb:colors="@array/flippy_rainbow"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

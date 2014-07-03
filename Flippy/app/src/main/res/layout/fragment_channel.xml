@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:gpb="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/margin_five"
     android:background="@color/flippy_white"
     android:orientation="horizontal">
+
     <ListView
         android:id="@+id/listViewChannels"
         android:layout_width="match_parent"
@@ -40,23 +42,14 @@
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/community_no_data"
-        android:id="@+id/textViewChannelNoData"
-        android:textColor="@color/flippy_orange"
-        android:textStyle="bold"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:minHeight="48dp"
-        android:layout_height="wrap_content"
-        style="?android:attr/progressBarStyle"
+    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
         android:id="@+id/progressBarChannelDataLoad"
-        android:layout_below="@+id/textViewChannelNoData"
-        android:layout_centerHorizontal="true" />
+        android:layout_width="@dimen/margin_fifty"
+        android:layout_height="@dimen/margin_fifty"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        gpb:colors="@array/flippy_rainbow"
+        gpb:type="folding_circles" />
+
 </RelativeLayout>

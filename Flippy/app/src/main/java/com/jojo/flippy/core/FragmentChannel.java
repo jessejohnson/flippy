@@ -35,13 +35,9 @@ import java.util.List;
  */
 
 public class FragmentChannel extends Fragment {
-    //Instance of the user channel
     ListView ChannelListView;
-    //Instance of the channel item
     List<Channel> rowItems;
-    private TextView textViewChannelNoData;
     private ProgressBar progressBarChannelDataLoad;
-
     private Intent intent;
     private String totalMembers = "";
     private Button buttonAddChannel;
@@ -66,8 +62,6 @@ public class FragmentChannel extends Fragment {
         rowItems = new ArrayList<Channel>();
         ChannelListView = (ListView) view.findViewById(R.id.listViewChannels);
         progressBarChannelDataLoad = (ProgressBar) view.findViewById(R.id.progressBarChannelDataLoad);
-        textViewChannelNoData = (TextView) view.findViewById(R.id.textViewChannelNoData);
-        ChannelListView.setEmptyView(textViewChannelNoData);
         adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems, true);
         ChannelListView.setAdapter(adapter);
@@ -81,14 +75,13 @@ public class FragmentChannel extends Fragment {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        textViewChannelNoData.setVisibility(View.VISIBLE);
                         progressBarChannelDataLoad.setVisibility(view.GONE);
-                        if (result!=null) {
+                        if (result != null) {
                             JsonArray communityArray = result.getAsJsonArray("results");
                             for (int i = 0; i < communityArray.size(); i++) {
                                 JsonObject item = communityArray.get(i).getAsJsonObject();
                                 JsonObject creator = item.getAsJsonObject("creator");
-                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()),item.get("id").getAsString(), item.get("name").getAsString(), creator.get("email").getAsString(), creator.get("first_name").getAsString()+" "+creator.get("last_name").getAsString());
+                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), item.get("id").getAsString(), item.get("name").getAsString(), creator.get("email").getAsString(), creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString());
                                 rowItems.add(channelItem);
                             }
                             updateAdapter();
@@ -107,14 +100,13 @@ public class FragmentChannel extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
 
-                TextView textViewChannelId = (TextView)view.findViewById(R.id.textViewChannelId);
-                TextView textViewChannelName = (TextView)view.findViewById(R.id.textViewChannelNameCustom);
+                TextView textViewChannelId = (TextView) view.findViewById(R.id.textViewChannelId);
+                TextView textViewChannelName = (TextView) view.findViewById(R.id.textViewChannelNameCustom);
                 String channelId = textViewChannelId.getText().toString();
                 String channelName = textViewChannelName.getText().toString();
-                intent.setClass(getActivity(),ChannelDetailActivity.class);
-                intent.putExtra("channelId",channelId);
+                intent.setClass(getActivity(), ChannelDetailActivity.class);
+                intent.putExtra("channelId", channelId);
                 intent.putExtra("channelName", channelName);
-                //setting the click action for each of the items
                 intent.putExtra("totalMembers", totalMembers);
                 intent.putExtra("isManageActivity", isManageActivity);
                 getActivity().startActivity(intent);

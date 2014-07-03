@@ -35,8 +35,10 @@ dependencies {
     compile 'com.android.support:support-v4:19.+'
     compile 'com.facebook:facebook-android-sdk:3.14.1'
     compile 'de.keyboardsurfer.android.widget:crouton:1.8.4'
-    compile 'com.koushikdutta.ion:ion:1.1.5'
+    compile 'com.koushikdutta.ion:ion:1.2.4'
     compile 'com.loopj.android:android-async-http:1.4.4'
     compile 'com.j256.ormlite:ormlite-android:4.47'
     compile 'com.google.android.gms:play-services:+'
+    compile 'com.jpardogo.googleprogressbar:library:+'
+
 }

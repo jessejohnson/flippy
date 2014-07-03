@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:gpb="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingBottom="0dp"
     android:paddingLeft="@dimen/margin_two"
@@ -61,13 +62,16 @@
         android:layout_below="@+id/linearLayoutUserProfile"
         android:layout_margin="@dimen/margin_five" />
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_twenty"
+    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
         android:id="@+id/progressBarUserChannelLoad"
-        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_twenty"
+        android:layout_width="@dimen/margin_twenty"
+        android:layout_height="@dimen/margin_twenty"
+        android:layout_gravity="center"
+        gpb:type="folding_circles"
+        gpb:colors="@array/flippy_rainbow"
         android:layout_below="@+id/linearLayoutUserProfile"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

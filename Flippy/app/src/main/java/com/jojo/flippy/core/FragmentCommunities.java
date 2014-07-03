@@ -34,7 +34,6 @@ public class FragmentCommunities extends Fragment {
     private ListView listViewCommunity;
     List<Channel> rowItems;
     private Intent intent;
-    private TextView textViewCommunityEmpty;
     private ProgressBar progressBarCommunityChannelLoader;
     private ChannelAdapter adapter;
 
@@ -56,11 +55,9 @@ public class FragmentCommunities extends Fragment {
 
         intent = new Intent();
         rowItems = new ArrayList<Channel>();
-        textViewCommunityEmpty =(TextView)view.findViewById(R.id.textViewCommunityEmpty);
         progressBarCommunityChannelLoader = (ProgressBar)view.findViewById(R.id.progressBarCommunityChannelLoader);
         listViewCommunity = (ListView) view.findViewById(R.id.listViewCommunity);
-        listViewCommunity.setEmptyView(textViewCommunityEmpty);
-        textViewCommunityEmpty.setVisibility(view.GONE);
+
 
         adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems, false);
@@ -74,7 +71,6 @@ public class FragmentCommunities extends Fragment {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        textViewCommunityEmpty.setVisibility(View.VISIBLE);
                         progressBarCommunityChannelLoader.setVisibility(view.GONE);
                         if (result != null) {
                             JsonArray communityArray = result.getAsJsonArray("results");
