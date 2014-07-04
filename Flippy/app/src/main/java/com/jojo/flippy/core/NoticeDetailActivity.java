@@ -211,6 +211,9 @@ public class NoticeDetailActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings_re_flip) {
+            intent.setClass(NoticeDetailActivity.this,SelectChannelActivity.class);
+            //pass data along and create a notice based on the selected channel
+            startActivity(intent);
             ToastMessages.showToastLong(NoticeDetailActivity.this,"sharing in other channels");
             return true;
         }
@@ -219,7 +222,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_share_all) {
-            ToastMessages.showToastLong(NoticeDetailActivity.this,"share with other apps");
+            shareNoticeWithOtherApps(noticeTitle,noticeBody,image_link,getString(R.string.splash_screen_url));
+            ToastMessages.showToastLong(NoticeDetailActivity.this,"Notice shared");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -243,18 +247,17 @@ public class NoticeDetailActivity extends ActionBarActivity {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date dateConverted = dateFormat.parse(date);
             Log.e("converted date",dateConverted+"");
-;
         }catch (Exception e){
 
         }
         Calendar calendar = Calendar.getInstance();
 
-        calendar.set(Calendar.MONTH, 7);
+        calendar.set(Calendar.MONTH, 6);
         calendar.set(Calendar.YEAR, 2014);
-        calendar.set(Calendar.DAY_OF_MONTH, 3);
+        calendar.set(Calendar.DAY_OF_MONTH, 4);
 
-        calendar.set(Calendar.HOUR_OF_DAY, 19);
-        calendar.set(Calendar.MINUTE, 6);
+        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        calendar.set(Calendar.MINUTE, 26);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.AM_PM,Calendar.PM);
 
@@ -263,6 +266,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        ToastMessages.showToastLong(NoticeDetailActivity.this,"Alarm set successfully");
 
     }
 
@@ -385,6 +390,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
                     }
                 });
+    }
+
+    private void shareNoticeWithOtherApps(String title,String body,String imageLink,String footer){
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, title+"\n"+ body+"\n"+ imageLink+"\n"+footer );
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, "Share Flippy notice via ..."));
     }
 
     @Override

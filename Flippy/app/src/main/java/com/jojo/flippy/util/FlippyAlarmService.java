@@ -9,7 +9,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
@@ -35,17 +39,29 @@ public class FlippyAlarmService extends Service {
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
 
-        mManager = (NotificationManager) this.getApplicationContext().getSystemService(this.getApplicationContext().NOTIFICATION_SERVICE);
-        Intent alarmServiceIntent = new Intent(this.getApplicationContext(), NoticeDetailActivity.class);
 
-        Notification notification = new Notification(R.drawable.ic_launcher, "This is a test message!", System.currentTimeMillis());
-        alarmServiceIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("Flippy notification")
+                        .setContentText("This is a test notification");
+        Intent notificationIntent = new Intent(this, CommunityCenterActivity.class);
 
-        PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this.getApplicationContext(), 0, alarmServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        notification.setLatestEventInfo(this.getApplicationContext(), "AlarmManagerDemo", "This is a test message!", pendingNotificationIntent);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
-        mManager.notify(0, notification);
+        builder.setContentIntent(contentIntent);
+        builder.setAutoCancel(true);
+        builder.setLights(Color.BLUE, 500, 500);
+        long[] pattern = {500,500,500,500,500,500,500,500,500};
+        builder.setVibrate(pattern);
+        builder.setStyle(new NotificationCompat.InboxStyle());
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        builder.setSound(alarmSound);
+        //Add as notification
+        NotificationManager manager = (NotificationManager) getSystemService(this.getApplication().NOTIFICATION_SERVICE);
+        manager.notify(1, builder.build());
+
     }
 
     @Override

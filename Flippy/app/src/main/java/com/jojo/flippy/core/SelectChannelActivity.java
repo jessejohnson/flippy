@@ -27,6 +27,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 public class SelectChannelActivity extends ActionBarActivity {
     private Intent intent;
     private ChannelMemberAdapter userChannelsAdapter;
@@ -76,7 +79,12 @@ public class SelectChannelActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarLoadUserChannels.setVisibility(View.INVISIBLE);
-                        if (result != null) {
+                        if(result.has("detail")){
+                            Crouton.makeText(SelectChannelActivity.this, "The requested user was not found", Style.ALERT)
+                                    .show();
+                            return;
+                        }
+                        if (result != null && !result.has("detail")) {
                             JsonArray channelArray = result.getAsJsonArray("results");
                             for (int i = 0; i < channelArray.size(); i++) {
                                 JsonObject item = channelArray.get(i).getAsJsonObject();
