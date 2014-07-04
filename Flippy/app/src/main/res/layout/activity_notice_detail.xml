@@ -13,6 +13,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="@dimen/margin_five"
             android:orientation="vertical">
 
 
@@ -28,9 +29,9 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.80"
+                    android:layout_weight="0.90"
                     android:orientation="vertical"
-                    android:padding="10dp">
+                    android:padding="@dimen/margin_five">
 
                     <TextView
                         android:id="@+id/textViewNoticeTitleDetail"
@@ -63,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="0.20">
+                    android:layout_weight="0.10">
 
                     <com.makeramen.RoundedImageView
                         xmlns:app="http://schemas.android.com/apk/res-auto"

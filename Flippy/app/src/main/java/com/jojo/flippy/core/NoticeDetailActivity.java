@@ -33,6 +33,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 
 public class NoticeDetailActivity extends ActionBarActivity {
     private Button buttonPublishNotice;
@@ -211,10 +214,10 @@ public class NoticeDetailActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings_re_flip) {
-            intent.setClass(NoticeDetailActivity.this,SelectChannelActivity.class);
+            intent.setClass(NoticeDetailActivity.this, SelectChannelActivity.class);
             //pass data along and create a notice based on the selected channel
             startActivity(intent);
-            ToastMessages.showToastLong(NoticeDetailActivity.this,"sharing in other channels");
+            ToastMessages.showToastLong(NoticeDetailActivity.this, "sharing in other channels");
             return true;
         }
         if (id == R.id.action_notice_alarm) {
@@ -222,8 +225,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_share_all) {
-            shareNoticeWithOtherApps(noticeTitle,noticeBody,image_link,getString(R.string.splash_screen_url));
-            ToastMessages.showToastLong(NoticeDetailActivity.this,"Notice shared");
+            shareNoticeWithOtherApps(noticeTitle, noticeBody, image_link, getString(R.string.splash_screen_url));
+            ToastMessages.showToastLong(NoticeDetailActivity.this, "Notice shared");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -231,43 +234,53 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
     private void setAlarm() {
 
-        if(noReminder!=null){
-            ToastMessages.showToastLong(NoticeDetailActivity.this,"This notice has no reminder date");
+        if (noReminder != null) {
+            ToastMessages.showToastLong(NoticeDetailActivity.this, "This notice has no reminder date");
             return;
         }
-        if(startDate==null){
-            ToastMessages.showToastLong(NoticeDetailActivity.this,"setting an alarm for notice");
+        if (startDate == null) {
+            ToastMessages.showToastLong(NoticeDetailActivity.this, "This notice has no reminder date");
             return;
         }
-        String actualDate[] = startDate.replace("Z","").trim().split("T");
+        String actualDate[] = startDate.replace("Z", "").trim().split("T");
         String date = actualDate[0];
         String time = actualDate[1];
+        int month, year, day, hour, minute, seconds = 0;
 
         try {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date dateConverted = dateFormat.parse(date);
-            Log.e("converted date",dateConverted+"");
-        }catch (Exception e){
-
+            String dateArray[] = date.toString().split("-");
+            String timeArray[] = time.toString().split(":");
+            month = Integer.parseInt(dateArray[1]);
+            year = Integer.parseInt(dateArray[0]);
+            day = Integer.parseInt(dateArray[2]);
+            hour = Integer.parseInt(timeArray[0]);
+            minute = Integer.parseInt(timeArray[1]);
+            seconds = Integer.parseInt(timeArray[2]);
+            Log.e("converted date", seconds + " " + minute + " " + hour);
+        } catch (Exception e) {
+            Crouton.makeText(NoticeDetailActivity.this, "Failed to set reminder", Style.ALERT)
+                    .show();
+            return;
         }
+
         Calendar calendar = Calendar.getInstance();
 
-        calendar.set(Calendar.MONTH, 6);
-        calendar.set(Calendar.YEAR, 2014);
-        calendar.set(Calendar.DAY_OF_MONTH, 4);
+        calendar.set(Calendar.MONTH, month - 1);
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
 
-        calendar.set(Calendar.HOUR_OF_DAY, 16);
-        calendar.set(Calendar.MINUTE, 36);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.AM_PM,Calendar.PM);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, seconds);
+        calendar.set(Calendar.AM_PM, Calendar.PM);
 
         Intent alarmIntent = new Intent(NoticeDetailActivity.this, FlippyReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(NoticeDetailActivity.this, 0, alarmIntent, 0);
 
-        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
-        ToastMessages.showToastLong(NoticeDetailActivity.this,"Alarm set successfully");
+        ToastMessages.showToastLong(NoticeDetailActivity.this, "Reminder set successfully");
 
     }
 
@@ -328,6 +341,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                     }
                 });
     }
+
     private void getNoticeReminder(String id) {
         String postReminderURL = Flippy.allPostURL + id + "/reminder/";
         Ion.with(NoticeDetailActivity.this)
@@ -337,7 +351,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         if (result != null) {
-                            if(result.has("detail")){
+                            if (result.has("detail")) {
                                 noReminder = result.get("detail").getAsString();
                                 return;
                             }
@@ -392,10 +406,10 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 });
     }
 
-    private void shareNoticeWithOtherApps(String title,String body,String imageLink,String footer){
+    private void shareNoticeWithOtherApps(String title, String body, String imageLink, String footer) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, title+"\n"+ body+"\n"+ imageLink+"\n"+footer );
+        sendIntent.putExtra(Intent.EXTRA_TEXT, title + "\n" + body + "\n" + imageLink + "\n" + footer);
         sendIntent.setType("text/plain");
         startActivity(Intent.createChooser(sendIntent, "Share Flippy notice via ..."));
     }
