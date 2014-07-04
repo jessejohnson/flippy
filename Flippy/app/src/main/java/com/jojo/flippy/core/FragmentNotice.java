@@ -25,6 +25,7 @@ import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.Notice;
 import com.jojo.flippy.adapter.NoticeListAdapter;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.profile.ImagePreviewActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
@@ -47,6 +48,7 @@ public class FragmentNotice extends Fragment {
     private String noticeTitle;
     private String noticeSubtitle;
     private String noticeId;
+    private String noticeAvatar;
     private String noticeBody;
     private ProgressBar progressBarCommunityCenterLoader;
 
@@ -55,7 +57,7 @@ public class FragmentNotice extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_notice, container,
@@ -116,7 +118,7 @@ public class FragmentNotice extends Fragment {
         //Setting the click listener for the notice list
         noticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
+            public void onItemClick(final AdapterView<?> parent, View view, int position,
                                     long id) {
                 //setting the click action for each of the items
                 TextView noticeTitleTextView = (TextView) view.findViewById(R.id.textViewNoticeTitle);
@@ -127,14 +129,6 @@ public class FragmentNotice extends Fragment {
                 noticeSubtitle = textViewNoticeSubtitle.getText().toString().trim();
                 noticeBody = textViewNoticeText.getText().toString().trim();
                 noticeId = textViewNoticeId.getText().toString().trim();
-                ImageView imageViewNoticeImage = (ImageView) view.findViewById(R.id.imageViewNoticeImage);
-                ImageView imageViewStar = (ImageView) view.findViewById(R.id.imageViewStar);
-                imageViewStar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        rateNotice(noticeId);
-                    }
-                });
 
                 intent = new Intent(getActivity(), NoticeDetailActivity.class);
                 intent.putExtra("noticeTitle", noticeTitle);
@@ -154,31 +148,6 @@ public class FragmentNotice extends Fragment {
 
     private void updateListAdapter() {
         listAdapter.notifyDataSetChanged();
-    }
-
-    private void rateNotice(String Id) {
-        String ratingURL = Flippy.allPostURL + Id + "/star/";
-        JsonObject json = new JsonObject();
-        json.addProperty("id", noticeId);
-        Ion.with(getActivity())
-                .load(ratingURL)
-                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
-                .setJsonObjectBody(json)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            ToastMessages.showToastLong(getActivity(), result.get("results").getAsString());
-                        }
-                        if (e != null) {
-                            ToastMessages.showToastLong(getActivity(), getResources().getString(R.string.internet_connection_error_dialog_title));
-                        }
-
-                    }
-
-                });
-
     }
 
 

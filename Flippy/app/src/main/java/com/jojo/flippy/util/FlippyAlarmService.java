@@ -13,6 +13,7 @@ import android.os.IBinder;
 
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.core.NoticeDetailActivity;
 
 
 public class FlippyAlarmService extends Service {
@@ -35,12 +36,12 @@ public class FlippyAlarmService extends Service {
         super.onStart(intent, startId);
 
         mManager = (NotificationManager) this.getApplicationContext().getSystemService(this.getApplicationContext().NOTIFICATION_SERVICE);
-        Intent intent1 = new Intent(this.getApplicationContext(), CommunityCenterActivity.class);
+        Intent alarmServiceIntent = new Intent(this.getApplicationContext(), NoticeDetailActivity.class);
 
         Notification notification = new Notification(R.drawable.ic_launcher, "This is a test message!", System.currentTimeMillis());
-        intent1.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        alarmServiceIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this.getApplicationContext(), 0, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this.getApplicationContext(), 0, alarmServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         notification.setLatestEventInfo(this.getApplicationContext(), "AlarmManagerDemo", "This is a test message!", pendingNotificationIntent);
 

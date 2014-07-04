@@ -131,6 +131,10 @@ public class CreateChannelActivity extends ActionBarActivity {
                 fileManagerString = selectedImageUri.getPath();
                 selectedImagePath = getPath(selectedImageUri);
                 // img.setImageURI(selectedImageUri);
+                if(imagePath==null){
+                    ToastMessages.showToastLong(CreateChannelActivity.this,"Choose an image with local source");
+                    return;
+                }
                 imagePath.getBytes();
                 path = imagePath.toString();
                 Bitmap bm = BitmapFactory.decodeFile(imagePath);

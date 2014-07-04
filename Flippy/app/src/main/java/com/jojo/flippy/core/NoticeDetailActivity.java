@@ -243,9 +243,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date dateConverted = dateFormat.parse(date);
             Log.e("converted date",dateConverted+"");
-            Log.e("Date ",dateConverted.getYear()+"");
-            dateConverted.getDay();
-            dateConverted.getMonth();
+;
         }catch (Exception e){
 
         }
@@ -255,17 +253,17 @@ public class NoticeDetailActivity extends ActionBarActivity {
         calendar.set(Calendar.YEAR, 2014);
         calendar.set(Calendar.DAY_OF_MONTH, 3);
 
-        calendar.set(Calendar.HOUR_OF_DAY, 13);
-        calendar.set(Calendar.MINUTE, 23);
+        calendar.set(Calendar.HOUR_OF_DAY, 19);
+        calendar.set(Calendar.MINUTE, 6);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.AM_PM,Calendar.PM);
 
-        Intent myIntent = new Intent(NoticeDetailActivity.this, FlippyReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(NoticeDetailActivity.this, 0, myIntent, 0);
+        Intent alarmIntent = new Intent(NoticeDetailActivity.this, FlippyReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(NoticeDetailActivity.this, 0, alarmIntent, 0);
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
-        Log.e("alarm object", alarmManager.toString());
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
     }
 
     private void showView() {
