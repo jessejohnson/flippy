@@ -46,13 +46,13 @@ public class FragmentSettings extends Fragment {
         SettingsItems = new ArrayList<SettingsItem>();
         SettingsItem settingHelp = new SettingsItem(R.drawable.ic_action_help, getResources().getString(R.string.settings_help), getResources().getString(R.string.settings_help_subtitle));
         SettingsItem settingProfile = new SettingsItem(R.drawable.ic_action_person_dark, getResources().getString(R.string.settings_profile), getResources().getString(R.string.settings_profile_subtitle));
-        SettingsItem settingNotifications = new SettingsItem(R.drawable.ic_action_alarms, getResources().getString(R.string.settings_notifications), getResources().getString(R.string.settings_notifications_subtitle));
         SettingsItem settingCommunity = new SettingsItem(R.drawable.ic_action_group_dark, getResources().getString(R.string.settings_accessibility),getResources().getString(R.string.settings_accessibility_subtitle));
+        SettingsItem settingNotifications = new SettingsItem(R.drawable.ic_action_error, getResources().getString(R.string.settings_legal), getResources().getString(R.string.settings_legal_subtitle));
         SettingsItem settingAbout = new SettingsItem(R.drawable.ic_action_about, getResources().getString(R.string.settings_about), getResources().getString(R.string.settings_about_subtitle));
         SettingsItems.add(settingHelp);
         SettingsItems.add(settingProfile);
-        SettingsItems.add(settingNotifications);
         SettingsItems.add(settingCommunity);
+        SettingsItems.add(settingNotifications);
         SettingsItems.add(settingAbout);
 
 
@@ -76,11 +76,11 @@ public class FragmentSettings extends Fragment {
                         startActivity(intent);
                         break;
                     case 2:
-                        intent.setClass(getActivity(), NotificationSettingsActivity.class);
-                        startActivity(intent);
-                        break;
+                    intent.setClass(getActivity(), GeneralSettingsActivity.class);
+                    startActivity(intent);
+                    break;
                     case 3:
-                        intent.setClass(getActivity(), GeneralSettingsActivity.class);
+                        intent.setClass(getActivity(), SettingsLegalActivity.class);
                         startActivity(intent);
                         break;
                     case 4:

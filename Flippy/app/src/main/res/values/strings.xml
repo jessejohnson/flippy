@@ -134,8 +134,8 @@
     <string name="settings_help_subtitle">get help information</string>
     <string name="settings_profile">Profile</string>
     <string name="settings_profile_subtitle">edit your account details</string>
-    <string name="settings_notifications">Notifications</string>
-    <string name="settings_notifications_subtitle">configure your notifications</string>
+    <string name="settings_legal">Legal</string>
+    <string name="settings_legal_subtitle">read the fine print</string>
     <string name="settings_accessibility">Flippy Settings</string>
     <string name="settings_accessibility_subtitle">make flippy better for you</string>
     <string name="settings_about">About Flippy</string>
@@ -257,9 +257,10 @@
     <string name="help_string_three">Help String Three</string>
     <string name="help_string_four">Help String Four</string>
 
-    <!--select channel activity string-->
+    <!-- select channel activity string -->
     <string name="title_activity_select_channel">Select Channel</string>
     <string name="activity_select_channel_empty_view">You have not subscribed or created any channel yet</string>
     <string name="activity_select_channel_empty_view_help">Create a channel</string>
+    <string name="title_activity_settings_legal">Legal</string>
 
 </resources>

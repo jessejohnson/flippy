@@ -219,10 +219,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
-        <service android:name="com.jojo.flippy.util.FlippyAlarmService"
+
+        <service
+            android:name="com.jojo.flippy.util.FlippyAlarmService"
             android:enabled="true" />
 
-        <receiver android:name="com.jojo.flippy.util.FlippyReceiver"/>
+        <receiver android:name="com.jojo.flippy.util.FlippyReceiver" />
+
+        <activity
+            android:name="com.jojo.flippy.core.SettingsLegalActivity"
+            android:label="@string/title_activity_settings_legal" >
+        </activity>
     </application>
 
 </manifest>
