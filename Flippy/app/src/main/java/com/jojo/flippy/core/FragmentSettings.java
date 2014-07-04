@@ -7,11 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
+
 import com.jojo.flippy.adapter.SettingsAdapter;
 import com.jojo.flippy.adapter.SettingsItem;
 import com.jojo.flippy.app.R;
@@ -83,7 +80,7 @@ public class FragmentSettings extends Fragment {
                         startActivity(intent);
                         break;
                     case 3:
-                        intent.setClass(getActivity(), ChannelSettingsActivity.class);
+                        intent.setClass(getActivity(), GeneralSettingsActivity.class);
                         startActivity(intent);
                         break;
                     case 4:
