@@ -134,10 +134,10 @@
     <string name="settings_help_subtitle">get help information</string>
     <string name="settings_profile">Profile</string>
     <string name="settings_profile_subtitle">edit your account details</string>
-    <string name="settings_notifications">Notifications</string>
-    <string name="settings_notifications_subtitle">configure your notifications</string>
-    <string name="settings_accessibility">Flippy channels</string>
-    <string name="settings_accessibility_subtitle">manage flippy channel accessibility</string>
+    <string name="settings_legal">Legal</string>
+    <string name="settings_legal_subtitle">read the fine print</string>
+    <string name="settings_accessibility">Flippy Settings</string>
+    <string name="settings_accessibility_subtitle">make flippy better for you</string>
     <string name="settings_about">About Flippy</string>
     <string name="settings_about_subtitle">more about flippy</string>
 
@@ -207,7 +207,7 @@
     <string name="manage_channel_remove">remove this channel</string>
     <string name="select_member_from_list">choose member</string>
 
-    <!-- temporal string section -->
+    <!-- temporary string section -->
     <string name="dummy_community">University of Cape coast</string>
     <string name="dummy_user_number_of_channels_own">admin (3)</string>
     <string name="dummy_user_number_channels_in">5 channels</string>
@@ -243,12 +243,10 @@
             Now, create channels and start posting.</string>
     <string name="about_more_info_email">email</string>
     <string name="about_more_info_web">email</string>
-    <string name="title_activity_channel_settings">Channel Settings</string>
+    <string name="title_activity_channel_settings">Flippy Settings</string>
 
-    <!-- the channel settings strings -->
-    <string name="channel_settings_configuration">Channel configuration</string>
-    <string name="channel_settings_channel_is_public">Is Public</string>
-    <string name="channel_settings_channel_is_public_summary">Declare all channels to to be created as public</string>
+    <!-- the general settings strings -->
+    <string name="general_settings_title">General Settings</string>
     <string name="title_activity_help">Help</string>
     <string name="hello_world">Hello world!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -259,9 +257,10 @@
     <string name="help_string_three">Help String Three</string>
     <string name="help_string_four">Help String Four</string>
 
-    <!--select channel activity string-->
+    <!-- select channel activity string -->
     <string name="title_activity_select_channel">Select Channel</string>
     <string name="activity_select_channel_empty_view">You have not subscribed or created any channel yet</string>
     <string name="activity_select_channel_empty_view_help">Create a channel</string>
+    <string name="title_activity_settings_legal">Legal</string>
 
 </resources>

@@ -199,6 +199,18 @@
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
         <activity
+<<<<<<< HEAD
+=======
+            android:name="com.jojo.flippy.core.GeneralSettingsActivity"
+            android:label="@string/title_activity_channel_settings"
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
+            android:windowSoftInputMode="adjustPan" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
+        </activity>
+        <activity
+>>>>>>> 8d830b29a7c382b3aa84f041733a24e8e5728c92
             android:name="com.jojo.flippy.core.HelpActivity"
             android:label="@string/title_activity_help" >
         </activity>
@@ -210,10 +222,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
-        <service android:name="com.jojo.flippy.util.FlippyAlarmService"
+
+        <service
+            android:name="com.jojo.flippy.util.FlippyAlarmService"
             android:enabled="true" />
 
-        <receiver android:name="com.jojo.flippy.util.FlippyReceiver"/>
+        <receiver android:name="com.jojo.flippy.util.FlippyReceiver" />
+
+        <activity
+            android:name="com.jojo.flippy.core.SettingsLegalActivity"
+            android:label="@string/title_activity_settings_legal" >
+        </activity>
     </application>
 
 </manifest>

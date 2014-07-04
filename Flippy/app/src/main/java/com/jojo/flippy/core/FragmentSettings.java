@@ -7,11 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
+
 import com.jojo.flippy.adapter.SettingsAdapter;
 import com.jojo.flippy.adapter.SettingsItem;
 import com.jojo.flippy.app.R;
@@ -49,10 +46,19 @@ public class FragmentSettings extends Fragment {
         SettingsItems = new ArrayList<SettingsItem>();
         SettingsItem settingHelp = new SettingsItem(R.drawable.ic_action_help, getResources().getString(R.string.settings_help), getResources().getString(R.string.settings_help_subtitle));
         SettingsItem settingProfile = new SettingsItem(R.drawable.ic_action_person_dark, getResources().getString(R.string.settings_profile), getResources().getString(R.string.settings_profile_subtitle));
+<<<<<<< HEAD
         SettingsItem settingNotifications = new SettingsItem(R.drawable.ic_action_alarms, getResources().getString(R.string.settings_notifications), getResources().getString(R.string.settings_notifications_subtitle));
         SettingsItem settingAbout = new SettingsItem(R.drawable.ic_action_about, getResources().getString(R.string.settings_about), getResources().getString(R.string.settings_about_subtitle));
         SettingsItems.add(settingHelp);
         SettingsItems.add(settingProfile);
+=======
+        SettingsItem settingCommunity = new SettingsItem(R.drawable.ic_action_group_dark, getResources().getString(R.string.settings_accessibility),getResources().getString(R.string.settings_accessibility_subtitle));
+        SettingsItem settingNotifications = new SettingsItem(R.drawable.ic_action_error, getResources().getString(R.string.settings_legal), getResources().getString(R.string.settings_legal_subtitle));
+        SettingsItem settingAbout = new SettingsItem(R.drawable.ic_action_about, getResources().getString(R.string.settings_about), getResources().getString(R.string.settings_about_subtitle));
+        SettingsItems.add(settingHelp);
+        SettingsItems.add(settingProfile);
+        SettingsItems.add(settingCommunity);
+>>>>>>> 8d830b29a7c382b3aa84f041733a24e8e5728c92
         SettingsItems.add(settingNotifications);
         SettingsItems.add(settingAbout);
 
@@ -77,10 +83,17 @@ public class FragmentSettings extends Fragment {
                         startActivity(intent);
                         break;
                     case 2:
-                        intent.setClass(getActivity(), NotificationSettingsActivity.class);
+                    intent.setClass(getActivity(), GeneralSettingsActivity.class);
+                    startActivity(intent);
+                    break;
+                    case 3:
+<<<<<<< HEAD
+=======
+                        intent.setClass(getActivity(), SettingsLegalActivity.class);
                         startActivity(intent);
                         break;
-                    case 3:
+                    case 4:
+>>>>>>> 8d830b29a7c382b3aa84f041733a24e8e5728c92
                         intent.setClass(getActivity(), AboutActivity.class);
                         startActivity(intent);
                         break;
