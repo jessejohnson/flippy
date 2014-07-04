@@ -51,12 +51,12 @@ public class FlippyAlarmService extends Service {
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         builder.setContentIntent(contentIntent);
-        builder.setAutoCancel(true);
+        builder.setAutoCancel(false);
         builder.setLights(Color.BLUE, 500, 500);
         long[] pattern = {500,500,500,500,500,500,500,500,500};
         builder.setVibrate(pattern);
         builder.setStyle(new NotificationCompat.InboxStyle());
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
         builder.setSound(alarmSound);
         //Add as notification
         NotificationManager manager = (NotificationManager) getSystemService(this.getApplication().NOTIFICATION_SERVICE);

@@ -256,8 +256,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
         calendar.set(Calendar.YEAR, 2014);
         calendar.set(Calendar.DAY_OF_MONTH, 4);
 
-        calendar.set(Calendar.HOUR_OF_DAY, 15);
-        calendar.set(Calendar.MINUTE, 26);
+        calendar.set(Calendar.HOUR_OF_DAY, 16);
+        calendar.set(Calendar.MINUTE, 36);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.AM_PM,Calendar.PM);
 

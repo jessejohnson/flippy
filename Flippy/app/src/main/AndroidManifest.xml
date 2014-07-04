@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OnboardingActivity"
+            android:name=".OnBoardingActivity"
             android:label="@string/title_activity_on_boarding"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
