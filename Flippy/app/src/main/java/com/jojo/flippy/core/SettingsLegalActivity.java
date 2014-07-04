@@ -1,10 +1,12 @@
 package com.jojo.flippy.core;
 
+import android.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import com.jojo.flippy.core.R;
+
+import com.jojo.flippy.app.R;
 
 public class SettingsLegalActivity extends ActionBarActivity {
 
@@ -12,6 +14,8 @@ public class SettingsLegalActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_legal);
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
 

@@ -6,8 +6,9 @@
     android:padding="@dimen/margin_five">
 
     <ListView
+        android:id="@+id/listViewSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listViewSettings"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:scrollbars="none" />
 </LinearLayout>

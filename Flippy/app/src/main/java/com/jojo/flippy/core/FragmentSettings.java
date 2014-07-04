@@ -46,24 +46,17 @@ public class FragmentSettings extends Fragment {
         SettingsItems = new ArrayList<SettingsItem>();
         SettingsItem settingHelp = new SettingsItem(R.drawable.ic_action_help, getResources().getString(R.string.settings_help), getResources().getString(R.string.settings_help_subtitle));
         SettingsItem settingProfile = new SettingsItem(R.drawable.ic_action_person_dark, getResources().getString(R.string.settings_profile), getResources().getString(R.string.settings_profile_subtitle));
-<<<<<<< HEAD
-        SettingsItem settingNotifications = new SettingsItem(R.drawable.ic_action_alarms, getResources().getString(R.string.settings_notifications), getResources().getString(R.string.settings_notifications_subtitle));
-        SettingsItem settingAbout = new SettingsItem(R.drawable.ic_action_about, getResources().getString(R.string.settings_about), getResources().getString(R.string.settings_about_subtitle));
-        SettingsItems.add(settingHelp);
-        SettingsItems.add(settingProfile);
-=======
-        SettingsItem settingCommunity = new SettingsItem(R.drawable.ic_action_group_dark, getResources().getString(R.string.settings_accessibility),getResources().getString(R.string.settings_accessibility_subtitle));
+        SettingsItem settingCommunity = new SettingsItem(R.drawable.ic_action_group_dark, getResources().getString(R.string.settings_accessibility), getResources().getString(R.string.settings_accessibility_subtitle));
         SettingsItem settingNotifications = new SettingsItem(R.drawable.ic_action_error, getResources().getString(R.string.settings_legal), getResources().getString(R.string.settings_legal_subtitle));
         SettingsItem settingAbout = new SettingsItem(R.drawable.ic_action_about, getResources().getString(R.string.settings_about), getResources().getString(R.string.settings_about_subtitle));
         SettingsItems.add(settingHelp);
         SettingsItems.add(settingProfile);
         SettingsItems.add(settingCommunity);
->>>>>>> 8d830b29a7c382b3aa84f041733a24e8e5728c92
         SettingsItems.add(settingNotifications);
         SettingsItems.add(settingAbout);
 
 
-        listViewSettings = (ListView)view.findViewById(R.id.listViewSettings);
+        listViewSettings = (ListView) view.findViewById(R.id.listViewSettings);
         SettingsAdapter adapter = new SettingsAdapter(getActivity(),
                 R.layout.settings_list_item, SettingsItems);
         listViewSettings.setAdapter(adapter);
@@ -73,7 +66,7 @@ public class FragmentSettings extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 //setting the click action for each of the items
-                switch(position){
+                switch (position) {
                     case 0:
                         intent.setClass(getActivity(), HelpActivity.class);
                         startActivity(intent);
@@ -83,17 +76,14 @@ public class FragmentSettings extends Fragment {
                         startActivity(intent);
                         break;
                     case 2:
-                    intent.setClass(getActivity(), GeneralSettingsActivity.class);
-                    startActivity(intent);
-                    break;
+                        intent.setClass(getActivity(), GeneralSettingsActivity.class);
+                        startActivity(intent);
+                        break;
                     case 3:
-<<<<<<< HEAD
-=======
                         intent.setClass(getActivity(), SettingsLegalActivity.class);
                         startActivity(intent);
                         break;
                     case 4:
->>>>>>> 8d830b29a7c382b3aa84f041733a24e8e5728c92
                         intent.setClass(getActivity(), AboutActivity.class);
                         startActivity(intent);
                         break;
