@@ -4,7 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +23,7 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.ProgressCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -29,7 +32,6 @@ public class ImagePreviewActivity extends ActionBarActivity {
     private Intent intent;
     private ProgressBar progressBarLoadUserImage;
     private ProgressDialog progressDialog;
-    private String imagePath;
     private String avatar;
 
 
@@ -45,27 +47,25 @@ public class ImagePreviewActivity extends ActionBarActivity {
         progressDialog = new ProgressDialog(ImagePreviewActivity.this);
 
         Ion.with(imageViewPreviewShare)
-                .placeholder(R.color.flippy_light_header)
+                .placeholder(R.color.flippy_dark_header)
                 .animateIn(R.anim.fade_in)
                 .load(avatar)
                 .setCallback(new FutureCallback<ImageView>() {
-
                     @Override
-                    public void onCompleted(Exception ex, ImageView iv) {
+                    public void onCompleted(Exception ex, ImageView imageLoaded) {
                         progressBarLoadUserImage.setVisibility(View.GONE);
                         if (ex != null) {
                             ToastMessages.showToastLong(ImagePreviewActivity.this, getResources().getString(R.string.internet_connection_error_dialog_message));
+                            return;
                         }
-
-                    }
+                  }
                 });
+
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.image_preview_menu, menu);
         return true;
     }
@@ -74,48 +74,27 @@ public class ImagePreviewActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_share_photo) {
-            if(avatar==null){
-                ToastMessages.showToastLong(ImagePreviewActivity.this,"Failed to download image");
+            if (avatar == null) {
+                ToastMessages.showToastLong(ImagePreviewActivity.this, "Failed to share image");
                 return true;
             }
-            saveImage(avatar);
+            sharePhoto(avatar);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void sharePhoto(Uri uriToImage) {
-        ToastMessages.showToastLong(this, uriToImage.toString());
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
-        shareIntent.setType("image/*");
-        startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.image_preview_menu)));
-    }
-
-   private void saveImage(String imageLink) {
-        Ion.with(ImagePreviewActivity.this)
-                .load("http:/flippy.flips.s3.amazonaws.com/media/posts/mecca.JPG")
-                .progress(new ProgressCallback() {
-                    @Override
-                    public void onProgress(int downloaded, int total) {
-                        progressDialog.setMessage("Downloading " + total + "%");
-                        progressDialog.show();
-                    }
-                })
-                .write(new File(imageLink.trim()))
-                .setCallback(new FutureCallback<File>() {
-                    @Override
-                    public void onCompleted(Exception e, File file) {
-                        progressDialog.cancel();
-                        if (e != null) {
-                            Log.e("Image error", e.toString());
-                            return;
-                        }
-                        imagePath = file.getAbsolutePath();
-                        sharePhoto(Uri.parse(imagePath));
-                    }
-                });
+    private void sharePhoto(String image) {
+        if (image == null) {
+            ToastMessages.showToastLong(ImagePreviewActivity.this, "Sharing failed");
+            return;
+        }
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Download flippy resource at :" + image);
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.app_name)));
     }
 
 }
+

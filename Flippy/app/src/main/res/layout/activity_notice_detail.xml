@@ -7,7 +7,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="none"
         android:layout_height="match_parent">
 
         <LinearLayout

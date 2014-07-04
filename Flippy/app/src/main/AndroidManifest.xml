@@ -199,15 +199,6 @@
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
         <activity
-            android:name="com.jojo.flippy.core.ChannelSettingsActivity"
-            android:label="@string/title_activity_channel_settings"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:windowSoftInputMode="adjustPan" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
-        </activity>
-        <activity
             android:name="com.jojo.flippy.core.HelpActivity"
             android:label="@string/title_activity_help" >
         </activity>

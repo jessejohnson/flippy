@@ -67,13 +67,12 @@
                 android:textColor="@color/flippy_orange"
                 android:textStyle="italic" />
         </LinearLayout>
-
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:id="@+id/imageViewStar"
             android:src="@drawable/trans_star_white"
-            android:scaleType="fitXY"
+            android:scaleType="fitCenter"
             android:layout_marginTop="20dp" />
     </LinearLayout>
 
