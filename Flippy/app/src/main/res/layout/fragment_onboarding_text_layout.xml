@@ -8,8 +8,7 @@
     <ImageView
         android:layout_width="@dimen/margin_two_hundred"
         android:layout_height="@dimen/margin_one_fifty"
-        android:id="@+id/imageView"
-        android:background="@drawable/connect"
+        android:id="@+id/imageViewOnBoardingImage"
         android:layout_marginTop="@dimen/margin_fifty"
         android:layout_gravity="center_horizontal|top" />
 

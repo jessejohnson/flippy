@@ -92,7 +92,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 userAvatarURL = currentUser.avatar;
                 userCommunityId = currentUser.community_id;
                 userCommunityName = currentUser.community_name;
-                regUserID = currentUser.id;
+                regUserID = currentUser.user_id;
                 userDateOfBirth = currentUser.date_of_birth;
                 userGender = currentUser.gender;
                 userAuthToken = currentUser.user_auth;
@@ -226,7 +226,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
 
     }
 

@@ -23,7 +23,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     // the DAO object we use to access the SimpleData table
     private Dao<User, Integer> userDao = null;
+    private Dao<Post, Integer> postDao = null;
     private RuntimeExceptionDao<User, Integer> simpleRuntimeDao = null;
+    private RuntimeExceptionDao<Post, Integer> simpleRuntimePostDao = null;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -34,6 +36,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             Log.i(DatabaseHelper.class.getName(), "onCreate");
             TableUtils.createTable(connectionSource, User.class);
+            TableUtils.createTable(connectionSource, Post.class);
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
             throw new RuntimeException(e);
@@ -45,6 +48,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             TableUtils.dropTable(connectionSource, User.class, true);
+            TableUtils.dropTable(connectionSource, Post.class, true);
             // after we drop the old databases, we create the new ones
             onCreate(db, connectionSource);
         } catch (SQLException e) {
@@ -52,16 +56,18 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             throw new RuntimeException(e);
         }
     }
-
-    /**
-     * Returns the Database Access Object (DAO) for our SimpleData class. It will create it or just give the cached
-     * value.
-     */
     public Dao<User, Integer> getUserDao() throws SQLException {
         if (userDao == null) {
             userDao = getDao(User.class);
         }
         return userDao;
+    }
+
+    public Dao<Post, Integer> getPostDao() throws SQLException {
+        if (postDao == null) {
+            postDao = getDao(Post.class);
+        }
+        return postDao;
     }
 
     /**
@@ -75,6 +81,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return simpleRuntimeDao;
     }
 
+    public RuntimeExceptionDao<Post, Integer> getSimplePostDataDao() {
+        if (simpleRuntimePostDao == null) {
+            simpleRuntimePostDao = getRuntimeExceptionDao(Post.class);
+        }
+        return simpleRuntimePostDao;
+    }
+
     /**
      * Close the database connections and clear any cached DAOs.
      */
@@ -82,6 +95,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void close() {
         super.close();
         userDao = null;
+        postDao = null;
         simpleRuntimeDao = null;
     }
 }

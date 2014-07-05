@@ -13,7 +13,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.JsonObject;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.ToastMessages;
+import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.List;
@@ -21,28 +26,27 @@ import java.util.List;
 public class ChannelAdapter extends ArrayAdapter<Channel> {
 
     Context context;
-    private  boolean isUserChannel;
+    private boolean isUserChannel;
 
     public ChannelAdapter(Context context, int resourceId,
                           List<Channel> items, boolean isUserChannels) {
         super(context, resourceId, items);
         this.context = context;
-        this.isUserChannel=isUserChannels;
+        this.isUserChannel = isUserChannels;
     }
 
     /*private view holder class*/
     private class ViewHolder {
-        ImageView imageView,imageViewSubscribe;
+        ImageView imageView, imageViewSubscribe;
         TextView textViewChannelName;
         TextView textViewNumberOfMembers;
         TextView textViewStatus;
         TextView textViewChannelId;
 
     }
-
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        Channel rowItem = getItem(position);
+        final Channel rowItem = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -52,9 +56,9 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             holder.textViewNumberOfMembers = (TextView) convertView.findViewById(R.id.textViewChannelMembersCustom);
             holder.textViewChannelName = (TextView) convertView.findViewById(R.id.textViewChannelNameCustom);
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageViewCommunityChannel);
-            holder.textViewStatus =(TextView)convertView.findViewById(R.id.textViewChannelStatusCustom);
-            holder.imageViewSubscribe = (ImageView)convertView.findViewById(R.id.imageViewSubscribe);
-            holder.textViewChannelId = (TextView)convertView.findViewById(R.id.textViewChannelId);
+            holder.textViewStatus = (TextView) convertView.findViewById(R.id.textViewChannelStatusCustom);
+            holder.imageViewSubscribe = (ImageView) convertView.findViewById(R.id.imageViewSubscribe);
+            holder.textViewChannelId = (TextView) convertView.findViewById(R.id.textViewChannelId);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -69,9 +73,46 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         holder.textViewStatus.setText(rowItem.getCreatorEmail());
         holder.textViewChannelId.setText(rowItem.getId());
         //check to see if the adapter displays only user channel, then set the subscription button to invisible state
-         if(isUserChannel){
-             holder.imageViewSubscribe.setVisibility(convertView.GONE);
-         }
+        if (isUserChannel) {
+            holder.imageViewSubscribe.setVisibility(convertView.GONE);
+        }
+
+        holder.imageViewSubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                subscribeToChannel(rowItem.getId());
+            }
+        });
         return convertView;
+    }
+
+    private void subscribeToChannel(String id) {
+        final String channelDetailSubscribeURL = Flippy.channelSubscribeURL + id + "/subscribe/";
+        if (CommunityCenterActivity.userAuthToken == "") {
+            ToastMessages.showToastLong(context, "Sorry, request cannot be made");
+            return;
+        }
+        JsonObject json = new JsonObject();
+        json.addProperty("id", CommunityCenterActivity.regUserID);
+        Ion.with(context)
+                .load(channelDetailSubscribeURL)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+
+                        if (result != null) {
+                            ToastMessages.showToastLong(context, result.get("detail").getAsString());
+                            if (e != null) {
+                                ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
+                            }
+
+                        }
+                    }
+
+                    ;
+                });
     }
 }

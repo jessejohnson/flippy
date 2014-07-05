@@ -8,13 +8,13 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "userTable")
 public class User {
-    @DatabaseField(columnName = "id", uniqueIndex = true)
-    public String id;
+    @DatabaseField(id=true)
+    public String user_id;
 
     @DatabaseField(columnName = "user_auth", uniqueIndex = true)
     public String user_auth;
 
-    @DatabaseField(columnName = "user_email")
+    @DatabaseField(columnName = "user_email",uniqueIndex = true)
     public String user_email;
 
     @DatabaseField(columnName = "user_number")
@@ -44,15 +44,15 @@ public class User {
     public  String community_name;
 
 
-    public User(String id, String user_auth, String user_email, String first_name, String last_name) {
-        this.id = id;
+    public User(String user_id, String user_auth, String user_email, String first_name, String last_name) {
+        this.user_id = user_id;
         this.user_auth = user_auth;
         this.user_email = user_email;
         this.first_name = first_name;
         this.last_name = last_name;
     }
-    public User(String id, String user_auth, String user_email, String first_name, String last_name,String avatar,String avatar_thumb,String gender,String date_of_birth) {
-        this.id = id;
+    public User(String user_id, String user_auth, String user_email, String first_name, String last_name,String avatar,String avatar_thumb,String gender,String date_of_birth) {
+        this.user_id = user_id;
         this.user_auth = user_auth;
         this.user_email = user_email;
         this.first_name = first_name;

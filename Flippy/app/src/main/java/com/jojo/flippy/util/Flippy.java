@@ -6,6 +6,7 @@ import android.util.Log;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.persistence.DatabaseHelper;
+import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.persistence.User;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
  */
 public class Flippy  extends Application{
     public Dao<User, Integer> userDao;
+    public Dao<Post, Integer> postDao;
     public User thisUser;
     //make the url accessible to all the activities
     public static String regURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/signup/";
@@ -39,6 +41,7 @@ public class Flippy  extends Application{
                 DatabaseHelper.class);
         try{
             userDao = databaseHelper.getUserDao();
+            postDao = databaseHelper.getPostDao();
             List<User> userList = userDao.queryForAll();
             if(userList.isEmpty()){
                 thisUser = null;

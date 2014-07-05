@@ -157,7 +157,7 @@ public class SignInActivity extends ActionBarActivity {
                                                userDao.delete(userList);
                                             }
                                             User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName, avatar, avatar_thumb, gender, date_of_birth);
-                                            userDao.create(user);
+                                            userDao.createOrUpdate(user);
                                            } catch (java.sql.SQLException sqlE) {
                                             sqlE.printStackTrace();
                                             Crouton.makeText(SignInActivity.this, "Sorry, Try again later", Style.ALERT)

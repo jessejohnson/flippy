@@ -21,7 +21,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.persistence.Post;
+import com.jojo.flippy.profile.ImagePreviewActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.FlippyReceiver;
 import com.jojo.flippy.util.ToastMessages;
@@ -29,9 +32,13 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 
 public class NoticeDetailActivity extends ActionBarActivity {
@@ -73,6 +80,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
     private LinearLayout linearLayoutMapView;
 
+    private Calendar calendar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,14 +91,13 @@ public class NoticeDetailActivity extends ActionBarActivity {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+
         intent = getIntent();
         noticeTitle = intent.getStringExtra("noticeTitle");
         noticeId = intent.getStringExtra("noticeId");
         noticeSubtitle = intent.getStringExtra("noticeSubtitle");
         noticeBody = intent.getStringExtra("noticeBody");
-
         actionBar.setSubtitle(noticeTitle);
-
 
         imageViewNoticeImageDetail = (ImageView) findViewById(R.id.imageViewNoticeImageDetail);
         imageViewStarDetail = (ImageView) findViewById(R.id.imageViewStarDetail);
@@ -162,6 +170,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
                     }
                 });
+        imageViewNoticeImageDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent.putExtra("avatar", image_link);
+                intent.setClass(NoticeDetailActivity.this, ImagePreviewActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //loads the post rating from the api
         getPostCount(noticeId);
@@ -202,7 +218,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.notice_detail, menu);
         return true;
     }
@@ -211,7 +226,10 @@ public class NoticeDetailActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings_re_flip) {
-            ToastMessages.showToastLong(NoticeDetailActivity.this,"sharing in other channels");
+            intent.setClass(NoticeDetailActivity.this, SelectChannelActivity.class);
+            //pass data along and create a notice based on the selected channel
+            startActivity(intent);
+            ToastMessages.showToastLong(NoticeDetailActivity.this, "sharing in other channels");
             return true;
         }
         if (id == R.id.action_notice_alarm) {
@@ -219,7 +237,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_share_all) {
-            ToastMessages.showToastLong(NoticeDetailActivity.this,"share with other apps");
+            shareNoticeWithOtherApps(noticeTitle, noticeBody, image_link, getString(R.string.splash_screen_url));
+            ToastMessages.showToastLong(NoticeDetailActivity.this, "Notice shared");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -227,58 +246,98 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
     private void setAlarm() {
 
-        if(noReminder!=null){
-            ToastMessages.showToastLong(NoticeDetailActivity.this,"This notice has no reminder date");
+        if (noReminder != null) {
+            ToastMessages.showToastLong(NoticeDetailActivity.this, "This notice has no reminder date");
             return;
         }
-        if(startDate==null){
-            ToastMessages.showToastLong(NoticeDetailActivity.this,"setting an alarm for notice");
+        if (startDate == null) {
+            ToastMessages.showToastLong(NoticeDetailActivity.this, "This notice has no reminder date");
             return;
         }
-        String actualDate[] = startDate.replace("Z","").trim().split("T");
+        String actualDate[] = startDate.replace("Z", "").trim().split("T");
         String date = actualDate[0];
         String time = actualDate[1];
+        int month, year, day, hour, minute, seconds = 0;
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Calendar c = Calendar.getInstance();
+            Date dateConverted = dateFormat.parse(date.toString());
+            if (dateConverted.compareTo(c.getTime()) < 1) {
+                ToastMessages.showToastLong(NoticeDetailActivity.this, "Notice is long due");
+                return;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         try {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date dateConverted = dateFormat.parse(date);
-            Log.e("converted date",dateConverted+"");
-            Log.e("Date ",dateConverted.getYear()+"");
-            dateConverted.getDay();
-            dateConverted.getMonth();
-        }catch (Exception e){
-
+            String dateArray[] = date.toString().split("-");
+            String timeArray[] = time.toString().split(":");
+            month = Integer.parseInt(dateArray[1]);
+            year = Integer.parseInt(dateArray[0]);
+            day = Integer.parseInt(dateArray[2]);
+            hour = Integer.parseInt(timeArray[0]);
+            minute = Integer.parseInt(timeArray[1]);
+            seconds = Integer.parseInt(timeArray[2]);
+        } catch (Exception e) {
+            Crouton.makeText(NoticeDetailActivity.this, "Failed to set reminder", Style.ALERT)
+                    .show();
+            return;
         }
-        Calendar calendar = Calendar.getInstance();
+        setCalenderReminder(month, year, day, hour, minute, seconds);
 
-        calendar.set(Calendar.MONTH, 7);
-        calendar.set(Calendar.YEAR, 2014);
-        calendar.set(Calendar.DAY_OF_MONTH, 3);
+    }
 
-        calendar.set(Calendar.HOUR_OF_DAY, 13);
-        calendar.set(Calendar.MINUTE, 23);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.AM_PM,Calendar.PM);
+    private void setCalenderReminder(int month, int year, int day, int hour, int minute, int seconds) {
+        calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, month - 1);
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, seconds);
+        calendar.set(Calendar.AM_PM, Calendar.PM);
 
-        Intent myIntent = new Intent(NoticeDetailActivity.this, FlippyReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(NoticeDetailActivity.this, 0, myIntent, 0);
+        Intent alarmIntent = new Intent(NoticeDetailActivity.this, FlippyReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(NoticeDetailActivity.this, 0, alarmIntent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        if (saveNoticeAlarm(calendar.getTimeInMillis())) {
+            ToastMessages.showToastLong(NoticeDetailActivity.this, "Reminder set successfully");
+            return;
+        }
 
-        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
-        Log.e("alarm object", alarmManager.toString());
     }
 
     private void showView() {
         Ion.with(imageViewNoticeImageDetail)
                 .animateIn(R.anim.fade_in)
+                .error(R.color.flippy_orange)
+                .placeholder(R.drawable.channel_bg)
                 .load(image_link);
         Ion.with(imageViewNoticeCreatorImage)
                 .animateIn(R.anim.fade_in)
-                .placeholder(R.color.flippy_orange)
+                .placeholder(R.drawable.channel_bg)
+                .error(R.color.flippy_orange)
                 .load(author_profile);
         textViewAuthorEmailAddress.setText(author_email);
         textViewNoticeTimeStamp.setText(time_stamp);
 
+    }
+
+    private boolean saveNoticeAlarm(long id) {
+        boolean set = false;
+        try {
+            Dao<Post, Integer> postDao = ((Flippy) getApplication()).postDao;
+            Post post = new Post(id, noticeId, noticeTitle, noticeSubtitle, noticeBody);
+            postDao.create(post);
+            set = true;
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            ToastMessages.showToastLong(NoticeDetailActivity.this, "Sorry, this notice is already on reminder");
+            set = false;
+        }
+        return set;
     }
 
     private void getPostCount(String id) {
@@ -325,6 +384,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                     }
                 });
     }
+
     private void getNoticeReminder(String id) {
         String postReminderURL = Flippy.allPostURL + id + "/reminder/";
         Ion.with(NoticeDetailActivity.this)
@@ -334,7 +394,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         if (result != null) {
-                            if(result.has("detail")){
+                            if (result.has("detail")) {
                                 noReminder = result.get("detail").getAsString();
                                 return;
                             }
@@ -387,6 +447,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
                     }
                 });
+    }
+
+    private void shareNoticeWithOtherApps(String title, String body, String imageLink, String footer) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, title + "\n" + body + "\n" + imageLink + "\n" + footer);
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, "Share Flippy notice via ..."));
     }
 
     @Override

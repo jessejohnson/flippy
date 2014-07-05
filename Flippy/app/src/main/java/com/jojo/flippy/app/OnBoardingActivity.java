@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 
 
-public class OnboardingActivity extends FragmentActivity {
+public class OnBoardingActivity extends FragmentActivity {
 
     private static final int NUMBER_OF_PAGES = 4;
     private ViewPager pager;
@@ -27,7 +27,7 @@ public class OnboardingActivity extends FragmentActivity {
         setContentView(R.layout.activity_onboarding);
 
         pager = (ViewPager) findViewById(R.id.pager);
-        pagerAdapter = new OnboardingPagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new OnBoardingPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
 
         //An Array of indicator image views to be manipulated with each page transition
@@ -50,7 +50,7 @@ public class OnboardingActivity extends FragmentActivity {
         btnGetStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(OnboardingActivity.this, SignUpOptionsActivity.class);
+                Intent intent = new Intent(OnBoardingActivity.this, SignUpOptionsActivity.class);
                 startActivity(intent);
             }
         });
@@ -66,14 +66,14 @@ public class OnboardingActivity extends FragmentActivity {
         }
     }
 
-    private class OnboardingPagerAdapter extends FragmentStatePagerAdapter {
-        public OnboardingPagerAdapter(FragmentManager supportFragmentManager) {
+    private class OnBoardingPagerAdapter extends FragmentStatePagerAdapter {
+        public OnBoardingPagerAdapter(FragmentManager supportFragmentManager) {
             super(supportFragmentManager);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return OnboardingTextFragment.create(position);
+            return OnBoardingTextFragment.create(position);
         }
 
         @Override

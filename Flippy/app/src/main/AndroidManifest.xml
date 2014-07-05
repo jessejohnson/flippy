@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".OnboardingActivity"
+            android:name=".OnBoardingActivity"
             android:label="@string/title_activity_on_boarding"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
         </activity>
@@ -199,7 +199,7 @@
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
         <activity
-            android:name="com.jojo.flippy.core.GeneralSettingsActivity"
+     android:name="com.jojo.flippy.core.GeneralSettingsActivity"
             android:label="@string/title_activity_channel_settings"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
             android:windowSoftInputMode="adjustPan" >
@@ -209,7 +209,12 @@
         </activity>
         <activity
             android:name="com.jojo.flippy.core.HelpActivity"
-            android:label="@string/title_activity_help" >
+            android:label="@string/title_activity_help"
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
+            android:windowSoftInputMode="adjustPan" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
         <activity
             android:name="com.jojo.flippy.core.SelectChannelActivity"
@@ -228,7 +233,12 @@
 
         <activity
             android:name="com.jojo.flippy.core.SettingsLegalActivity"
-            android:label="@string/title_activity_settings_legal" >
+            android:label="@string/title_activity_settings_legal"
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
+            android:windowSoftInputMode="adjustPan" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
     </application>
 

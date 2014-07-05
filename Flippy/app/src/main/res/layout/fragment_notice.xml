@@ -15,6 +15,7 @@
         android:layout_weight="1"
         android:divider="@null"
         android:dividerHeight="@dimen/margin_two"
+        android:scrollbars="none"
         android:scrollbarStyle="outsideOverlay" />
 
 

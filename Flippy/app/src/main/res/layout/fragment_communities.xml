@@ -16,6 +16,7 @@
         android:divider="@null"
         android:scrollbarStyle="outsideOverlay"
         android:dividerHeight="@dimen/margin_five"
+        android:scrollbars="none"
         android:footerDividersEnabled="true"
         android:headerDividersEnabled="true" />
 
