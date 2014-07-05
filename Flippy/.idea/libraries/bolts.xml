@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="bolts">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/build/intermediates/exploded-aar/com.facebook/facebook-android-sdk/3.14.1/libs/bolts.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
