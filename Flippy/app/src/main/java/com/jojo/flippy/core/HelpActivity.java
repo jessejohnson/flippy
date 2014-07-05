@@ -27,7 +27,8 @@ public class HelpActivity extends FragmentActivity {
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        
+        actionBar.setSubtitle("Create channel");
+
         pager = (ViewPager) findViewById(R.id.pagerHelp);
         pagerAdapter = new HelpPagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pagerAdapter);
@@ -38,7 +39,7 @@ public class HelpActivity extends FragmentActivity {
         indicators.add((ImageView) findViewById(R.id.imageViewHelpIndicatorThree));
         indicators.add((ImageView) findViewById(R.id.imageViewHelpIndicatorFour));
 
-        pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+        pager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
@@ -49,8 +50,8 @@ public class HelpActivity extends FragmentActivity {
 
     private void setPageIndicator(ArrayList<ImageView> indicatorList, int position) {
         indicatorList.get(position).setImageResource(R.drawable.indicator_circle_active);
-        for(int i = 0; i < indicatorList.size(); i++){
-            if(i == position){
+        for (int i = 0; i < indicatorList.size(); i++) {
+            if (i == position) {
                 continue;
             }
             indicatorList.get(i).setImageResource(R.drawable.indicator_circle);

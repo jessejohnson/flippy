@@ -4,15 +4,17 @@
     android:layout_height="match_parent"
     tools:context="com.jojo.flippy.core.HelpTextFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
+        android:id="@+id/textViewHelpText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textColor="@color/flippy_white"
         android:textStyle="bold"
-        android:typeface="sans"
-        android:textColor="#ffffff"
-        android:textAppearance="@android:style/TextAppearance.Large"
-        android:id="@+id/textViewHelpText" />
+        android:typeface="sans" />
+
 
 </FrameLayout>
