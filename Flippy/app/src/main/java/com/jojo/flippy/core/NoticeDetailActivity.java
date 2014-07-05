@@ -290,6 +290,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
     private void setCalenderReminder(int month, int year, int day, int hour, int minute, int seconds) {
         calendar = Calendar.getInstance();
+
         calendar.set(Calendar.MONTH, month - 1);
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.DAY_OF_MONTH, day);
@@ -299,14 +300,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
         calendar.set(Calendar.AM_PM, Calendar.PM);
 
         Intent alarmIntent = new Intent(NoticeDetailActivity.this, FlippyReceiver.class);
+        alarmIntent.putExtra("noticeId", noticeId);
+        alarmIntent.putExtra("noticeSubtitle", noticeSubtitle);
+        alarmIntent.putExtra("noticeBody", noticeBody);
+        alarmIntent.putExtra("noticeTitle", noticeTitle);
         pendingIntent = PendingIntent.getBroadcast(NoticeDetailActivity.this, 0, alarmIntent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        if (saveNoticeAlarm(calendar.getTimeInMillis())) {
-            ToastMessages.showToastLong(NoticeDetailActivity.this, "Reminder set successfully");
-            return;
-        }
-
+        ToastMessages.showToastLong(NoticeDetailActivity.this, "Reminder set successfully");
     }
 
     private void showView() {
@@ -323,21 +324,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
         textViewAuthorEmailAddress.setText(author_email);
         textViewNoticeTimeStamp.setText(time_stamp);
 
-    }
-
-    private boolean saveNoticeAlarm(long id) {
-        boolean set = false;
-        try {
-            Dao<Post, Integer> postDao = ((Flippy) getApplication()).postDao;
-            Post post = new Post(id, noticeId, noticeTitle, noticeSubtitle, noticeBody);
-            postDao.create(post);
-            set = true;
-        } catch (java.sql.SQLException sqlE) {
-            sqlE.printStackTrace();
-            ToastMessages.showToastLong(NoticeDetailActivity.this, "Sorry, this notice is already on reminder");
-            set = false;
-        }
-        return set;
     }
 
     private void getPostCount(String id) {

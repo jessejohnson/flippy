@@ -31,15 +31,12 @@ import java.util.List;
 
 
 public class FlippyAlarmService extends Service {
-
     private NotificationManager notificationManager;
-    private String noticeTitle = "Flippy reminder";
-    private String noticeBody = "Flippy reminder";
-    private String noticeId = "1";
-    private String noticeSubtitle = "";
-
-    private boolean isValidReminder = false;
-
+    private String noticeTitle;
+    private String noticeBody;
+    private String noticeId;
+    private String noticeSubtitle;
+    private boolean isValidReminder = true;
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -55,27 +52,13 @@ public class FlippyAlarmService extends Service {
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
-        try {
-            Calendar c = Calendar.getInstance();
-            Log.e("current mills", c.getTimeInMillis() + "");
-            Dao<Post, Integer> postDao = ((Flippy) getApplication()).postDao;
-            QueryBuilder<Post, Integer> queryBuilder = postDao.queryBuilder();
-            queryBuilder.where().eq("id", c.getTimeInMillis());
-            PreparedQuery<Post> preparedQuery = queryBuilder.prepare();
-            List<Post> postList = postDao.query(preparedQuery);
+        noticeSubtitle = intent.getStringExtra("noticeSubtitle");
+        noticeBody = intent.getStringExtra("noticeBody");
+        noticeId = intent.getStringExtra("noticeId");
+        noticeTitle = intent.getStringExtra("noticeTitle");
 
-            if (!postList.isEmpty()) {
-                Log.e("The entire notice list", postList.toString());
-                Post post = postList.get(0);
-                noticeTitle = post.notice_title;
-                noticeBody = post.notice_body;
-                noticeId = post.notice_id;
-                noticeSubtitle = post.notice_subtitle;
-                isValidReminder = true;
-            }
-
-        } catch (java.sql.SQLException sqlE) {
-            sqlE.printStackTrace();
+        if (noticeSubtitle == null || noticeId == null || noticeTitle == null || noticeBody == null) {
+            isValidReminder = false;
         }
 
 

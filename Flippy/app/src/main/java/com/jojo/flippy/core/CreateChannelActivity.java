@@ -35,7 +35,6 @@ public class CreateChannelActivity extends ActionBarActivity {
     private EditText editTextNewChannelOneLiner;
     private CheckBox checkBoxChannelIsPublic;
     private Button buttonCreateNewChannel;
-    private ProgressBar progressBarCreateChannel;
 
 
     private static final int SELECT_PICTURE = 1;
@@ -59,7 +58,7 @@ public class CreateChannelActivity extends ActionBarActivity {
         editTextNewChannelName = (EditText) findViewById(R.id.editTextNewChannelName);
         editTextNewChannelOneLiner = (EditText) findViewById(R.id.editTextNewChannelOneLiner);
         buttonCreateNewChannel = (Button) findViewById(R.id.buttonCreateNewChannel);
-        progressBarCreateChannel = (ProgressBar) findViewById(R.id.progressBarCreateChannel);
+
 
 
         imageViewCreateChannel.setOnClickListener(new View.OnClickListener() {
@@ -92,10 +91,8 @@ public class CreateChannelActivity extends ActionBarActivity {
                 }
                 buttonCreateNewChannel.setText("Please wait ...");
                 buttonCreateNewChannel.setEnabled(false);
-                progressBarCreateChannel.setVisibility(View.VISIBLE);
                 Ion.with(CreateChannelActivity.this, Flippy.channelsURL)
                         .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
-                        .uploadProgressBar(progressBarCreateChannel)
                         .setMultipartParameter("community", CommunityCenterActivity.userCommunityId)
                         .setMultipartParameter("bio", channelBio)
                         .setMultipartParameter("creator", CommunityCenterActivity.regUserID)
@@ -108,7 +105,6 @@ public class CreateChannelActivity extends ActionBarActivity {
                                 Log.e("file", selectedImagePath);
                                 buttonCreateNewChannel.setEnabled(true);
                                 buttonCreateNewChannel.setText(getText(R.string.channel_create));
-                                progressBarCreateChannel.setVisibility(View.INVISIBLE);
                                 if (result != null) {
                                     ToastMessages.showToastLong(CreateChannelActivity.this, result.get("detail").getAsString());
                                 }
