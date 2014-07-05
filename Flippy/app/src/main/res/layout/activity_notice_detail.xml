@@ -7,14 +7,14 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:scrollbars="none"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/margin_five"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/margin_five">
 
 
             <LinearLayout
@@ -42,15 +42,6 @@
                         android:textColor="@color/flippy_white" />
 
                     <TextView
-                        android:id="@+id/textViewNoticeSubtitleChannelName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/notice_subtitle"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/flippy_white"
-                        android:textStyle="normal" />
-
-                    <TextView
                         android:id="@+id/textViewNoticeSubtitleDetail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -66,13 +57,12 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="0.10">
 
-                    <com.makeramen.RoundedImageView
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/imageViewStarDetail"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:padding="1dp"
                         android:layout_marginRight="@dimen/margin_five"
+                        android:padding="1dp"
                         android:scaleType="fitCenter"
                         android:src="@drawable/trans_star_white"
                         app:border_color="@color/border"
@@ -116,6 +106,15 @@
 
             </FrameLayout>
 
+            <TextView
+                android:id="@+id/textViewNoticeSubtitleChannelName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/notice_subtitle"
+                android:padding="@dimen/margin_five"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/flippy_orange"
+                android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/textViewNoticeTextDetail"
@@ -127,7 +126,7 @@
                 android:layout_alignRight="@+id/imageViewNoticeImage"
                 android:layout_below="@+id/imageViewNoticeImage"
                 android:gravity="left"
-                android:padding="10dp"
+                android:padding="@dimen/margin_five"
                 android:text="@string/dummy_user_name"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/flippy_dark_header" />
@@ -199,10 +198,11 @@
                 android:id="@+id/linearLayoutMapView"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_margin="@dimen/margin_five">
+                android:layout_margin="0dp">
 
 
-                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                <fragment
+                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/linearLayoutNoticeShowLocation"
                     class="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"

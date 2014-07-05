@@ -86,13 +86,11 @@ public class FragmentNotice extends Fragment {
                                 JsonObject author = item.getAsJsonObject("author");
                                 String[] timestampArray = item.get("timestamp").getAsString().replace("Z", "").split("T");
                                 String timestamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0, 8);
-
                                 try {
                                     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                                     SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
                                     Date dateConverted = dateFormat.parse(timestampArray[0].toString());
-                                    timestamp = formatter.format(dateConverted)+ " @ " + timestampArray[1].substring(0, 8);
-
+                                    timestamp = formatter.format(dateConverted) + " @ " + timestampArray[1].substring(0, 8);
                                 } catch (Exception error) {
                                     //maintain the first format
                                 }

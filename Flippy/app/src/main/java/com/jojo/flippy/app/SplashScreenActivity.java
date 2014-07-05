@@ -30,19 +30,15 @@ public class SplashScreenActivity extends ActionBarActivity {
         try {
             Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
             List<User> userList = userDao.queryForAll();
-            Log.e("users",userList.toString());
             if (userList.isEmpty()) {
                 currentUser = null;
             } else {
                 currentUser = userList.get(0);
              }
-
-
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
         }
 
-        /*onCreate variables*/
         int DELAY = 2000;
 
         timer.schedule(new TimerTask() {

@@ -56,11 +56,6 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             throw new RuntimeException(e);
         }
     }
-
-    /**
-     * Returns the Database Access Object (DAO) for our SimpleData class. It will create it or just give the cached
-     * value.
-     */
     public Dao<User, Integer> getUserDao() throws SQLException {
         if (userDao == null) {
             userDao = getDao(User.class);

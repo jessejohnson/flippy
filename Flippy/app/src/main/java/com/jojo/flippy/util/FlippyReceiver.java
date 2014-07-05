@@ -6,6 +6,9 @@ package com.jojo.flippy.util;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+
+import java.util.Calendar;
 
 public class FlippyReceiver extends BroadcastReceiver {
 

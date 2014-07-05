@@ -8,10 +8,10 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "postTable")
 public class Post {
-    @DatabaseField(columnName = "id", uniqueIndex = true)
-    public String id;
+    @DatabaseField(columnName = "id")
+    public long id;
 
-    @DatabaseField(columnName = "notice_id", uniqueIndex = true)
+    @DatabaseField(id = true)
     public String notice_id;
 
     @DatabaseField(columnName = "notice_subtitle")
@@ -24,7 +24,7 @@ public class Post {
     public String notice_body;
 
 
-    public Post(String id, String notice_id, String notice_subtitle, String notice_title, String notice_body) {
+    public Post(long id, String notice_id, String notice_title, String notice_subtitle, String notice_body) {
         this.id = id;
         this.notice_id = notice_id;
         this.notice_subtitle = notice_subtitle;
