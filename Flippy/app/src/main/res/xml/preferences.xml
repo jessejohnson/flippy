@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory
-        android:title="@string/general_settings_title" >
+        android:title="@string/general_settings_title"
+        android:key="@string/general_settings_key">
+
+        <CheckBoxPreference
+            android:key="@string/turn_on_notifications_key"
+            android:summary="@string/turn_on_notifications_summary"
+            android:title="@string/turn_on_notifications_title"
+            android:defaultValue="true"/>
+
+        <RingtonePreference
+            android:key="@string/ringtone_key"
+            android:summary="@string/ringtone_summary"
+            android:title="@string/ringtone_title"
+            android:dependency="@string/turn_on_notifications_key"
+            android:ringtoneType="notification"/>
     </PreferenceCategory>
 </PreferenceScreen>
