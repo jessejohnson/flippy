@@ -140,10 +140,9 @@ public class ChannelDetailActivity extends ActionBarActivity {
 
                                 if (result != null) {
                                     ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("detail").getAsString());
-                                    if (e != null) {
-                                        ToastMessages.showToastLong(ChannelDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                                    }
-
+                                }
+                                if (e != null) {
+                                    ToastMessages.showToastLong(ChannelDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
                                 }
                             }
 

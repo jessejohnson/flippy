@@ -27,6 +27,9 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
 
     Context context;
     private boolean isUserChannel;
+    String channelDetailSubscribeURL = Flippy.channelSubscribeURL;
+    private ViewHolder holder;
+
 
     public ChannelAdapter(Context context, int resourceId,
                           List<Channel> items, boolean isUserChannels) {
@@ -37,15 +40,16 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
 
     /*private view holder class*/
     private class ViewHolder {
-        ImageView imageView, imageViewSubscribe;
+        ImageView imageView, imageViewSubscribe, imageViewUnSubscribe;
         TextView textViewChannelName;
         TextView textViewNumberOfMembers;
         TextView textViewStatus;
         TextView textViewChannelId;
 
     }
+
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        holder = null;
         final Channel rowItem = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context
@@ -58,6 +62,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageViewCommunityChannel);
             holder.textViewStatus = (TextView) convertView.findViewById(R.id.textViewChannelStatusCustom);
             holder.imageViewSubscribe = (ImageView) convertView.findViewById(R.id.imageViewSubscribe);
+            holder.imageViewUnSubscribe = (ImageView) convertView.findViewById(R.id.imageViewUnSubscribe);
             holder.textViewChannelId = (TextView) convertView.findViewById(R.id.textViewChannelId);
             convertView.setTag(holder);
         } else
@@ -72,22 +77,30 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                 .load(String.valueOf(rowItem.getImageUrl()));
         holder.textViewStatus.setText(rowItem.getCreatorEmail());
         holder.textViewChannelId.setText(rowItem.getId());
-        //check to see if the adapter displays only user channel, then set the subscription button to invisible state
+
         if (isUserChannel) {
             holder.imageViewSubscribe.setVisibility(convertView.GONE);
+            holder.imageViewUnSubscribe.setVisibility(convertView.GONE);
+        } else {
+            //check the subscription states
         }
 
         holder.imageViewSubscribe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                subscribeToChannel(rowItem.getId());
+                setSubscribe(rowItem.getId());
+            }
+        });
+        holder.imageViewUnSubscribe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setUnSubscribe(rowItem.getId());
             }
         });
         return convertView;
     }
 
-    private void subscribeToChannel(String id) {
-        final String channelDetailSubscribeURL = Flippy.channelSubscribeURL + id + "/subscribe/";
+    private void setSubscribe(String channelId) {
         if (CommunityCenterActivity.userAuthToken == "") {
             ToastMessages.showToastLong(context, "Sorry, request cannot be made");
             return;
@@ -95,7 +108,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         JsonObject json = new JsonObject();
         json.addProperty("id", CommunityCenterActivity.regUserID);
         Ion.with(context)
-                .load(channelDetailSubscribeURL)
+                .load(channelDetailSubscribeURL + channelId + "/subscribe/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()
@@ -105,14 +118,42 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
 
                         if (result != null) {
                             ToastMessages.showToastLong(context, result.get("detail").getAsString());
-                            if (e != null) {
-                                ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
-                            }
-
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
                         }
                     }
 
                     ;
                 });
     }
+    private void setUnSubscribe(String channelId) {
+        if (CommunityCenterActivity.userAuthToken == "") {
+            ToastMessages.showToastLong(context, "Sorry, request cannot be made");
+            return;
+        }
+        JsonObject json = new JsonObject();
+        json.addProperty("id", CommunityCenterActivity.regUserID);
+        Ion.with(context)
+                .load(channelDetailSubscribeURL + channelId + "/unsubscribe/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+
+                        if (result.has("results")) {
+                            ToastMessages.showToastLong(context, result.get("results").getAsString());
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
+                        }
+                    }
+
+                    ;
+                });
+    }
+
+
 }

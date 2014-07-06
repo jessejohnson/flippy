@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
             <ImageView
                 android:id="@+id/imageViewCommunityChannel"
                 android:layout_width="match_parent"
@@ -28,17 +29,45 @@
                 android:contentDescription="@string/app_name"
                 android:scaleType="centerCrop" />
 
-            <ImageView
-                android:id="@+id/imageViewSubscribe"
-                android:padding="@dimen/margin_two"
-                android:layout_margin="@dimen/margin_five"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/linearLayoutChannelAction"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_bg_accept"
-                android:contentDescription="@string/app_name"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_action_accept" />
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_two">
 
+                <com.makeramen.RoundedImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/imageViewSubscribe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/flippy_dark_header"
+                    android:scaleType="centerCrop"
+                    android:alpha="0.9"
+                    android:layout_margin="@dimen/margin_two"
+                    android:src="@drawable/ic_action_accept"
+                    app:border_color="@color/border"
+                    app:border_width="1dp"
+                    app:corner_radius="0dp"
+                    app:oval="false" />
+
+                <com.makeramen.RoundedImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/imageViewUnSubscribe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/flippy_orange"
+                    android:scaleType="centerCrop"
+                    android:alpha="0.9"
+                    android:layout_margin="@dimen/margin_two"
+                    android:src="@drawable/ic_action_remove"
+                    app:border_color="@color/border"
+                    app:border_width="1dp"
+                    app:corner_radius="0dp"
+                    app:oval="false" />
+            </LinearLayout>
         </FrameLayout>
 
         <LinearLayout
@@ -52,8 +81,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="2">
+                android:layout_weight="2"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textViewChannelNameCustom"
@@ -63,15 +92,16 @@
                     android:text="@string/default_channel_name"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/flippy_white" />
+
                 <TextView
                     android:id="@+id/textViewChannelId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:visibility="gone"
                     android:text="@string/default_channel_name"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/flippy_white" />
+                    android:textColor="@color/flippy_white"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -87,12 +117,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:text="@string/default_channel_status"
-                    android:singleLine="true"
-                    android:maxLength="@android:integer/config_shortAnimTime"
-                    android:maxEms="20"
                     android:ellipsize="marquee"
-                    android:marqueeRepeatLimit ="marquee_forever"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:maxEms="20"
+                    android:maxLength="@android:integer/config_shortAnimTime"
+                    android:singleLine="true"
+                    android:text="@string/default_channel_status"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/flippy_white" />
 
@@ -100,16 +130,17 @@
                     android:id="@+id/textViewChannelMembersCustom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:maxLength="@android:integer/config_shortAnimTime"
-                    android:maxEms="20"
-                    android:ellipsize="marquee"
-                    android:marqueeRepeatLimit ="marquee_forever"
                     android:layout_gravity="right"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:maxEms="20"
+                    android:maxLength="@android:integer/config_shortAnimTime"
+                    android:singleLine="true"
                     android:text="@string/default_channel_number"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/flippy_white" />
             </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 </RelativeLayout>

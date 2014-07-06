@@ -27,7 +27,7 @@ public class HelpActivity extends FragmentActivity {
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setSubtitle("Create channel");
+
 
         pager = (ViewPager) findViewById(R.id.pagerHelp);
         pagerAdapter = new HelpPagerAdapter(getSupportFragmentManager());
