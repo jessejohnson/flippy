@@ -60,6 +60,7 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
             drawerHolder.user_frame = (FrameLayout) view.findViewById(R.id.user_frame);
 
             drawerHolder.userImage = (ImageView) view.findViewById(R.id.user_pic);
+            drawerHolder.imageViewUserProfileSmall = (ImageView) view.findViewById(R.id.imageViewUserProfileSmall);
             drawerHolder.userEmail = (TextView) view.findViewById(R.id.text_user_email);
             drawerHolder.userName = (TextView) view.findViewById(R.id.text_user_name);
 
@@ -87,6 +88,15 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
                         .error(R.color.flippy_light_header)
                         .load(CommunityCenterActivity.userAvatarURL.toString());
             }
+            if (CommunityCenterActivity.userAvatarThumbURL == null) {
+                drawerHolder.imageViewUserProfileSmall.setImageResource(R.drawable.default_profile_picture);
+            } else {
+                Ion.with(drawerHolder.imageViewUserProfileSmall)
+                        .placeholder(R.color.flippy_light_header)
+                        .animateIn(R.anim.fade_in)
+                        .error(R.color.flippy_light_header)
+                        .load(CommunityCenterActivity.userAvatarThumbURL.toString());
+            }
         } else {
             //destroy all the other views if not in the item with the zeroth index
             drawerHolder.user_frame.setVisibility(View.GONE);
@@ -110,6 +120,7 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
         TextView ItemName, userName, userEmail;
         ImageView icon;
         ImageView userImage;
+        ImageView imageViewUserProfileSmall;
         LinearLayout itemLayout, accountLayout;
         FrameLayout user_frame;
     }

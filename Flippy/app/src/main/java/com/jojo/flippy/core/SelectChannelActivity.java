@@ -42,8 +42,8 @@ public class SelectChannelActivity extends ActionBarActivity {
     private TextView textViewNoChannelHelp;
 
 
-    private String channelId = "";
-    private String channelName = "";
+    private String channelId;
+    private String channelName;
 
 
     @Override
@@ -55,7 +55,7 @@ public class SelectChannelActivity extends ActionBarActivity {
         intent = getIntent();
         String url = Flippy.userChannelsSubscribedURL + CommunityCenterActivity.regUserID + userChannels;
         ActionBar actionBar = getActionBar();
-        actionBar = getActionBar();
+
 
 
         //finding all the views with their appropriate ids

@@ -45,7 +45,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-    private ShareActionProvider shareActionProvider;
     public static String regUserEmail = "";
     public static String userFirstName = "";
     public static String userLastName = "";
@@ -58,10 +57,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
     public static String userGender = "";
     public  static String userAuthToken;
     private User currentUser;
-    private String userChannels = "/subscriptions/";
-
-    private ArrayList<String> channelListArray;
-
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
@@ -73,9 +68,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer_main);
-
-        //a new instance of the list of channel
-        channelListArray = new ArrayList<String>();
 
         //get the current user from the database
         try {
