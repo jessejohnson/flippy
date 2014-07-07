@@ -1,10 +1,12 @@
-package com.jojo.flippy.util;
+package com.jojo.flippy.persistence;
 
 import android.content.Context;
 
 import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.persistence.User;
+import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.ToastMessages;
 
 import java.util.List;
 
@@ -28,12 +30,11 @@ public class SavePost {
             if(!postList.isEmpty()){
                 postDao.delete(postList);
             }
-            Post post = new Post(Id, "", "", "","","");
-            postDao.create(post);
+
 
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
-            ToastMessages.showToastLong(context,"Sorry, Unable to create user account");
+            ToastMessages.showToastLong(context, "Sorry, Unable to create user account");
             return;
         }
 

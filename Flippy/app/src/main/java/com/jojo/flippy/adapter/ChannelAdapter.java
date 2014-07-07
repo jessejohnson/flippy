@@ -117,7 +117,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                     public void onCompleted(Exception e, JsonObject result) {
 
                         if (result != null) {
-                            ToastMessages.showToastLong(context, result.get("detail").getAsString());
+                            ToastMessages.showToastLong(context, result.get("details").getAsString());
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
