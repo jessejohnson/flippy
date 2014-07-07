@@ -16,7 +16,7 @@
         android:layout_gravity="center|top"
         android:src="@drawable/flippy_logo_white"
         android:contentDescription="@string/app_name"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,7 +25,7 @@
         android:text="@string/splash_screen_tag_line"
         android:id="@+id/textViewSplashScreenTagLine"
         android:layout_gravity="center"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         android:textColor="#ffffff"
         android:textStyle="italic"/>
 
@@ -36,7 +36,7 @@
         android:text="@string/splash_screen_url"
         android:id="@+id/textViewSplashScreenURL"
         android:layout_gravity="center"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="120dp"
         android:textColor="#ffffff"
         android:textStyle="italic" />
 </FrameLayout>
