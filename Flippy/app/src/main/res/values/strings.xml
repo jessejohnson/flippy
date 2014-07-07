@@ -97,6 +97,7 @@
     <string name="dummy_user_number">(+233) 0000000</string>
     <string name="profile_list_channels">My Channels</string>
     <string name="profile_edit">Edit profile</string>
+    <string name="profile_upload">Upload photo</string>
 
     <!-- the feedback strings -->
     <string name="flippy_email">info@flippy.co</string>
@@ -268,10 +269,10 @@
                    Draw out the navigation drawer
                    Click on channels then
                    add Channels. Enter Name, give short description and upload an image to represent it,
-                   check\/uncheck public (public channels can be seen by people outside your community, private channels can be accessed only by people inside your community)
+                   check/uncheck public (public channels can be seen by people outside your community, private channels can be accessed only by people inside your community)
     </string>
     <string name="help_string_two">How do I create a notice ? \n\n
-            On the action bar Click on the “+” icon, Choose the Channel
+            On the action bar Click on the “+” icon, Choose the Channel.
             Hurray, now you can create a Notice
     </string>
     <string name="help_string_three">

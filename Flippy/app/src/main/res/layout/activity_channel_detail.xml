@@ -18,8 +18,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:layout_marginBottom="@dimen/margin_fifty">
+            android:layout_marginBottom="@dimen/margin_fifty"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -36,26 +36,26 @@
                         android:layout_height="@dimen/margin_two_hundred"
                         android:scaleType="centerCrop" />
 
-                    <TextView
-                        android:id="@+id/textViewChannelBio"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left|bottom"
-                        android:background="@android:drawable/screen_background_dark_transparent"
-                        android:gravity="left"
-                        android:paddingBottom="@dimen/margin_five"
-                        android:paddingLeft="@dimen/margin_five"
-                        android:paddingRight="@dimen/margin_five"
-                        android:paddingTop="@dimen/margin_five"
-                        android:shadowColor="@color/flippy_dark_header"
-                        android:shadowDx="1"
-                        android:shadowDy="1"
-                        android:shadowRadius="2"
-                        android:text="@string/channel_detail_bio"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@color/flippy_white" />
-
                 </FrameLayout>
+
+                <TextView
+                    android:id="@+id/textViewChannelBio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|bottom"
+                    android:background="@android:drawable/screen_background_dark_transparent"
+                    android:gravity="left"
+                    android:paddingBottom="@dimen/margin_five"
+                    android:paddingLeft="@dimen/margin_five"
+                    android:paddingRight="@dimen/margin_five"
+                    android:paddingTop="@dimen/margin_five"
+                    android:shadowColor="@color/flippy_dark_header"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="2"
+                    android:text="@string/channel_detail_bio"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/flippy_white" />
 
                 <TextView
                     android:id="@+id/textViewChannelNameDetail"

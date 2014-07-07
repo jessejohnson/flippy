@@ -72,15 +72,15 @@ public class FragmentNotice extends Fragment {
 
 
         String url = Flippy.allPostURL;
-        //Loading the list with data from Api call
         Ion.with(getActivity())
                 .load(url)
+                .setHeader("Authorization","Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarCommunityCenterLoader.setVisibility(view.GONE);
-                        if (result != null) {
+                        if (result != null && result.has("results")) {
                             JsonArray communityArray = result.getAsJsonArray("results");
                             for (int i = 0; i < communityArray.size(); i++) {
                                 JsonObject item = communityArray.get(i).getAsJsonObject();
@@ -100,6 +100,7 @@ public class FragmentNotice extends Fragment {
                                 if (!item.get("image_url").isJsonNull()) {
                                     image_link = item.get("image_url").getAsString();
                                 }
+
                                 noticeFeed.add(new Notice(item.get("id").getAsString(), author.get("first_name").getAsString(), author.get("last_name").getAsString(), item.get("title").getAsString(), "sub", item.get("content").getAsString(), timestamp, URI.create(image_link)));
 
                             }

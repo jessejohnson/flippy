@@ -2,8 +2,10 @@ package com.jojo.flippy.profile;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,21 +34,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountProfileActivity extends ActionBarActivity {
-    //Instance of the user channel
     ListView profileChannelListView;
-    //Instance of the channel item
     List<ProfileItem> rowItems;
     private Intent intent;
     private String userFirstName;
     private String userLastName;
     private String userEmail;
     private String userFullName;
+    private String userCommunityName;
+    private String userCommunityImageLink;
     private String userChannels = "/subscriptions/";
     private ProfileAdapter profileAdapter;
     private ImageView imageViewProfilePic;
+    private ImageView imageViewProfileUserCommunity;
     private TextView textViewProfileUserNameNew;
     private TextView textViewProfileUserEmailNew;
-
+    private TextView textViewProfileUserCommunity;
 
 
     private LinearLayout linearLayoutUserProfile;
@@ -64,13 +67,14 @@ public class AccountProfileActivity extends ActionBarActivity {
         userLastName = CommunityCenterActivity.userLastName;
         userEmail = CommunityCenterActivity.regUserEmail;
         userFullName = userFirstName + ", " + userLastName;
+        userCommunityName = CommunityCenterActivity.userCommunityName;
 
         ActionBar actionBar = getActionBar();
         actionBar.setTitle(userFirstName);
         actionBar.setSubtitle(R.string.user_tap_to_edit);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        String url = Flippy.userChannelsSubscribedURL + CommunityCenterActivity.regUserID + userChannels;
+        final String url = Flippy.userChannelsSubscribedURL + CommunityCenterActivity.regUserID + userChannels;
 
 
         intent = getIntent();
@@ -78,9 +82,13 @@ public class AccountProfileActivity extends ActionBarActivity {
         profileChannelListView = (ListView) findViewById(R.id.profileChannelListView);
         textViewProfileUserEmailNew = (TextView) findViewById(R.id.textViewProfileUserEmailNew);
         textViewProfileUserNameNew = (TextView) findViewById(R.id.textViewProfileUserNameNew);
+        textViewProfileUserCommunity = (TextView) findViewById(R.id.textViewProfileUserCommunity);
+        textViewProfileUserCommunity.setVisibility(View.GONE);
         linearLayoutUserProfile = (LinearLayout) findViewById(R.id.linearLayoutUserProfile);
         imageViewProfilePic = (ImageView) findViewById(R.id.imageViewProfilePic);
-        progressBarUserChannelLoad= (ProgressBar)findViewById(R.id.progressBarUserChannelLoad);
+        imageViewProfileUserCommunity = (ImageView) findViewById(R.id.imageViewProfileUserCommunity);
+        progressBarUserChannelLoad = (ProgressBar) findViewById(R.id.progressBarUserChannelLoad);
+
 
         profileAdapter = new ProfileAdapter(AccountProfileActivity.this,
                 R.layout.profile_listview, rowItems);
@@ -102,6 +110,7 @@ public class AccountProfileActivity extends ActionBarActivity {
 
         textViewProfileUserNameNew.setText(userFullName);
         textViewProfileUserEmailNew.setText(userEmail);
+        getCommunityImage(CommunityCenterActivity.userCommunityId);
 
         //load the channels user subscribed to
         Ion.with(AccountProfileActivity.this)
@@ -119,18 +128,15 @@ public class AccountProfileActivity extends ActionBarActivity {
                                 rowItems.add(profileItem);
                             }
                             updateAdapter();
-
-
                         }
                         if (e != null) {
                             progressBarUserChannelLoad.setVisibility(View.GONE);
                             ToastMessages.showToastLong(AccountProfileActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                        }
+                            Log.e("Error loading channel",e.toString());
+                      }
 
                     }
                 });
-
-
         profileChannelListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -145,10 +151,43 @@ public class AccountProfileActivity extends ActionBarActivity {
         progressBarUserChannelLoad.setVisibility(View.GONE);
     }
 
+    private void getCommunityImage(String id) {
+        Ion.with(AccountProfileActivity.this)
+                .load(Flippy.communitiesURL + id + "/")
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (result != null) {
+                            userCommunityImageLink = result.get("image_url").getAsString();
+                            userCommunityName = result.get("name").getAsString();
+                            loadCommunityImage(userCommunityImageLink);
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(AccountProfileActivity.this, "Check internet connection");
+                            Log.e("error", e.toString());
+                        }
+
+                    }
+                });
+    }
+
+    private void loadCommunityImage(String url) {
+        if(url==null){
+            ToastMessages.showToastShort(AccountProfileActivity.this,"Failed to load community image");
+            return;
+        }
+        textViewProfileUserCommunity.setText(userCommunityName);
+        textViewProfileUserCommunity.setVisibility(View.VISIBLE);
+        Ion.with(imageViewProfileUserCommunity)
+                .placeholder(R.drawable.default_profile_picture)
+                .error(R.color.flippy_light_header)
+                .animateIn(R.anim.fade_in)
+                .load(url);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.account_profile, menu);
         return true;
     }

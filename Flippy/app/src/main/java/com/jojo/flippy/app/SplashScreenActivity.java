@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
 
@@ -19,6 +21,7 @@ public class SplashScreenActivity extends ActionBarActivity {
     Timer timer = new Timer();
     private User currentUser;
     private Intent intent;
+    private Dao<User, Integer> userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +31,9 @@ public class SplashScreenActivity extends ActionBarActivity {
 
 
         try {
-            Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(SplashScreenActivity.this,
+                    DatabaseHelper.class);
+            userDao = databaseHelper.getUserDao();
             List<User> userList = userDao.queryForAll();
             if (userList.isEmpty()) {
                 currentUser = null;

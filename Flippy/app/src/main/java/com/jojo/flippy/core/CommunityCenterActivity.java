@@ -22,11 +22,13 @@ import android.widget.ShareActionProvider;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.CustomDrawer;
 import com.jojo.flippy.adapter.DrawerItem;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.profile.AccountProfileActivity;
 import com.jojo.flippy.util.Flippy;
@@ -57,6 +59,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
     public static String userGender = "";
     public  static String userAuthToken;
     private User currentUser;
+    private Dao<User, Integer> userDao;
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
@@ -68,10 +71,11 @@ public class CommunityCenterActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer_main);
-
         //get the current user from the database
         try {
-            Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(CommunityCenterActivity.this,
+                    DatabaseHelper.class);
+            userDao = databaseHelper.getUserDao();
             List<User> userList = userDao.queryForAll();
             if (userList.isEmpty()) {
                 currentUser = null;

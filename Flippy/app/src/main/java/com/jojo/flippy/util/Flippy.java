@@ -19,6 +19,7 @@ public class Flippy  extends Application{
     public Dao<Post, Integer> postDao;
     public User thisUser;
     //make the url accessible to all the activities
+    public static String userBasicURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/me/";
     public static String regURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/signup/";
     public static String signInURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/users/login/";
     public static String channelsURL= "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/channels/";

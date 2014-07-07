@@ -29,18 +29,6 @@
                 android:orientation="horizontal"
                 android:padding="@dimen/margin_two">
 
-                <com.makeramen.RoundedImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/imageViewUserProfileSmall"
-                    android:layout_width="@dimen/margin_fifty"
-                    android:layout_height="@dimen/margin_fifty"
-                    android:layout_alignParentLeft="true"
-                    android:scaleType="centerCrop"
-                    app:border_color="@color/border"
-                    app:border_width="2dp"
-                    app:corner_radius="@dimen/margin_two"
-                    app:oval="false" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

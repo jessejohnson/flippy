@@ -14,6 +14,7 @@ import com.jojo.flippy.app.R;
 
 public class CreateNoticeActivity extends ActionBarActivity {
     private String channelToCreateNotice;
+    private String channelId;
     private Intent intent;
     private Button buttonNextCreateNotice;
     private EditText editTextNewNoticeContent, editTextNewNoticeTitle;
@@ -25,7 +26,8 @@ public class CreateNoticeActivity extends ActionBarActivity {
         setContentView(R.layout.activity_create_notice);
 
         intent = getIntent();
-        channelToCreateNotice = intent.getStringExtra("channelToCreateNotice");
+        channelToCreateNotice = intent.getStringExtra("channelName");
+        channelId = intent.getStringExtra("channelId");
 
         ActionBar actionBar = getActionBar();
         actionBar.setSubtitle(channelToCreateNotice);

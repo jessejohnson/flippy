@@ -1,4 +1,4 @@
-package com.jojo.flippy.util;
+package com.jojo.flippy.services;
 
 /**
  * Created by bright on 7/3/14.

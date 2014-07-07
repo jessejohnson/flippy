@@ -20,11 +20,19 @@ public class Post {
     @DatabaseField(columnName = "notice_body")
     public String notice_body;
 
-    public Post(String notice_id, String notice_title, String notice_subtitle, String notice_body) {
+    @DatabaseField(columnName = "notice_image")
+    public String notice_image;
+
+    @DatabaseField(columnName = "notice_date_info")
+    public String notice_date_info;
+
+    public Post(String notice_id, String notice_title, String notice_subtitle, String notice_body,String notice_image,String notice_date_info) {
         this.notice_id = notice_id;
         this.notice_subtitle = notice_subtitle;
         this.notice_title = notice_title;
         this.notice_body = notice_body;
+        this.notice_image = notice_image;
+        this.notice_date_info = notice_date_info;
     }
 
     Post() {

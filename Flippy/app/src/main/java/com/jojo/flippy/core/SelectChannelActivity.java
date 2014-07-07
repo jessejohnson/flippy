@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,8 +41,6 @@ public class SelectChannelActivity extends ActionBarActivity {
     private ProgressBar progressBarLoadUserChannels;
     private TextView textViewNoChannel;
     private TextView textViewNoChannelHelp;
-
-
     private String channelId;
     private String channelName;
 
@@ -117,6 +116,14 @@ public class SelectChannelActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
+                TextView textViewMemberLastName = (TextView)view.findViewById(R.id.textViewMemberLastName);
+                TextView textViewMemberFirstName = (TextView)view.findViewById(R.id.textViewMemberFirstName);
+                String channelId = textViewMemberLastName.getText().toString();
+                String channelName = textViewMemberFirstName.getText().toString();
+                intent.setClass(SelectChannelActivity.this,CreateNoticeActivity.class);
+                intent.putExtra("channelId",channelId);
+                intent.putExtra("channelName",channelName);
+                startActivity(intent);
 
 
             }

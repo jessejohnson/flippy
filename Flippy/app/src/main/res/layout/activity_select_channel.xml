@@ -14,6 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:scrollbars="none"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" />
 
@@ -24,23 +25,25 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
 
+
     <TextView
         android:id="@+id/textViewNoChannel"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/progressBarLoadUserChannels"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:textStyle="normal"
+        android:textColor="@android:color/darker_gray"
         android:gravity="center_horizontal"
         android:text="@string/activity_select_channel_empty_view"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/textViewNoChannelHelp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewNoChannel"
-        android:gravity="center_horizontal"
         android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
         android:text="@string/activity_select_channel_empty_view_help"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/flippy_orange"

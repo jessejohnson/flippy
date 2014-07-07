@@ -23,9 +23,11 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.InternetConnectionDetector;
@@ -60,6 +62,7 @@ public class SelectCommunityActivity extends Activity {
     private String regUserEmail;
     private ProgressBar progressBarLoadCommunity;
     private ScrollView scrollViewLogin;
+    private Dao<User, Integer> userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,8 +163,9 @@ public class SelectCommunityActivity extends Activity {
                 }
                /* update the user with the selected community id and name*/
                 try {
-                    Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
-                    //this user
+                    DatabaseHelper databaseHelper = OpenHelperManager.getHelper(SelectCommunityActivity.this,
+                            DatabaseHelper.class);
+                    userDao = databaseHelper.getUserDao();
                     UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
                     updateBuilder.where().eq("user_email", regUserEmail);
                     updateBuilder.updateColumnValue("community_id" , selectedCommunityID);

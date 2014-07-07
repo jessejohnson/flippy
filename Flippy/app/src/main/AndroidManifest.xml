@@ -226,10 +226,13 @@
         </activity>
 
         <service
-            android:name="com.jojo.flippy.util.FlippyAlarmService"
+            android:name="com.jojo.flippy.services.FlippyAlarmService"
             android:enabled="true" />
 
-        <receiver android:name="com.jojo.flippy.util.FlippyReceiver" />
+        <service
+            android:name="com.jojo.flippy.services.RetrievePostService"
+            android:enabled="true" />
+        <receiver android:name="com.jojo.flippy.services.FlippyReceiver" />
 
         <activity
             android:name="com.jojo.flippy.core.SettingsLegalActivity"

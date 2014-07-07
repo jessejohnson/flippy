@@ -38,7 +38,6 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
 
         DrawerItemHolder drawerHolder;
         View view = convertView;
@@ -56,11 +55,8 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
                     .findViewById(R.id.accountLayout);
             drawerHolder.itemLayout = (LinearLayout) view
                     .findViewById(R.id.itemLayout);
-
             drawerHolder.user_frame = (FrameLayout) view.findViewById(R.id.user_frame);
-
             drawerHolder.userImage = (ImageView) view.findViewById(R.id.user_pic);
-            drawerHolder.imageViewUserProfileSmall = (ImageView) view.findViewById(R.id.imageViewUserProfileSmall);
             drawerHolder.userEmail = (TextView) view.findViewById(R.id.text_user_email);
             drawerHolder.userName = (TextView) view.findViewById(R.id.text_user_name);
 
@@ -83,20 +79,12 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
                 drawerHolder.userImage.setImageResource(R.drawable.default_profile_picture);
             } else {
                 Ion.with(drawerHolder.userImage)
-                        .placeholder(R.color.flippy_light_header)
+                        .placeholder(R.drawable.default_profile_picture)
                         .animateIn(R.anim.fade_in)
                         .error(R.color.flippy_light_header)
                         .load(CommunityCenterActivity.userAvatarURL.toString());
             }
-            if (CommunityCenterActivity.userAvatarThumbURL == null) {
-                drawerHolder.imageViewUserProfileSmall.setImageResource(R.drawable.default_profile_picture);
-            } else {
-                Ion.with(drawerHolder.imageViewUserProfileSmall)
-                        .placeholder(R.color.flippy_light_header)
-                        .animateIn(R.anim.fade_in)
-                        .error(R.color.flippy_light_header)
-                        .load(CommunityCenterActivity.userAvatarThumbURL.toString());
-            }
+
         } else {
             //destroy all the other views if not in the item with the zeroth index
             drawerHolder.user_frame.setVisibility(View.GONE);
@@ -120,7 +108,6 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
         TextView ItemName, userName, userEmail;
         ImageView icon;
         ImageView userImage;
-        ImageView imageViewUserProfileSmall;
         LinearLayout itemLayout, accountLayout;
         FrameLayout user_frame;
     }
