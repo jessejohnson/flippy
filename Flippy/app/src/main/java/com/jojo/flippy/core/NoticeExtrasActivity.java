@@ -57,11 +57,10 @@ public class NoticeExtrasActivity extends ActionBarActivity {
         setContentView(R.layout.activity_notice_extras);
 
         intent = getIntent();
-        channelToCreateNotice = intent.getStringExtra("channelToCreateNotice");
+        channelToCreateNotice = intent.getStringExtra("channelId");
         noticeTitle = intent.getStringExtra("noticeTitle");
 
         ActionBar actionBar = getActionBar();
-        actionBar.setTitle(channelToCreateNotice);
         actionBar.setSubtitle(noticeTitle);
         timerSupport = getSupportFragmentManager();
 
@@ -266,6 +265,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
     }
 
     public void decodeFile(String filePath) {
+        Log.e("File path",filePath);
         // Decode image size
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;

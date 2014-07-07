@@ -2,10 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:gpb="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="@dimen/margin_five"
-    android:paddingLeft="@dimen/margin_five"
-    android:paddingRight="@dimen/margin_five"
-    android:paddingTop="@dimen/margin_five"
+    android:paddingLeft="@dimen/margin_two"
+    android:paddingRight="@dimen/margin_two"
+    android:paddingTop="@dimen/margin_two"
     tools:context="com.jojo.flippy.core.SelectChannelActivity">
 
 
@@ -18,12 +19,16 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true" />
 
-    <ProgressBar
+    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
         android:id="@+id/progressBarLoadUserChannels"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        gpb:type="folding_circles"
+        gpb:colors="@array/flippy_rainbow"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
 
 
     <TextView

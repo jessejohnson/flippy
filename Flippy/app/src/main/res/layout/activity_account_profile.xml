@@ -93,6 +93,7 @@
         android:id="@+id/profileChannelListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:listSelector="@android:color/transparent"
         android:layout_below="@+id/linearLayoutUserProfile"
         android:layout_margin="@dimen/margin_five"
         android:divider="@color/flippy_orange"

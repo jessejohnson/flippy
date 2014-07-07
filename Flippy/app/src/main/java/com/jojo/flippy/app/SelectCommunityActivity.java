@@ -253,8 +253,4 @@ public class SelectCommunityActivity extends Activity {
         return savedCommunity;
     }
 
-    private void updateDatabase() {
-
-    }
-
 }

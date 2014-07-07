@@ -88,7 +88,7 @@ public class FragmentNotice extends Fragment {
             if (postList.isEmpty()) {
                 getAllPost(view);
             } else {
-                loadAdapterFromDatabase();
+                loadAdapterFromDatabase(view);
             }
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
@@ -153,6 +153,7 @@ public class FragmentNotice extends Fragment {
         String url = Flippy.allPostURL;
         Ion.with(getActivity())
                 .load(url)
+                .setTimeout(60 * 60 * 1000)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -192,14 +193,15 @@ public class FragmentNotice extends Fragment {
 
     }
 
-    private void loadAdapterFromDatabase() {
+    private void loadAdapterFromDatabase(View view) {
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
                     DatabaseHelper.class);
             postDao = databaseHelper.getPostDao();
             List<Post> postList = postDao.queryForAll();
+            progressBarCommunityCenterLoader.setVisibility(view.GONE);
             if (!postList.isEmpty()) {
-                for (int i = 0; i <= postList.size(); i++) {
+                for (int i = 0; i < postList.size(); i++) {
                     Post post = postList.get(i);
                     String[] timestampArray = post.start_date.replace("Z", "").split("T");
                     String timestamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0, 8);

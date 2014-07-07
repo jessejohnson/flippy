@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/flippy_white"
-    android:paddingBottom="@dimen/margin_five"
+    android:paddingBottom="@dimen/margin_two"
     android:paddingLeft="@dimen/margin_five"
     android:paddingRight="@dimen/margin_five"
-    android:paddingTop="@dimen/margin_five"
+    android:paddingTop="@dimen/margin_two"
     tools:context="com.jojo.flippy.core.ChannelDetailActivity">
 
     <LinearLayout
@@ -133,17 +133,45 @@
         </ScrollView>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/buttonSubscribeToChannel"
-        style="?android:attr/buttonStyleSmall"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:id="@+id/linearLayoutSubscriptions"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@drawable/flippy_button_default"
-        android:text="@string/subscription_state_true"
-        android:textColor="@color/flippy_white" />
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/buttonSubscribeToChannel"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginRight="@dimen/margin_one"
+            android:background="@drawable/flippy_button_default"
+            android:text="@string/subscription_state_true"
+            android:textColor="@color/flippy_white" />
+
+        <Button
+            android:id="@+id/buttonUnSubscribeToChannel"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_marginLeft="@dimen/margin_one"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/flippy_button_default"
+            android:text="@string/subscription_state_false"
+            android:textColor="@color/flippy_white" />
+
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/buttonManageToChannel"
