@@ -173,13 +173,13 @@ public class SelectCommunityActivity extends Activity {
                         updateBuilder.update();
                     } catch (java.sql.SQLException sqlE) {
                         sqlE.printStackTrace();
-                        Log.e("Community error",sqlE.toString());
+                        Log.e("Community error", sqlE.toString());
                     }
                     intent.setClass(SelectCommunityActivity.this, CommunityCenterActivity.class);
                     intent.putExtra("communitySelected", communitySelected);
                     intent.putExtra("selectedCommunityID", selectedCommunityID);
                     startActivity(intent);
-                }else{
+                } else {
                     Crouton.makeText(SelectCommunityActivity.this, "sorry, unable to add community", Style.ALERT)
                             .show();
                     return;
@@ -226,7 +226,7 @@ public class SelectCommunityActivity extends Activity {
     private boolean saveUserCommunity() {
         savedCommunity = false;
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("community_id",selectedCommunityID);
+        jsonObject.addProperty("community_id", selectedCommunityID);
         Ion.with(SelectCommunityActivity.this)
                 .load(Flippy.userCommunityURL + intent.getStringExtra("regUserID") + "/community/")
                 .setHeader("Authorization", "Token " + intent.getStringExtra("regUserAuthToken"))
@@ -238,14 +238,15 @@ public class SelectCommunityActivity extends Activity {
                         if (result != null) {
                             if (result.has("results")) {
                                 savedCommunity = true;
-
+                            } else {
+                                savedCommunity = false;
                             }
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
                             savedCommunity = false;
                         }
-                        savedCommunity = false;
+                       
                     }
                 });
 
