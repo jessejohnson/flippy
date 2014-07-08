@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
-        android:title="@string/general_settings_title"
-        android:key="@string/general_settings_key">
+        android:key="@string/general_settings_key"
+        android:title="@string/general_settings_title">
 
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="@string/turn_on_notifications_key"
             android:summary="@string/turn_on_notifications_summary"
-            android:title="@string/turn_on_notifications_title"
-            android:defaultValue="true"/>
+            android:title="@string/turn_on_notifications_title" />
 
         <RingtonePreference
-            android:key="@string/ringtone_key"
-            android:summary="@string/ringtone_summary"
-            android:title="@string/ringtone_title"
             android:dependency="@string/turn_on_notifications_key"
-            android:ringtoneType="notification"/>
+            android:key="@string/ringtone_key"
+            android:ringtoneType="notification"
+            android:summary="@string/ringtone_summary"
+            android:title="@string/ringtone_title" />
     </PreferenceCategory>
+
+    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
+       dismiss it. -->
+    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
+    <ListPreference
+        android:defaultValue="180"
+        android:entries="@array/pref_sync_frequency_titles"
+        android:entryValues="@array/pref_sync_frequency_values"
+        android:key="sync_frequency"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/pref_title_sync_frequency" />
+
 </PreferenceScreen>
