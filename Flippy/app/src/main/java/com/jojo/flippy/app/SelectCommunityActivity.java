@@ -161,29 +161,45 @@ public class SelectCommunityActivity extends Activity {
                                 }
                             });
                 }
-                if (saveUserCommunity()) {
-                    try {
-                        DatabaseHelper databaseHelper = OpenHelperManager.getHelper(SelectCommunityActivity.this,
-                                DatabaseHelper.class);
-                        userDao = databaseHelper.getUserDao();
-                        UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
-                        updateBuilder.where().eq("user_email", regUserEmail);
-                        updateBuilder.updateColumnValue("community_id", selectedCommunityID);
-                        updateBuilder.updateColumnValue("community_name", communitySelected);
-                        updateBuilder.update();
-                    } catch (java.sql.SQLException sqlE) {
-                        sqlE.printStackTrace();
-                        Log.e("Community error", sqlE.toString());
-                    }
-                    intent.setClass(SelectCommunityActivity.this, CommunityCenterActivity.class);
-                    intent.putExtra("communitySelected", communitySelected);
-                    intent.putExtra("selectedCommunityID", selectedCommunityID);
-                    startActivity(intent);
-                } else {
-                    Crouton.makeText(SelectCommunityActivity.this, "sorry, unable to add community", Style.ALERT)
-                            .show();
-                    return;
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("community_id", selectedCommunityID);
+                Ion.with(SelectCommunityActivity.this)
+                        .load(Flippy.userCommunityURL + intent.getStringExtra("regUserID") + "/community/")
+                        .setHeader("Authorization", "Token " + intent.getStringExtra("regUserAuthToken"))
+                        .setJsonObjectBody(jsonObject)
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                if (result != null) {
+                                    if (result.has("results")) {
+                                        
+                                    }
+                                }
+                                if (e != null) {
+                                    ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
+                                    return;
+                                }
+
+                            }
+                        });
+                try {
+                    DatabaseHelper databaseHelper = OpenHelperManager.getHelper(SelectCommunityActivity.this,
+                            DatabaseHelper.class);
+                    userDao = databaseHelper.getUserDao();
+                    UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
+                    updateBuilder.where().eq("user_email", regUserEmail);
+                    updateBuilder.updateColumnValue("community_id", selectedCommunityID);
+                    updateBuilder.updateColumnValue("community_name", communitySelected);
+                    updateBuilder.update();
+                } catch (java.sql.SQLException sqlE) {
+                    sqlE.printStackTrace();
+                    Log.e("Community error", sqlE.toString());
                 }
+                intent.setClass(SelectCommunityActivity.this, CommunityCenterActivity.class);
+                intent.putExtra("communitySelected", communitySelected);
+                intent.putExtra("selectedCommunityID", selectedCommunityID);
+                startActivity(intent);
 
 
             }
@@ -223,8 +239,7 @@ public class SelectCommunityActivity extends Activity {
     }
 
 
-    private boolean saveUserCommunity() {
-        savedCommunity = false;
+    private void saveUserCommunity() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("community_id", selectedCommunityID);
         Ion.with(SelectCommunityActivity.this)
@@ -238,19 +253,16 @@ public class SelectCommunityActivity extends Activity {
                         if (result != null) {
                             if (result.has("results")) {
                                 savedCommunity = true;
-                            } else {
-                                savedCommunity = false;
                             }
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
-                            savedCommunity = false;
+                            return;
                         }
-                       
+
                     }
                 });
 
-        return savedCommunity;
     }
 
 }
