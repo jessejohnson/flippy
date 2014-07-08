@@ -141,6 +141,10 @@
     <string name="settings_accessibility_subtitle">make flippy better for you</string>
     <string name="settings_about">About Flippy</string>
     <string name="settings_about_subtitle">more about flippy</string>
+    <string name="settings_account">Account settings</string>
+    <string name="settings_account_subtitle">log out here</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_version_subtitle">version information</string>
 
     <!-- the channel creatorFullName string -->
     <string name="channel_members_activity_title">Channel creator full name</string>
@@ -177,10 +181,8 @@
     <!-- creating notice activity strings -->
     <string name="title_activity_create_notice">Create Notice</string>
     <string name="notice_new_title">Create a new Notice</string>
-    <string name="notice_new_warning">
-        Notice are meant to be relevant to creatorFullName of the channel you manage. It is your
-        responsibility to keep them so.
-    </string>
+    <string name="notice_new_warning">        Notice are meant to be relevant to creatorFullName of the channel you manage. It is your
+        responsibility to keep them so.</string>
     <string name="notice_new_learn">To learn more about creating successful Notice, read our Notice\'s Guide</string>
     <string name="notice_new_title_field">notice title</string>
     <string name="notice_new_content">notice content</string>
@@ -189,10 +191,8 @@
     <!-- optional notice information strings -->
     <string name="title_activity_notice_extras">Notice Optionals</string>
     <string name="optional_notice_title">Optional Information</string>
-    <string name="optional_notice_help">
-        Images, Maps and Reminders are great ways to give the creatorFullName of your channel more
-        value from a notice
-    </string>
+    <string name="optional_notice_help">        Images, Maps and Reminders are great ways to give the creatorFullName of your channel more
+        value from a notice</string>
     <string name="final_step_create_notice">send to channel</string>
     <string name="optional_notice_add_image">add Image</string>
     <string name="optional_notice_add_map">add Map</string>
@@ -259,7 +259,6 @@
     <string name="ringtone_title">Select Ringtone</string>
     <string name="ringtone_summary">Choose a ringtone for Flippy Notifications</string>
     <string name="ringtone_key">flippy_ringtone</string>
-
     <string name="title_activity_help">Help</string>
     <string name="hello_world">Hello world!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -269,59 +268,40 @@
                    Draw out the navigation drawer
                    Click on channels then
                    add Channels. Enter Name, give short description and upload an image to represent it,
-                   check/uncheck public (public channels can be seen by people outside your community, private channels can be accessed only by people inside your community)
-    </string>
+                   check/uncheck public (public channels can be seen by people outside your community, private channels can be accessed only by people inside your community)</string>
     <string name="help_string_two">How do I create a notice ? \n\n
             On the action bar Click on the “+” icon, Choose the Channel.
-            Hurray, now you can create a Notice
-    </string>
-    <string name="help_string_three">
-        How do I subscribe to a channel ? \n\n
+            Hurray, now you can create a Notice</string>
+    <string name="help_string_three">        How do I subscribe to a channel ? \n\n
         To subscribe to a channel draw the navigation drawer,
         Choose My Community, this bring all the channels in your community as well as public channels in other communities.
-        Click on the “Correct Sign ”(icon on the top left corner) to subscribe.
-    </string>
-    <string name="help_string_four">
-        How do I Manage a channel ? \n\n
-        Draw the navigation drawer, Choose My Channels,  Click on the Channel to manage it (you must be an admin of a channel to manage it)
-    </string>
+        Click on the “Correct Sign ”(icon on the top left corner) to subscribe.</string>
+    <string name="help_string_four">        How do I Manage a channel ? \n\n
+        Draw the navigation drawer, Choose My Channels,  Click on the Channel to manage it (you must be an admin of a channel to manage it)</string>
     <!-- select channel activity string -->
     <string name="title_activity_select_channel">Select Channel</string>
     <string name="activity_select_channel_empty_view">You have not subscribed or created any channel yet</string>
     <string name="activity_select_channel_empty_view_help">Create a channel</string>
 
-    <!--the legal issues sections-->
+    <!-- the legal issues sections -->
     <string name="title_activity_settings_legal">Legal issues</string>
     <string name="legal_intellectual_title">Intellectual Property</string>
     <string name="legal_privacy_title">Privacy </string>
-    <string name="legal_privacy_message">
-            Your privacy is very important to us. We desire all our users to respect the rights of other people with regards to the use of Flippy.
-    </string>
-    <string name="legal_intellectual_message">
-        Flippy respects the intellectual property rights of others and is committed to helping third parties protect their rights. Our Statement of Rights and Responsibilities prohibits users from posting content that violates another party\'s intellectual property rights.
-    </string>
+    <string name="legal_privacy_message">            Your privacy is very important to us. We desire all our users to respect the rights of other people with regards to the use of Flippy.</string>
+    <string name="legal_intellectual_message">        Flippy respects the intellectual property rights of others and is committed to helping third parties protect their rights. Our Statement of Rights and Responsibilities prohibits users from posting content that violates another party\'s intellectual property rights.</string>
     <string name="legal_content_title">Content and Information</string>
-    <string name="legal_content_message">
-            You own all of the content and information you post on Flippy, and the information that you post can be shared by other users who has subscribed to your channel. This information can be reshared by other parties who see this information
-     </string>
+    <string name="legal_content_message">            You own all of the content and information you post on Flippy, and the information that you post can be shared by other users who has subscribed to your channel. This information can be reshared by other parties who see this information</string>
     <string name="legal_safety_title">Safety and Security</string>
-    <string name="legal_safety_message">
-        We do our best to keep Flippy safe, but we cannot guarantee it. We need your help to keep Flippy safe, which includes the following commitments by you:
-    </string>
-    <string name="security_one">
-        You will not post unauthorized commercial communications (such as spam) on Flippy.
-    </string>
-    <string name="security_two">
-       You will not engage in unlawful multi-level marketing, such as a pyramid scheme, on Flippy.
-    </string>
-    <string name="security_three">
-        You will not upload viruses or other malicious code.
-    </string>
-    <string name="security_four">
-        You will not solicit login information or access an account belonging to someone else.
-    </string>
-     <string name="security_conclusion">
-       Flippy reserves the rights to deactivate a user\'s\’ account without prior notice if a user is suspected of or is indulging in any activity which is illegal or violates the right or other users or the policy of Flippy.
-    </string>
+    <string name="legal_safety_message">        We do our best to keep Flippy safe, but we cannot guarantee it. We need your help to keep Flippy safe, which includes the following commitments by you:</string>
+    <string name="security_one">        You will not post unauthorized commercial communications (such as spam) on Flippy.</string>
+    <string name="security_two">       You will not engage in unlawful multi-level marketing, such as a pyramid scheme, on Flippy.</string>
+    <string name="security_three">        You will not upload viruses or other malicious code.</string>
+    <string name="security_four">        You will not solicit login information or access an account belonging to someone else.</string>
+    <string name="security_conclusion">       Flippy reserves the rights to deactivate a user\'s\’ account without prior notice if a user is suspected of or is indulging in any activity which is illegal or violates the right or other users or the policy of Flippy.</string>
+
+
+    <string name="title_activity_user_account_logout">Logout</string>
+    <string name="title_activity_version_info">Flippy version information</string>
+    <string name="activity_version_current">Current Version</string>
 
 </resources>

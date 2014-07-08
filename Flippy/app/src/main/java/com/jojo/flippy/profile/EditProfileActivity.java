@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,6 +99,8 @@ public class EditProfileActivity extends ActionBarActivity {
         editTextEditProfileEmail.setText(CommunityCenterActivity.regUserEmail);
         editTextEditProfileDateOfBirth.setText(CommunityCenterActivity.userDateOfBirth);
         imageViewUploadPhoto = (ImageView) findViewById(R.id.imageViewUploadPhoto);
+
+
         loadProfile();
 
         try {
@@ -173,6 +176,7 @@ public class EditProfileActivity extends ActionBarActivity {
             NewEmailUpdate = editTextEditProfileEmail.getText().toString().trim();
             NewDateOfBirthUpdate = editTextEditProfileDateOfBirth.getText().toString().trim();
             NewGenderUpdate = genderSpinner.getSelectedItem().toString();
+            Log.e("New email",NewEmailUpdate);
             if (updateUserStringDetails(NewEmailUpdate, NewFirstNameUpdate, NewLastNameUpdate, NewGenderUpdate)) {
                 ToastMessages.showToastLong(EditProfileActivity.this, "Profile updated");
                 goToMainActivity();
