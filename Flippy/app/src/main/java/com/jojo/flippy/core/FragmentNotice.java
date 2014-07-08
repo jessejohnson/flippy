@@ -67,6 +67,7 @@ public class FragmentNotice extends Fragment {
     private ProgressBar progressBarCommunityCenterLoader;
     private Dao<Post, Integer> postDao;
     private InternetConnectionDetector internetConnectionDetector;
+    public static IntentFilter postIntentFilter;
 
     public FragmentNotice() {
 
@@ -85,9 +86,10 @@ public class FragmentNotice extends Fragment {
         progressBarCommunityCenterLoader = (ProgressBar) view.findViewById(R.id.progressBarLoadNoticeData);
         noticeList.setAdapter(listAdapter);
 
+
         internetConnectionDetector = new InternetConnectionDetector(getActivity());
         if (internetConnectionDetector.isConnectingToInternet()) {
-            IntentFilter postIntentFilter = new IntentFilter();
+            postIntentFilter = new IntentFilter();
             postIntentFilter.addAction("newPostArrived");
             getActivity().registerReceiver(postReceiver, postIntentFilter);
 
@@ -146,9 +148,12 @@ public class FragmentNotice extends Fragment {
     BroadcastReceiver postReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            //update list cos there is new data
-            Log.e("New Data here", "here");
             loadAdapterFromDatabaseOnReceive();
+        }
+
+        @Override
+        protected void finalize() throws Throwable {
+            super.finalize();
         }
     };
 
@@ -289,6 +294,5 @@ public class FragmentNotice extends Fragment {
         }
 
     }
-
 
 }

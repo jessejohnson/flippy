@@ -322,4 +322,9 @@ public class CommunityCenterActivity extends ActionBarActivity {
                     }
                 }).setNegativeButton(R.string.exit_negative, null).show();
     }
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+    }
 }
