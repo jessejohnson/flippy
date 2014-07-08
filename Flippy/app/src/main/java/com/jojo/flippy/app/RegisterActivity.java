@@ -185,6 +185,7 @@ public class RegisterActivity extends Activity {
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
             ToastMessages.showToastLong(RegisterActivity.this, "Sorry, Unable to create user account");
+            Log.e("User creation error",sqlE.toString());
 
         }
 

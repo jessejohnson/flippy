@@ -9,23 +9,19 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.jojo.flippy.app.R;
-import com.jojo.flippy.app.SelectCommunityActivity;
 import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
@@ -35,8 +31,6 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -78,6 +72,7 @@ public class EditProfileActivity extends ActionBarActivity {
     private String userDateOfBirth = "";
     private String userAvatarThumb = "";
     private String userCommunityId;
+    private ProgressBar progressBarUpdateAvatar;
 
     private boolean save = false;
 
@@ -95,6 +90,8 @@ public class EditProfileActivity extends ActionBarActivity {
         editTextEditProfileEmail = (EditText) findViewById(R.id.editTextEditProfileEmail);
         editTextEditProfileDateOfBirth = (EditText) findViewById(R.id.editTextEditProfileDateOfBirth);
         editTextEditProfileNumber = (EditText) findViewById(R.id.editTextEditProfileNumber);
+        progressBarUpdateAvatar = (ProgressBar)findViewById(R.id.progressBarUpdateAvatar);
+        progressBarUpdateAvatar.setVisibility(View.GONE);
         genderSpinner = (Spinner) findViewById(R.id.genderSpinner);
         editTextEditProfileFirstName.setText(CommunityCenterActivity.userFirstName);
         editTextEditProfileLastName.setText(CommunityCenterActivity.userLastName);
@@ -178,16 +175,16 @@ public class EditProfileActivity extends ActionBarActivity {
             NewGenderUpdate = genderSpinner.getSelectedItem().toString();
             if (updateUserStringDetails(NewEmailUpdate, NewFirstNameUpdate, NewLastNameUpdate, NewGenderUpdate)) {
                 ToastMessages.showToastLong(EditProfileActivity.this, "Profile updated");
-                goToAccountProfile();
+                goToMainActivity();
             }
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void goToAccountProfile() {
+    private void goToMainActivity() {
         Intent intent = getIntent();
-        intent.setClass(EditProfileActivity.this, AccountProfileActivity.class);
+        intent.setClass(EditProfileActivity.this, CommunityCenterActivity.class);
         startActivity(intent);
     }
 
@@ -207,6 +204,7 @@ public class EditProfileActivity extends ActionBarActivity {
             ToastMessages.showToastShort(EditProfileActivity.this, "Browse a new image first");
             return;
         }
+        progressBarUpdateAvatar.setVisibility(View.VISIBLE);
         Ion.with(EditProfileActivity.this, Flippy.userChannelsSubscribedURL + "upload-avatar/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setMultipartFile("avatar", new File(filePath))
@@ -214,6 +212,7 @@ public class EditProfileActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
+                        progressBarUpdateAvatar.setVisibility(View.GONE);
                         if (result.has("details")) {
                             Crouton.makeText(EditProfileActivity.this, "Failed to upload picture", Style.ALERT)
                                     .show();
@@ -241,7 +240,7 @@ public class EditProfileActivity extends ActionBarActivity {
             updateBuilder.updateColumnValue("avatar", userAvatar);
             updateBuilder.updateColumnValue("avatar_thumb", userAvatarThumb);
             updateBuilder.update();
-            goToAccountProfile();
+            goToMainActivity();
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
             Crouton.makeText(EditProfileActivity.this, "Sorry, Try again later", Style.ALERT)

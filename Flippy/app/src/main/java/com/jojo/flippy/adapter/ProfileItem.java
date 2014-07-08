@@ -10,13 +10,14 @@ import java.net.URI;
 public class ProfileItem {
 
     private URI profileChannelItem;
-    private String profileChannelName,profileChannelTotalNumber;
+    private String profileChannelName,profileChannelTotalNumber,textViewMemberId;
 
 
-    public ProfileItem(URI profileChannelItem ,String profileChannelName,String profileChannelTotalNumber ) {
+    public ProfileItem(URI profileChannelItem ,String profileChannelName,String profileChannelTotalNumber,String MemberId ) {
         this.profileChannelItem = profileChannelItem;
         this.profileChannelName = profileChannelName;
         this.profileChannelTotalNumber = profileChannelTotalNumber;
+        this.textViewMemberId = MemberId;
     }
 
     public void setProfileChannelItem(URI profileChannelItem) {
@@ -43,4 +44,11 @@ public class ProfileItem {
         return profileChannelTotalNumber;
     }
 
+    public String getTextViewMemberId() {
+        return textViewMemberId;
+    }
+
+    public void setTextViewMemberId(String textViewMemberId) {
+        this.textViewMemberId = textViewMemberId;
+    }
 }

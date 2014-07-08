@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:gpb="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/margin_five"
+    android:layout_margin="@dimen/margin_two"
     android:orientation="vertical">
 
     <ListView
@@ -13,22 +14,14 @@
         android:choiceMode="singleChoice"
         android:dividerHeight="@dimen/margin_one" />
 
-    <ProgressBar
-        android:id="@+id/progressBarMemberChannelLoader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewCommunityEmpty"
-        android:layout_centerInParent="true"
-        android:minHeight="48dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/community_no_data"
+    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
+        android:id="@+id/progressBarMemberChannelLoader"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerInParent="true"
-        android:textColor="@color/flippy_orange"
-        android:id="@+id/textViewNoMember"
-        android:layout_above="@+id/progressBarMemberChannelLoader"
-        android:layout_centerHorizontal="true" />
+        android:layout_gravity="center"
+        gpb:colors="@array/flippy_rainbow"
+        gpb:type="folding_circles" />
+
 </RelativeLayout>

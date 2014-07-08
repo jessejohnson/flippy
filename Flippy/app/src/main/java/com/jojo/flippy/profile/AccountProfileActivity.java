@@ -124,7 +124,7 @@ public class AccountProfileActivity extends ActionBarActivity {
                             for (int i = 0; i < profileArray.size(); i++) {
                                 JsonObject item = profileArray.get(i).getAsJsonObject();
                                 JsonObject creator = item.getAsJsonObject("creator");
-                                ProfileItem profileItem = new ProfileItem(URI.create(item.get("image_url").getAsString()), item.get("name").getAsString(), creator.get("email").getAsString());
+                                ProfileItem profileItem = new ProfileItem(URI.create(item.get("image_url").getAsString()), item.get("name").getAsString(), creator.get("email").getAsString(),"");
                                 rowItems.add(profileItem);
                             }
                             updateAdapter();

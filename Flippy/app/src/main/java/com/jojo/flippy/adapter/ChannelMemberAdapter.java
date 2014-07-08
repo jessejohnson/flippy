@@ -32,6 +32,7 @@ public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> {
         ImageView imageView;
         TextView textViewChannelMemberFirstName;
         TextView getTextViewChannelMemberSecondName;
+        TextView textViewMemberId;
         LinearLayout linearLayoutChannelMember;
     }
 
@@ -45,6 +46,7 @@ public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> {
             convertView = mInflater.inflate(R.layout.channel_members_listview, null);
             holder = new ViewHolder();
             holder.textViewChannelMemberFirstName = (TextView) convertView.findViewById(R.id.textViewMemberFirstName);
+            holder.textViewMemberId = (TextView) convertView.findViewById(R.id.textViewMemberId);
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageViewMember);
             holder.getTextViewChannelMemberSecondName = (TextView) convertView.findViewById(R.id.textViewMemberLastName);
             holder.linearLayoutChannelMember = (LinearLayout) convertView.findViewById(R.id.linearLayoutChannelMember);
@@ -56,6 +58,7 @@ public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> {
           holder.linearLayoutChannelMember.setBackgroundResource(R.drawable.flippy_background_light_dark);
         }
         holder.textViewChannelMemberFirstName.setText(rowItem.getProfileChannelName());
+        holder.textViewMemberId.setText(rowItem.getTextViewMemberId());
         holder.getTextViewChannelMemberSecondName.setText(rowItem.getProfileChannelTotalNumber());
 
         Ion.with(holder.imageView)

@@ -230,7 +230,7 @@
             android:enabled="true" />
 
         <service
-            android:name="com.jojo.flippy.services.RetrievePostService"
+            android:name="com.jojo.flippy.services.DataService"
             android:enabled="true" />
         <receiver android:name="com.jojo.flippy.services.FlippyReceiver" />
 

@@ -1,6 +1,7 @@
 package com.jojo.flippy.util;
 
 import android.app.Application;
+import android.content.Intent;
 import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -8,6 +9,7 @@ import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.persistence.User;
+import com.jojo.flippy.services.DataService;
 
 import java.util.List;
 
@@ -53,6 +55,9 @@ public class Flippy  extends Application{
         }catch(java.sql.SQLException sqlE){
             sqlE.printStackTrace();
         }
+
+        Intent dataServiceIntent = new Intent(getApplicationContext(), DataService.class);
+        startService(dataServiceIntent);
     }
 
     @Override

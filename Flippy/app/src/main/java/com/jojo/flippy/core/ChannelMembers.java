@@ -46,16 +46,13 @@ public class ChannelMembers extends Activity {
     private String memberId;
     private String memberFirstName;
     private String totalMembers = "";
-
     private ChannelMemberAdapter channelMemberAdapter;
-
     private Intent intent;
     private ListView membershipList;
     private List<ProfileItem> ChannelMemberItem;
     private String membersURL = "/members/";
     private ActionBar actionBar;
     private ProgressBar progressBarMemberChannelLoader;
-    private TextView textViewNoMember;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +75,6 @@ public class ChannelMembers extends Activity {
         //finding all the views with their appropriate ids
         ChannelMemberItem = new ArrayList<ProfileItem>();
         membershipList = (ListView) findViewById(R.id.listViewChannelMembers);
-        textViewNoMember = (TextView) findViewById(R.id.textViewNoMember);
-        membershipList.setEmptyView(textViewNoMember);
         progressBarMemberChannelLoader = (ProgressBar) findViewById(R.id.progressBarMemberChannelLoader);
         channelMemberAdapter = new ChannelMemberAdapter(ChannelMembers.this,
                 R.layout.channel_members_listview, ChannelMemberItem);
@@ -105,7 +100,7 @@ public class ChannelMembers extends Activity {
                                     url = item.get("avatar").getAsString();
                                 }
                                 memberFirstName = item.get("first_name").getAsString();
-                                ProfileItem profileItem = new ProfileItem(URI.create(url), item.get("email").getAsString(), memberFirstName + ", " + item.get("last_name").getAsString());
+                                ProfileItem profileItem = new ProfileItem(URI.create(url), item.get("email").getAsString(), memberFirstName + ", " + item.get("last_name").getAsString(),memberId);
                                 ChannelMemberItem.add(profileItem);
                             }
                             updateAdapter();
@@ -126,8 +121,15 @@ public class ChannelMembers extends Activity {
                                     long id) {
                 //setting the click action for each of the items
                 intent.setClass(ChannelMembers.this, MemberDetailActivity.class);
-                intent.putExtra("memberId", memberId);
-                intent.putExtra("memberFirstName", memberFirstName);
+                TextView textViewMemberId = (TextView)view.findViewById(R.id.textViewMemberId);
+                TextView textViewMemberFirstName = (TextView)view.findViewById(R.id.textViewMemberFirstName);
+                TextView textViewMemberLastName = (TextView)view.findViewById(R.id.textViewMemberLastName);
+                String userId = textViewMemberId.getText().toString();
+                String userFirstName = textViewMemberFirstName.getText().toString();
+                String userMemberLastName = textViewMemberLastName.getText().toString();
+                intent.putExtra("memberId", userId);
+                intent.putExtra("memberFirstName", userFirstName);
+                intent.putExtra("memberLastName", userMemberLastName);
                 startActivity(intent);
 
             }

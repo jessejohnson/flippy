@@ -5,7 +5,10 @@ package com.jojo.flippy.core;
  */
 
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +36,7 @@ import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.profile.ImagePreviewActivity;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.InternetConnectionDetector;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -62,6 +66,7 @@ public class FragmentNotice extends Fragment {
     private String noticeBody;
     private ProgressBar progressBarCommunityCenterLoader;
     private Dao<Post, Integer> postDao;
+    private InternetConnectionDetector internetConnectionDetector;
 
     public FragmentNotice() {
 
@@ -79,6 +84,17 @@ public class FragmentNotice extends Fragment {
         noticeList = (ListView) view.findViewById(R.id.listViewNoticeList);
         progressBarCommunityCenterLoader = (ProgressBar) view.findViewById(R.id.progressBarLoadNoticeData);
         noticeList.setAdapter(listAdapter);
+
+        internetConnectionDetector = new InternetConnectionDetector(getActivity());
+        if (internetConnectionDetector.isConnectingToInternet()) {
+            IntentFilter postIntentFilter = new IntentFilter();
+            postIntentFilter.addAction("newPostArrived");
+            getActivity().registerReceiver(postReceiver, postIntentFilter);
+
+        } else {
+            Crouton.makeText(getActivity(), "You are in offline mode", Style.ALERT)
+                    .show();
+        }
 
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
@@ -126,6 +142,15 @@ public class FragmentNotice extends Fragment {
         registerForContextMenu(noticeList);
         return view;
     }
+
+    BroadcastReceiver postReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //update list cos there is new data
+            Log.e("New Data here", "here");
+            loadAdapterFromDatabaseOnReceive();
+        }
+    };
 
     private void updateListAdapter() {
         listAdapter.notifyDataSetChanged();
@@ -201,6 +226,42 @@ public class FragmentNotice extends Fragment {
             List<Post> postList = postDao.queryForAll();
             progressBarCommunityCenterLoader.setVisibility(view.GONE);
             if (!postList.isEmpty()) {
+                for (int i = 0; i < postList.size(); i++) {
+                    Post post = postList.get(i);
+                    String[] timestampArray = post.start_date.replace("Z", "").split("T");
+                    String timestamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0, 8);
+
+                    try {
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+                        Date dateConverted = dateFormat.parse(timestampArray[0].toString());
+                        timestamp = formatter.format(dateConverted) + " @ " + timestampArray[1].substring(0, 8);
+                    } catch (Exception error) {
+                        //maintain the first format
+                    }
+                    noticeFeed.add(new Notice(post.notice_id, post.author_first_name, post.author_last_name, post.notice_title, "sub", post.notice_body, timestamp, URI.create(post.notice_image)));
+
+                }
+                updateListAdapter();
+
+            }
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            Crouton.makeText(getActivity(), "Sorry, Try again later", Style.ALERT)
+                    .show();
+
+        }
+
+    }
+
+    private void loadAdapterFromDatabaseOnReceive() {
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
+                    DatabaseHelper.class);
+            postDao = databaseHelper.getPostDao();
+            List<Post> postList = postDao.queryForAll();
+            if (!postList.isEmpty()) {
+                noticeFeed.clear();
                 for (int i = 0; i < postList.size(); i++) {
                     Post post = postList.get(i);
                     String[] timestampArray = post.start_date.replace("Z", "").split("T");

@@ -223,7 +223,7 @@
     <string name="dummy_flippy_likes">12 likes</string>
 
     <!-- the member detail strings -->
-    <string name="another_member_detail_add_as_admin">add as admin</string>
+    <string name="another_member_detail_add_as_admin">promote user</string>
     <string name="title_activity_member_detail">Member Profile</string>
 
     <!-- the spinner for the edit profile gender -->

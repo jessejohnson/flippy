@@ -28,7 +28,6 @@ public class InternetConnectionDetector {
                 }
             }
         }
-        //else
         return false;
     }
 }

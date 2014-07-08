@@ -97,7 +97,7 @@ public class SelectChannelActivity extends ActionBarActivity {
                                 }
                                 channelName = item.get("name").getAsString();
                                 if (creatorId.equals(CommunityCenterActivity.regUserID)) {
-                                    ProfileItem channelItem = new ProfileItem(URI.create(url), channelName, channelId);
+                                    ProfileItem channelItem = new ProfileItem(URI.create(url), channelName, channelId,"");
                                     userChannelItem.add(channelItem);
                                 }
                             }

@@ -35,7 +35,7 @@
                     android:layout_height="@dimen/margin_one_fifty"
                     android:layout_alignParentTop="true"
                     android:padding="1dp"
-                    android:scaleType="center"
+                    android:scaleType="centerCrop"
                     app:border_color="@color/border_white"
                     app:border_width="3dp"
                     app:corner_radius="150dp"
@@ -108,20 +108,8 @@
                     android:layout_height="fill_parent"
                     android:layout_marginTop="@dimen/margin_five"
                     android:orientation="horizontal"
-                    android:weightSum="2">
+                    android:weightSum="1">
 
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/margin_one"
-                        android:layout_weight="1"
-                        android:background="@color/flippy_light_header"
-                        android:gravity="center_horizontal"
-                        android:padding="@dimen/margin_twenty"
-                        android:text="@string/dummy_user_number_of_channels_own"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@color/flippy_white" />
 
                     <TextView
                         android:id="@+id/textViewUserTotalNumberOfCircles"

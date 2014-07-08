@@ -203,14 +203,13 @@ public class ChannelDetailActivity extends ActionBarActivity {
         JsonObject json = new JsonObject();
         json.addProperty("id", CommunityCenterActivity.regUserID);
         Ion.with(ChannelDetailActivity.this)
-                .load(channelDetailSubscribeURL + channelId + "/subscribe/")
+                .load(channelDetailSubscribeURL + "/subscribe/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-
                         if (result != null) {
                             if (result.has("results")) {
                                 ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("results").getAsString());

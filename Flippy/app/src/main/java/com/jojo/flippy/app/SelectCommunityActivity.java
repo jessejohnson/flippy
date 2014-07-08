@@ -224,6 +224,7 @@ public class SelectCommunityActivity extends Activity {
 
 
     private boolean saveUserCommunity() {
+        savedCommunity = false;
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("community_id",selectedCommunityID);
         Ion.with(SelectCommunityActivity.this)
@@ -237,16 +238,14 @@ public class SelectCommunityActivity extends Activity {
                         if (result != null) {
                             if (result.has("results")) {
                                 savedCommunity = true;
-                                return;
-                            } else {
-                                savedCommunity = false;
-                                return;
+
                             }
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
+                            savedCommunity = false;
                         }
-
+                        savedCommunity = false;
                     }
                 });
 
