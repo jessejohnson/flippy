@@ -2,13 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/flippy_white"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.jojo.flippy.app.RegisterActivity">
-
+    tools:context="com.jojo.flippy.app.SignInActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -41,14 +38,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="@string/register_title"
+                        android:text="@string/title_activity_sign_in"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="@color/flippy_white" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearLayout2"
+                android:id="@+id/linearLayoutSignInContent"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -59,8 +56,7 @@
                 android:padding="10dp">
 
                 <EditText
-                    android:id="@+id/registerEmailEditText"
-
+                    android:id="@+id/editTextSigninEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_email_phone_number_placeholder"
@@ -71,27 +67,7 @@
                     android:textColor="@color/flippy_white" />
 
                 <EditText
-                    android:id="@+id/editTextRegisterFirstName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/register_first_name_placeholder"
-                    android:inputType="text"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"
-                    android:textColor="@color/flippy_white" />
-
-                <EditText
-                    android:id="@+id/editTextRegisterLastName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/register_last_name_placeholder"
-                    android:inputType="text"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"
-                    android:textColor="@color/flippy_white" />
-
-                <EditText
-                    android:id="@+id/editTextRegisterPassword"
+                    android:id="@+id/editTextSigninPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/register_password_placeholder"
@@ -109,29 +85,30 @@
 
                 <TextView
                     android:id="@+id/textViewSignIn"
+                    android:layout_gravity="center_horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/linearLayout2"
+                    android:layout_below="@+id/linearLayoutSignInContent"
                     android:layout_centerHorizontal="true"
-                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/margin_ten"
-                    android:text="@string/register_sign_in_text"
+                    android:text="@string/new_user"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@color/flippy_orange" />
 
                 <Button
-                    android:id="@+id/registerNextButton"
+                    android:id="@+id/signGetStartedButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/flippy_button_default"
                     android:padding="@dimen/margin_ten"
-                    android:text="@string/register_next"
+                    android:text="@string/start"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:textColor="@color/flippy_white"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </RelativeLayout>
