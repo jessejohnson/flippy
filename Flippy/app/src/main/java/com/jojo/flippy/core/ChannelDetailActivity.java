@@ -21,6 +21,8 @@ import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.util.List;
+
 
 public class ChannelDetailActivity extends ActionBarActivity {
     private Intent intent;
@@ -44,7 +46,9 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private TextView textViewNameChannelDetailFullName, textViewChannelCreatorEmail;
     private LinearLayout linearLayoutChannelDetailContent;
     private ProgressBar progressBarLoadChannelDetail;
-    private Button buttonSubscribeToChannel, buttonManageToChannel;
+    private Button buttonSubscribeToChannel, buttonManageToChannel, buttonUnSubscribeToChannel;
+    private String channelDetailSubscribeURL;
+    private LinearLayout linearLayoutSubscriptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         channelName = intent.getStringExtra("channelName");
         channelId = intent.getStringExtra("channelId");
         String channelDetailsURL = Flippy.channelDetailURL + channelId + "/";
-        final String channelDetailSubscribeURL = Flippy.channelSubscribeURL + channelId + "/subscribe/";
+        channelDetailSubscribeURL = Flippy.channelSubscribeURL + channelId;
 
 
         ActionBar actionBar = getActionBar();
@@ -73,6 +77,10 @@ public class ChannelDetailActivity extends ActionBarActivity {
         progressBarLoadChannelDetail = (ProgressBar) findViewById(R.id.progressBarLoadChannelDetail);
         buttonSubscribeToChannel = (Button) findViewById(R.id.buttonSubscribeToChannel);
         buttonManageToChannel = (Button) findViewById(R.id.buttonManageToChannel);
+        buttonUnSubscribeToChannel = (Button) findViewById(R.id.buttonUnSubscribeToChannel);
+        linearLayoutSubscriptions = (LinearLayout) findViewById(R.id.linearLayoutSubscriptions);
+        linearLayoutSubscriptions.setVisibility(View.GONE);
+        buttonUnSubscribeToChannel.setVisibility(View.GONE);
         linearLayoutChannelDetailContent.setVisibility(View.GONE);
         buttonSubscribeToChannel.setVisibility(View.GONE);
         textViewNameChannelDetailFullName.setVisibility(View.GONE);
@@ -123,31 +131,14 @@ public class ChannelDetailActivity extends ActionBarActivity {
         buttonSubscribeToChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(CommunityCenterActivity.userAuthToken==""){
-                  ToastMessages.showToastLong(ChannelDetailActivity.this,"Sorry, request cannot be made");
-                  return;
-                }
-                JsonObject json = new JsonObject();
-                json.addProperty("id", CommunityCenterActivity.regUserID);
-                Ion.with(ChannelDetailActivity.this)
-                        .load(channelDetailSubscribeURL)
-                        .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
-                        .setJsonObjectBody(json)
-                        .asJsonObject()
-                        .setCallback(new FutureCallback<JsonObject>() {
-                            @Override
-                            public void onCompleted(Exception e, JsonObject result) {
+                setSubscribe();
+            }
 
-                                if (result != null) {
-                                    ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("detail").getAsString());
-                                }
-                                if (e != null) {
-                                    ToastMessages.showToastLong(ChannelDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                                }
-                            }
-
-                            ;
-                        });
+        });
+        buttonUnSubscribeToChannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setUnSubscribe();
             }
 
         });
@@ -198,13 +189,76 @@ public class ChannelDetailActivity extends ActionBarActivity {
         imageViewCreator.setVisibility(View.VISIBLE);
 
         if (CommunityCenterActivity.regUserEmail.equals(creatorEmail)) {
-            buttonManageToChannel.setVisibility(View.VISIBLE);
-            buttonSubscribeToChannel.setVisibility(View.GONE);
+            showManageButton();
         } else {
-            buttonSubscribeToChannel.setVisibility(View.VISIBLE);
+            showSubscribeButton();
         }
+    }
 
+    private void setSubscribe() {
+        if (CommunityCenterActivity.userAuthToken == "") {
+            ToastMessages.showToastLong(ChannelDetailActivity.this, "Sorry, request cannot be made");
+            return;
+        }
+        JsonObject json = new JsonObject();
+        json.addProperty("id", CommunityCenterActivity.regUserID);
+        Ion.with(ChannelDetailActivity.this)
+                .load(channelDetailSubscribeURL + channelId + "/subscribe/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
 
+                        if (result != null) {
+                            if (result.has("results")) {
+                                ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("results").getAsString());
+                            }
+                            if (result.has("detail")) {
+                                ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("detail").getAsString());
+                            }
+
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(ChannelDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                        }
+                    }
+
+                    ;
+                });
+    }
+
+    private void setUnSubscribe() {
+        if (CommunityCenterActivity.userAuthToken == "") {
+            ToastMessages.showToastLong(ChannelDetailActivity.this, "Sorry, request cannot be made");
+            return;
+        }
+        JsonObject json = new JsonObject();
+        json.addProperty("id", CommunityCenterActivity.regUserID);
+        Ion.with(ChannelDetailActivity.this)
+                .load(channelDetailSubscribeURL + "/unsubscribe/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (result != null) {
+                            if (result.has("results")) {
+                                ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("results").getAsString());
+                            }
+                            if (result.has("detail")) {
+                                ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("detail").getAsString());
+                            }
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(ChannelDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                        }
+                    }
+
+                    ;
+                });
     }
 
 
@@ -229,5 +283,19 @@ public class ChannelDetailActivity extends ActionBarActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
+    }
+
+    private void showSubscribeButton() {
+        linearLayoutSubscriptions.setVisibility(View.VISIBLE);
+        buttonSubscribeToChannel.setVisibility(View.VISIBLE);
+        buttonManageToChannel.setVisibility(View.GONE);
+        buttonUnSubscribeToChannel.setVisibility(View.VISIBLE);
+    }
+
+    private void showManageButton() {
+        linearLayoutSubscriptions.setVisibility(View.GONE);
+        buttonSubscribeToChannel.setVisibility(View.GONE);
+        buttonManageToChannel.setVisibility(View.VISIBLE);
+        buttonUnSubscribeToChannel.setVisibility(View.GONE);
     }
 }

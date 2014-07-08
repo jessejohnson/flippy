@@ -38,4 +38,6 @@ dependencies {
     compile 'com.j256.ormlite:ormlite-android:4.47'
     compile 'com.google.android.gms:play-services:+'
     compile 'com.jpardogo.googleprogressbar:library:+'
+    compile 'com.edmodo:cropper:1.0.1'
+
 }

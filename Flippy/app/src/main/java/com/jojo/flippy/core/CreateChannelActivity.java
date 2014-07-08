@@ -29,6 +29,9 @@ import com.koushikdutta.ion.ProgressCallback;
 
 import java.io.File;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 public class CreateChannelActivity extends ActionBarActivity {
     private ImageView imageViewCreateChannel;
     private EditText editTextNewChannelName;
@@ -44,6 +47,7 @@ public class CreateChannelActivity extends ActionBarActivity {
     private int column_index;
     private Cursor cursor;
     private String path;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class CreateChannelActivity extends ActionBarActivity {
         editTextNewChannelOneLiner = (EditText) findViewById(R.id.editTextNewChannelOneLiner);
         buttonCreateNewChannel = (Button) findViewById(R.id.buttonCreateNewChannel);
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBarUpload);
 
 
         imageViewCreateChannel.setOnClickListener(new View.OnClickListener() {
@@ -75,46 +80,7 @@ public class CreateChannelActivity extends ActionBarActivity {
         buttonCreateNewChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String channelName = editTextNewChannelName.getText().toString().trim();
-                String channelBio = editTextNewChannelOneLiner.getText().toString().trim();
-                if (channelName.isEmpty()) {
-                    editTextNewChannelName.setError("Channel name is required");
-                    return;
-                }
-                if (channelBio.isEmpty()) {
-                    editTextNewChannelOneLiner.setError("Provide a brief description here");
-                    return;
-                }
-                if (selectedImagePath == null) {
-                    ToastMessages.showToastLong(CreateChannelActivity.this, "Image is required");
-                    return;
-                }
-                buttonCreateNewChannel.setText("Please wait ...");
-                buttonCreateNewChannel.setEnabled(false);
-                Ion.with(CreateChannelActivity.this, Flippy.channelsURL)
-                        .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
-                        .setMultipartParameter("community", CommunityCenterActivity.userCommunityId)
-                        .setMultipartParameter("bio", channelBio)
-                        .setMultipartParameter("creator", CommunityCenterActivity.regUserID)
-                        .setMultipartParameter("name", channelName)
-                        .setMultipartFile("image_url", new File(selectedImagePath))
-                        .asJsonObject()
-                        .setCallback(new FutureCallback<JsonObject>() {
-                            @Override
-                            public void onCompleted(Exception e, JsonObject result) {
-                                Log.e("file", selectedImagePath);
-                                buttonCreateNewChannel.setEnabled(true);
-                                buttonCreateNewChannel.setText(getText(R.string.channel_create));
-                                if (result != null) {
-                                    ToastMessages.showToastLong(CreateChannelActivity.this, result.get("detail").getAsString());
-                                }
-                                if (e != null) {
-                                    ToastMessages.showToastLong(CreateChannelActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                                }
-
-                            }
-
-                        });
+                createChannel();
             }
         });
     }
@@ -126,9 +92,8 @@ public class CreateChannelActivity extends ActionBarActivity {
                 Uri selectedImageUri = data.getData();
                 fileManagerString = selectedImageUri.getPath();
                 selectedImagePath = getPath(selectedImageUri);
-                // img.setImageURI(selectedImageUri);
-                if(imagePath==null){
-                    ToastMessages.showToastLong(CreateChannelActivity.this,"Choose an image with local source");
+                if (imagePath == null) {
+                    ToastMessages.showToastLong(CreateChannelActivity.this, "Choose an image with local source");
                     return;
                 }
                 imagePath.getBytes();
@@ -156,13 +121,13 @@ public class CreateChannelActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_manage) {
+        if (id == R.id.action_create_channel) {
+            createChannel();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    //UPDATED!
     private String getPath(Uri uri) {
         String[] projection = {MediaStore.MediaColumns.DATA};
         Cursor cursor = managedQuery(uri, projection, null, null, null);
@@ -172,5 +137,59 @@ public class CreateChannelActivity extends ActionBarActivity {
         imagePath = cursor.getString(column_index);
 
         return cursor.getString(column_index);
+    }
+
+    private void createChannel() {
+        final String channelName = editTextNewChannelName.getText().toString().trim();
+        String channelBio = editTextNewChannelOneLiner.getText().toString().trim();
+        String is_public = "true";
+        if (!checkBoxChannelIsPublic.isChecked()) {
+            is_public = "false";
+        }
+        if (channelName.isEmpty()) {
+            editTextNewChannelName.setError("Channel name is required");
+            return;
+        }
+        if (channelBio.isEmpty()) {
+            editTextNewChannelOneLiner.setError("Provide a brief description here");
+            return;
+        }
+        if (selectedImagePath == null) {
+            ToastMessages.showToastLong(CreateChannelActivity.this, "Image is required");
+            return;
+        }
+        buttonCreateNewChannel.setText("Please wait ...");
+        buttonCreateNewChannel.setEnabled(false);
+        Ion.with(CreateChannelActivity.this, Flippy.channelsURL)
+                .uploadProgressBar(progressBar)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .setMultipartParameter("community_id", CommunityCenterActivity.userCommunityId)
+                .setMultipartParameter("bio", channelBio)
+                .setMultipartParameter("creator", CommunityCenterActivity.regUserID)
+                .setMultipartParameter("name", channelName)
+                .setMultipartParameter("is_public", is_public)
+                .setMultipartFile("image", new File(selectedImagePath))
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        Log.e("file", selectedImagePath);
+                        buttonCreateNewChannel.setEnabled(true);
+                        buttonCreateNewChannel.setText(getText(R.string.channel_create));
+                        if (result.has("details")) {
+                            Crouton.makeText(CreateChannelActivity.this, "Failed to create channel", Style.ALERT)
+                                    .show();
+                            return;
+                        }
+                        if (result != null && !result.has("details")) {
+                            ToastMessages.showToastLong(CreateChannelActivity.this, "Channel " + channelName + "Created successfully");
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(CreateChannelActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                        }
+
+                    }
+
+                });
     }
 }

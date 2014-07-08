@@ -1,4 +1,4 @@
-package com.jojo.flippy.util;
+package com.jojo.flippy.services;
 
 /**
  * Created by bright on 7/3/14.
@@ -6,9 +6,8 @@ package com.jojo.flippy.util;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
-import java.util.Calendar;
+import com.jojo.flippy.services.FlippyAlarmService;
 
 public class FlippyReceiver extends BroadcastReceiver {
     private String noticeTitle;

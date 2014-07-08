@@ -23,9 +23,11 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.UpdateBuilder;
 import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.InternetConnectionDetector;
@@ -60,6 +62,8 @@ public class SelectCommunityActivity extends Activity {
     private String regUserEmail;
     private ProgressBar progressBarLoadCommunity;
     private ScrollView scrollViewLogin;
+    private Dao<User, Integer> userDao;
+    private boolean savedCommunity = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +78,9 @@ public class SelectCommunityActivity extends Activity {
         final ArrayList<String> communityListId = new ArrayList<String>();
         communityListId.add("flippy01");
         communityListAdapt.add(defaultSpinnerItem);
-        progressBarLoadCommunity = (ProgressBar)findViewById(R.id.progressBarLoadCommunity);
+        progressBarLoadCommunity = (ProgressBar) findViewById(R.id.progressBarLoadCommunity);
         buttonGetStartedFromCommunity = (Button) findViewById(R.id.buttonGetStartedCommunity);
-        scrollViewLogin = (ScrollView)findViewById(R.id.scrollViewLogin);
+        scrollViewLogin = (ScrollView) findViewById(R.id.scrollViewLogin);
         scrollViewLogin.setVisibility(View.GONE);
         buttonGetStartedFromCommunity.setVisibility(View.GONE);
 
@@ -138,9 +142,8 @@ public class SelectCommunityActivity extends Activity {
                 //TODO submit community key to API. On success, set communitySelected & selectedCommunityID
                 if (!editTextCommunityKey.getText().toString().equalsIgnoreCase("")) {
                     String communityKey = editTextCommunityKey.getText().toString();
-                    //TODO add parameters for POST
                     JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("key", "value");
+                    jsonObject.addProperty("key", communityKey);
 
                     Ion.with(SelectCommunityActivity.this)
                             .load(communityKeyURL)
@@ -158,22 +161,30 @@ public class SelectCommunityActivity extends Activity {
                                 }
                             });
                 }
-               /* update the user with the selected community id and name*/
-                try {
-                    Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
-                    //this user
-                    UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
-                    updateBuilder.where().eq("user_email", regUserEmail);
-                    updateBuilder.updateColumnValue("community_id" , selectedCommunityID);
-                    updateBuilder.updateColumnValue("community_name" ,communitySelected);
-                    updateBuilder.update();
-                } catch (java.sql.SQLException sqlE) {
-                    sqlE.printStackTrace();
+                if (saveUserCommunity()) {
+                    try {
+                        DatabaseHelper databaseHelper = OpenHelperManager.getHelper(SelectCommunityActivity.this,
+                                DatabaseHelper.class);
+                        userDao = databaseHelper.getUserDao();
+                        UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
+                        updateBuilder.where().eq("user_email", regUserEmail);
+                        updateBuilder.updateColumnValue("community_id", selectedCommunityID);
+                        updateBuilder.updateColumnValue("community_name", communitySelected);
+                        updateBuilder.update();
+                    } catch (java.sql.SQLException sqlE) {
+                        sqlE.printStackTrace();
+                        Log.e("Community error",sqlE.toString());
+                    }
+                    intent.setClass(SelectCommunityActivity.this, CommunityCenterActivity.class);
+                    intent.putExtra("communitySelected", communitySelected);
+                    intent.putExtra("selectedCommunityID", selectedCommunityID);
+                    startActivity(intent);
+                }else{
+                    Crouton.makeText(SelectCommunityActivity.this, "sorry, unable to add community", Style.ALERT)
+                            .show();
+                    return;
                 }
-                intent.setClass(SelectCommunityActivity.this, CommunityCenterActivity.class);
-                intent.putExtra("communitySelected", communitySelected);
-                intent.putExtra("selectedCommunityID", selectedCommunityID);
-                startActivity(intent);
+
 
             }
         });
@@ -206,25 +217,40 @@ public class SelectCommunityActivity extends Activity {
         Crouton.cancelAllCroutons();
     }
 
-    public Dialog onCreateDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(SelectCommunityActivity.this);
-        // Get the layout inflater
-        LayoutInflater inflater = SelectCommunityActivity.this.getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.customize_alert_dialog, null))
-                // Add action buttons
-                .setPositiveButton(R.string.app_name, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // sign in the user ...
-                    }
-                });
-        return builder.create();
-    }
-    private void showViews(){
+    private void showViews() {
         buttonGetStartedFromCommunity.setVisibility(View.VISIBLE);
         scrollViewLogin.setVisibility(View.VISIBLE);
+    }
 
 
+    private boolean saveUserCommunity() {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("community_id",selectedCommunityID);
+        Ion.with(SelectCommunityActivity.this)
+                .load(Flippy.userCommunityURL + intent.getStringExtra("regUserID") + "/community/")
+                .setHeader("Authorization", "Token " + intent.getStringExtra("regUserAuthToken"))
+                .setJsonObjectBody(jsonObject)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (result != null) {
+                            if (result.has("results")) {
+                                savedCommunity = true;
+                                return;
+                            } else {
+                                savedCommunity = false;
+                                return;
+                            }
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
+                        }
+
+                    }
+                });
+
+        return savedCommunity;
     }
 
 }

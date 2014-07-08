@@ -117,7 +117,13 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                     public void onCompleted(Exception e, JsonObject result) {
 
                         if (result != null) {
-                            ToastMessages.showToastLong(context, result.get("detail").getAsString());
+                            if (result.has("results")) {
+                                ToastMessages.showToastLong(context, result.get("results").getAsString());
+                            }
+                            if (result.has("detail")) {
+                                ToastMessages.showToastLong(context, result.get("detail").getAsString());
+                            }
+
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
@@ -127,6 +133,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                     ;
                 });
     }
+
     private void setUnSubscribe(String channelId) {
         if (CommunityCenterActivity.userAuthToken == "") {
             ToastMessages.showToastLong(context, "Sorry, request cannot be made");
@@ -142,9 +149,13 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-
-                        if (result.has("results")) {
-                            ToastMessages.showToastLong(context, result.get("results").getAsString());
+                        if (result != null) {
+                            if (result.has("results")) {
+                                ToastMessages.showToastLong(context, result.get("results").getAsString());
+                            }
+                            if (result.has("detail")) {
+                                ToastMessages.showToastLong(context, result.get("detail").getAsString());
+                            }
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));

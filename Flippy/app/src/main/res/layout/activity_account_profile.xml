@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:gpb="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:gpb="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingBottom="0dp"
     android:paddingLeft="@dimen/margin_two"
@@ -12,22 +12,47 @@
     <LinearLayout
         android:id="@+id/linearLayoutUserProfile"
         android:layout_width="fill_parent"
-        android:gravity="center_horizontal"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="0dp"
         android:background="@color/flippy_dark_header"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageViewProfilePic"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/margin_one_fifty"
-            android:layout_gravity="center_horizontal"
-            android:background="@color/flippy_orange"
-            android:scaleType="centerCrop" />
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageViewProfileUserCommunity"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_one_fifty"
+                android:layout_gravity="center_horizontal"
+                android:alpha="0.5"
+                android:background="@color/flippy_orange"
+                android:scaleType="centerCrop" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <com.makeramen.RoundedImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/imageViewProfilePic"
+                    android:layout_width="@dimen/margin_one_fifty"
+                    android:layout_height="@dimen/margin_one_fifty"
+                    android:layout_marginTop="@dimen/margin_fifty"
+                    android:scaleType="centerCrop"
+                    app:border_color="@color/border_white"
+                    app:border_width="3dip"
+                    app:corner_radius="@dimen/margin_one_fifty"
+                    app:oval="false" />
+
+            </LinearLayout>
+        </FrameLayout>
 
         <TextView
             android:id="@+id/textViewProfileUserNameNew"
@@ -35,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
-            android:padding="@dimen/margin_five"
+            android:padding="@dimen/margin_two"
             android:text="@string/dummy_user_name"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/flippy_white" />
@@ -46,9 +71,20 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
-            android:padding="@dimen/margin_five"
+            android:padding="@dimen/margin_two"
             android:text="@string/dummy_user_email"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/flippy_white" />
+
+        <TextView
+            android:id="@+id/textViewProfileUserCommunity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/margin_two"
+            android:text="@string/dummy_user_email"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/flippy_white" />
     </LinearLayout>
 
@@ -56,22 +92,23 @@
     <ListView
         android:id="@+id/profileChannelListView"
         android:layout_width="match_parent"
-        android:divider="@color/flippy_orange"
-        android:dividerHeight="@dimen/margin_one"
         android:layout_height="match_parent"
+        android:listSelector="@android:color/transparent"
         android:layout_below="@+id/linearLayoutUserProfile"
-        android:layout_margin="@dimen/margin_five" />
+        android:layout_margin="@dimen/margin_five"
+        android:divider="@color/flippy_orange"
+        android:dividerHeight="@dimen/margin_one" />
 
     <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
         android:id="@+id/progressBarUserChannelLoad"
-        android:layout_marginTop="@dimen/margin_twenty"
         android:layout_width="@dimen/margin_twenty"
         android:layout_height="@dimen/margin_twenty"
-        android:layout_gravity="center"
-        gpb:type="folding_circles"
-        gpb:colors="@array/flippy_rainbow"
         android:layout_below="@+id/linearLayoutUserProfile"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_twenty"
+        gpb:colors="@array/flippy_rainbow"
+        gpb:type="folding_circles" />
 
 </RelativeLayout>

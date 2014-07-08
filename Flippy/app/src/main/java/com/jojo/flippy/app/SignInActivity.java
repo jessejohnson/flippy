@@ -14,7 +14,9 @@ import android.widget.TextView;
 
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
@@ -43,6 +45,7 @@ public class SignInActivity extends ActionBarActivity {
     private String regFirstName;
     private String regLastName;
     private String avatar, avatar_thumb, date_of_birth, gender;
+    private Dao<User, Integer> userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,8 +153,9 @@ public class SignInActivity extends ActionBarActivity {
 
                                         //Save the information in the database
                                         try {
-                                            //an instance of the userDao from the application class
-                                            Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
+                                            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(SignInActivity.this,
+                                                    DatabaseHelper.class);
+                                            userDao = databaseHelper.getUserDao();
                                             List<User> userList = userDao.queryForAll();
                                             if(!userList.isEmpty()){
                                                userDao.delete(userList);

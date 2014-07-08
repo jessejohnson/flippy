@@ -13,7 +13,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
@@ -33,6 +35,7 @@ public class RegisterActivity extends Activity {
     private CheckBox checkBoxTerms;
     private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName, regNumber;
     private Intent intent;
+    private Dao<User, Integer> userDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,8 +115,6 @@ public class RegisterActivity extends Activity {
 
                     registrationNext.setEnabled(false);
                     registrationNext.setText("Registering ...");
-
-
                     JsonObject json = new JsonObject();
                     json.addProperty("email", userEmail);
                     json.addProperty("first_name", first_name);
@@ -144,23 +145,11 @@ public class RegisterActivity extends Activity {
                                         regFirstName = result.get("first_name").getAsString();
                                         regUserEmail = result.get("email").getAsString();
                                         regLastName = result.get("last_name").getAsString();
-
-                                        //Save the information in the database
-                                        try {
-                                            Dao<User, Integer> userDao = ((Flippy) getApplication()).userDao;
-                                            List<User> userList = userDao.queryForAll();
-                                            if(!userList.isEmpty()){
-                                                userDao.delete(userList);
-                                            }
-                                            User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName);
-                                            userDao.create(user);
-
-                                        } catch (java.sql.SQLException sqlE) {
-                                            sqlE.printStackTrace();
-                                            ToastMessages.showToastLong(RegisterActivity.this,"Sorry, Unable to create user account");
+                                        if(!createUser()){
+                                            Crouton.makeText(RegisterActivity.this, "sorry user registration  failed", Style.ALERT)
+                                                    .show();
                                             return;
                                         }
-                                        //the end of the persistence
                                         intent.putExtra("regUserEmail", regUserEmail);
                                         intent.putExtra("regUserAuthToken", regUserAuthToken);
                                         intent.putExtra("regUserID", regUserID);
@@ -171,11 +160,34 @@ public class RegisterActivity extends Activity {
 
                             });
 
-                }else{
+                } else {
                     return;
                 }
             }
         });
 
+    }
+
+    private boolean createUser() {
+        boolean created = false;
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(RegisterActivity.this,
+                    DatabaseHelper.class);
+            userDao = databaseHelper.getUserDao();
+            List<User> userList = userDao.queryForAll();
+            if (!userList.isEmpty()) {
+                userDao.delete(userList);
+            }
+            User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName);
+            userDao.create(user);
+            created = true;
+
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            ToastMessages.showToastLong(RegisterActivity.this, "Sorry, Unable to create user account");
+
+        }
+
+        return created;
     }
 }

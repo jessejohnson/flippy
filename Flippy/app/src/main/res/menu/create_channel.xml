@@ -2,8 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.jojo.flippy.core.CreateChannelActivity" >
-    <item android:id="@+id/action_manage"
-        android:title="@string/action_settings"
+    <item android:id="@+id/action_create_channel"
+        android:title="@string/channel_create_done"
         android:icon="@drawable/ic_action_accept"
         android:orderInCategory="100"
         app:showAsAction="always" />

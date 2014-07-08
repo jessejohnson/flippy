@@ -22,10 +22,15 @@ import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.Notice;
 import com.jojo.flippy.adapter.NoticeListAdapter;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.persistence.DatabaseHelper;
+import com.jojo.flippy.persistence.Post;
+import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.profile.ImagePreviewActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
@@ -38,7 +43,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class FragmentNotice extends Fragment {
 
@@ -52,6 +61,7 @@ public class FragmentNotice extends Fragment {
     private String noticeAvatar;
     private String noticeBody;
     private ProgressBar progressBarCommunityCenterLoader;
+    private Dao<Post, Integer> postDao;
 
     public FragmentNotice() {
 
@@ -70,49 +80,22 @@ public class FragmentNotice extends Fragment {
         progressBarCommunityCenterLoader = (ProgressBar) view.findViewById(R.id.progressBarLoadNoticeData);
         noticeList.setAdapter(listAdapter);
 
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
+                    DatabaseHelper.class);
+            postDao = databaseHelper.getPostDao();
+            List<Post> postList = postDao.queryForAll();
+            if (postList.isEmpty()) {
+                getAllPost(view);
+            } else {
+                loadAdapterFromDatabase(view);
+            }
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            Crouton.makeText(getActivity(), "Sorry, Try again later", Style.ALERT)
+                    .show();
 
-        String url = Flippy.allPostURL;
-        //Loading the list with data from Api call
-        Ion.with(getActivity())
-                .load(url)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        progressBarCommunityCenterLoader.setVisibility(view.GONE);
-                        if (result != null) {
-                            JsonArray communityArray = result.getAsJsonArray("results");
-                            for (int i = 0; i < communityArray.size(); i++) {
-                                JsonObject item = communityArray.get(i).getAsJsonObject();
-                                JsonObject author = item.getAsJsonObject("author");
-                                String[] timestampArray = item.get("timestamp").getAsString().replace("Z", "").split("T");
-                                String timestamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0, 8);
-                                try {
-                                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                                    SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
-                                    Date dateConverted = dateFormat.parse(timestampArray[0].toString());
-                                    timestamp = formatter.format(dateConverted) + " @ " + timestampArray[1].substring(0, 8);
-                                } catch (Exception error) {
-                                    //maintain the first format
-                                }
-
-                                String image_link = "";
-                                if (!item.get("image_url").isJsonNull()) {
-                                    image_link = item.get("image_url").getAsString();
-                                }
-                                noticeFeed.add(new Notice(item.get("id").getAsString(), author.get("first_name").getAsString(), author.get("last_name").getAsString(), item.get("title").getAsString(), "sub", item.get("content").getAsString(), timestamp, URI.create(image_link)));
-
-                            }
-                            updateListAdapter();
-
-                        }
-                        if (e != null) {
-                            ToastMessages.showToastLong(getActivity(), getResources().getString(R.string.internet_connection_error_dialog_title));
-                        }
-
-                    }
-                });
-
+        }
 
         //Setting the click listener for the notice list
         noticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -139,22 +122,111 @@ public class FragmentNotice extends Fragment {
 
             }
         });
-        noticeList.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                return false;
-            }
-        });
-
-
-        //registering the list view for context menu actions
         registerForContextMenu(noticeList);
         return view;
     }
 
     private void updateListAdapter() {
         listAdapter.notifyDataSetChanged();
+    }
+
+
+    private void persistPost(
+            String notice_id, String notice_title, String notice_body, String notice_image, String start_date, String author_email, String author_id, String author_first_name, String author_last_name, String channel_id) {
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
+                    DatabaseHelper.class);
+            postDao = databaseHelper.getPostDao();
+            Post post = new Post(notice_id, notice_title, notice_body, notice_image, start_date, author_email, author_id, author_first_name, author_last_name, channel_id);
+            postDao.create(post);
+
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            ToastMessages.showToastLong(getActivity(), "Sorry, Failed to save post");
+
+        }
+
+    }
+
+    private void getAllPost(final View view) {
+        String url = Flippy.allPostURL;
+        Ion.with(getActivity())
+                .load(url)
+                .setTimeout(60 * 60 * 1000)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        progressBarCommunityCenterLoader.setVisibility(view.GONE);
+                        if (result != null && result.has("results")) {
+                            JsonArray communityArray = result.getAsJsonArray("results");
+                            for (int i = 0; i < communityArray.size(); i++) {
+                                JsonObject item = communityArray.get(i).getAsJsonObject();
+                                JsonObject author = item.getAsJsonObject("author");
+                                String startDate = item.get("timestamp").getAsString();
+                                String title = item.get("title").getAsString();
+                                String id = item.get("id").getAsString();
+                                String content = item.get("content").getAsString();
+                                String channel = item.get("channel").getAsString();
+                                String image_link = "";
+                                if (!item.get("image_url").isJsonNull()) {
+                                    image_link = item.get("image_url").getAsString();
+                                }
+                                String authorEmail = author.get("email").getAsString();
+                                String authorId = author.get("id").getAsString();
+                                String authorFirstName = author.get("first_name").getAsString();
+                                String authorLastName = author.get("last_name").getAsString();
+
+                                persistPost(id, title, content, image_link, startDate, authorEmail, authorId, authorFirstName, authorLastName, channel);
+
+                            }
+
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(getActivity(), getResources().getString(R.string.internet_connection_error_dialog_title));
+                        }
+
+                    }
+                });
+
+    }
+
+    private void loadAdapterFromDatabase(View view) {
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
+                    DatabaseHelper.class);
+            postDao = databaseHelper.getPostDao();
+            List<Post> postList = postDao.queryForAll();
+            progressBarCommunityCenterLoader.setVisibility(view.GONE);
+            if (!postList.isEmpty()) {
+                for (int i = 0; i < postList.size(); i++) {
+                    Post post = postList.get(i);
+                    String[] timestampArray = post.start_date.replace("Z", "").split("T");
+                    String timestamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0, 8);
+
+                    try {
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+                        Date dateConverted = dateFormat.parse(timestampArray[0].toString());
+                        timestamp = formatter.format(dateConverted) + " @ " + timestampArray[1].substring(0, 8);
+                    } catch (Exception error) {
+                        //maintain the first format
+                    }
+                    noticeFeed.add(new Notice(post.notice_id, post.author_first_name, post.author_last_name, post.notice_title, "sub", post.notice_body, timestamp, URI.create(post.notice_image)));
+
+                }
+                updateListAdapter();
+
+            }
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            Crouton.makeText(getActivity(), "Sorry, Try again later", Style.ALERT)
+                    .show();
+
+        }
+
     }
 
 
