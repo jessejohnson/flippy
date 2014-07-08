@@ -43,6 +43,7 @@ import org.json.JSONObject;
 
 import java.sql.SQLDataException;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -63,7 +64,7 @@ public class SelectCommunityActivity extends Activity {
     private ProgressBar progressBarLoadCommunity;
     private ScrollView scrollViewLogin;
     private Dao<User, Integer> userDao;
-    private boolean savedCommunity = false;
+    private boolean savedCommunity = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,45 +162,29 @@ public class SelectCommunityActivity extends Activity {
                                 }
                             });
                 }
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("community_id", selectedCommunityID);
-                Ion.with(SelectCommunityActivity.this)
-                        .load(Flippy.userCommunityURL + intent.getStringExtra("regUserID") + "/community/")
-                        .setHeader("Authorization", "Token " + intent.getStringExtra("regUserAuthToken"))
-                        .setJsonObjectBody(jsonObject)
-                        .asJsonObject()
-                        .setCallback(new FutureCallback<JsonObject>() {
-                            @Override
-                            public void onCompleted(Exception e, JsonObject result) {
-                                if (result != null) {
-                                    if (result.has("results")) {
-                                        
-                                    }
-                                }
-                                if (e != null) {
-                                    ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
-                                    return;
-                                }
-
-                            }
-                        });
-                try {
-                    DatabaseHelper databaseHelper = OpenHelperManager.getHelper(SelectCommunityActivity.this,
-                            DatabaseHelper.class);
-                    userDao = databaseHelper.getUserDao();
-                    UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
-                    updateBuilder.where().eq("user_email", regUserEmail);
-                    updateBuilder.updateColumnValue("community_id", selectedCommunityID);
-                    updateBuilder.updateColumnValue("community_name", communitySelected);
-                    updateBuilder.update();
-                } catch (java.sql.SQLException sqlE) {
-                    sqlE.printStackTrace();
-                    Log.e("Community error", sqlE.toString());
+                if (saveUserCommunity()) {
+                    try {
+                        DatabaseHelper databaseHelper = OpenHelperManager.getHelper(SelectCommunityActivity.this,
+                                DatabaseHelper.class);
+                        userDao = databaseHelper.getUserDao();
+                        UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
+                        updateBuilder.where().eq("user_email", regUserEmail);
+                        updateBuilder.updateColumnValue("community_id", selectedCommunityID);
+                        updateBuilder.updateColumnValue("community_name", communitySelected);
+                        updateBuilder.update();
+                    } catch (java.sql.SQLException sqlE) {
+                        sqlE.printStackTrace();
+                        Log.e("Community error", sqlE.toString());
+                    }
+                    intent.setClass(SelectCommunityActivity.this, CommunityCenterActivity.class);
+                    intent.putExtra("communitySelected", communitySelected);
+                    intent.putExtra("selectedCommunityID", selectedCommunityID);
+                    startActivity(intent);
+                }else {
+                    Crouton.makeText(SelectCommunityActivity.this, "sorry user registration  failed", Style.ALERT)
+                            .show();
+                    return;
                 }
-                intent.setClass(SelectCommunityActivity.this, CommunityCenterActivity.class);
-                intent.putExtra("communitySelected", communitySelected);
-                intent.putExtra("selectedCommunityID", selectedCommunityID);
-                startActivity(intent);
 
 
             }
@@ -238,8 +223,7 @@ public class SelectCommunityActivity extends Activity {
         scrollViewLogin.setVisibility(View.VISIBLE);
     }
 
-
-    private void saveUserCommunity() {
+    private boolean saveUserCommunity() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("community_id", selectedCommunityID);
         Ion.with(SelectCommunityActivity.this)
@@ -257,12 +241,13 @@ public class SelectCommunityActivity extends Activity {
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
-                            return;
+                            savedCommunity = false;
                         }
 
                     }
                 });
 
+        return savedCommunity;
     }
 
 }

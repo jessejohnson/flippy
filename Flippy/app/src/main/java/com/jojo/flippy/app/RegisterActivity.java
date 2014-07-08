@@ -169,7 +169,7 @@ public class RegisterActivity extends Activity {
     }
 
     private boolean createUser() {
-        boolean created = false;
+        boolean created;
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(RegisterActivity.this,
                     DatabaseHelper.class);
@@ -186,6 +186,7 @@ public class RegisterActivity extends Activity {
             sqlE.printStackTrace();
             ToastMessages.showToastLong(RegisterActivity.this, "Sorry, Unable to create user account");
             Log.e("User creation error",sqlE.toString());
+            created = false;
 
         }
 
