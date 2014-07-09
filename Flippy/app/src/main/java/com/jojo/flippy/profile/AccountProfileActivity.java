@@ -104,8 +104,9 @@ public class AccountProfileActivity extends ActionBarActivity {
 
         //set the user profile
         Ion.with(imageViewProfilePic)
-                .placeholder(R.color.flippy_light_header)
+                .placeholder(R.drawable.default_profile_picture)
                 .animateIn(R.anim.fade_in)
+                .error(R.drawable.default_profile_picture)
                 .load(CommunityCenterActivity.userAvatarURL);
 
         textViewProfileUserNameNew.setText(userFullName);

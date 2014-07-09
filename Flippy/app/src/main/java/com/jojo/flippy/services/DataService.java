@@ -34,7 +34,6 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  */
 public class DataService extends Service {
     private Dao<Post, Integer> postDao;
-    private boolean postInDb = false;
     private ArrayList<String> savedPostIds;
 
 

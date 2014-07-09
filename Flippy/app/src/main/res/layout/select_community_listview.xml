@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/margin_five"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_one_fifty">
+
+        <com.makeramen.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/imageViewCommunity"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_one_fifty"
+            android:scaleType="centerCrop"
+            app:border_color="@color/border_white"
+            app:border_width="2dp"
+            app:corner_radius="@dimen/margin_five"
+            app:oval="false" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:padding="@dimen/margin_ten"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewCommunityName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:textStyle="normal"
+                android:paddingBottom="@dimen/margin_five"
+                android:textSize="30sp"
+                android:shadowDy="1"
+                android:shadowDx="1"
+                android:textColor="@color/flippy_white"
+                android:background="@android:color/transparent"
+                android:shadowRadius="1"
+                android:shadowColor="@color/flippy_dark_header"
+                android:text="@string/app_name"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/textViewCommunityBio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:shadowDy="1"
+                android:background="@android:color/transparent"
+                android:shadowDx="1"
+                android:shadowRadius="1"
+                android:textColor="@color/flippy_white"
+                android:shadowColor="@color/flippy_dark_header"
+                android:paddingBottom="@dimen/margin_five"
+                android:text="@string/app_name"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/textViewCommunityId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowDy="1"
+                android:shadowDx="1"
+                android:visibility="gone"
+                android:shadowRadius="1"
+                android:textColor="@color/flippy_white"
+                android:shadowColor="@color/flippy_dark_header"
+                android:layout_gravity="left|top"
+                android:text="@string/app_name"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+</RelativeLayout>
