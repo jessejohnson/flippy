@@ -50,6 +50,7 @@ public class SelectCommunityActivity extends ActionBarActivity {
     private ProgressBar progressBarLoadCommunity;
     private Dao<User, Integer> userDao;
     private LinearLayout linearLayoutKey;
+    private boolean isKeyToggle = false;
 
 
     ListView listViewCommunities;
@@ -78,8 +79,6 @@ public class SelectCommunityActivity extends ActionBarActivity {
 
 
         editTextCommunityKey = (EditText) findViewById(R.id.editTextCommunityKey);
-
-
 
 
         rowItems = new ArrayList<Community>();
@@ -233,9 +232,18 @@ public class SelectCommunityActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_community_key) {
-            buttonGetStartedFromCommunity.setVisibility(View.VISIBLE);
-            linearLayoutKey.setVisibility(View.VISIBLE);
-            return true;
+            if (!isKeyToggle) {
+                isKeyToggle = true;
+                buttonGetStartedFromCommunity.setVisibility(View.VISIBLE);
+                linearLayoutKey.setVisibility(View.VISIBLE);
+                return true;
+            } else {
+                buttonGetStartedFromCommunity.setVisibility(View.GONE);
+                linearLayoutKey.setVisibility(View.GONE);
+                isKeyToggle = false;
+                return true;
+            }
+
         }
         return super.onOptionsItemSelected(item);
     }

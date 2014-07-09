@@ -19,9 +19,14 @@ import com.koushikdutta.ion.Ion;
 
 public class ManageChannelActivity extends ActionBarActivity {
     private EditText editTextManageChannelChannelName, editTextFirstAdmin, editTextSecondAdmin, editTextThirdAdmin, editTextFourthAdmin;
-    private ImageView imageViewChannelManageEdit,imageViewEditChannelName, imageViewEditFirstAdmin, imageViewEditSecondAdmin, imageViewEditThirdAdmin, imageViewEditFourthAdmin;
+    private ImageView imageViewChannelManageEdit, imageViewEditChannelName, imageViewEditFirstAdmin, imageViewEditSecondAdmin, imageViewEditThirdAdmin, imageViewEditFourthAdmin;
     private Intent intent;
-    private String channelName,channelId,image_url;
+    private String channelName, channelId, image_url;
+    private boolean isManage = true;
+    private final int ADMIN_ONE = 1;
+    private final int ADMIN_TWO = 2;
+    private final int ADMIN_THREE = 3;
+    private final int ADMIN_FOUR = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +59,7 @@ public class ManageChannelActivity extends ActionBarActivity {
         imageViewEditFourthAdmin = (ImageView) findViewById(R.id.imageViewEditFourthAdmin);
 
         Ion.with(imageViewChannelManageEdit)
-                .placeholder(R.color.flippy_light_header)
+                .placeholder(R.drawable.channel_bg)
                 .animateIn(R.anim.fade_in)
                 .load(image_url);
 
@@ -74,7 +79,7 @@ public class ManageChannelActivity extends ActionBarActivity {
         editTextFourthAdmin.setEnabled(false);
 
         intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
-        intent.putExtra("isManageActivity", true);
+        intent.putExtra("isManage", true);
 
         //enable the edit text for the channel name on click
         imageViewEditChannelName.setOnClickListener(new View.OnClickListener() {
@@ -88,31 +93,27 @@ public class ManageChannelActivity extends ActionBarActivity {
         imageViewEditFirstAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.putExtra("requestCode",1);
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, ADMIN_ONE);
             }
         });
         imageViewEditSecondAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.putExtra("requestCode",2);
-                startActivityForResult(intent, 2);
+                startActivityForResult(intent, ADMIN_TWO);
 
             }
         });
         imageViewEditThirdAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.putExtra("requestCode",3);
-                startActivityForResult(intent, 3);
+                startActivityForResult(intent, ADMIN_THREE);
 
             }
         });
         imageViewEditFourthAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.putExtra("requestCode",4);
-                startActivityForResult(intent, 4);
+                startActivityForResult(intent, ADMIN_FOUR);
 
             }
         });
@@ -136,77 +137,56 @@ public class ManageChannelActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void channelListDialog(final CharSequence[] channelList) {
-        //TODO this should line should return a list of user channels subscribed to
-        AlertDialog.Builder builder = new AlertDialog.Builder(ManageChannelActivity.this);
-        builder.setTitle(R.string.choose_channel_list_dialog_title);
-        builder.setItems(channelList, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                //get the selected option and pass it on to the next activity
-                String channelToCreateNotice = channelList[item].toString();
-                intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
-                intent.putExtra("channelToCreateNotice", channelToCreateNotice);
-                startActivity(intent);
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        String noMember = "No member selected";
         // check if the request code is same as what is passed  here it is 2
-        if(data == null){
-            ToastMessages.showToastLong(ManageChannelActivity.this, "No member selected");
+        if (requestCode != RESULT_OK) {
+            ToastMessages.showToastLong(ManageChannelActivity.this, noMember);
+            return;
+
+        }
+        if (data == null) {
+            ToastMessages.showToastLong(ManageChannelActivity.this, noMember);
             return;
         }
         String adminEmail = data.getStringExtra("memberEmail");
-        if (requestCode == 1) {
-
+        if (requestCode == ADMIN_ONE) {
             if (null != data) {
                 editTextFirstAdmin.setText(adminEmail);
-
             } else {
-                ToastMessages.showToastLong(ManageChannelActivity.this, "No member selected");
-
+                ToastMessages.showToastLong(ManageChannelActivity.this, noMember);
             }
             return;
 
         }
-        if (requestCode == 2) {
+        if (requestCode == ADMIN_TWO) {
             if (null != data) {
                 editTextSecondAdmin.setText(adminEmail);
-
             } else {
-                ToastMessages.showToastLong(ManageChannelActivity.this, "No member selected");
+                ToastMessages.showToastLong(ManageChannelActivity.this, noMember);
             }
             return;
-
         }
-        if (requestCode == 3) {
+        if (requestCode == ADMIN_THREE) {
             if (null != data) {
                 editTextThirdAdmin.setText(adminEmail);
 
             } else {
-                ToastMessages.showToastLong(ManageChannelActivity.this, "No member selected");
+                ToastMessages.showToastLong(ManageChannelActivity.this, noMember);
             }
             return;
-
         }
-        if (requestCode == 4) {
+        if (requestCode == ADMIN_FOUR) {
             if (null != data) {
-                // fetch the message String
                 editTextFourthAdmin.setText(adminEmail);
-
             } else {
-                ToastMessages.showToastLong(ManageChannelActivity.this, "No member selected");
+                ToastMessages.showToastLong(ManageChannelActivity.this, noMember);
             }
             return;
-
         }
-        ToastMessages.showToastLong(ManageChannelActivity.this, "No member selected");
+        ToastMessages.showToastLong(ManageChannelActivity.this, noMember);
     }
-
 
 }

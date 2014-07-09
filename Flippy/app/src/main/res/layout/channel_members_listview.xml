@@ -26,9 +26,9 @@
                 android:layout_width="@dimen/margin_fifty"
                 android:layout_height="@dimen/margin_fifty"
                 android:scaleType="centerCrop"
+                app:border_color="@color/border_white"
                 app:border_width="2dip"
                 app:corner_radius="@dimen/margin_five"
-                app:border_color="@color/border_white"
                 app:oval="false" />
 
         </LinearLayout>
@@ -36,28 +36,24 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.7"
-            android:layout_gravity="center_horizontal"
-            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.6"
             android:gravity="left"
+            android:orientation="vertical"
             android:paddingTop="@dimen/margin_five">
 
             <TextView
-                android:id="@+id/textViewMemberFirstName"
+                android:id="@+id/textViewMemberEmail"
                 android:layout_width="wrap_content"
-                android:paddingTop="@dimen/margin_five"
-                android:paddingLeft="@dimen/margin_five"
-                android:paddingBottom="@dimen/margin_one"
                 android:layout_height="wrap_content"
                 android:text="@string/dummy_user_name"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/flippy_white" />
 
             <TextView
-                android:id="@+id/textViewMemberLastName"
+                android:id="@+id/textViewMemberFullName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/margin_five"
                 android:text="@string/dummy_user_email"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/flippy_white" />
@@ -66,11 +62,34 @@
                 android:id="@+id/textViewMemberId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/margin_five"
-                android:visibility="gone"
                 android:text="@string/dummy_user_email"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/flippy_white" />
+                android:textColor="@color/flippy_white"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutAcceptMember"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:padding="@dimen/margin_two">
+
+            <com.makeramen.RoundedImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/imageViewMemberAdded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:background="@color/flippy_orange"
+                android:src="@drawable/ic_action_accept"
+                app:border_color="@color/border"
+                app:border_width="2dip"
+                app:corner_radius="@dimen/margin_five"
+                app:oval="false" />
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

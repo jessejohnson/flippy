@@ -4,33 +4,24 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.ChannelMemberAdapter;
-import com.jojo.flippy.adapter.ProfileAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
-import com.jojo.flippy.adapter.SettingsAdapter;
-import com.jojo.flippy.adapter.SettingsItem;
 import com.jojo.flippy.app.R;
-import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.profile.MemberDetailActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -53,6 +44,12 @@ public class ChannelMembers extends Activity {
     private String membersURL = "/members/";
     private ActionBar actionBar;
     private ProgressBar progressBarMemberChannelLoader;
+    private boolean isManage = false;
+
+
+    private String userId;
+    private String userEmail;
+    private String userFullName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +59,7 @@ public class ChannelMembers extends Activity {
         intent = getIntent();
         channelName = intent.getStringExtra("channelName");
         channelId = intent.getStringExtra("channelId");
+        isManage = intent.getBooleanExtra("isManage", false);
         String channelDetailsURL = Flippy.channelMembersURL + channelId + membersURL;
 
 
@@ -77,7 +75,7 @@ public class ChannelMembers extends Activity {
         membershipList = (ListView) findViewById(R.id.listViewChannelMembers);
         progressBarMemberChannelLoader = (ProgressBar) findViewById(R.id.progressBarMemberChannelLoader);
         channelMemberAdapter = new ChannelMemberAdapter(ChannelMembers.this,
-                R.layout.channel_members_listview, ChannelMemberItem);
+                R.layout.channel_members_listview, ChannelMemberItem, isManage);
         membershipList.setAdapter(channelMemberAdapter);
 
 
@@ -100,7 +98,7 @@ public class ChannelMembers extends Activity {
                                     url = item.get("avatar").getAsString();
                                 }
                                 memberFirstName = item.get("first_name").getAsString();
-                                ProfileItem profileItem = new ProfileItem(URI.create(url), item.get("email").getAsString(), memberFirstName + ", " + item.get("last_name").getAsString(),memberId);
+                                ProfileItem profileItem = new ProfileItem(URI.create(url), item.get("email").getAsString(), memberFirstName + ", " + item.get("last_name").getAsString(), memberId);
                                 ChannelMemberItem.add(profileItem);
                             }
                             updateAdapter();
@@ -114,23 +112,37 @@ public class ChannelMembers extends Activity {
 
                     }
                 });
+        if (isManage) {
+            membershipList.setClickable(false);
+        }
+
 
         membershipList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 //setting the click action for each of the items
+
                 intent.setClass(ChannelMembers.this, MemberDetailActivity.class);
-                TextView textViewMemberId = (TextView)view.findViewById(R.id.textViewMemberId);
-                TextView textViewMemberFirstName = (TextView)view.findViewById(R.id.textViewMemberFirstName);
-                TextView textViewMemberLastName = (TextView)view.findViewById(R.id.textViewMemberLastName);
-                String userId = textViewMemberId.getText().toString();
-                String userFirstName = textViewMemberFirstName.getText().toString();
-                String userMemberLastName = textViewMemberLastName.getText().toString();
-                intent.putExtra("memberId", userId);
-                intent.putExtra("memberFirstName", userFirstName);
-                intent.putExtra("memberLastName", userMemberLastName);
-                startActivity(intent);
+                TextView textViewMemberId = (TextView) view.findViewById(R.id.textViewMemberId);
+                TextView textViewMemberEmail = (TextView) view.findViewById(R.id.textViewMemberEmail);
+                TextView textViewMemberFullName = (TextView) view.findViewById(R.id.textViewMemberFullName);
+                userId = textViewMemberId.getText().toString();
+                userEmail = textViewMemberEmail.getText().toString();
+                userFullName = textViewMemberFullName.getText().toString();
+                if (isManage) {
+                    ToastMessages.showToastLong(ChannelMembers.this, "clicked");
+                    intent.putExtra("memberEmail", userEmail);
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+
+                } else {
+                    intent.putExtra("memberId", userId);
+                    intent.putExtra("memberEmail", userEmail);
+                    intent.putExtra("memberFullName", userFullName);
+                    startActivity(intent);
+                }
+
 
             }
         });

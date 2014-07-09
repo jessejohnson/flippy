@@ -8,8 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -67,7 +65,7 @@ public class SelectChannelActivity extends ActionBarActivity {
         textViewNoChannelHelp.setVisibility(View.GONE);
         progressBarLoadUserChannels = (ProgressBar) findViewById(R.id.progressBarLoadUserChannels);
         userChannelsAdapter = new ChannelMemberAdapter(SelectChannelActivity.this,
-                R.layout.channel_members_listview, userChannelItem);
+                R.layout.channel_members_listview, userChannelItem,false);
         userChannelList.setAdapter(userChannelsAdapter);
 
 
@@ -102,7 +100,7 @@ public class SelectChannelActivity extends ActionBarActivity {
                                 }
                             }
                             updateAdapter();
-                            if (channelArray.size() == 0) {
+                            if (userChannelsAdapter.isEmpty()) {
                                 textViewNoChannelHelp.setVisibility(View.VISIBLE);
                                 textViewNoChannel.setVisibility(View.VISIBLE);
                             }
@@ -121,8 +119,8 @@ public class SelectChannelActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                TextView textViewMemberLastName = (TextView) view.findViewById(R.id.textViewMemberLastName);
-                TextView textViewMemberFirstName = (TextView) view.findViewById(R.id.textViewMemberFirstName);
+                TextView textViewMemberLastName = (TextView) view.findViewById(R.id.textViewMemberFullName);
+                TextView textViewMemberFirstName = (TextView) view.findViewById(R.id.textViewMemberEmail);
                 String channelId = textViewMemberLastName.getText().toString();
                 String channelName = textViewMemberFirstName.getText().toString();
                 intent.setClass(SelectChannelActivity.this, CreateNoticeActivity.class);

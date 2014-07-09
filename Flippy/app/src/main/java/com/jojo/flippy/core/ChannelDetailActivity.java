@@ -174,7 +174,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 .animateIn(R.anim.fade_in)
                 .load(image_url);
         Ion.with(imageViewCreator)
-                .placeholder(R.color.flippy_light_header)
+                .placeholder(R.drawable.default_profile_picture)
                 .animateIn(R.anim.fade_in)
                 .load(creatorAvatarURL);
         textViewChannelNameDetail.setText(channelName + " @ " + communityName);

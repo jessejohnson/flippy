@@ -118,7 +118,10 @@
                             android:id="@+id/progressBarUpload"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="@dimen/margin_five"
+                            android:layout_marginBottom="@dimen/margin_two"
+                            android:layout_marginTop="@dimen/margin_two"
+                            android:progressDrawable="@drawable/create_channel_progress" />
 
 
                         <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"

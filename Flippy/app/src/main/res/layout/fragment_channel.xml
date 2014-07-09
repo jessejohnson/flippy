@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_five"
         android:layout_marginBottom="@dimen/margin_fifty"
+        android:paddingBottom="@dimen/margin_five"
         android:layout_weight="1"
         android:choiceMode="singleChoice"
         android:divider="@null"
