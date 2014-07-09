@@ -57,6 +57,7 @@
     <string name="community_key">Were you given a community key? Enter it here</string>
     <string name="community_key_hint">private community key</string>
     <string name="community_key_get_started">get started with key</string>
+    <string name="community_key_menu">key</string>
 
     <!-- The community center's strings -->
     <string name="title_activity_community_center">Community Center</string>
@@ -281,7 +282,7 @@
         Draw the navigation drawer, Choose My Channels,  Click on the Channel to manage it (you must be an admin of a channel to manage it)</string>
     <!-- select channel activity string -->
     <string name="title_activity_select_channel">Select Channel</string>
-    <string name="activity_select_channel_empty_view">You have not subscribed or created any channel yet</string>
+    <string name="activity_select_channel_empty_view">no channel to manage yet</string>
     <string name="activity_select_channel_empty_view_help">Create a channel</string>
 
     <!-- the legal issues sections -->

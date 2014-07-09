@@ -2,7 +2,6 @@ package com.jojo.flippy.profile;
 
 import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,9 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.jojo.flippy.adapter.Channel;
-import com.jojo.flippy.adapter.ChannelAdapter;
+import com.google.gson.JsonObject;;
 import com.jojo.flippy.adapter.ProfileAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;

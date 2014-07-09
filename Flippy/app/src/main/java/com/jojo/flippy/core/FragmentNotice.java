@@ -295,4 +295,26 @@ public class FragmentNotice extends Fragment {
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (internetConnectionDetector.isConnectingToInternet()) {
+            postIntentFilter = new IntentFilter();
+            postIntentFilter.addAction("newPostArrived");
+            getActivity().registerReceiver(postReceiver, postIntentFilter);
+
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(postReceiver);
+
+    }
 }

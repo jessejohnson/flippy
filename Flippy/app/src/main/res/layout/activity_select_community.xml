@@ -48,11 +48,12 @@
         android:scrollbars="none"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/linearLayoutKey"
         android:layout_alignParentStart="true"
         android:divider="@null"
+        android:layout_marginTop="@dimen/margin_five"
+        android:dividerHeight="@dimen/margin_five"
         android:layout_marginBottom="@dimen/margin_fifty"
         android:listSelector="@android:color/transparent" />
 

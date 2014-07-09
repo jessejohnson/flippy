@@ -263,8 +263,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             SelectItem(position);
-
-
         }
     }
 

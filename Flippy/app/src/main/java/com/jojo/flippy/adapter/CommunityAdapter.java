@@ -6,6 +6,7 @@ package com.jojo.flippy.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,8 +65,8 @@ public class CommunityAdapter extends ArrayAdapter<Community> {
         holder.textViewCommunityId.setText(rowItem.getId());
         holder.textViewCommunityBio.setText(rowItem.getCommunityBio());
         Ion.with(holder.imageView)
-                .placeholder(R.color.flippy_orange)
                 .animateIn(R.anim.fade_in)
+                .placeholder(R.color.flippy_orange)
                 .error(R.color.flippy_orange)
                 .load(String.valueOf(rowItem.getImageUrl()));
         holder.textViewCommunityName.setText(rowItem.getCommunityName());

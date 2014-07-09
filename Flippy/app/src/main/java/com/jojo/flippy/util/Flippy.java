@@ -33,7 +33,7 @@ public class Flippy  extends Application{
     public static String channelMembersURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/channels/";
     public static String channelSubscribeURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/channels/";
     public static String allPostURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/posts/";
-    public static String aPostURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/posts/";
+
 
 
 
