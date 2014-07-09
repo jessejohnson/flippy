@@ -62,7 +62,7 @@ public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> {
         holder.getTextViewChannelMemberSecondName.setText(rowItem.getProfileChannelTotalNumber());
 
         Ion.with(holder.imageView)
-                .placeholder(R.color.flippy_orange)
+                .placeholder(R.drawable.default_profile_picture)
                 .load(String.valueOf(rowItem.getProfileChannelItem()));
 
 

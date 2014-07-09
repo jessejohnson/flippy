@@ -28,10 +28,21 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 
+import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.stmt.UpdateBuilder;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.persistence.DatabaseHelper;
+import com.jojo.flippy.persistence.User;
+import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.util.Calendar;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class NoticeExtrasActivity extends ActionBarActivity {
     private Intent intent;
@@ -42,6 +53,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
     private Button buttonAddImageToNotice, buttonPreviewCreateNotice, buttonAddMapToNotice;
     private AlertDialog levelDialog;
     private ImageView imageViewNoticeImageCaptured;
+    private String lat, lon;
 
 
     private static final int BROWSE_IMAGE = 1;
@@ -73,8 +85,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                 intent.putExtra("isPreview", true);
                 intent.putExtra("noticeTitle", noticeTitle);
                 intent.putExtra("noticeContent", noticeContent);
-                intent.setClass(NoticeExtrasActivity.this, NoticeDetailActivity.class);
-                startActivity(intent);
+
             }
         });
         buttonAddImageToNotice = (Button) findViewById(R.id.buttonAddImageToNotice);
@@ -230,6 +241,10 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                 break;
             case START_MAP:
                 if (resultCode == RESULT_OK) {
+                    Log.e("From location",data.getStringExtra("location"));
+                    String[] location = data.getStringExtra("location").split(",");
+                    lat = location[0];
+                    lon = location[1];
 
                 } else {
                     Toast.makeText(this, "No location selected", Toast.LENGTH_SHORT).show();
@@ -265,7 +280,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
     }
 
     public void decodeFile(String filePath) {
-        Log.e("File path",filePath);
+        Log.e("File path", filePath);
         // Decode image size
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
@@ -298,6 +313,33 @@ public class NoticeExtrasActivity extends ActionBarActivity {
             return cursor.getString(column_index);
         } else
             return null;
+    }
+
+    private boolean createPostWithoutImage(String title, String body, String channel, String author) {
+        JsonObject json = new JsonObject();
+        json.addProperty("title", title);
+        json.addProperty("content", body);
+        json.addProperty("channel", channel);
+        json.addProperty("author", author);
+
+        Ion.with(NoticeExtrasActivity.this, Flippy.allPostURL)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .setJsonObjectBody(json)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (e != null) {
+                            ToastMessages.showToastLong(NoticeExtrasActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                        } else {
+
+
+                        }
+                    }
+
+                });
+
+        return true;
     }
 
 }

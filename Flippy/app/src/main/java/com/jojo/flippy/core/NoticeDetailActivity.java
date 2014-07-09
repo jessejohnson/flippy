@@ -136,7 +136,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         }
 
 
-        String url = Flippy.aPostURL + noticeId + "/";
+        String url = Flippy.allPostURL + noticeId + "/";
         //Loading the list with data from Api call
         Ion.with(NoticeDetailActivity.this)
                 .load(url)

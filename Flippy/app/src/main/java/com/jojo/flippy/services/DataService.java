@@ -18,6 +18,7 @@ import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -33,7 +34,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
  */
 public class DataService extends Service {
     private Dao<Post, Integer> postDao;
-    private boolean postInDb = false;
+    private ArrayList<String> savedPostIds;
 
 
     @Override
@@ -50,15 +51,17 @@ public class DataService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
+        savedPostIds = new ArrayList<String>();
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
                     DatabaseHelper.class);
             postDao = databaseHelper.getPostDao();
             List<Post> postList = postDao.queryForAll();
             if (!postList.isEmpty()) {
-                postInDb = false;
-            } else {
-
+                for (int i = 0; i < postList.size(); i++) {
+                    Post post = postList.get(i);
+                    savedPostIds.add(post.notice_id);
+                }
             }
 
         } catch (java.sql.SQLException sqlE) {
@@ -66,12 +69,10 @@ public class DataService extends Service {
 
         }
 
-
         Timer dataTimer = new Timer();
         dataTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                //
                 Ion.with(getApplicationContext())
                         .load(Flippy.allPostURL)
                         .asJsonObject()
@@ -102,9 +103,9 @@ public class DataService extends Service {
                                             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
                                                     DatabaseHelper.class);
                                             postDao = databaseHelper.getPostDao();
-                                            postDao.createOrUpdate(new_post);
-
-
+                                            if(!savedPostIds.contains(id)){
+                                                postDao.createOrUpdate(new_post);
+                                            }
                                         } catch (java.sql.SQLException sqlE) {
                                             sqlE.printStackTrace();
 
@@ -125,29 +126,7 @@ public class DataService extends Service {
 
         return START_STICKY;
 
-    }
-
-    ;
-
-    private boolean IsPostInDatabase(String Id) {
-        try {
-            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
-                    DatabaseHelper.class);
-            postDao = databaseHelper.getPostDao();
-            List<Post> postList = postDao.queryForAll();
-            if (!postList.isEmpty()) {
-                postInDb = false;
-            } else {
-
-            }
-
-        } catch (java.sql.SQLException sqlE) {
-            sqlE.printStackTrace();
-
-        }
-
-        return postInDb;
-    }
+    };
 
     @Override
     public void onDestroy() {

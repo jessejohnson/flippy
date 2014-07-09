@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,6 +99,8 @@ public class EditProfileActivity extends ActionBarActivity {
         editTextEditProfileEmail.setText(CommunityCenterActivity.regUserEmail);
         editTextEditProfileDateOfBirth.setText(CommunityCenterActivity.userDateOfBirth);
         imageViewUploadPhoto = (ImageView) findViewById(R.id.imageViewUploadPhoto);
+
+
         loadProfile();
 
         try {
@@ -173,6 +176,7 @@ public class EditProfileActivity extends ActionBarActivity {
             NewEmailUpdate = editTextEditProfileEmail.getText().toString().trim();
             NewDateOfBirthUpdate = editTextEditProfileDateOfBirth.getText().toString().trim();
             NewGenderUpdate = genderSpinner.getSelectedItem().toString();
+            Log.e("New email",NewEmailUpdate);
             if (updateUserStringDetails(NewEmailUpdate, NewFirstNameUpdate, NewLastNameUpdate, NewGenderUpdate)) {
                 ToastMessages.showToastLong(EditProfileActivity.this, "Profile updated");
                 goToMainActivity();
@@ -292,7 +296,7 @@ public class EditProfileActivity extends ActionBarActivity {
 
     private void loadProfile() {
         Ion.with(imageViewMemberEdit)
-                .placeholder(R.color.flippy_orange)
+                .placeholder(R.drawable.default_profile_picture)
                 .animateIn(R.anim.fade_in)
                 .load(CommunityCenterActivity.userAvatarURL);
     }
@@ -303,8 +307,7 @@ public class EditProfileActivity extends ActionBarActivity {
         json.addProperty("last_name", lastName);
         json.addProperty("gender", gender);
 
-        Ion.with(EditProfileActivity.this)
-                .load(Flippy.userBasicURL)
+        Ion.with(EditProfileActivity.this,Flippy.userBasicURL)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()
@@ -314,8 +317,10 @@ public class EditProfileActivity extends ActionBarActivity {
                         if (e != null) {
                             ToastMessages.showToastLong(EditProfileActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
                         } else {
+                            Log.e("result",result.toString());
+
                             if (result.has("detail")) {
-                                Crouton.makeText(EditProfileActivity.this, "email already in use", Style.ALERT)
+                                Crouton.makeText(EditProfileActivity.this, result.get("detail").toString(), Style.ALERT)
                                         .show();
                                 return;
                             }

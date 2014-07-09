@@ -263,8 +263,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
             SelectItem(position);
-
-
         }
     }
 
@@ -321,5 +319,10 @@ public class CommunityCenterActivity extends ActionBarActivity {
                         finish();
                     }
                 }).setNegativeButton(R.string.exit_negative, null).show();
+    }
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
     }
 }

@@ -2,102 +2,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/margin_two"
+    xmlns:gpb="http://schemas.android.com/apk/res-auto"
+    android:paddingLeft="@dimen/margin_five"
+    android:paddingRight="@dimen/margin_five"
+    android:paddingTop="@dimen/margin_two"
     tools:context="com.jojo.flippy.app.SelectCommunityActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:id="@+id/scrollViewLogin"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/linearLayoutKey"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/flippy_dark_header"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textViewCommunityKey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_ten"
+            android:layout_marginTop="@dimen/margin_ten"
+            android:text="@string/community_key"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/flippy_white" />
+
+        <EditText
+            android:id="@+id/editTextCommunityKey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginBottom="@dimen/margin_ten"
+            android:layout_marginTop="@dimen/margin_five"
+            android:hint="@string/community_key_hint"
+            android:inputType="text"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:textColor="@color/flippy_white" />
 
+    </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:background="@color/flippy_dark_header"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
-
-                    <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="@string/select_community"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textColor="@color/flippy_white" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/linearLayout"
-                android:background="@color/flippy_light_header"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <Spinner
-                    android:id="@+id/spinnerSelectCommunity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_fifteen"
-                    android:layout_marginTop="@dimen/margin_fifteen" />
-
-
-                <TextView
-                    android:id="@+id/textViewCommunityKey"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_ten"
-                    android:layout_marginTop="@dimen/margin_ten"
-                    android:text="@string/community_key"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/flippy_white" />
-
-                <EditText
-                    android:id="@+id/editTextCommunityKey"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_ten"
-                    android:layout_marginTop="@dimen/margin_ten"
-                    android:hint="@string/community_key_hint"
-                    android:inputType="text"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true"
-                    android:textColor="@color/flippy_white" />
-
-                 </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-
-    <ProgressBar
+    <ListView
+        android:id="@+id/listViewCommunities"
+        android:scrollbars="none"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/linearLayoutKey"
+        android:layout_alignParentStart="true"
+        android:divider="@null"
+        android:layout_marginTop="@dimen/margin_five"
+        android:dividerHeight="@dimen/margin_five"
+        android:layout_marginBottom="@dimen/margin_fifty"
+        android:listSelector="@android:color/transparent" />
+
+    <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
         android:id="@+id/progressBarLoadCommunity"
-        android:minHeight="48dp"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center_horizontal" />
+        android:layout_width="@dimen/margin_twenty"
+        android:layout_height="@dimen/margin_twenty"
+        android:layout_below="@+id/linearLayoutUserProfile"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_twenty"
+        gpb:colors="@array/flippy_rainbow"
+        gpb:type="folding_circles" />
 
     <Button
         android:id="@+id/buttonGetStartedCommunity"
@@ -107,10 +77,9 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/flippy_button_default"
         android:padding="@dimen/margin_ten"
-        android:text="@string/start"
+        android:text="@string/community_key_get_started"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/flippy_white"
         android:textStyle="bold" />
-
 
 </RelativeLayout>

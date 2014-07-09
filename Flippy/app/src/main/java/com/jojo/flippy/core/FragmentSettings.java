@@ -12,7 +12,9 @@ import android.widget.ListView;
 import com.jojo.flippy.adapter.SettingsAdapter;
 import com.jojo.flippy.adapter.SettingsItem;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.app.VersionInfoActivity;
 import com.jojo.flippy.profile.EditProfileActivity;
+import com.jojo.flippy.profile.UserAccountLogout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,14 +48,18 @@ public class FragmentSettings extends Fragment {
         SettingsItems = new ArrayList<SettingsItem>();
         SettingsItem settingHelp = new SettingsItem(R.drawable.ic_action_help, getResources().getString(R.string.settings_help), getResources().getString(R.string.settings_help_subtitle));
         SettingsItem settingProfile = new SettingsItem(R.drawable.ic_action_person_dark, getResources().getString(R.string.settings_profile), getResources().getString(R.string.settings_profile_subtitle));
+        SettingsItem settingAccount = new SettingsItem(R.drawable.ic_action_settings_dark, getResources().getString(R.string.settings_account), getResources().getString(R.string.settings_account_subtitle));
         SettingsItem settingCommunity = new SettingsItem(R.drawable.ic_action_group_dark, getResources().getString(R.string.settings_accessibility), getResources().getString(R.string.settings_accessibility_subtitle));
         SettingsItem settingNotifications = new SettingsItem(R.drawable.ic_action_error, getResources().getString(R.string.settings_legal), getResources().getString(R.string.settings_legal_subtitle));
         SettingsItem settingAbout = new SettingsItem(R.drawable.ic_action_about, getResources().getString(R.string.settings_about), getResources().getString(R.string.settings_about_subtitle));
+        SettingsItem settingVersion = new SettingsItem(R.drawable.ic_action_about, getResources().getString(R.string.settings_version), getResources().getString(R.string.settings_version_subtitle));
         SettingsItems.add(settingHelp);
         SettingsItems.add(settingProfile);
         SettingsItems.add(settingCommunity);
         SettingsItems.add(settingNotifications);
         SettingsItems.add(settingAbout);
+        SettingsItems.add(settingAccount);
+        SettingsItems.add(settingVersion);
 
 
         listViewSettings = (ListView) view.findViewById(R.id.listViewSettings);
@@ -85,6 +91,14 @@ public class FragmentSettings extends Fragment {
                         break;
                     case 4:
                         intent.setClass(getActivity(), AboutActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 5:
+                        intent.setClass(getActivity(), UserAccountLogout.class);
+                        startActivity(intent);
+                        break;
+                    case 6:
+                        intent.setClass(getActivity(), VersionInfoActivity.class);
                         startActivity(intent);
                         break;
 
