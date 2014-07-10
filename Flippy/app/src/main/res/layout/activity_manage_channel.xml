@@ -11,8 +11,8 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_marginBottom="@dimen/margin_fifty"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_fifty">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -22,23 +22,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:paddingLeft="@dimen/margin_two"
-                android:paddingRight="@dimen/margin_two"
-                android:gravity="center_horizontal">
+                android:paddingRight="@dimen/margin_two">
 
                 <com.makeramen.RoundedImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/imageViewChannelManageEdit"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/margin_two_hundred"
-                    android:layout_alignParentTop="true"
-                    android:padding="@dimen/margin_two"
-                    android:scaleType="centerCrop"
-                    android:background="@color/flippy_dark_header"
-                    app:border_color="@color/border"
-                    app:border_width="3dp"
-                    app:corner_radius="0dp"
-                    app:oval="false" />
+                     xmlns:app="http://schemas.android.com/apk/res-auto"
+                     android:id="@+id/imageViewChannelManageEdit"
+                     android:layout_width="match_parent"
+                     android:layout_height="@dimen/margin_two_hundred"
+                     android:layout_alignParentTop="true"
+                     android:padding="@dimen/margin_two"
+                     android:scaleType="centerCrop"
+                     android:background="@color/flippy_dark_header"
+                     app:border_color="@color/border"
+                     app:border_width="3dp"
+                     app:corner_radius="0dp"
+                     app:oval="false" />
             </LinearLayout>
 
             <LinearLayout
@@ -189,15 +189,15 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/button"
         style="?android:attr/buttonStyleSmall"
-        android:layout_marginRight="@dimen/margin_ten"
-        android:layout_marginLeft="@dimen/margin_ten"
-        android:layout_marginBottom="0dp"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/flippy_white"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="@dimen/margin_ten"
+        android:layout_marginRight="@dimen/margin_ten"
         android:background="@drawable/flippy_button_default"
         android:text="@string/manage_channel_remove"
-        android:id="@+id/button" />
+        android:textColor="@color/flippy_white" />
 </RelativeLayout>

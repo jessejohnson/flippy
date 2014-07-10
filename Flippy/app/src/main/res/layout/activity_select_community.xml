@@ -3,7 +3,6 @@
     xmlns:gpb="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/margin_two"
     android:paddingLeft="@dimen/margin_five"
     android:paddingRight="@dimen/margin_five"
     android:paddingTop="@dimen/margin_two"
@@ -14,7 +13,7 @@
         android:scrollbars="none"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:divider="@null"
         android:layout_marginTop="@dimen/margin_five"
@@ -23,13 +22,11 @@
 
     <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
         android:id="@+id/progressBarLoadCommunity"
-        android:layout_width="@dimen/margin_twenty"
-        android:layout_height="@dimen/margin_twenty"
-        android:layout_below="@+id/linearLayoutUserProfile"
+        android:layout_width="@dimen/margin_fifty"
+        android:layout_height="@dimen/margin_fifty"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin_twenty"
         gpb:colors="@array/flippy_rainbow"
         gpb:type="folding_circles" />
 

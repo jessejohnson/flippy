@@ -2,13 +2,19 @@ package com.jojo.flippy.profile;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -16,6 +22,8 @@ import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.ChannelMembers;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.ion.Ion;
+
+import java.io.File;
 
 public class ManageChannelActivity extends ActionBarActivity {
     private EditText editTextManageChannelChannelName, editTextFirstAdmin, editTextSecondAdmin, editTextThirdAdmin, editTextFourthAdmin;
@@ -27,6 +35,13 @@ public class ManageChannelActivity extends ActionBarActivity {
     private final int ADMIN_TWO = 2;
     private final int ADMIN_THREE = 3;
     private final int ADMIN_FOUR = 4;
+
+    private Uri mImageCaptureUri;
+    private static final int PICK_FROM_CAMERA = 5;
+    private static final int CROP_FROM_CAMERA = 6;
+    private static final int PICK_FROM_FILE = 7;
+
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,16 +72,20 @@ public class ManageChannelActivity extends ActionBarActivity {
         imageViewEditSecondAdmin = (ImageView) findViewById(R.id.imageViewEditSecondAdmin);
         imageViewEditThirdAdmin = (ImageView) findViewById(R.id.imageViewEditThirdAdmin);
         imageViewEditFourthAdmin = (ImageView) findViewById(R.id.imageViewEditFourthAdmin);
+        //called the method without the show
+        showDialog();
+
 
         Ion.with(imageViewChannelManageEdit)
                 .placeholder(R.drawable.channel_bg)
                 .animateIn(R.anim.fade_in)
                 .load(image_url);
-
+        ;
         imageViewChannelManageEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //upload a new image for the user to change his channel image
+                dialog.show();
+
             }
         });
 
@@ -117,8 +136,6 @@ public class ManageChannelActivity extends ActionBarActivity {
 
             }
         });
-
-
     }
 
 
@@ -187,6 +204,45 @@ public class ManageChannelActivity extends ActionBarActivity {
             return;
         }
         ToastMessages.showToastLong(ManageChannelActivity.this, noMember);
+    }
+
+    private void showDialog() {
+        final String[] items = new String[]{"Take from camera",
+                "Select from gallery"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ManageChannelActivity.this,
+                android.R.layout.select_dialog_item, items);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(ManageChannelActivity.this);
+        builder.setTitle("Select image");
+        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int position) {
+                if (position == 0) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    mImageCaptureUri = Uri.fromFile(new File(Environment
+                            .getExternalStorageDirectory(), "tmp_avatar_"
+                            + String.valueOf(System.currentTimeMillis())
+                            + ".jpg"));
+
+                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                            mImageCaptureUri);
+
+                    try {
+                        intent.putExtra("return-data", true);
+                        startActivityForResult(intent, PICK_FROM_CAMERA);
+                    } catch (ActivityNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                } else if (position == 1) {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent,
+                            "Complete action using"), PICK_FROM_FILE);
+                } else {
+                    ToastMessages.showToastLong(ManageChannelActivity.this, "No option selected");
+                }
+            }
+        });
+        dialog = builder.create();
     }
 
 }

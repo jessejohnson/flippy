@@ -175,7 +175,7 @@ public class AccountProfileActivity extends ActionBarActivity {
             ToastMessages.showToastShort(AccountProfileActivity.this,"Failed to load community image");
             return;
         }
-        textViewProfileUserCommunity.setText(userCommunityName);
+        textViewProfileUserCommunity.setText("Community: "+userCommunityName);
         textViewProfileUserCommunity.setVisibility(View.VISIBLE);
         Ion.with(imageViewProfileUserCommunity)
                 .placeholder(R.drawable.default_profile_picture)
