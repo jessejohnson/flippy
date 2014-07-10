@@ -1,6 +1,8 @@
 package com.jojo.flippy.app;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -41,16 +43,12 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 
 public class SelectCommunityActivity extends ActionBarActivity {
-    private Button buttonGetStartedFromCommunity;
     //TODO get communityKeyURL
     private String communityKeyURL = "";
-    private EditText editTextCommunityKey;
     private Intent intent;
     private String regUserEmail;
     private ProgressBar progressBarLoadCommunity;
     private Dao<User, Integer> userDao;
-    private LinearLayout linearLayoutKey;
-    private boolean isKeyToggle = false;
 
 
     ListView listViewCommunities;
@@ -72,14 +70,6 @@ public class SelectCommunityActivity extends ActionBarActivity {
         actionbar.setTitle("Select a community");
 
         progressBarLoadCommunity = (ProgressBar) findViewById(R.id.progressBarLoadCommunity);
-        buttonGetStartedFromCommunity = (Button) findViewById(R.id.buttonGetStartedCommunity);
-        linearLayoutKey = (LinearLayout) findViewById(R.id.linearLayoutKey);
-        buttonGetStartedFromCommunity.setVisibility(View.GONE);
-        linearLayoutKey.setVisibility(View.GONE);
-
-
-        editTextCommunityKey = (EditText) findViewById(R.id.editTextCommunityKey);
-
 
         rowItems = new ArrayList<Community>();
         listViewCommunities = (ListView) findViewById(R.id.listViewCommunities);
@@ -166,37 +156,6 @@ public class SelectCommunityActivity extends ActionBarActivity {
 
             }
         });
-        buttonGetStartedFromCommunity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String communityKey = editTextCommunityKey.getText().toString();
-                if (communityKey == "") {
-                    editTextCommunityKey.setError("Community key is required");
-                    return;
-                }
-                //TODO submit community key to API. On success, set communitySelected & selectedCommunityID
-                if (!editTextCommunityKey.getText().toString().equalsIgnoreCase("")) {
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("key", communityKey);
-                    Ion.with(SelectCommunityActivity.this)
-                            .load(communityKeyURL)
-                            .setJsonObjectBody(jsonObject)
-                            .asJsonObject()
-                            .setCallback(new FutureCallback<JsonObject>() {
-                                @Override
-                                public void onCompleted(Exception e, JsonObject result) {
-                                    if (e != null) {
-                                        ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
-                                        Log.e("Error", e.toString());
-                                    } else {
-                                        //TODO set communitySelected & selectedCommunityID
-                                    }
-                                }
-                            });
-                }
-
-            }
-        });
     }
 
     private void updateAdapter() {
@@ -232,20 +191,58 @@ public class SelectCommunityActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_community_key) {
-            if (!isKeyToggle) {
-                isKeyToggle = true;
-                buttonGetStartedFromCommunity.setVisibility(View.VISIBLE);
-                linearLayoutKey.setVisibility(View.VISIBLE);
-                return true;
-            } else {
-                buttonGetStartedFromCommunity.setVisibility(View.GONE);
-                linearLayoutKey.setVisibility(View.GONE);
-                isKeyToggle = false;
-                return true;
-            }
+            final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Private community key");
+            alert.setIcon(R.drawable.ic_action_secure);
+            alert.setMessage(getResources().getString(R.string.community_key));
+            final EditText privateCommunityKeyInput = new EditText(this);
+            alert.setView(privateCommunityKeyInput);
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    String key = privateCommunityKeyInput.getText().toString();
+                    ToastMessages.showToastLong(SelectCommunityActivity.this, key);
+                    //getCommunityByKey(key);
+                }
+            });
+
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                }
+            });
+
+            alert.show();
+            return true;
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getCommunityByKey(String communityKey) {
+        if (communityKey == "") {
+            ToastMessages.showToastLong(SelectCommunityActivity.this, "Community key is required");
+            return;
+        }
+        //TODO submit community key to API. On success, set communitySelected & selectedCommunityID
+        if (!communityKey.equalsIgnoreCase("")) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("key", communityKey);
+            Ion.with(SelectCommunityActivity.this)
+                    .load(communityKeyURL)
+                    .setJsonObjectBody(jsonObject)
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+                            if (e != null) {
+                                ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
+                                Log.e("Error", e.toString());
+                            } else {
+                                //TODO set communitySelected & selectedCommunityID
+                            }
+                        }
+                    });
+        }
     }
 
 
