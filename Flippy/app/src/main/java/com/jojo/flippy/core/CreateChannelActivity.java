@@ -100,7 +100,7 @@ public class CreateChannelActivity extends ActionBarActivity {
                 path = imagePath.toString();
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 8;
-                Bitmap bm = BitmapFactory.decodeFile(imagePath,options);
+                Bitmap bm = BitmapFactory.decodeFile(imagePath, options);
                 imageViewCreateChannel.setImageBitmap(bm);
 
             } else {
@@ -192,6 +192,7 @@ public class CreateChannelActivity extends ActionBarActivity {
                         }
                         if (result != null && !result.has("details")) {
                             ToastMessages.showToastLong(CreateChannelActivity.this, "Channel " + channelName + " Created successfully");
+                            goToMainActivity();
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(CreateChannelActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
@@ -200,5 +201,11 @@ public class CreateChannelActivity extends ActionBarActivity {
                     }
 
                 });
+    }
+
+    private void goToMainActivity() {
+        Intent intent = getIntent();
+        intent.setClass(CreateChannelActivity.this, CommunityCenterActivity.class);
+        startActivity(intent);
     }
 }

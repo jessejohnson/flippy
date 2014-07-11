@@ -70,6 +70,8 @@
     <string name="add_channel">Add A Channel</string>
     <string name="subscription_state_true">Subscribe</string>
     <string name="subscription_state_false">Unsubscribe</string>
+    <string name="channel_empty">Currently no channel</string>
+
 
     <!-- The facebook application id -->
     <string name="app_id">305971362902085</string>
@@ -311,7 +313,7 @@
     <string name="activity_user_account_logout_info_four">Require a to login next time you come</string>
 
 
-   <!-- strings for version activity-->
+    <!-- strings for version activity-->
     <string name="title_activity_version_info">Flippy version information</string>
     <string name="activity_version_current">Current Version</string>
 

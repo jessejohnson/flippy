@@ -44,7 +44,7 @@ public class FragmentChannel extends Fragment {
     private String isManageActivity = "false";
     private String userChannels = "/subscriptions/";
     private ChannelAdapter adapter;
-
+    private TextView textViewEmptyChannel;
 
     public FragmentChannel() {
 
@@ -61,6 +61,8 @@ public class FragmentChannel extends Fragment {
         //Loading the list with a dummy data
         rowItems = new ArrayList<Channel>();
         ChannelListView = (ListView) view.findViewById(R.id.listViewChannels);
+        textViewEmptyChannel = (TextView) view.findViewById(R.id.textViewEmptyChannel);
+        textViewEmptyChannel.setVisibility(View.GONE);
         progressBarChannelDataLoad = (ProgressBar) view.findViewById(R.id.progressBarChannelDataLoad);
         adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems, true);
@@ -130,6 +132,9 @@ public class FragmentChannel extends Fragment {
 
     private void updateAdapter() {
         adapter.notifyDataSetChanged();
+        if(adapter.isEmpty()){
+            textViewEmptyChannel.setVisibility(View.VISIBLE);
+        }
     }
 
 }

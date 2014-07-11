@@ -40,6 +40,7 @@ public class FragmentCommunities extends Fragment {
     public static String channelId;
     public static String channelName;
 
+    private TextView textViewEmptyCommunityChannel;
 
 
     public FragmentCommunities() {
@@ -55,14 +56,16 @@ public class FragmentCommunities extends Fragment {
 
         intent = new Intent();
         rowItems = new ArrayList<Channel>();
-        progressBarCommunityChannelLoader = (ProgressBar)view.findViewById(R.id.progressBarCommunityChannelLoader);
+        progressBarCommunityChannelLoader = (ProgressBar) view.findViewById(R.id.progressBarCommunityChannelLoader);
         listViewCommunity = (ListView) view.findViewById(R.id.listViewCommunity);
+        textViewEmptyCommunityChannel = (TextView) view.findViewById(R.id.textViewEmptyCommunityChannel);
+        textViewEmptyCommunityChannel.setVisibility(View.GONE);
 
 
         adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems, false);
         listViewCommunity.setAdapter(adapter);
-        String url = Flippy.channelsInCommunityURL + CommunityCenterActivity.userCommunityId+"/channels/";
+        String url = Flippy.channelsInCommunityURL + CommunityCenterActivity.userCommunityId + "/channels/";
 
         //Loading the list with data from Api call
         Ion.with(getActivity())
@@ -77,14 +80,14 @@ public class FragmentCommunities extends Fragment {
                             for (int i = 0; i < communityArray.size(); i++) {
                                 JsonObject item = communityArray.get(i).getAsJsonObject();
                                 JsonObject creator = item.getAsJsonObject("creator");
-                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()),item.get("id").getAsString(), item.get("name").getAsString(),creator.get("email").getAsString(), creator.get("first_name").getAsString()+" "+creator.get("last_name").getAsString());
+                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), item.get("id").getAsString(), item.get("name").getAsString(), creator.get("email").getAsString(), creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString());
                                 rowItems.add(channelItem);
                             }
                             updateListAdapter();
 
                         }
                         if (e != null) {
-                            ToastMessages.showToastLong(getActivity(),getResources().getString(R.string.internet_connection_error_dialog_title));
+                            ToastMessages.showToastLong(getActivity(), getResources().getString(R.string.internet_connection_error_dialog_title));
                         }
 
                     }
@@ -97,12 +100,12 @@ public class FragmentCommunities extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
 
-                TextView textViewChannelId = (TextView)view.findViewById(R.id.textViewChannelId);
-                TextView textViewChannelName = (TextView)view.findViewById(R.id.textViewChannelNameCustom);
+                TextView textViewChannelId = (TextView) view.findViewById(R.id.textViewChannelId);
+                TextView textViewChannelName = (TextView) view.findViewById(R.id.textViewChannelNameCustom);
                 channelId = textViewChannelId.getText().toString();
                 channelName = textViewChannelName.getText().toString();
-                intent.setClass(getActivity(),ChannelDetailActivity.class);
-                intent.putExtra("channelId",channelId);
+                intent.setClass(getActivity(), ChannelDetailActivity.class);
+                intent.putExtra("channelId", channelId);
                 intent.putExtra("channelName", channelName);
                 getActivity().startActivity(intent);
 
@@ -115,6 +118,9 @@ public class FragmentCommunities extends Fragment {
 
     private void updateListAdapter() {
         adapter.notifyDataSetChanged();
+        if (adapter.isEmpty()) {
+            textViewEmptyCommunityChannel.setVisibility(View.VISIBLE);
+        }
     }
 
 }

@@ -18,6 +18,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
@@ -30,8 +35,15 @@ import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.apache.http.Header;
 
 import java.io.File;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -91,7 +103,7 @@ public class EditProfileActivity extends ActionBarActivity {
         editTextEditProfileEmail = (EditText) findViewById(R.id.editTextEditProfileEmail);
         editTextEditProfileDateOfBirth = (EditText) findViewById(R.id.editTextEditProfileDateOfBirth);
         editTextEditProfileNumber = (EditText) findViewById(R.id.editTextEditProfileNumber);
-        progressBarUpdateAvatar = (ProgressBar)findViewById(R.id.progressBarUpdateAvatar);
+        progressBarUpdateAvatar = (ProgressBar) findViewById(R.id.progressBarUpdateAvatar);
         progressBarUpdateAvatar.setVisibility(View.GONE);
         genderSpinner = (Spinner) findViewById(R.id.genderSpinner);
         editTextEditProfileFirstName.setText(CommunityCenterActivity.userFirstName);
@@ -176,11 +188,9 @@ public class EditProfileActivity extends ActionBarActivity {
             NewEmailUpdate = editTextEditProfileEmail.getText().toString().trim();
             NewDateOfBirthUpdate = editTextEditProfileDateOfBirth.getText().toString().trim();
             NewGenderUpdate = genderSpinner.getSelectedItem().toString();
-            Log.e("New email",NewEmailUpdate);
-            if (updateUserStringDetails(NewEmailUpdate, NewFirstNameUpdate, NewLastNameUpdate, NewGenderUpdate)) {
-                ToastMessages.showToastLong(EditProfileActivity.this, "Profile updated");
-                goToMainActivity();
-            }
+            Log.e("New email", NewEmailUpdate);
+            updateUserStringDetails(NewEmailUpdate, NewFirstNameUpdate, NewLastNameUpdate, NewGenderUpdate);
+            ToastMessages.showToastLong(EditProfileActivity.this, "Profile updated");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -300,74 +310,44 @@ public class EditProfileActivity extends ActionBarActivity {
                 .animateIn(R.anim.fade_in)
                 .load(CommunityCenterActivity.userAvatarURL);
     }
-    private boolean updateUserStringDetails(String email, String firstName, String lastName, String gender) {
-        JsonObject json = new JsonObject();
-        json.addProperty("email", email);
-        json.addProperty("first_name", firstName);
-        json.addProperty("last_name", lastName);
-        json.addProperty("gender", gender);
 
-        Ion.with(EditProfileActivity.this,Flippy.userBasicURL)
-                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
-                .setJsonObjectBody(json)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
+    private void updateUserStringDetails(final String email, final String firstName, final String lastName, final String gender) {
+        String url = Flippy.userBasicURL;
+        Log.e("Url", url);
+        StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
+                new Response.Listener<String>() {
                     @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        if (e != null) {
-                            ToastMessages.showToastLong(EditProfileActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                        } else {
-                            Log.e("result",result.toString());
-
-                            if (result.has("detail")) {
-                                Crouton.makeText(EditProfileActivity.this, result.get("detail").toString(), Style.ALERT)
-                                        .show();
-                                return;
-                            }
-                            String email = result.get("email").getAsString();
-                            String first_name = result.get("first_name").getAsString();
-                            String last_name = result.get("last_name").getAsString();
-                            String date_of_birth = "";
-                            if (!result.get("date_of_birth").isJsonNull()) {
-                                date_of_birth = result.get("date_of_birth").getAsString();
-                            }
-                            String gender = "";
-                            if (!result.get("gender").isJsonNull()) {
-                                gender = result.get("gender").getAsString();
-                            }
-                            String community = "";
-                            if (!result.get("community").isJsonNull()) {
-                                gender = result.get("community").getAsString();
-                            }
-
-                            try {
-                                DatabaseHelper databaseHelper = OpenHelperManager.getHelper(EditProfileActivity.this,
-                                        DatabaseHelper.class);
-                                userDao = databaseHelper.getUserDao();
-                                UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
-                                updateBuilder.where().eq("user_email", email);
-                                updateBuilder.updateColumnValue("first_name", first_name);
-                                updateBuilder.updateColumnValue("last_name", last_name);
-                                updateBuilder.updateColumnValue("date_of_birth", date_of_birth);
-                                updateBuilder.updateColumnValue("gender", gender);
-                                updateBuilder.updateColumnValue("community_id", community);
-                                updateBuilder.update();
-                                save = true;
-                            } catch (java.sql.SQLException sqlE) {
-                                sqlE.printStackTrace();
-                                Crouton.makeText(EditProfileActivity.this, "Sorry, Try again later", Style.ALERT)
-                                        .show();
-                                save = false;
-                                return;
-
-                            }
-
-                        }
+                    public void onResponse(String response) {
+                        Log.e("Response", response);
                     }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Error.Response", error.toString());
+                    }
+                }
+        ) {
 
-                });
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("email", email);
+                params.put("first_name", firstName);
+                params.put("last_name", lastName);
+                params.put("gender", gender);
+                return params;
+            }
 
-        return save;
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type","application/x-www-form-urlencoded");
+                headers.put("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
+                return headers;
+            }
 
+        };
+        Flippy.getInstance().getRequestQueue().add(putRequest);
     }
 }

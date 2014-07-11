@@ -15,15 +15,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.google.gson.JsonObject;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.ChannelMembers;
+import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
+import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ManageChannelActivity extends ActionBarActivity {
     private EditText editTextManageChannelChannelName, editTextFirstAdmin, editTextSecondAdmin, editTextThirdAdmin, editTextFourthAdmin;
@@ -42,6 +55,7 @@ public class ManageChannelActivity extends ActionBarActivity {
     private static final int PICK_FROM_FILE = 7;
 
     private AlertDialog dialog;
+    private Button buttonRemoveChannel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +86,7 @@ public class ManageChannelActivity extends ActionBarActivity {
         imageViewEditSecondAdmin = (ImageView) findViewById(R.id.imageViewEditSecondAdmin);
         imageViewEditThirdAdmin = (ImageView) findViewById(R.id.imageViewEditThirdAdmin);
         imageViewEditFourthAdmin = (ImageView) findViewById(R.id.imageViewEditFourthAdmin);
+        buttonRemoveChannel = (Button) findViewById(R.id.buttonRemoveChannel);
         //called the method without the show
         showDialog();
 
@@ -80,7 +95,7 @@ public class ManageChannelActivity extends ActionBarActivity {
                 .placeholder(R.drawable.channel_bg)
                 .animateIn(R.anim.fade_in)
                 .load(image_url);
-        ;
+
         imageViewChannelManageEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,6 +151,38 @@ public class ManageChannelActivity extends ActionBarActivity {
 
             }
         });
+        buttonRemoveChannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = Flippy.channels + channelId + "/";
+                StringRequest delete = new StringRequest(Request.Method.DELETE, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(ManageChannelActivity.this, channelName+ " successfully removed", Toast.LENGTH_LONG).show();
+                                goToMainActivity();
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("Error", error.toString());
+                            }
+                        }
+                ) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("Content-Type", "application/json");
+                        headers.put("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
+                        return headers;
+                    }
+
+                };
+                Flippy.getInstance().getRequestQueue().add(delete);
+            }
+        });
+
     }
 
 
@@ -243,6 +290,13 @@ public class ManageChannelActivity extends ActionBarActivity {
             }
         });
         dialog = builder.create();
+
+    }
+
+    private void goToMainActivity() {
+        Intent intent = getIntent();
+        intent.setClass(ManageChannelActivity.this, CommunityCenterActivity.class);
+        startActivity(intent);
     }
 
 }

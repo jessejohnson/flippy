@@ -94,7 +94,7 @@ public class FragmentNotice extends Fragment {
             getActivity().registerReceiver(postReceiver, postIntentFilter);
 
         } else {
-            Crouton.makeText(getActivity(), "You are in offline mode", Style.ALERT)
+            Crouton.makeText(getActivity(), "You are currently offline", Style.ALERT)
                     .show();
         }
 
