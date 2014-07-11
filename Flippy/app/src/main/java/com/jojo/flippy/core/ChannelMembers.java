@@ -75,7 +75,7 @@ public class ChannelMembers extends Activity {
         //finding all the views with their appropriate ids
         ChannelMemberItem = new ArrayList<ProfileItem>();
         membershipList = (ListView) findViewById(R.id.listViewChannelMembers);
-        textViewNoChannelMember= (TextView)findViewById(R.id.textViewNoChannelMember);
+        textViewNoChannelMember = (TextView) findViewById(R.id.textViewNoChannelMember);
         textViewNoChannelMember.setVisibility(View.GONE);
         progressBarMemberChannelLoader = (ProgressBar) findViewById(R.id.progressBarMemberChannelLoader);
         channelMemberAdapter = new ChannelMemberAdapter(ChannelMembers.this,
@@ -92,7 +92,7 @@ public class ChannelMembers extends Activity {
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarMemberChannelLoader.setVisibility(View.GONE);
                         if (result != null) {
-                            if(result.has("detail")){
+                            if (result.has("detail")) {
 
                                 textViewNoChannelMember.setVisibility(View.VISIBLE);
                                 textViewNoChannelMember.setText("Sorry, channel has been removed");
@@ -163,8 +163,11 @@ public class ChannelMembers extends Activity {
     private void updateAdapter() {
         channelMemberAdapter.notifyDataSetChanged();
         actionBar.setSubtitle(totalMembers + " " + "member(s)");
-        textViewNoChannelMember.setVisibility(View.VISIBLE);
-        textViewNoChannelMember.setText("Channel has no member");
+        if (channelMemberAdapter.isEmpty()) {
+            textViewNoChannelMember.setVisibility(View.VISIBLE);
+            textViewNoChannelMember.setText("Channel has no member");
+        }
+
     }
 
     @Override

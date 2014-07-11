@@ -99,6 +99,11 @@ public class ChannelDetailActivity extends ActionBarActivity {
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarLoadChannelDetail.setVisibility(View.GONE);
                         if (result != null) {
+                            if (result.has("detail")) {
+                                ToastMessages.showToastLong(ChannelDetailActivity.this, "Sorry, channel has been removed");
+                                finish();
+                                return;
+                            }
                             name = result.get("name").getAsString();
                             id = result.get("id").getAsString();
                             JsonObject creator = result.getAsJsonObject("creator");
