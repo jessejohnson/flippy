@@ -51,6 +51,8 @@ public class ChannelMembers extends Activity {
     private String userEmail;
     private String userFullName;
 
+    private TextView textViewNoChannelMember;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +75,8 @@ public class ChannelMembers extends Activity {
         //finding all the views with their appropriate ids
         ChannelMemberItem = new ArrayList<ProfileItem>();
         membershipList = (ListView) findViewById(R.id.listViewChannelMembers);
+        textViewNoChannelMember= (TextView)findViewById(R.id.textViewNoChannelMember);
+        textViewNoChannelMember.setVisibility(View.GONE);
         progressBarMemberChannelLoader = (ProgressBar) findViewById(R.id.progressBarMemberChannelLoader);
         channelMemberAdapter = new ChannelMemberAdapter(ChannelMembers.this,
                 R.layout.channel_members_listview, ChannelMemberItem, isManage);
@@ -88,6 +92,12 @@ public class ChannelMembers extends Activity {
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarMemberChannelLoader.setVisibility(View.GONE);
                         if (result != null) {
+                            if(result.has("detail")){
+
+                                textViewNoChannelMember.setVisibility(View.VISIBLE);
+                                textViewNoChannelMember.setText("Sorry, channel has been removed");
+                                return;
+                            }
                             JsonArray profileArray = result.getAsJsonArray("results");
                             totalMembers = profileArray.size() + "";
                             for (int i = 0; i < profileArray.size(); i++) {
@@ -153,6 +163,8 @@ public class ChannelMembers extends Activity {
     private void updateAdapter() {
         channelMemberAdapter.notifyDataSetChanged();
         actionBar.setSubtitle(totalMembers + " " + "member(s)");
+        textViewNoChannelMember.setVisibility(View.VISIBLE);
+        textViewNoChannelMember.setText("Channel has no member");
     }
 
     @Override

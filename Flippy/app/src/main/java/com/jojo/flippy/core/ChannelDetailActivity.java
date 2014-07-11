@@ -215,7 +215,9 @@ public class ChannelDetailActivity extends ActionBarActivity {
                                 ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("results").getAsString());
                             }
                             if (result.has("detail")) {
-                                ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("detail").getAsString());
+                                ToastMessages.showToastLong(ChannelDetailActivity.this, "Sorry, channel has been removed");
+                                finish();
+                                return;
                             }
 
                         }
