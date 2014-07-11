@@ -49,6 +49,7 @@ public class SelectCommunityActivity extends ActionBarActivity {
     private String regUserEmail;
     private ProgressBar progressBarLoadCommunity;
     private Dao<User, Integer> userDao;
+    private TextView textViewNoCommunity;
 
 
     ListView listViewCommunities;
@@ -73,6 +74,8 @@ public class SelectCommunityActivity extends ActionBarActivity {
 
         rowItems = new ArrayList<Community>();
         listViewCommunities = (ListView) findViewById(R.id.listViewCommunities);
+        textViewNoCommunity = (TextView) findViewById(R.id.textViewNoCommunity);
+        textViewNoCommunity.setVisibility(View.GONE);
         progressBarLoadCommunity = (ProgressBar) findViewById(R.id.progressBarLoadCommunity);
         adapter = new CommunityAdapter(SelectCommunityActivity.this,
                 R.layout.select_community_listview, rowItems);
@@ -102,6 +105,8 @@ public class SelectCommunityActivity extends ActionBarActivity {
                         if (e != null) {
                             ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
                             Log.e("error", e.toString());
+                            textViewNoCommunity.setVisibility(View.VISIBLE);
+                            textViewNoCommunity.setText("Failed to load communities");
                         }
 
                     }
@@ -159,7 +164,12 @@ public class SelectCommunityActivity extends ActionBarActivity {
     }
 
     private void updateAdapter() {
+
         adapter.notifyDataSetChanged();
+        if (adapter.isEmpty()) {
+            textViewNoCommunity.setVisibility(View.VISIBLE);
+            textViewNoCommunity.setText("Currently no community");
+        }
     }
 
     @Override

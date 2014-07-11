@@ -70,6 +70,8 @@ public class FragmentNotice extends Fragment {
     public static IntentFilter postIntentFilter;
     private View view;
 
+    private TextView textViewNoNotice;
+
     public FragmentNotice() {
 
     }
@@ -84,6 +86,8 @@ public class FragmentNotice extends Fragment {
 
         listAdapter = new NoticeListAdapter(this.getActivity(), noticeFeed);
         noticeList = (ListView) view.findViewById(R.id.listViewNoticeList);
+        textViewNoNotice = (TextView)view.findViewById(R.id.textViewNoNotice);
+        textViewNoNotice.setVisibility(View.GONE);
         progressBarCommunityCenterLoader = (ProgressBar) view.findViewById(R.id.progressBarLoadNoticeData);
         noticeList.setAdapter(listAdapter);
 
@@ -160,6 +164,10 @@ public class FragmentNotice extends Fragment {
 
     private void updateListAdapter() {
         listAdapter.notifyDataSetChanged();
+        if(listAdapter.isEmpty()){
+            textViewNoNotice.setVisibility(View.VISIBLE);
+            textViewNoNotice.setText("Currently no notice");
+        }
     }
 
 
