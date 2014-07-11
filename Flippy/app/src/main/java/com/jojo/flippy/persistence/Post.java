@@ -38,8 +38,11 @@ public class Post {
     @DatabaseField(columnName = "start_date")
     public String start_date;
 
+    @DatabaseField(columnName = "local_id")
+    public String local_id;
 
-    public Post(String notice_id, String notice_title,String notice_body,String notice_image,String start_date,String author_email,String author_id,String author_first_name,String author_last_name,String channel_id) {
+
+    public Post(String notice_id, String notice_title,String notice_body,String notice_image,String start_date,String author_email,String author_id,String author_first_name,String author_last_name,String channel_id,String local_id) {
         this.notice_id = notice_id;
         this.notice_title = notice_title;
         this.notice_body = notice_body;
@@ -50,6 +53,7 @@ public class Post {
         this.author_first_name = author_first_name;
         this.author_last_name = author_last_name;
         this.channel_id = channel_id;
+        this.local_id = local_id;
     }
 
     Post() {

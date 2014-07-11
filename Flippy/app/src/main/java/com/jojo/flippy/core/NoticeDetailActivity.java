@@ -79,6 +79,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
     private Calendar calendar;
 
+    private String noPost = "Sorry, this post has been remove";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,6 +147,10 @@ public class NoticeDetailActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         if (result != null) {
+                            if (result.has("detail")) {
+                                Crouton.makeText(NoticeDetailActivity.this, "Sorry, this post has been removed", Style.ALERT).show();
+                                return;
+                            }
                             JsonObject item = result.getAsJsonObject("author");
                             author_email = item.get("email").getAsString();
                             if (!item.get("avatar").isJsonNull()) {
@@ -197,6 +203,10 @@ public class NoticeDetailActivity extends ActionBarActivity {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
                                 if (result != null) {
+                                    if(result.has("detail")){
+                                       Crouton.makeText(NoticeDetailActivity.this,noPost,Style.ALERT);
+                                        return;
+                                    }
                                     ToastMessages.showToastLong(NoticeDetailActivity.this, result.get("results").getAsString());
                                 }
                                 if (e != null) {
@@ -332,6 +342,10 @@ public class NoticeDetailActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         if (result != null) {
+                            if(result.has("detail")){
+                                Crouton.makeText(NoticeDetailActivity.this,noPost,Style.ALERT);
+                                return;
+                            }
                             String item = result.get("results").getAsString();
                             textViewLikes.setText(item + " Star(s)");
                             return;
@@ -354,6 +368,10 @@ public class NoticeDetailActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         if (result != null) {
+                            if(result.has("detail")){
+                                Crouton.makeText(NoticeDetailActivity.this,noPost,Style.ALERT);
+                                return;
+                            }
                             JsonObject item = result.getAsJsonObject("results");
                             locationName = item.get("local_name").getAsString();
                             locationLat = item.get("latitude").getAsString();
@@ -421,6 +439,10 @@ public class NoticeDetailActivity extends ActionBarActivity {
                     public void onCompleted(Exception ex, JsonObject nameResult) {
 
                         if (nameResult != null) {
+                            if(nameResult.has("detail")){
+                                Crouton.makeText(NoticeDetailActivity.this,noPost,Style.ALERT);
+                                return;
+                            }
                             textViewNoticeSubtitleChannelName.setVisibility(View.VISIBLE);
                             textViewNoticeSubtitleChannelName.setText(nameResult.get("name").getAsString());
                         }

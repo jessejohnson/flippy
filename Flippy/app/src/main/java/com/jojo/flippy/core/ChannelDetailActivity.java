@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -50,6 +51,8 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private String channelDetailSubscribeURL;
     private LinearLayout linearLayoutSubscriptions;
 
+    private ListView listViewChannelPost;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +89,8 @@ public class ChannelDetailActivity extends ActionBarActivity {
         textViewNameChannelDetailFullName.setVisibility(View.GONE);
         textViewChannelCreatorEmail.setVisibility(View.GONE);
         imageViewCreator.setVisibility(View.GONE);
+
+        listViewChannelPost = (ListView)findViewById(R.id.listViewChannelPost);
 
         textViewChannelBio.setText("");
         textViewChannelNameDetail.setText(channelName);
@@ -150,7 +155,6 @@ public class ChannelDetailActivity extends ActionBarActivity {
     }
 
     private void getCommunityName(String communityURL) {
-        //load the creator of the channel
         Ion.with(ChannelDetailActivity.this)
                 .load(channelCommunityDetail + communityURL + "/")
                 .asJsonObject()

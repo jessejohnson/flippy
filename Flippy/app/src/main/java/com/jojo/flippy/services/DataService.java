@@ -20,6 +20,7 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -101,8 +102,9 @@ public class DataService extends Service {
                                         String authorId = author.get("id").getAsString();
                                         String authorFirstName = author.get("first_name").getAsString();
                                         String authorLastName = author.get("last_name").getAsString();
+                                        Calendar calendar = Calendar.getInstance();
                                         Post new_post = new Post(id, title, content, image_link, startDate,
-                                                authorEmail, authorId, authorFirstName, authorLastName, channel);
+                                                authorEmail, authorId, authorFirstName, authorLastName, channel,calendar.getTimeInMillis()+"");
                                         try {
                                             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
                                                     DatabaseHelper.class);
