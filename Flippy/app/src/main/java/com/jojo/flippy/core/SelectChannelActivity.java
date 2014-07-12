@@ -2,8 +2,8 @@ package com.jojo.flippy.core;
 
 import android.app.ActionBar;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,7 +51,7 @@ public class SelectChannelActivity extends ActionBarActivity {
 
 
         intent = getIntent();
-        String url = Flippy.userChannelsSubscribedURL + CommunityCenterActivity.regUserID + userChannels;
+        String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
         ActionBar actionBar = getActionBar();
         actionBar.setSubtitle(subTitle);
 
@@ -65,7 +65,7 @@ public class SelectChannelActivity extends ActionBarActivity {
         textViewNoChannelHelp.setVisibility(View.GONE);
         progressBarLoadUserChannels = (ProgressBar) findViewById(R.id.progressBarLoadUserChannels);
         userChannelsAdapter = new ChannelMemberAdapter(SelectChannelActivity.this,
-                R.layout.channel_members_listview, userChannelItem,false);
+                R.layout.channel_members_listview, userChannelItem, false);
         userChannelList.setAdapter(userChannelsAdapter);
 
 
@@ -95,7 +95,7 @@ public class SelectChannelActivity extends ActionBarActivity {
                                 }
                                 channelName = item.get("name").getAsString();
                                 if (creatorId.equals(CommunityCenterActivity.regUserID)) {
-                                    ProfileItem channelItem = new ProfileItem(URI.create(url), channelName, channelId,"");
+                                    ProfileItem channelItem = new ProfileItem(URI.create(url), channelName, channelId, "");
                                     userChannelItem.add(channelItem);
                                 }
                             }

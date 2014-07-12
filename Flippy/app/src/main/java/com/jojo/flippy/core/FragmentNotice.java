@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -162,7 +163,7 @@ public class FragmentNotice extends Fragment {
                     DatabaseHelper.class);
             postDao = databaseHelper.getPostDao();
             Calendar calendar = Calendar.getInstance();
-            Post post = new Post(notice_id, notice_title, notice_body, notice_image, start_date, author_email, author_id, author_first_name, author_last_name, channel_id,calendar.getTimeInMillis()+"");
+            Post post = new Post(notice_id, notice_title, notice_body, notice_image, start_date, author_email, author_id, author_first_name, author_last_name, channel_id, calendar.getTimeInMillis());
             postDao.create(post);
             loadAdapterFromDatabase(view);
 
@@ -224,6 +225,7 @@ public class FragmentNotice extends Fragment {
             postDao = databaseHelper.getPostDao();
             List<Post> postList = postDao.queryForAll();
             progressBarCommunityCenterLoader.setVisibility(view.GONE);
+            noticeFeed.clear();
             if (!postList.isEmpty()) {
                 for (int i = 0; i < postList.size(); i++) {
                     Post post = postList.get(i);
@@ -236,7 +238,7 @@ public class FragmentNotice extends Fragment {
                         Date dateConverted = dateFormat.parse(timestampArray[0].toString());
                         timestamp = formatter.format(dateConverted) + " @ " + timestampArray[1].substring(0, 8);
                     } catch (Exception error) {
-                        //maintain the first format
+                        Log.e("Date error", error.toString());
                     }
                     String subtitle = post.author_first_name+", " +post.author_first_name;
                     noticeFeed.add(new Notice(post.notice_id, post.notice_title,subtitle, post.notice_body,post.author_id,post.channel_id, timestamp, URI.create(post.notice_image)));

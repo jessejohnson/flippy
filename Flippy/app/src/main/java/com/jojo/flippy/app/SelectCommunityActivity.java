@@ -13,9 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,7 +32,7 @@ import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +40,12 @@ import java.util.List;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
+;
+
 
 public class SelectCommunityActivity extends ActionBarActivity {
+    ListView listViewCommunities;
+    List<Community> rowItems;
     //TODO get communityKeyURL
     private String communityKeyURL = "";
     private Intent intent;
@@ -51,10 +53,6 @@ public class SelectCommunityActivity extends ActionBarActivity {
     private ProgressBar progressBarLoadCommunity;
     private Dao<User, Integer> userDao;
     private TextView textViewNoCommunity;
-
-
-    ListView listViewCommunities;
-    List<Community> rowItems;
     private CommunityAdapter adapter;
     private ProgressDialog progressDialog;
 
@@ -123,12 +121,12 @@ public class SelectCommunityActivity extends ActionBarActivity {
                 TextView textViewCommunityName = (TextView) view.findViewById(R.id.textViewCommunityName);
                 final String communityId = textViewCommunityId.getText().toString();
                 final String communityName = textViewCommunityName.getText().toString();
-                progressDialog.setMessage("Preparing "+communityName+" community");
+                progressDialog.setMessage("Preparing " + communityName + " community");
                 progressDialog.show();
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("community_id", communityId);
                 Ion.with(SelectCommunityActivity.this)
-                        .load(Flippy.userCommunityURL + intent.getStringExtra("regUserID") + "/community/")
+                        .load(Flippy.users + intent.getStringExtra("regUserID") + "/community/")
                         .setHeader("Authorization", "Token " + intent.getStringExtra("regUserAuthToken"))
                         .setJsonObjectBody(jsonObject)
                         .asJsonObject()

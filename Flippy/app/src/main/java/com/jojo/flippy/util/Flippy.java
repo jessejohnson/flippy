@@ -14,18 +14,14 @@ import com.jojo.flippy.services.DataService;
 
 import java.util.List;
 
-/**
- * Created by bright on 6/20/14.
- */
 public class Flippy extends Application {
     //make the url accessible to all the activities
     public static String channels = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/channels/";
     public static String userBasicURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/me/";
-    public static String userCommunityURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/";
+    public static String users = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/";
     public static String regURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/signup/";
     public static String signInURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/users/login/";
     public static String channelsInCommunityURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/communities/";
-    public static String userChannelsSubscribedURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/users/";
     public static String communitiesURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/communities/";
     public static String allPostURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/posts/";
     private static Flippy sInstance;

@@ -2,8 +2,8 @@ package com.jojo.flippy.profile;
 
 import android.app.ActionBar;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;;
+import com.google.gson.JsonObject;
 import com.jojo.flippy.adapter.ProfileAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
@@ -29,6 +29,8 @@ import com.koushikdutta.ion.Ion;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
+;
 
 public class AccountProfileActivity extends ActionBarActivity {
     ListView profileChannelListView;
@@ -71,7 +73,7 @@ public class AccountProfileActivity extends ActionBarActivity {
         actionBar.setSubtitle(R.string.user_tap_to_edit);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        final String url = Flippy.userChannelsSubscribedURL + CommunityCenterActivity.regUserID + userChannels;
+        final String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
 
 
         intent = getIntent();
@@ -122,7 +124,7 @@ public class AccountProfileActivity extends ActionBarActivity {
                             for (int i = 0; i < profileArray.size(); i++) {
                                 JsonObject item = profileArray.get(i).getAsJsonObject();
                                 JsonObject creator = item.getAsJsonObject("creator");
-                                ProfileItem profileItem = new ProfileItem(URI.create(item.get("image_url").getAsString()), item.get("name").getAsString(), creator.get("email").getAsString(),"");
+                                ProfileItem profileItem = new ProfileItem(URI.create(item.get("image_url").getAsString()), item.get("name").getAsString(), creator.get("email").getAsString(), "");
                                 rowItems.add(profileItem);
                             }
                             updateAdapter();
@@ -130,8 +132,8 @@ public class AccountProfileActivity extends ActionBarActivity {
                         if (e != null) {
                             progressBarUserChannelLoad.setVisibility(View.GONE);
                             ToastMessages.showToastLong(AccountProfileActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                            Log.e("Error loading channel",e.toString());
-                      }
+                            Log.e("Error loading channel", e.toString());
+                        }
 
                     }
                 });
@@ -171,11 +173,11 @@ public class AccountProfileActivity extends ActionBarActivity {
     }
 
     private void loadCommunityImage(String url) {
-        if(url==null){
-            ToastMessages.showToastShort(AccountProfileActivity.this,"Failed to load community image");
+        if (url == null) {
+            ToastMessages.showToastShort(AccountProfileActivity.this, "Failed to load community image");
             return;
         }
-        textViewProfileUserCommunity.setText("Community: "+userCommunityName);
+        textViewProfileUserCommunity.setText("Community: " + userCommunityName);
         textViewProfileUserCommunity.setVisibility(View.VISIBLE);
         Ion.with(imageViewProfileUserCommunity)
                 .placeholder(R.drawable.default_profile_picture)

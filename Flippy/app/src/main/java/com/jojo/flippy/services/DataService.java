@@ -96,7 +96,7 @@ public class DataService extends Service {
                                         String authorLastName = author.get("last_name").getAsString();
                                         Calendar calendar = Calendar.getInstance();
                                         Post new_post = new Post(id, title, content, image_link, startDate,
-                                                authorEmail, authorId, authorFirstName, authorLastName, channel, calendar.getTimeInMillis() + "");
+                                                authorEmail, authorId, authorFirstName, authorLastName, channel, calendar.getTimeInMillis());
                                         try {
                                             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
                                                     DatabaseHelper.class);
@@ -124,11 +124,6 @@ public class DataService extends Service {
 
         return START_STICKY;
 
-    }
-
-    ;
-
-    void makeApiCall() {
     }
 
     @Override

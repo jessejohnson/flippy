@@ -1,8 +1,6 @@
 package com.jojo.flippy.core;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,14 +11,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.ChannelAdapter;
 import com.jojo.flippy.app.R;
-import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
@@ -68,7 +64,7 @@ public class FragmentChannel extends Fragment {
                 R.layout.channel_listview, rowItems, true);
         ChannelListView.setAdapter(adapter);
         //get the request url
-        String url = Flippy.userChannelsSubscribedURL + CommunityCenterActivity.regUserID + userChannels;
+        String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
 
         //load the channels user subscribed to
         Ion.with(getActivity())
@@ -132,7 +128,7 @@ public class FragmentChannel extends Fragment {
 
     private void updateAdapter() {
         adapter.notifyDataSetChanged();
-        if(adapter.isEmpty()){
+        if (adapter.isEmpty()) {
             textViewEmptyChannel.setVisibility(View.VISIBLE);
         }
     }

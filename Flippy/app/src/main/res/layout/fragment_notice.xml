@@ -15,28 +15,40 @@
         android:layout_weight="1"
         android:divider="@null"
         android:dividerHeight="@dimen/margin_two"
-        android:scrollbars="none"
-        android:scrollbarStyle="outsideOverlay" />
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="none" />
 
 
     <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
         android:id="@+id/progressBarLoadNoticeData"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_gravity="center"
-        gpb:type="folding_circles"
-        gpb:colors="@array/flippy_rainbow"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_gravity="center"
+        gpb:colors="@array/flippy_rainbow"
+        gpb:type="folding_circles" />
 
     <TextView
+        android:id="@+id/textViewNoNotice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/textViewNoNotice"
+        android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/buttonLoadOldPost"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listViewNoticeList"
+        android:layout_marginTop="@dimen/margin_two"
+        android:background="@drawable/flippy_button_default"
+        android:gravity="center"
+        android:text="@string/community_center_old_notice"
+        android:textColor="@color/flippy_white" />
 
 </RelativeLayout>

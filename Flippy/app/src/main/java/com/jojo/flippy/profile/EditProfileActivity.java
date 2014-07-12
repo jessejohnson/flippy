@@ -210,7 +210,7 @@ public class EditProfileActivity extends ActionBarActivity {
             return;
         }
         progressBarUpdateAvatar.setVisibility(View.VISIBLE);
-        Ion.with(EditProfileActivity.this, Flippy.userChannelsSubscribedURL + "upload-avatar/")
+        Ion.with(EditProfileActivity.this, Flippy.channels + "upload-avatar/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setMultipartFile("avatar", new File(filePath))
                 .asJsonObject()
@@ -256,7 +256,7 @@ public class EditProfileActivity extends ActionBarActivity {
     }
 
     private void getUserInfo() {
-        Ion.with(EditProfileActivity.this, Flippy.userChannelsSubscribedURL + CommunityCenterActivity.regUserID + "/")
+        Ion.with(EditProfileActivity.this, Flippy.channels + CommunityCenterActivity.regUserID + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
