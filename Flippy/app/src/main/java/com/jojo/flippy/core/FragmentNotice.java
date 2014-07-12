@@ -46,6 +46,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -177,7 +178,8 @@ public class FragmentNotice extends Fragment {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
                     DatabaseHelper.class);
             postDao = databaseHelper.getPostDao();
-            Post post = new Post(notice_id, notice_title, notice_body, notice_image, start_date, author_email, author_id, author_first_name, author_last_name, channel_id);
+            Calendar calendar = Calendar.getInstance();
+            Post post = new Post(notice_id, notice_title, notice_body, notice_image, start_date, author_email, author_id, author_first_name, author_last_name, channel_id,calendar.getTimeInMillis()+"");
             postDao.create(post);
             loadAdapterFromDatabase(view);
 
@@ -218,7 +220,6 @@ public class FragmentNotice extends Fragment {
                                 String authorId = author.get("id").getAsString();
                                 String authorFirstName = author.get("first_name").getAsString();
                                 String authorLastName = author.get("last_name").getAsString();
-
                                 persistPost(id, title, content, image_link, startDate, authorEmail, authorId, authorFirstName, authorLastName, channel);
 
                             }
@@ -254,7 +255,8 @@ public class FragmentNotice extends Fragment {
                     } catch (Exception error) {
                         //maintain the first format
                     }
-                    noticeFeed.add(new Notice(post.notice_id, post.author_first_name, post.author_last_name, post.notice_title, "sub", post.notice_body, timestamp, URI.create(post.notice_image)));
+                    String subtitle = post.author_first_name+", " +post.author_first_name;
+                    noticeFeed.add(new Notice(post.notice_id, post.notice_title,subtitle, post.notice_body,post.author_id,post.channel_id, timestamp, URI.create(post.notice_image)));
 
                 }
                 updateListAdapter();
@@ -290,7 +292,8 @@ public class FragmentNotice extends Fragment {
                     } catch (Exception error) {
                         //maintain the first format
                     }
-                    noticeFeed.add(new Notice(post.notice_id, post.author_first_name, post.author_last_name, post.notice_title, "sub", post.notice_body, timestamp, URI.create(post.notice_image)));
+                    String subtitle = post.author_first_name+", " +post.author_first_name;
+                    noticeFeed.add(new Notice(post.notice_id,post.notice_title,subtitle, post.notice_body,post.author_id,post.channel_id, timestamp, URI.create(post.notice_image)));
 
                 }
                 updateListAdapter();

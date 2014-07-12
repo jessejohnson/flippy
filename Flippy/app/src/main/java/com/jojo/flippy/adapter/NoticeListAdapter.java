@@ -3,6 +3,7 @@ package com.jojo.flippy.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,7 @@ public class NoticeListAdapter extends BaseAdapter {
         TextView title = (TextView) v.findViewById(R.id.textViewNoticeTitle);
         TextView subtitle = (TextView) v.findViewById(R.id.textViewNoticeSubtitle);
         ImageView image = (ImageView) v.findViewById(R.id.imageViewNoticeImage);
+        image.setVisibility(View.GONE);
         TextView content = (TextView) v.findViewById(R.id.textViewNoticeText);
         TextView id = (TextView) v.findViewById(R.id.textViewNoticeId);
         TextView textViewNoticeDateInfo = (TextView) v.findViewById(R.id.textViewNoticeDateInfo);
@@ -66,7 +68,7 @@ public class NoticeListAdapter extends BaseAdapter {
         title.setText(noticeArrayList.get(i).getTitle());
         id.setText(noticeArrayList.get(i).getId());
         textViewNoticeDateInfo.setText(noticeArrayList.get(i).getDateInfo());
-        subtitle.setText(noticeArrayList.get(i).getCreatorId() + " , " + noticeArrayList.get(i).getChannelId());
+        subtitle.setText(noticeArrayList.get(i).getSubtitle());
         content.setText(noticeArrayList.get(i).getContent());
 
 
@@ -88,10 +90,20 @@ public class NoticeListAdapter extends BaseAdapter {
         if (String.valueOf(noticeArrayList.get(i).getImageUrl()) == "") {
             image.setVisibility(View.GONE);
         } else {
+            image.setVisibility(View.VISIBLE);
             Ion.with(image)
                     .animateIn(R.anim.fade_in)
                     .load(String.valueOf(noticeArrayList.get(i).getImageUrl()));
         }
+        Log.e("Image Link",String.valueOf(noticeArrayList.get(i).getImageUrl()));
+        Log.e("Date",String.valueOf(noticeArrayList.get(i).getDateInfo()));
+        Log.e("Content",String.valueOf(noticeArrayList.get(i).getContent()));
+        Log.e("Title",String.valueOf(noticeArrayList.get(i).getTitle()));
+        Log.e("Subtitle",String.valueOf(noticeArrayList.get(i).getSubtitle()));
+        Log.e("Id",String.valueOf(noticeArrayList.get(i).getId()));
+        Log.e("Creator",String.valueOf(noticeArrayList.get(i).getCreatorId()));
+        Log.e("Channel",String.valueOf(noticeArrayList.get(i).getChannelId()));
+
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

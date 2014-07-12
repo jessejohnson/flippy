@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
 
                     <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -95,6 +95,7 @@
                         app:border_width="3dip"
                         app:corner_radius="@dimen/margin_hundred"
                         app:oval="false" />
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -109,7 +110,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:gravity="center_horizontal"
+                            android:gravity="left"
                             android:paddingLeft="@dimen/margin_five"
                             android:paddingTop="@dimen/margin_five"
                             android:text="@string/flippy_email"
@@ -120,7 +121,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="left|bottom"
-                            android:gravity="center_horizontal"
+                            android:gravity="left"
                             android:paddingLeft="@dimen/margin_five"
                             android:paddingRight="@dimen/margin_five"
                             android:shadowColor="@color/flippy_white"
@@ -132,6 +133,16 @@
                             android:textColor="@color/flippy_dark_header" />
                     </LinearLayout>
                 </LinearLayout>
+                <ListView
+                    android:id="@+id/listViewChannelPost"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:listSelector="@android:color/transparent"
+                    android:layout_below="@+id/linearLayoutUserProfile"
+                    android:layout_marginBottom="@dimen/margin_eighty"
+                    android:divider="@color/flippy_orange"
+                    android:dividerHeight="@dimen/margin_one" />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

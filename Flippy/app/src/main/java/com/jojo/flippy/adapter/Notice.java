@@ -21,7 +21,7 @@ public class Notice {
     String location;
     int Starts;
 
-    public Notice(String id, String creatorId, String channelId, String title, String subtitle, String content, String dateInfo,URI imageUrl) {
+    public Notice(String id,String title, String subtitle, String content, String creatorId, String channelId, String dateInfo,URI imageUrl) {
         this.id = id;
         this.creatorId = creatorId;
         this.channelId = channelId;

@@ -8,6 +8,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_fifty"
         android:scrollbars="none">
 
         <LinearLayout
@@ -110,8 +111,8 @@
                 android:id="@+id/textViewNoticeSubtitleChannelName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/notice_subtitle"
                 android:padding="@dimen/margin_five"
+                android:text="@string/notice_subtitle"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/flippy_orange"
                 android:textStyle="normal" />
@@ -200,9 +201,7 @@
                 android:layout_height="200dp"
                 android:layout_margin="0dp">
 
-
-                <fragment
-                    xmlns:android="http://schemas.android.com/apk/res/android"
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/linearLayoutNoticeShowLocation"
                     class="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
@@ -211,14 +210,59 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/buttonPublishNotice"
-        style="?android:attr/buttonStyleSmall"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/flippy_button_default"
-        android:text="@string/notice_detail_publish"
-        android:textColor="@color/flippy_white"
-        android:visibility="gone" />
+        android:background="@color/flippy_orange"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="@dimen/margin_five"
+        android:weightSum="4">
+
+        <ImageView
+            android:id="@+id/imageViewRemovePost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_five"
+            android:layout_marginRight="@dimen/margin_five"
+            android:layout_weight="1"
+            android:background="@color/flippy_orange"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_action_remove" />
+
+        <ImageView
+            android:id="@+id/imageViewDeletePost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_five"
+            android:layout_marginRight="@dimen/margin_five"
+            android:layout_weight="1"
+            android:background="@color/flippy_orange"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_action_discard" />
+
+        <ImageView
+            android:id="@+id/imageViewPublishPost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_five"
+            android:layout_marginRight="@dimen/margin_five"
+            android:layout_weight="1"
+            android:background="@color/flippy_orange"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_action_send_now" />
+
+        <ImageView
+            android:id="@+id/imageViewRatePost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_five"
+            android:layout_marginRight="@dimen/margin_five"
+            android:layout_weight="1"
+            android:background="@color/flippy_orange"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_action_important" />
+
+    </LinearLayout>
 </RelativeLayout>

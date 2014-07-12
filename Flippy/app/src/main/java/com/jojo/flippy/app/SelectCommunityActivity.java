@@ -2,6 +2,7 @@ package com.jojo.flippy.app;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -55,6 +56,7 @@ public class SelectCommunityActivity extends ActionBarActivity {
     ListView listViewCommunities;
     List<Community> rowItems;
     private CommunityAdapter adapter;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +72,8 @@ public class SelectCommunityActivity extends ActionBarActivity {
         actionbar.setSubtitle(getString(R.string.last_step));
         actionbar.setTitle("Select a community");
 
+        progressDialog = new ProgressDialog(SelectCommunityActivity.this);
+        progressDialog.setTitle("Flippy progress");
         progressBarLoadCommunity = (ProgressBar) findViewById(R.id.progressBarLoadCommunity);
 
         rowItems = new ArrayList<Community>();
@@ -114,10 +118,13 @@ public class SelectCommunityActivity extends ActionBarActivity {
         listViewCommunities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
                 TextView textViewCommunityId = (TextView) view.findViewById(R.id.textViewCommunityId);
                 TextView textViewCommunityName = (TextView) view.findViewById(R.id.textViewCommunityName);
                 final String communityId = textViewCommunityId.getText().toString();
                 final String communityName = textViewCommunityName.getText().toString();
+                progressDialog.setMessage("Preparing "+communityName+" community");
+                progressDialog.show();
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("community_id", communityId);
                 Ion.with(SelectCommunityActivity.this)
@@ -128,6 +135,7 @@ public class SelectCommunityActivity extends ActionBarActivity {
                         .setCallback(new FutureCallback<JsonObject>() {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
+                                progressDialog.dismiss();
                                 if (result != null) {
                                     try {
                                         DatabaseHelper databaseHelper = OpenHelperManager.getHelper(SelectCommunityActivity.this,
