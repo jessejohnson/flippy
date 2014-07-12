@@ -24,6 +24,7 @@ import com.jojo.flippy.adapter.NoticeListAdapter;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
+import com.jojo.flippy.services.StartingService;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.InternetConnectionDetector;
 import com.jojo.flippy.util.ToastMessages;
@@ -91,6 +92,10 @@ public class FragmentNotice extends Fragment {
 
         internetConnectionDetector = new InternetConnectionDetector(getActivity());
         if (internetConnectionDetector.isConnectingToInternet()) {
+            //starting the manage service activity
+            Intent serviceIntent = new Intent(getActivity(), StartingService.class);
+            getActivity().startService(serviceIntent);
+
             postIntentFilter = new IntentFilter();
             postIntentFilter.addAction("newPostArrived");
             getActivity().registerReceiver(postReceiver, postIntentFilter);

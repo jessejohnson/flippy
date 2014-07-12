@@ -11,6 +11,7 @@ import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.services.DataService;
+import com.jojo.flippy.services.ManageLocalPost;
 
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class Flippy extends Application {
         mRequestQueue = Volley.newRequestQueue(this);
         sInstance = this;
 
+        //starting the manage service activity
+        Intent serviceIntent = new Intent(this, ManageLocalPost.class);
+        startService(serviceIntent);
+
         DatabaseHelper databaseHelper = OpenHelperManager.getHelper(this,
                 DatabaseHelper.class);
         try {
@@ -56,6 +61,7 @@ public class Flippy extends Application {
             sqlE.printStackTrace();
         }
 
+        //letter start the data synchronization intent
         Intent dataServiceIntent = new Intent(getApplicationContext(), DataService.class);
         startService(dataServiceIntent);
     }

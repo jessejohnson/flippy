@@ -9,6 +9,7 @@ import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
 
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -26,6 +27,8 @@ public class ManageLocalPost extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        Calendar calendar = Calendar.getInstance();
+
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
                     DatabaseHelper.class);
@@ -33,6 +36,16 @@ public class ManageLocalPost extends Service {
             List<Post> postList = postDao.queryForAll();
             if (!postList.isEmpty()) {
                 totalPost = postList.size();
+                if (totalPost > maxRowLength) {
+                    //delete the rows
+                }
+                for (Post post : postList) {
+                    int dateDiff = (int) (calendar.getTimeInMillis() - getPostLocalId(post)) / (1000 * 60 * 60 * 24);
+                    if (dateDiff > 3) {
+                        postDao.delete(post);
+                    }
+                }
+
             }
 
         } catch (java.sql.SQLException sqlE) {
