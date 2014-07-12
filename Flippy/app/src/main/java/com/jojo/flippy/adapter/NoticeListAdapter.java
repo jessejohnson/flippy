@@ -3,7 +3,6 @@ package com.jojo.flippy.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +22,13 @@ import com.koushikdutta.ion.Ion;
 import java.util.ArrayList;
 
 
-/**
- * Created by odette on 6/11/14.
- */
 public class NoticeListAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<Notice> noticeArrayList = new ArrayList<Notice>();
 
     public NoticeListAdapter(Activity a, ArrayList<Notice> list) {
-        this.context = (Context) a;
+        this.context = a;
         this.noticeArrayList = list;
     }
 
@@ -87,7 +83,7 @@ public class NoticeListAdapter extends BaseAdapter {
         });
 
         //if a notice came without an image or with image
-        if (String.valueOf(noticeArrayList.get(i).getImageUrl()) == "") {
+        if (String.valueOf(noticeArrayList.get(i).getImageUrl()).equals("") && !String.valueOf(noticeArrayList.get(i).getImageUrl()).contains("htttp")) {
             image.setVisibility(View.GONE);
         } else {
             image.setVisibility(View.VISIBLE);
@@ -95,15 +91,6 @@ public class NoticeListAdapter extends BaseAdapter {
                     .animateIn(R.anim.fade_in)
                     .load(String.valueOf(noticeArrayList.get(i).getImageUrl()));
         }
-        Log.e("Image Link",String.valueOf(noticeArrayList.get(i).getImageUrl()));
-        Log.e("Date",String.valueOf(noticeArrayList.get(i).getDateInfo()));
-        Log.e("Content",String.valueOf(noticeArrayList.get(i).getContent()));
-        Log.e("Title",String.valueOf(noticeArrayList.get(i).getTitle()));
-        Log.e("Subtitle",String.valueOf(noticeArrayList.get(i).getSubtitle()));
-        Log.e("Id",String.valueOf(noticeArrayList.get(i).getId()));
-        Log.e("Creator",String.valueOf(noticeArrayList.get(i).getCreatorId()));
-        Log.e("Channel",String.valueOf(noticeArrayList.get(i).getChannelId()));
-
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
