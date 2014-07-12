@@ -83,7 +83,7 @@ public class NoticeListAdapter extends BaseAdapter {
         });
 
         //if a notice came without an image or with image
-        if (String.valueOf(noticeArrayList.get(i).getImageUrl()).equals("") && !String.valueOf(noticeArrayList.get(i).getImageUrl()).contains("htttp")) {
+        if (String.valueOf(noticeArrayList.get(i).getImageUrl()).equalsIgnoreCase("flip")) {
             image.setVisibility(View.GONE);
         } else {
             image.setVisibility(View.VISIBLE);

@@ -42,14 +42,14 @@ public class Post {
     public String local_id;
 
 
-    public Post(String notice_id, String notice_title,String notice_body,String notice_image,String start_date,String author_email,String author_id,String author_first_name,String author_last_name,String channel_id,String local_id) {
+    public Post(String notice_id, String notice_title, String notice_body, String notice_image, String start_date, String author_email, String author_id, String author_first_name, String author_last_name, String channel_id, String local_id) {
         this.notice_id = notice_id;
         this.notice_title = notice_title;
         this.notice_body = notice_body;
         this.notice_image = notice_image;
         this.start_date = start_date;
         this.author_email = author_email;
-        this.author_id =author_id;
+        this.author_id = author_id;
         this.author_first_name = author_first_name;
         this.author_last_name = author_last_name;
         this.channel_id = channel_id;
@@ -61,6 +61,6 @@ public class Post {
 
     @Override
     public String toString() {
-        return this.notice_title + " " + this.notice_id;
+        return this.notice_title + " " + this.notice_id + this.notice_image;
     }
 }
