@@ -145,16 +145,29 @@ public class RegisterActivity extends Activity {
                                         regFirstName = result.get("first_name").getAsString();
                                         regUserEmail = result.get("email").getAsString();
                                         regLastName = result.get("last_name").getAsString();
-                                        if(!createUser()){
-                                            Crouton.makeText(RegisterActivity.this, "sorry user registration  failed", Style.ALERT)
-                                                    .show();
+                                        try {
+                                            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(RegisterActivity.this,
+                                                    DatabaseHelper.class);
+                                            userDao = databaseHelper.getUserDao();
+                                            List<User> userList = userDao.queryForAll();
+                                            if (!userList.isEmpty()) {
+                                                userDao.delete(userList);
+                                            }
+                                            User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName);
+                                            userDao.create(user);
+                                        } catch (java.sql.SQLException sqlE) {
+                                            sqlE.printStackTrace();
+                                            ToastMessages.showToastLong(RegisterActivity.this, "Sorry, Unable to create user account");
+                                            Log.e("User creation error", sqlE.toString());
                                             return;
                                         }
+
                                         intent.putExtra("regUserEmail", regUserEmail);
                                         intent.putExtra("regUserAuthToken", regUserAuthToken);
                                         intent.putExtra("regUserID", regUserID);
                                         intent.setClass(RegisterActivity.this, SelectCommunityActivity.class);
                                         startActivity(intent);
+
                                     }
                                 }
 
@@ -166,30 +179,5 @@ public class RegisterActivity extends Activity {
             }
         });
 
-    }
-
-    private boolean createUser() {
-        boolean created;
-        try {
-            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(RegisterActivity.this,
-                    DatabaseHelper.class);
-            userDao = databaseHelper.getUserDao();
-            List<User> userList = userDao.queryForAll();
-            if (!userList.isEmpty()) {
-                userDao.delete(userList);
-            }
-            User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName);
-            userDao.create(user);
-            created = true;
-
-        } catch (java.sql.SQLException sqlE) {
-            sqlE.printStackTrace();
-            ToastMessages.showToastLong(RegisterActivity.this, "Sorry, Unable to create user account");
-            Log.e("User creation error",sqlE.toString());
-            created = false;
-
-        }
-
-        return created;
     }
 }

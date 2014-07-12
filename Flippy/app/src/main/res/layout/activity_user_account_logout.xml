@@ -25,7 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_twenty"
-        android:background="@color/flippy_background_color"
         android:paddingTop="@dimen/margin_ten"
         android:paddingBottom="@dimen/margin_ten"
         android:paddingLeft="@dimen/margin_twenty"

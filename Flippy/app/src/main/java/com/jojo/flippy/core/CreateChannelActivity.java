@@ -98,7 +98,9 @@ public class CreateChannelActivity extends ActionBarActivity {
                 }
                 imagePath.getBytes();
                 path = imagePath.toString();
-                Bitmap bm = BitmapFactory.decodeFile(imagePath);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
+                Bitmap bm = BitmapFactory.decodeFile(imagePath, options);
                 imageViewCreateChannel.setImageBitmap(bm);
 
             } else {
@@ -158,10 +160,16 @@ public class CreateChannelActivity extends ActionBarActivity {
             ToastMessages.showToastLong(CreateChannelActivity.this, "Image is required");
             return;
         }
-        buttonCreateNewChannel.setText("Please wait ...");
         buttonCreateNewChannel.setEnabled(false);
         Ion.with(CreateChannelActivity.this, Flippy.channelsURL)
                 .uploadProgressBar(progressBar)
+                .uploadProgressHandler(new ProgressCallback() {
+                    @Override
+                    public void onProgress(int downloaded, int total) {
+                        progressBar.setProgress(downloaded);
+                        buttonCreateNewChannel.setText("Please wait ... " + downloaded);
+                    }
+                })
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setMultipartParameter("community_id", CommunityCenterActivity.userCommunityId)
                 .setMultipartParameter("bio", channelBio)
@@ -170,6 +178,7 @@ public class CreateChannelActivity extends ActionBarActivity {
                 .setMultipartParameter("is_public", is_public)
                 .setMultipartFile("image", new File(selectedImagePath))
                 .asJsonObject()
+
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
@@ -182,7 +191,8 @@ public class CreateChannelActivity extends ActionBarActivity {
                             return;
                         }
                         if (result != null && !result.has("details")) {
-                            ToastMessages.showToastLong(CreateChannelActivity.this, "Channel " + channelName + "Created successfully");
+                            ToastMessages.showToastLong(CreateChannelActivity.this, "Channel " + channelName + " Created successfully");
+                            goToMainActivity();
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(CreateChannelActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
@@ -191,5 +201,11 @@ public class CreateChannelActivity extends ActionBarActivity {
                     }
 
                 });
+    }
+
+    private void goToMainActivity() {
+        Intent intent = getIntent();
+        intent.setClass(CreateChannelActivity.this, CommunityCenterActivity.class);
+        startActivity(intent);
     }
 }

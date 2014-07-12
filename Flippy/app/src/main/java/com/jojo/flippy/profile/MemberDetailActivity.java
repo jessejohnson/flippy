@@ -1,8 +1,6 @@
 package com.jojo.flippy.profile;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -26,10 +24,11 @@ import com.koushikdutta.ion.Ion;
 public class MemberDetailActivity extends ActionBarActivity {
 
     private String memberId;
-    private String memberFirstName;
+    private String memberEmailReceived;
     private String memberFirstNameNew;
     private String memberLastNameNew;
     private String memberFullName;
+    private String memberFullNameReceived;
     private String memberEmail;
     private String memberCommunity;
     private String memberCommunityName;
@@ -63,8 +62,9 @@ public class MemberDetailActivity extends ActionBarActivity {
         intent = getIntent();
         memberId = intent.getStringExtra("memberId");
         requestCode = intent.getIntExtra("requestCode", 0);
-        memberFirstName = intent.getStringExtra("memberFirstName");
-        actionBar.setSubtitle(memberFirstName + "'s profile");
+        memberEmailReceived = intent.getStringExtra("memberEmail");
+        memberFullNameReceived = intent.getStringExtra("memberFullName");
+        actionBar.setSubtitle(memberEmailReceived + "'s profile");
         actionBar.setDisplayHomeAsUpEnabled(true);
 
 
@@ -225,8 +225,9 @@ public class MemberDetailActivity extends ActionBarActivity {
         textViewUserCommunityName.setVisibility(View.VISIBLE);
         imageViewMemberAnotherUserProfilePic.setVisibility(View.VISIBLE);
         Ion.with(imageViewMemberAnotherUserProfilePic)
-                .placeholder(R.color.flippy_white)
+                .placeholder(R.drawable.default_profile_picture)
                 .animateIn(R.anim.fade_in)
+                .error(R.drawable.default_profile_picture)
                 .load(avatar);
 
     }

@@ -20,16 +20,19 @@ import java.util.List;
  */
 public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> {
     Context context;
+    boolean isManage;
 
     public ChannelMemberAdapter(Context context, int resourceId,
-                                List<ProfileItem> items) {
+                                List<ProfileItem> items,boolean isManage) {
         super(context, resourceId, items);
         this.context = context;
+        this.isManage = isManage;
+
     }
 
     /*private view holder class*/
     private class ViewHolder {
-        ImageView imageView;
+        ImageView imageView,imageViewMemberAdded;
         TextView textViewChannelMemberFirstName;
         TextView getTextViewChannelMemberSecondName;
         TextView textViewMemberId;
@@ -45,10 +48,11 @@ public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.channel_members_listview, null);
             holder = new ViewHolder();
-            holder.textViewChannelMemberFirstName = (TextView) convertView.findViewById(R.id.textViewMemberFirstName);
+            holder.textViewChannelMemberFirstName = (TextView) convertView.findViewById(R.id.textViewMemberEmail);
             holder.textViewMemberId = (TextView) convertView.findViewById(R.id.textViewMemberId);
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageViewMember);
-            holder.getTextViewChannelMemberSecondName = (TextView) convertView.findViewById(R.id.textViewMemberLastName);
+            holder.imageViewMemberAdded = (ImageView) convertView.findViewById(R.id.imageViewMemberAdded);
+            holder.getTextViewChannelMemberSecondName = (TextView) convertView.findViewById(R.id.textViewMemberFullName);
             holder.linearLayoutChannelMember = (LinearLayout) convertView.findViewById(R.id.linearLayoutChannelMember);
             convertView.setTag(holder);
         } else
@@ -57,12 +61,17 @@ public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> {
         if (position % 2 ==0) {
           holder.linearLayoutChannelMember.setBackgroundResource(R.drawable.flippy_background_light_dark);
         }
+        if(!isManage){
+           holder.imageViewMemberAdded.setVisibility(View.GONE);
+        }
         holder.textViewChannelMemberFirstName.setText(rowItem.getProfileChannelName());
         holder.textViewMemberId.setText(rowItem.getTextViewMemberId());
         holder.getTextViewChannelMemberSecondName.setText(rowItem.getProfileChannelTotalNumber());
 
         Ion.with(holder.imageView)
                 .placeholder(R.drawable.default_profile_picture)
+                .error(R.drawable.default_profile_picture)
+                .animateIn(R.anim.fade_in)
                 .load(String.valueOf(rowItem.getProfileChannelItem()));
 
 

@@ -14,6 +14,7 @@ import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.InternetConnectionDetector;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -68,7 +69,10 @@ public class DataService extends Service {
             sqlE.printStackTrace();
 
         }
+        InternetConnectionDetector internetConnectionDetector = new InternetConnectionDetector(getApplicationContext());
+        if(internetConnectionDetector.isConnectingToInternet()){
 
+        }
         Timer dataTimer = new Timer();
         dataTimer.schedule(new TimerTask() {
             @Override
@@ -127,6 +131,8 @@ public class DataService extends Service {
         return START_STICKY;
 
     };
+
+   void makeApiCall(){}
 
     @Override
     public void onDestroy() {

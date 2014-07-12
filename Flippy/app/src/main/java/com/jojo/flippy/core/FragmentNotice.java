@@ -68,6 +68,9 @@ public class FragmentNotice extends Fragment {
     private Dao<Post, Integer> postDao;
     private InternetConnectionDetector internetConnectionDetector;
     public static IntentFilter postIntentFilter;
+    private View view;
+
+    private TextView textViewNoNotice;
 
     public FragmentNotice() {
 
@@ -77,12 +80,14 @@ public class FragmentNotice extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.fragment_notice, container,
+        view = inflater.inflate(R.layout.fragment_notice, container,
                 false);
 
 
         listAdapter = new NoticeListAdapter(this.getActivity(), noticeFeed);
         noticeList = (ListView) view.findViewById(R.id.listViewNoticeList);
+        textViewNoNotice = (TextView)view.findViewById(R.id.textViewNoNotice);
+        textViewNoNotice.setVisibility(View.GONE);
         progressBarCommunityCenterLoader = (ProgressBar) view.findViewById(R.id.progressBarLoadNoticeData);
         noticeList.setAdapter(listAdapter);
 
@@ -94,7 +99,7 @@ public class FragmentNotice extends Fragment {
             getActivity().registerReceiver(postReceiver, postIntentFilter);
 
         } else {
-            Crouton.makeText(getActivity(), "You are in offline mode", Style.ALERT)
+            Crouton.makeText(getActivity(), "You are currently offline", Style.ALERT)
                     .show();
         }
 
@@ -159,6 +164,10 @@ public class FragmentNotice extends Fragment {
 
     private void updateListAdapter() {
         listAdapter.notifyDataSetChanged();
+        if(listAdapter.isEmpty()){
+            textViewNoNotice.setVisibility(View.VISIBLE);
+            textViewNoNotice.setText("Currently no notice");
+        }
     }
 
 
@@ -170,6 +179,7 @@ public class FragmentNotice extends Fragment {
             postDao = databaseHelper.getPostDao();
             Post post = new Post(notice_id, notice_title, notice_body, notice_image, start_date, author_email, author_id, author_first_name, author_last_name, channel_id);
             postDao.create(post);
+            loadAdapterFromDatabase(view);
 
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();

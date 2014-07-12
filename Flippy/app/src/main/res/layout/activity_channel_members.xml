@@ -24,4 +24,21 @@
         gpb:colors="@array/flippy_rainbow"
         gpb:type="folding_circles" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:layout_centerInParent="true"
+        android:textColor="@color/flippy_orange"
+        android:textStyle="normal"
+        android:shadowColor="@color/flippy_orange"
+        android:shadowDy="1"
+        android:shadowDx="1"
+        android:shadowRadius="1"
+        android:background="@android:color/transparent"
+        android:id="@+id/textViewNoChannelMember"
+        android:layout_alignBottom="@+id/progressBarMemberChannelLoader"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

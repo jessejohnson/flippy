@@ -11,13 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_five"
-        android:layout_marginBottom="@dimen/margin_fifty"
+        android:layout_marginBottom="@dimen/margin_eighty"
         android:layout_weight="1"
         android:choiceMode="singleChoice"
         android:divider="@null"
         android:dividerHeight="@dimen/margin_five"
         android:footerDividersEnabled="true"
         android:headerDividersEnabled="true"
+        android:paddingBottom="@dimen/margin_five"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="none" />
 
@@ -56,5 +57,21 @@
         android:layout_gravity="center"
         gpb:colors="@array/flippy_rainbow"
         gpb:type="folding_circles" />
+
+    <TextView
+        android:id="@+id/textViewEmptyChannel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:shadowColor="@color/flippy_orange"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:background="@android:color/transparent"
+        android:shadowRadius="1"
+        android:text="@string/channel_empty"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/flippy_orange"
+        android:textStyle="bold" />
 
 </RelativeLayout>

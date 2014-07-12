@@ -42,7 +42,7 @@ public class UserAccountLogout extends ActionBarActivity {
 
     public void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(UserAccountLogout.this);
-        builder.setMessage("This action is irreversible ?");
+        builder.setMessage("Are you sure you want to logout ?");
         builder.setIcon(R.drawable.ic_action_warning);
         builder.setTitle("Flippy notification");
         builder.setPositiveButton("Yes, continue", new DialogInterface.OnClickListener() {

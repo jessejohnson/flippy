@@ -99,6 +99,11 @@ public class ChannelDetailActivity extends ActionBarActivity {
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarLoadChannelDetail.setVisibility(View.GONE);
                         if (result != null) {
+                            if (result.has("detail")) {
+                                ToastMessages.showToastLong(ChannelDetailActivity.this, "Sorry, channel has been removed");
+                                finish();
+                                return;
+                            }
                             name = result.get("name").getAsString();
                             id = result.get("id").getAsString();
                             JsonObject creator = result.getAsJsonObject("creator");
@@ -174,7 +179,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 .animateIn(R.anim.fade_in)
                 .load(image_url);
         Ion.with(imageViewCreator)
-                .placeholder(R.color.flippy_light_header)
+                .placeholder(R.drawable.default_profile_picture)
                 .animateIn(R.anim.fade_in)
                 .load(creatorAvatarURL);
         textViewChannelNameDetail.setText(channelName + " @ " + communityName);
@@ -215,7 +220,9 @@ public class ChannelDetailActivity extends ActionBarActivity {
                                 ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("results").getAsString());
                             }
                             if (result.has("detail")) {
-                                ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("detail").getAsString());
+                                ToastMessages.showToastLong(ChannelDetailActivity.this, "Sorry, channel has been removed");
+                                finish();
+                                return;
                             }
 
                         }
