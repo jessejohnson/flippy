@@ -24,9 +24,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-/**
- * Created by bright on 7/8/14.
- */
 public class DataService extends Service {
     private Dao<Post, Integer> postDao;
     private ArrayList<String> savedPostIds;
@@ -53,8 +50,7 @@ public class DataService extends Service {
             postDao = databaseHelper.getPostDao();
             List<Post> postList = postDao.queryForAll();
             if (!postList.isEmpty()) {
-                for (int i = 0; i < postList.size(); i++) {
-                    Post post = postList.get(i);
+                for (Post post : postList) {
                     savedPostIds.add(post.notice_id);
                 }
             }

@@ -328,7 +328,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 .load(image_link);
         Ion.with(imageViewNoticeCreatorImage)
                 .animateIn(R.anim.fade_in)
-                .placeholder(R.drawable.channel_bg)
+                .placeholder(R.drawable.default_profile_picture)
                 .error(R.color.flippy_orange)
                 .load(author_profile);
         textViewAuthorEmailAddress.setText(author_email);

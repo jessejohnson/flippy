@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="0dp" />
+            <gradient android:endColor="@color/flippy_orange_light" android:startColor="@color/flippy_orange_light" />
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="0dp" />
+            <gradient android:endColor="@color/flippy_orange_light" android:startColor="@color/flippy_orange_light" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="0dp" />
+            <gradient android:endColor="@color/flippy_orange" android:startColor="@color/flippy_orange" />
+        </shape>
+    </item>
+</selector>

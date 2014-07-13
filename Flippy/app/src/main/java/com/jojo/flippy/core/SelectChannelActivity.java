@@ -42,6 +42,7 @@ public class SelectChannelActivity extends ActionBarActivity {
     private String channelId;
     private String channelName;
     private String subTitle = "a step to more to go";
+    private boolean isPromoteUser;
 
 
     @Override
@@ -51,6 +52,7 @@ public class SelectChannelActivity extends ActionBarActivity {
 
 
         intent = getIntent();
+        isPromoteUser = intent.getBooleanExtra("isPromoteUser", false);
         String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
         ActionBar actionBar = getActionBar();
         actionBar.setSubtitle(subTitle);
@@ -123,6 +125,9 @@ public class SelectChannelActivity extends ActionBarActivity {
                 TextView textViewMemberFirstName = (TextView) view.findViewById(R.id.textViewMemberEmail);
                 String channelId = textViewMemberLastName.getText().toString();
                 String channelName = textViewMemberFirstName.getText().toString();
+                if (isPromoteUser) {
+
+                }
                 intent.setClass(SelectChannelActivity.this, CreateNoticeActivity.class);
                 intent.putExtra("channelId", channelId);
                 intent.putExtra("channelName", channelName);

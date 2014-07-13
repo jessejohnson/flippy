@@ -15,11 +15,15 @@ import android.widget.TextView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.core.SelectChannelActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class MemberDetailActivity extends ActionBarActivity {
 
@@ -49,6 +53,7 @@ public class MemberDetailActivity extends ActionBarActivity {
     private int requestCode = 0;
     private TextView textViewUserTotalNumberOfCircles;
     private String TotalChannels;
+    private int PROMOTE_USER = 1;
 
 
     @Override
@@ -84,9 +89,10 @@ public class MemberDetailActivity extends ActionBarActivity {
         buttonAddAsAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.putExtra("memberEmail", memberEmail);
-                intent.setClass(MemberDetailActivity.this, SelectChannelActivity.class);
-                startActivity(intent);
+                Intent intentChooseChannel = new Intent(MemberDetailActivity.this, SelectChannelActivity.class);
+                intentChooseChannel.putExtra("userId", CommunityCenterActivity.regUserID);
+                intentChooseChannel.putExtra("isPromoteUser", true);
+                startActivityForResult(intentChooseChannel, PROMOTE_USER);
             }
         });
         imageViewMemberAnotherUserProfilePic = (ImageView) findViewById(R.id.imageViewMemberAnotherUserProfilePic);
@@ -230,6 +236,40 @@ public class MemberDetailActivity extends ActionBarActivity {
                 .error(R.drawable.default_profile_picture)
                 .load(avatar);
 
+    }
+
+    private void promoteUser(String channelId) {
+        String URL = Flippy.channels + memberId + "/promote_user/";
+        Ion.with(MemberDetailActivity.this)
+                .load(URL)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (result != null) {
+                            if (result.has("detail")) {
+                                Crouton.makeText(MemberDetailActivity.this, result.get("detail").toString(), Style.ALERT);
+                                return;
+                            }
+                            Crouton.makeText(MemberDetailActivity.this, result.get("results").toString(), Style.CONFIRM);
+                            return;
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(MemberDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            return;
+                        }
+
+                    }
+                });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+
+        }
     }
 }
 

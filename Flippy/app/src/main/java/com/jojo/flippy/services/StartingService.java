@@ -25,9 +25,15 @@ public class StartingService extends Service {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         final String url = Flippy.allPostURL;
+        Log.e("Intent started", startId + "");
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
