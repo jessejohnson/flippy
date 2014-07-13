@@ -3,22 +3,16 @@ package com.jojo.flippy.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.persistence.DatabaseHelper;
-import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.persistence.User;
-import com.jojo.flippy.util.Flippy;
 
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 
 public class SplashScreenActivity extends ActionBarActivity {
@@ -26,8 +20,8 @@ public class SplashScreenActivity extends ActionBarActivity {
     private User currentUser;
     private Intent intent;
     private Dao<User, Integer> userDao;
-    private Dao<Post, Integer> postDao;
     private boolean noCommunity = false;
+    private int DELAY = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +35,9 @@ public class SplashScreenActivity extends ActionBarActivity {
                     DatabaseHelper.class);
             userDao = databaseHelper.getUserDao();
             List<User> userList = userDao.queryForAll();
-            if (userList.isEmpty()) {
-                currentUser = null;
-            } else {
+            if (!userList.isEmpty()) {
                 currentUser = userList.get(0);
-                if (currentUser.community_id == null || currentUser.community_id == "") {
+                if (currentUser.community_id == null || currentUser.community_id.equals("")) {
                     noCommunity = true;
                 }
             }
@@ -53,8 +45,6 @@ public class SplashScreenActivity extends ActionBarActivity {
             sqlE.printStackTrace();
         }
 
-
-        int DELAY = 2000;
 
         timer.schedule(new TimerTask() {
             public void run() {
@@ -65,9 +55,9 @@ public class SplashScreenActivity extends ActionBarActivity {
                 }
                 if (noCommunity) {
                     intent.setClass(SplashScreenActivity.this, SelectCommunityActivity.class);
-                    intent.putExtra("regUserEmail",currentUser.user_email);
-                    intent.putExtra("regUserAuthToken",currentUser.user_auth);
-                    intent.putExtra("regUserID",currentUser.user_id);
+                    intent.putExtra("regUserEmail", currentUser.user_email);
+                    intent.putExtra("regUserAuthToken", currentUser.user_auth);
+                    intent.putExtra("regUserID", currentUser.user_id);
                     startActivity(intent);
                     return;
                 }
@@ -87,6 +77,12 @@ public class SplashScreenActivity extends ActionBarActivity {
     public void onBackPressed() {
         super.onBackPressed();
         timer.cancel();
+        finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         finish();
     }
 }
