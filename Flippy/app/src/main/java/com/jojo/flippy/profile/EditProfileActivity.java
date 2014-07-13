@@ -303,7 +303,7 @@ public class EditProfileActivity extends ActionBarActivity {
     }
 
     private void updateUserStringDetails(final String email, final String firstName, final String lastName, final String gender) {
-        String url = Flippy.userBasicURL;
+        String url = Flippy.users + "me/";
         Log.e("Url", url);
         StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
                 new Response.Listener<String>() {

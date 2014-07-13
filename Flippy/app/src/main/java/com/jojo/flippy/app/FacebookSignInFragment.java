@@ -1,14 +1,16 @@
 package com.jojo.flippy.app;
 
-/**
- * Created by bright on 6/9/14.
- */
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.Signature;
-import java.util.Arrays;
-import java.util.List;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -26,24 +28,12 @@ import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Base64;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import java.util.Arrays;
+import java.util.List;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 @SuppressLint("NewApi")
-public class FacebookSigninFragment extends Fragment {
+public class FacebookSignInFragment extends Fragment {
     private static final String TAG = "FacebookLogin";
     Context mContext;
     LoginButton mLoginBtn;
@@ -175,7 +165,7 @@ public class FacebookSigninFragment extends Fragment {
                                 json.addProperty("gender",gender);
 
                                 Ion.with(mContext)
-                                        .load(Flippy.regURL)
+                                        .load(Flippy.users + "signup/")
                                         .setJsonObjectBody(json)
                                         .asJsonObject()
                                         .setCallback(new FutureCallback<JsonObject>() {

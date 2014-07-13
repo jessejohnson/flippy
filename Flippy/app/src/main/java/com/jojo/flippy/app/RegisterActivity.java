@@ -2,7 +2,6 @@ package com.jojo.flippy.app;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
@@ -25,17 +25,15 @@ import com.koushikdutta.ion.Ion;
 
 import java.util.List;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
-
 
 public class RegisterActivity extends Activity {
     private EditText editTextRegisterEmail, editTextFirstName, editTextLastName, editTextPassword;
     private TextView textViewSignIn;
     private CheckBox checkBoxTerms;
-    private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName, regNumber;
+    private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName;
     private Intent intent;
     private Dao<User, Integer> userDao;
+    private SuperToast superToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +41,14 @@ public class RegisterActivity extends Activity {
         setContentView(R.layout.activity_register);
 
         ActionBar actionbar = getActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setSubtitle(getString(R.string.register_title_few_things));
+        if (actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setSubtitle(getString(R.string.register_title_few_things));
+        }
+
 
         intent = new Intent();
+        superToast = new SuperToast(RegisterActivity.this);
 
         editTextRegisterEmail = (EditText) findViewById(R.id.registerEmailEditText);
         editTextFirstName = (EditText) findViewById(R.id.editTextRegisterFirstName);
@@ -122,7 +124,7 @@ public class RegisterActivity extends Activity {
                     json.addProperty("password", password);
 
                     Ion.with(RegisterActivity.this)
-                            .load(Flippy.regURL)
+                            .load(Flippy.users + "signup/")
                             .setJsonObjectBody(json)
                             .asJsonObject()
                             .setCallback(new FutureCallback<JsonObject>() {
@@ -136,8 +138,12 @@ public class RegisterActivity extends Activity {
                                     } else {
                                         if (result.has("detail")) {
                                             editTextRegisterEmail.setError("email already in use");
-                                            Crouton.makeText(RegisterActivity.this, "email already in use", Style.ALERT)
-                                                    .show();
+                                            superToast.setAnimations(SuperToast.Animations.FLYIN);
+                                            superToast.setDuration(SuperToast.Duration.LONG);
+                                            superToast.setBackground(SuperToast.Background.RED);
+                                            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                                            superToast.setText("email already in use");
+                                            superToast.show();
                                             return;
                                         }
                                         regUserAuthToken = result.get("auth_token").getAsString();
@@ -157,8 +163,13 @@ public class RegisterActivity extends Activity {
                                             userDao.create(user);
                                         } catch (java.sql.SQLException sqlE) {
                                             sqlE.printStackTrace();
-                                            ToastMessages.showToastLong(RegisterActivity.this, "Sorry, Unable to create user account");
-                                            Log.e("User creation error", sqlE.toString());
+                                            superToast.setAnimations(SuperToast.Animations.FLYIN);
+                                            superToast.setDuration(SuperToast.Duration.LONG);
+                                            superToast.setBackground(SuperToast.Background.RED);
+                                            superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+                                            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                                            superToast.setText("sorry, user creation failed");
+                                            superToast.show();
                                             return;
                                         }
 
@@ -180,4 +191,17 @@ public class RegisterActivity extends Activity {
         });
 
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        finish();
+    }
+
 }
