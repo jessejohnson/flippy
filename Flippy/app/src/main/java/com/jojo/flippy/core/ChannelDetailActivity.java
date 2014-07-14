@@ -2,8 +2,8 @@ package com.jojo.flippy.core;
 
 import android.app.ActionBar;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,10 +22,9 @@ import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import java.util.List;
-
 
 public class ChannelDetailActivity extends ActionBarActivity {
+    String channelCommunityDetail = Flippy.channelsInCommunityURL;
     private Intent intent;
     private String name;
     private String id;
@@ -39,8 +38,6 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private String communityName;
     private String channelId;
     private String channelName;
-    String channelCommunityDetail = Flippy.channelsInCommunityURL;
-
     private ImageView imageViewChannelLarge, imageViewCreator;
     private TextView textViewChannelNameDetail;
     private TextView textViewChannelBio;
@@ -61,12 +58,14 @@ public class ChannelDetailActivity extends ActionBarActivity {
         intent = getIntent();
         channelName = intent.getStringExtra("channelName");
         channelId = intent.getStringExtra("channelId");
-        String channelDetailsURL = Flippy.channelDetailURL + channelId + "/";
-        channelDetailSubscribeURL = Flippy.channelSubscribeURL + channelId;
+        String channelDetailsURL = Flippy.channels + channelId + "/";
+        channelDetailSubscribeURL = Flippy.channels + channelId;
 
 
         ActionBar actionBar = getActionBar();
-        actionBar.setSubtitle(channelName);
+        if (actionBar != null) {
+            actionBar.setSubtitle(channelName);
+        }
         actionBar.setDisplayHomeAsUpEnabled(true);
 
 
@@ -90,7 +89,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         textViewChannelCreatorEmail.setVisibility(View.GONE);
         imageViewCreator.setVisibility(View.GONE);
 
-        listViewChannelPost = (ListView)findViewById(R.id.listViewChannelPost);
+        listViewChannelPost = (ListView) findViewById(R.id.listViewChannelPost);
 
         textViewChannelBio.setText("");
         textViewChannelNameDetail.setText(channelName);
@@ -205,7 +204,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
     }
 
     private void setSubscribe() {
-        if (CommunityCenterActivity.userAuthToken == "") {
+        if (CommunityCenterActivity.userAuthToken.equals("")) {
             ToastMessages.showToastLong(ChannelDetailActivity.this, "Sorry, request cannot be made");
             return;
         }
@@ -235,12 +234,11 @@ public class ChannelDetailActivity extends ActionBarActivity {
                         }
                     }
 
-                    ;
                 });
     }
 
     private void setUnSubscribe() {
-        if (CommunityCenterActivity.userAuthToken == "") {
+        if (CommunityCenterActivity.userAuthToken.equals("")) {
             ToastMessages.showToastLong(ChannelDetailActivity.this, "Sorry, request cannot be made");
             return;
         }

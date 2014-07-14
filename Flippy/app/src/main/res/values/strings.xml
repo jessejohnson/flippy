@@ -61,6 +61,7 @@
 
     <!-- The community center's strings -->
     <string name="title_activity_community_center">Community Center</string>
+    <string name="community_center_old_notice">load old notices</string>
 
     <!-- Channel list view strings -->
     <string name="default_channel_name">Channel name</string>

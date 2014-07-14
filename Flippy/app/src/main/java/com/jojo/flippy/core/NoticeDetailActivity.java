@@ -4,8 +4,8 @@ import android.app.ActionBar;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +22,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonObject;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.profile.ImagePreviewActivity;
-import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.services.FlippyReceiver;
+import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -60,6 +60,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private ImageView imageViewNoticeImageDetail;
     private ImageView imageViewNoticeCreatorImage;
     private ImageView imageViewStarDetail;
+    private ImageView imageViewDeletePost;
 
 
     private String image_link;
@@ -113,6 +114,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
         textViewNoticeTextDetail.setText(noticeBody);
         textViewNoticeSubtitleDetail.setText(noticeSubtitle);
         textViewNoticeSubtitleChannelName.setText("");
+        imageViewDeletePost = (ImageView) findViewById(R.id.imageViewDeletePost);
+        imageViewDeletePost.setEnabled(false);
 
 
         //place holder texts
@@ -203,8 +206,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
                                 if (result != null) {
-                                    if(result.has("detail")){
-                                       Crouton.makeText(NoticeDetailActivity.this,noPost,Style.ALERT);
+                                    if (result.has("detail")) {
+                                        Crouton.makeText(NoticeDetailActivity.this, noPost, Style.ALERT);
                                         return;
                                     }
                                     ToastMessages.showToastLong(NoticeDetailActivity.this, result.get("results").getAsString());
@@ -325,11 +328,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 .load(image_link);
         Ion.with(imageViewNoticeCreatorImage)
                 .animateIn(R.anim.fade_in)
-                .placeholder(R.drawable.channel_bg)
+                .placeholder(R.drawable.default_profile_picture)
                 .error(R.color.flippy_orange)
                 .load(author_profile);
         textViewAuthorEmailAddress.setText(author_email);
         textViewNoticeTimeStamp.setText(time_stamp);
+        if (CommunityCenterActivity.regUserEmail.equalsIgnoreCase(author_email)) {
+            imageViewDeletePost.setEnabled(true);
+        }
 
     }
 
@@ -342,8 +348,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         if (result != null) {
-                            if(result.has("detail")){
-                                Crouton.makeText(NoticeDetailActivity.this,noPost,Style.ALERT);
+                            if (result.has("detail")) {
+                                Crouton.makeText(NoticeDetailActivity.this, noPost, Style.ALERT);
                                 return;
                             }
                             String item = result.get("results").getAsString();
@@ -368,8 +374,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         if (result != null) {
-                            if(result.has("detail")){
-                                Crouton.makeText(NoticeDetailActivity.this,noPost,Style.ALERT);
+                            if (result.has("detail")) {
+                                Crouton.makeText(NoticeDetailActivity.this, noPost, Style.ALERT);
                                 return;
                             }
                             JsonObject item = result.getAsJsonObject("results");
@@ -432,15 +438,15 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private void getChannelName(String id) {
         //load the channel name using the channel id
         Ion.with(NoticeDetailActivity.this)
-                .load(Flippy.channelDetailURL + id + "/")
+                .load(Flippy.channels + id + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception ex, JsonObject nameResult) {
 
                         if (nameResult != null) {
-                            if(nameResult.has("detail")){
-                                Crouton.makeText(NoticeDetailActivity.this,noPost,Style.ALERT);
+                            if (nameResult.has("detail")) {
+                                Crouton.makeText(NoticeDetailActivity.this, noPost, Style.ALERT);
                                 return;
                             }
                             textViewNoticeSubtitleChannelName.setVisibility(View.VISIBLE);

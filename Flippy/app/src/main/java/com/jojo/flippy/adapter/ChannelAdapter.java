@@ -1,8 +1,5 @@
 package com.jojo.flippy.adapter;
 
-/**
- * Created by bright on 6/11/14.
- */
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,8 +23,8 @@ import java.util.List;
 public class ChannelAdapter extends ArrayAdapter<Channel> {
 
     Context context;
+    String channelDetailSubscribeURL = Flippy.channels;
     private boolean isUserChannel;
-    String channelDetailSubscribeURL = Flippy.channelSubscribeURL;
     private ViewHolder holder;
 
 
@@ -36,16 +33,6 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         super(context, resourceId, items);
         this.context = context;
         this.isUserChannel = isUserChannels;
-    }
-
-    /*private view holder class*/
-    private class ViewHolder {
-        ImageView imageView, imageViewSubscribe, imageViewUnSubscribe;
-        TextView textViewChannelName;
-        TextView textViewNumberOfMembers;
-        TextView textViewStatus;
-        TextView textViewChannelId;
-
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -101,7 +88,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
     }
 
     private void setSubscribe(String channelId) {
-        if (CommunityCenterActivity.userAuthToken == "") {
+        if (CommunityCenterActivity.userAuthToken.equals("")) {
             ToastMessages.showToastLong(context, "Sorry, request cannot be made");
             return;
         }
@@ -129,13 +116,11 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                             ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
                         }
                     }
-
-                    ;
                 });
     }
 
     private void setUnSubscribe(String channelId) {
-        if (CommunityCenterActivity.userAuthToken == "") {
+        if (CommunityCenterActivity.userAuthToken.equals("")) {
             ToastMessages.showToastLong(context, "Sorry, request cannot be made");
             return;
         }
@@ -161,9 +146,17 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                             ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
                         }
                     }
-
-                    ;
                 });
+    }
+
+    /*private view holder class*/
+    private class ViewHolder {
+        ImageView imageView, imageViewSubscribe, imageViewUnSubscribe;
+        TextView textViewChannelName;
+        TextView textViewNumberOfMembers;
+        TextView textViewStatus;
+        TextView textViewChannelId;
+
     }
 
 

@@ -1,14 +1,15 @@
 package com.jojo.flippy.core;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,14 +34,12 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class CreateChannelActivity extends ActionBarActivity {
+    private static final int SELECT_PICTURE = 1;
     private ImageView imageViewCreateChannel;
     private EditText editTextNewChannelName;
     private EditText editTextNewChannelOneLiner;
     private CheckBox checkBoxChannelIsPublic;
     private Button buttonCreateNewChannel;
-
-
-    private static final int SELECT_PICTURE = 1;
     private String selectedImagePath;
     private String imagePath;
     private String fileManagerString;
@@ -48,6 +47,7 @@ public class CreateChannelActivity extends ActionBarActivity {
     private Cursor cursor;
     private String path;
     private ProgressBar progressBar;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +64,7 @@ public class CreateChannelActivity extends ActionBarActivity {
         buttonCreateNewChannel = (Button) findViewById(R.id.buttonCreateNewChannel);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBarUpload);
+        progressDialog = new ProgressDialog(CreateChannelActivity.this);
 
 
         imageViewCreateChannel.setOnClickListener(new View.OnClickListener() {
@@ -161,13 +162,16 @@ public class CreateChannelActivity extends ActionBarActivity {
             return;
         }
         buttonCreateNewChannel.setEnabled(false);
-        Ion.with(CreateChannelActivity.this, Flippy.channelsURL)
+        Ion.with(CreateChannelActivity.this, Flippy.channels)
                 .uploadProgressBar(progressBar)
                 .uploadProgressHandler(new ProgressCallback() {
                     @Override
                     public void onProgress(int downloaded, int total) {
                         progressBar.setProgress(downloaded);
-                        buttonCreateNewChannel.setText("Please wait ... " + downloaded);
+                        buttonCreateNewChannel.setText("Please wait ... ");
+                        progressDialog.setTitle("Just a minute ...");
+                        progressDialog.setMessage("Creating " + channelName);
+                        progressDialog.show();
                     }
                 })
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
@@ -185,6 +189,7 @@ public class CreateChannelActivity extends ActionBarActivity {
                         Log.e("file", selectedImagePath);
                         buttonCreateNewChannel.setEnabled(true);
                         buttonCreateNewChannel.setText(getText(R.string.channel_create));
+                        progressDialog.dismiss();
                         if (result.has("details")) {
                             Crouton.makeText(CreateChannelActivity.this, "Failed to create channel", Style.ALERT)
                                     .show();

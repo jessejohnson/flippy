@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jojo.flippy.app" >
+    package="com.jojo.flippy.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -18,11 +18,10 @@
     <application
         android:name="com.jojo.flippy.util.Flippy"
         android:allowBackup="true"
-        android:debuggable="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/FlippyActionBarTheme" >
+        android:theme="@style/FlippyActionBarTheme">
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -33,7 +32,7 @@
         <activity
             android:name=".SplashScreenActivity"
             android:label="@string/app_name"
-            android:theme="@style/FlippyFullScreen" >
+            android:theme="@style/FlippyFullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,19 +42,17 @@
         <activity
             android:name=".OnBoardingActivity"
             android:label="@string/title_activity_on_boarding"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
-        </activity>
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"></activity>
         <activity
             android:name=".SignInActivity"
             android:label="@string/title_activity_select_community"
             android:parentActivityName=".RegisterActivity"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_select_community"
             android:parentActivityName=".SignUpOptionsActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.app.SignUpOptionsActivity" />
@@ -63,25 +60,22 @@
         <activity
             android:name=".SelectCommunityActivity"
             android:label="@string/title_activity_select_community"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".SignUpOptionsActivity"
             android:label="@string/title_activity_select_community"
-            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
-        </activity>
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"></activity>
         <activity
             android:name="com.jojo.flippy.core.ChannelMembers"
             android:label="@string/channel_members_activity_title"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
         <activity
             android:name="com.jojo.flippy.core.CommunityCenterActivity"
-            android:label="@string/title_activity_community_center" >
-        </activity>
+            android:label="@string/title_activity_community_center"></activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -89,12 +83,11 @@
 
         <activity
             android:name="com.facebook.LoginActivity"
-            android:label="@string/app_name" >
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name="com.jojo.flippy.profile.AccountProfileActivity"
             android:label="@string/title_activity_account_profile"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -102,7 +95,7 @@
         <activity
             android:name="com.jojo.flippy.core.NoticeDetailActivity"
             android:label="@string/title_activity_notice_detail"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -111,7 +104,7 @@
             android:name="com.jojo.flippy.profile.EditProfileActivity"
             android:label="@string/title_activity_edit_profile"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -120,7 +113,7 @@
             android:name="com.jojo.flippy.core.CreateChannelActivity"
             android:label="@string/title_activity_create_channel"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -129,7 +122,7 @@
             android:name="com.jojo.flippy.core.CreateNoticeActivity"
             android:label="@string/title_activity_create_notice"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -137,7 +130,7 @@
         <activity
             android:name="com.jojo.flippy.core.NoticeExtrasActivity"
             android:label="@string/title_activity_notice_extras"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -146,7 +139,7 @@
             android:name="com.jojo.flippy.profile.ManageChannelActivity"
             android:label="@string/title_activity_manage_channel"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -154,20 +147,19 @@
         <activity
             android:name="com.jojo.flippy.profile.MemberDetailActivity"
             android:label="@string/title_activity_member_detail"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
         <activity
             android:name="com.jojo.flippy.profile.ImagePreviewActivity"
-            android:label="@string/title_activity_image_preview" >
-        </activity>
+            android:label="@string/title_activity_image_preview"></activity>
         <activity
             android:name="com.jojo.flippy.core.PickMapLocationActivity"
             android:label="@string/title_activity_pick_map_location"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -176,7 +168,7 @@
             android:name="com.jojo.flippy.core.ChannelDetailActivity"
             android:label="@string/title_activity_channel_detail"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -185,16 +177,7 @@
             android:name="com.jojo.flippy.core.AboutActivity"
             android:label="@string/title_activity_about"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:windowSoftInputMode="adjustPan" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
-        </activity>
-        <activity
-            android:name="com.jojo.flippy.core.NotificationSettingsActivity"
-            android:label="@string/title_activity_notification_settings"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -203,7 +186,7 @@
             android:name="com.jojo.flippy.core.GeneralSettingsActivity"
             android:label="@string/title_activity_channel_settings"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -212,7 +195,7 @@
             android:name="com.jojo.flippy.core.HelpActivity"
             android:label="@string/title_activity_help"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -220,7 +203,7 @@
         <activity
             android:name="com.jojo.flippy.core.SelectChannelActivity"
             android:label="@string/title_activity_select_channel"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -233,13 +216,20 @@
             android:name="com.jojo.flippy.services.DataService"
             android:enabled="true" />
 
+        <service
+            android:name="com.jojo.flippy.services.ManageLocalPost"
+            android:enabled="true" />
+        <service
+            android:name="com.jojo.flippy.services.StartingService"
+            android:enabled="true" />
+
         <receiver android:name="com.jojo.flippy.services.FlippyReceiver" />
 
         <activity
             android:name="com.jojo.flippy.core.SettingsLegalActivity"
             android:label="@string/title_activity_settings_legal"
             android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -247,7 +237,7 @@
         <activity
             android:name="com.jojo.flippy.profile.UserAccountLogout"
             android:label="@string/title_activity_user_account_logout"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
@@ -255,7 +245,7 @@
         <activity
             android:name=".VersionInfoActivity"
             android:label="@string/title_activity_version_info"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity" >
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />

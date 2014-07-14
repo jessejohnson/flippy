@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,13 +35,8 @@ import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-
-import org.apache.http.Header;
 
 import java.io.File;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +44,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class EditProfileActivity extends ActionBarActivity {
+    private static final int SELECT_PICTURE = 1;
     private ImageView imageViewMemberEdit;
     private EditText editTextEditProfileFirstName;
     private EditText editTextEditProfileLastName;
@@ -57,8 +53,6 @@ public class EditProfileActivity extends ActionBarActivity {
     private EditText editTextEditProfileNumber;
     private Spinner genderSpinner;
     private ImageView imageViewUploadPhoto;
-
-
     private String NewFirstNameUpdate;
     private String NewLastNameUpdate;
     private String NewNumberUpdate;
@@ -66,9 +60,6 @@ public class EditProfileActivity extends ActionBarActivity {
     private String NewDateOfBirthUpdate;
     private String NewGenderUpdate;
     private String NewAvatarUpdate;
-
-
-    private static final int SELECT_PICTURE = 1;
     private String selectedImagePath;
     private String imagePath;
     private String fileManagerString;
@@ -219,7 +210,7 @@ public class EditProfileActivity extends ActionBarActivity {
             return;
         }
         progressBarUpdateAvatar.setVisibility(View.VISIBLE);
-        Ion.with(EditProfileActivity.this, Flippy.userChannelsSubscribedURL + "upload-avatar/")
+        Ion.with(EditProfileActivity.this, Flippy.channels + "upload-avatar/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setMultipartFile("avatar", new File(filePath))
                 .asJsonObject()
@@ -265,7 +256,7 @@ public class EditProfileActivity extends ActionBarActivity {
     }
 
     private void getUserInfo() {
-        Ion.with(EditProfileActivity.this, Flippy.userChannelsSubscribedURL + CommunityCenterActivity.regUserID + "/")
+        Ion.with(EditProfileActivity.this, Flippy.channels + CommunityCenterActivity.regUserID + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -342,7 +333,7 @@ public class EditProfileActivity extends ActionBarActivity {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type","application/x-www-form-urlencoded");
+                headers.put("Content-Type", "application/json");
                 headers.put("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
                 return headers;
             }

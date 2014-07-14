@@ -2,8 +2,8 @@ package com.jojo.flippy.services;
 
 import android.app.Service;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -12,7 +12,6 @@ import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
-import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.InternetConnectionDetector;
 import com.jojo.flippy.util.ToastMessages;
@@ -21,19 +20,10 @@ import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
-
-/**
- * Created by bright on 7/8/14.
- */
 public class DataService extends Service {
     private Dao<Post, Integer> postDao;
     private ArrayList<String> savedPostIds;
@@ -60,8 +50,7 @@ public class DataService extends Service {
             postDao = databaseHelper.getPostDao();
             List<Post> postList = postDao.queryForAll();
             if (!postList.isEmpty()) {
-                for (int i = 0; i < postList.size(); i++) {
-                    Post post = postList.get(i);
+                for (Post post : postList) {
                     savedPostIds.add(post.notice_id);
                 }
             }
@@ -71,7 +60,7 @@ public class DataService extends Service {
 
         }
         InternetConnectionDetector internetConnectionDetector = new InternetConnectionDetector(getApplicationContext());
-        if(internetConnectionDetector.isConnectingToInternet()){
+        if (internetConnectionDetector.isConnectingToInternet()) {
 
         }
         Timer dataTimer = new Timer();
@@ -94,7 +83,7 @@ public class DataService extends Service {
                                         String id = item.get("id").getAsString();
                                         String content = item.get("content").getAsString();
                                         String channel = item.get("channel").getAsString();
-                                        String image_link = "";
+                                        String image_link = "flip";
                                         if (!item.get("image_url").isJsonNull()) {
                                             image_link = item.get("image_url").getAsString();
                                         }
@@ -104,12 +93,14 @@ public class DataService extends Service {
                                         String authorLastName = author.get("last_name").getAsString();
                                         Calendar calendar = Calendar.getInstance();
                                         Post new_post = new Post(id, title, content, image_link, startDate,
-                                                authorEmail, authorId, authorFirstName, authorLastName, channel,calendar.getTimeInMillis()+"");
+                                                authorEmail, authorId, authorFirstName, authorLastName, channel, calendar.getTimeInMillis());
                                         try {
+                                            Log.e("ready", "run");
                                             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
                                                     DatabaseHelper.class);
                                             postDao = databaseHelper.getPostDao();
-                                            if(!savedPostIds.contains(id)){
+                                            if (!savedPostIds.contains(id)) {
+                                                Log.e("ready id", id);
                                                 postDao.createOrUpdate(new_post);
                                             }
                                         } catch (java.sql.SQLException sqlE) {
@@ -128,13 +119,11 @@ public class DataService extends Service {
                             }
                         });
             }
-        }, 30 * 60 * 1000, 30 * 60 * 1000);
+        }, 1000, 1000);
 
         return START_STICKY;
 
-    };
-
-   void makeApiCall(){}
+    }
 
     @Override
     public void onDestroy() {

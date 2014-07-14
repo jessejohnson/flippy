@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.ChannelMemberAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
@@ -27,9 +25,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by bright on 6/12/14.
- */
 public class ChannelMembers extends Activity {
 
     private String channelName;
@@ -62,7 +57,7 @@ public class ChannelMembers extends Activity {
         channelName = intent.getStringExtra("channelName");
         channelId = intent.getStringExtra("channelId");
         isManage = intent.getBooleanExtra("isManage", false);
-        String channelDetailsURL = Flippy.channelMembersURL + channelId + membersURL;
+        String channelDetailsURL = Flippy.channels + channelId + membersURL;
 
 
         actionBar = getActionBar();
