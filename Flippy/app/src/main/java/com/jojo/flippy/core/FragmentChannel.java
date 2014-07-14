@@ -66,6 +66,7 @@ public class FragmentChannel extends Fragment {
         //get the request url
         String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
 
+
         //load the channels user subscribed to
         Ion.with(getActivity())
                 .load(url)

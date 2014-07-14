@@ -1,8 +1,5 @@
 package com.jojo.flippy.app;
 
-/**
- * Created by bright on 6/9/14.
- */
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

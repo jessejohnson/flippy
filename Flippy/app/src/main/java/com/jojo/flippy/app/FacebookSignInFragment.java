@@ -19,6 +19,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
+import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.persistence.User;
@@ -38,9 +39,10 @@ public class FacebookSignInFragment extends Fragment {
     Context mContext;
     LoginButton mLoginBtn;
     private Button signInWithEmail;
-    private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName, regAvatar,regGender,regAvatarURL;
-    private String regDateOfBirth="";
-
+    private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName, regAvatar, regGender, regAvatarURL;
+    private String regDateOfBirth = "";
+    private String fbId, first_name, last_name, userEmail, profilePic, profilePicSmall, gender = "", avatar = "", avatar_thumb = "", date_of_birth = "";
+    private SuperToast superToast;
     //session status callback variable
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -59,13 +61,13 @@ public class FacebookSignInFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_facebook_login, container, false);
 
         mContext = getActivity();
+        superToast = new SuperToast(mContext);
 
         signInWithEmail = (Button) view.findViewById(R.id.buttonSigninWithEmail);
         signInWithEmail.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, RegisterActivity.class);
-                startActivity(intent);
+                loginWithEmail();
             }
         });
         mLoginBtn = (LoginButton) view.findViewById(R.id.authButton);
@@ -141,18 +143,13 @@ public class FacebookSignInFragment extends Fragment {
                         // If the response is successful
                         if (session == Session.getActiveSession()) {
                             if (user != null) {
-                                String fullName = user.getName();
-                                String username = user.getUsername();
-                                final String first_name = user.getFirstName();
-                                final String last_name = user.getLastName();
-                                final String fbId = user.getId();
-                                final String userEmail = (String) user.asMap().get("email");
-                                final String profilePic = "http://graph.facebook.com/" + fbId + "/picture?type=large";
-                                final String profilePicSmall = "http://graph.facebook.com/" + fbId + "/picture?type=small";
-                                final String gender = user.asMap().get("gender").toString();
-
-                                //Try to register the user, but if the user already exist, then sign him in instead
-                                Log.e("user facebook info",first_name+ " " + gender);
+                                first_name = user.getFirstName();
+                                last_name = user.getLastName();
+                                fbId = user.getId();
+                                userEmail = (String) user.asMap().get("email");
+                                profilePic = "http://graph.facebook.com/" + fbId + "/picture?type=large";
+                                profilePicSmall = "http://graph.facebook.com/" + fbId + "/picture?type=small";
+                                gender = user.asMap().get("gender").toString();
                                 //setting the user parameters
                                 JsonObject json = new JsonObject();
                                 json.addProperty("email", userEmail);
@@ -161,8 +158,8 @@ public class FacebookSignInFragment extends Fragment {
                                 json.addProperty("password", fbId);
                                 //json.addProperty("avatar",profilePic);
                                 //json.addProperty("avatar_thumb",profilePicSmall);
-                               // json.addProperty("date_of_birth",date_of_birth);
-                                json.addProperty("gender",gender);
+                                // json.addProperty("date_of_birth",date_of_birth);
+                                json.addProperty("gender", gender);
 
                                 Ion.with(mContext)
                                         .load(Flippy.users + "signup/")
@@ -176,21 +173,76 @@ public class FacebookSignInFragment extends Fragment {
                                                     ToastMessages.showToastLong(mContext, getResources().getString(R.string.internet_connection_error_dialog_title));
                                                     Log.e("Error", e.toString());
                                                 } else {
+
                                                     if (result.has("detail")) {
-                                                        createUser(fbId,fbId,userEmail,first_name,last_name,profilePic,profilePicSmall,gender,regDateOfBirth);
-                                                        Intent intent = new Intent(getActivity(), SelectCommunityActivity.class);
-                                                        intent.putExtra("regUserEmail",userEmail);
-                                                        startActivity(intent);
-                                                        return;
+                                                        JsonObject json = new JsonObject();
+                                                        json.addProperty("email", userEmail);
+                                                        json.addProperty("password", fbId);
+                                                        Ion.with(mContext)
+                                                                .load(Flippy.users + "login/")
+                                                                .setJsonObjectBody(json)
+                                                                .asJsonObject()
+                                                                .setCallback(new FutureCallback<JsonObject>() {
+                                                                    @Override
+                                                                    public void onCompleted(Exception e, JsonObject result) {
+
+                                                                        if (e != null) {
+                                                                            superToast.setAnimations(SuperToast.Animations.FLYIN);
+                                                                            superToast.setDuration(SuperToast.Duration.LONG);
+                                                                            superToast.setBackground(SuperToast.Background.PURPLE);
+                                                                            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                                                                            superToast.setText(getResources().getString(R.string.internet_connection_error_dialog_title));
+                                                                            superToast.show();
+                                                                            return;
+                                                                        } else {
+
+                                                                            if (result.has("detail")) {
+                                                                                superToast.setAnimations(SuperToast.Animations.FLYIN);
+                                                                                superToast.setDuration(SuperToast.Duration.LONG);
+                                                                                superToast.setBackground(SuperToast.Background.RED);
+                                                                                superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                                                                                superToast.setText(result.get("detail").getAsString());
+                                                                                superToast.show();
+                                                                                return;
+                                                                            }
+                                                                            regUserAuthToken = result.get("auth_token").getAsString();
+                                                                            regUserID = result.get("id").getAsString();
+                                                                            regFirstName = result.get("first_name").getAsString();
+                                                                            regUserEmail = result.get("email").getAsString();
+                                                                            regLastName = result.get("last_name").getAsString();
+                                                                            if (!result.get("avatar").isJsonNull()) {
+                                                                                avatar = result.get("avatar").getAsString();
+                                                                            }
+                                                                            if (!result.get("avatar_thumb").isJsonNull()) {
+                                                                                avatar_thumb = result.get("avatar_thumb").getAsString();
+                                                                            }
+
+                                                                            if (!result.get("gender").isJsonNull()) {
+                                                                                gender = result.get("gender").getAsString();
+                                                                            }
+                                                                            if (!result.get("date_of_birth").isJsonNull()) {
+                                                                                date_of_birth = result.get("date_of_birth").getAsString();
+                                                                            }
+
+                                                                            createUser(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName, avatar, avatar_thumb, gender, date_of_birth);
+                                                                            Intent intent = new Intent(getActivity(), SelectCommunityActivity.class);
+                                                                            intent.putExtra("regUserEmail", regUserEmail);
+                                                                            intent.putExtra("regUserAuthToken", regUserAuthToken);
+                                                                            intent.putExtra("regUserID", regUserID);
+                                                                            startActivity(intent);
+                                                                        }
+                                                                    }
+
+                                                                });
                                                     }
                                                     regUserAuthToken = result.get("auth_token").getAsString();
                                                     regUserID = result.get("id").getAsString();
                                                     regFirstName = result.get("first_name").getAsString();
                                                     regLastName = result.get("last_name").getAsString();
-                                                    regUserEmail =result.get("email").getAsString();
+                                                    regUserEmail = result.get("email").getAsString();
                                                     regGender = gender;
-                                                    createUser(regUserID,regUserAuthToken,regUserEmail,regFirstName,regLastName,profilePic,profilePicSmall,regGender,regDateOfBirth);
-                                                    //the end of the persistence
+                                                    createUser(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName, profilePic, profilePicSmall, regGender, regDateOfBirth);
+
                                                     Intent intent = new Intent(getActivity(), SelectCommunityActivity.class);
                                                     intent.putExtra("regUserEmail", regUserEmail);
                                                     intent.putExtra("regUserAuthToken", regUserAuthToken);
@@ -218,19 +270,24 @@ public class FacebookSignInFragment extends Fragment {
         request.executeAsync();
     }
 
-    private void createUser(String userID,String userToken,String userEmail,String userFirstName,String userLastName,String profilePic, String profilePicSmall,String gender,String dateOfBirth ) {
+    private void createUser(String userID, String userToken, String userEmail, String userFirstName, String userLastName, String profilePic, String profilePicSmall, String gender, String dateOfBirth) {
         try {
             Dao<User, Integer> userDao = ((Flippy) getActivity().getApplication()).userDao;
             List<User> userList = userDao.queryForAll();
-            if(!userList.isEmpty()){
+            if (!userList.isEmpty()) {
                 userDao.delete(userList);
             }
-            User user = new User(userID, userToken, userEmail, userFirstName, userLastName,profilePic,profilePicSmall,gender,dateOfBirth);
+            User user = new User(userID, userToken, userEmail, userFirstName, userLastName, profilePic, profilePicSmall, gender, dateOfBirth);
             userDao.create(user);
 
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
         }
+    }
+
+    private void loginWithEmail() {
+        Intent intent = new Intent(getActivity(), RegisterActivity.class);
+        startActivity(intent);
     }
 
 }

@@ -24,7 +24,7 @@ import com.koushikdutta.ion.Ion;
 
 
 public class ChannelDetailActivity extends ActionBarActivity {
-    String channelCommunityDetail = Flippy.channelsInCommunityURL;
+    String channelCommunityDetail = Flippy.communitiesURL;
     private Intent intent;
     private String name;
     private String id;

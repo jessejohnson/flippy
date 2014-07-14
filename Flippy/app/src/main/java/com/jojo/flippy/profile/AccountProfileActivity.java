@@ -49,11 +49,8 @@ public class AccountProfileActivity extends ActionBarActivity {
     private TextView textViewProfileUserNameNew;
     private TextView textViewProfileUserEmailNew;
     private TextView textViewProfileUserCommunity;
-
-
     private LinearLayout linearLayoutUserProfile;
     private ProgressBar progressBarUserChannelLoad;
-
     private SuperToast superToast;
 
 
