@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jojo.flippy.adapter.ProfileAdapter;
@@ -22,7 +23,6 @@ import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.util.Flippy;
-import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -54,6 +54,8 @@ public class AccountProfileActivity extends ActionBarActivity {
     private LinearLayout linearLayoutUserProfile;
     private ProgressBar progressBarUserChannelLoad;
 
+    private SuperToast superToast;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +71,13 @@ public class AccountProfileActivity extends ActionBarActivity {
         userCommunityName = CommunityCenterActivity.userCommunityName;
 
         ActionBar actionBar = getActionBar();
-        actionBar.setTitle(userFirstName);
-        actionBar.setSubtitle(R.string.user_tap_to_edit);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
+        if (actionBar != null) {
+            actionBar.setTitle(userFirstName);
+            actionBar.setSubtitle(R.string.user_tap_to_edit);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        superToast = new SuperToast(AccountProfileActivity.this);
         final String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
-
-
         intent = getIntent();
         rowItems = new ArrayList<ProfileItem>();
         profileChannelListView = (ListView) findViewById(R.id.profileChannelListView);
@@ -119,7 +121,7 @@ public class AccountProfileActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
+                        if (result != null && !result.has("detail")) {
                             JsonArray profileArray = result.getAsJsonArray("results");
                             for (int i = 0; i < profileArray.size(); i++) {
                                 JsonObject item = profileArray.get(i).getAsJsonObject();
@@ -131,7 +133,13 @@ public class AccountProfileActivity extends ActionBarActivity {
                         }
                         if (e != null) {
                             progressBarUserChannelLoad.setVisibility(View.GONE);
-                            ToastMessages.showToastLong(AccountProfileActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            superToast.setAnimations(SuperToast.Animations.FLYIN);
+                            superToast.setDuration(SuperToast.Duration.SHORT);
+                            superToast.setBackground(SuperToast.Background.PURPLE);
+                            superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+                            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                            superToast.setText("sorry, failed to load your communities");
+                            superToast.show();
                             Log.e("Error loading channel", e.toString());
                         }
 
@@ -164,7 +172,13 @@ public class AccountProfileActivity extends ActionBarActivity {
                             loadCommunityImage(userCommunityImageLink);
                         }
                         if (e != null) {
-                            ToastMessages.showToastLong(AccountProfileActivity.this, "Check internet connection");
+                            superToast.setAnimations(SuperToast.Animations.FLYIN);
+                            superToast.setDuration(SuperToast.Duration.LONG);
+                            superToast.setBackground(SuperToast.Background.PURPLE);
+                            superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+                            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                            superToast.setText("sorry, failed to get community image");
+                            superToast.show();
                             Log.e("error", e.toString());
                         }
 
@@ -174,7 +188,13 @@ public class AccountProfileActivity extends ActionBarActivity {
 
     private void loadCommunityImage(String url) {
         if (url == null) {
-            ToastMessages.showToastShort(AccountProfileActivity.this, "Failed to load community image");
+            superToast.setAnimations(SuperToast.Animations.FLYIN);
+            superToast.setDuration(SuperToast.Duration.LONG);
+            superToast.setBackground(SuperToast.Background.PURPLE);
+            superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+            superToast.setText("sorry, internal error occurred");
+            superToast.show();
             return;
         }
         textViewProfileUserCommunity.setText("Community: " + userCommunityName);

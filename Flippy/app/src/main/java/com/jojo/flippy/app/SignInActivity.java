@@ -4,28 +4,24 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
-import com.jojo.flippy.util.ToastMessages;
 import com.jojo.flippy.util.Validator;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.List;
-
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 
 public class SignInActivity extends ActionBarActivity {
@@ -41,6 +37,7 @@ public class SignInActivity extends ActionBarActivity {
     private String regLastName;
     private String avatar, avatar_thumb, date_of_birth, gender;
     private Dao<User, Integer> userDao;
+    private SuperToast superToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +45,10 @@ public class SignInActivity extends ActionBarActivity {
         setContentView(R.layout.activity_sign_in);
 
         ActionBar actionbar = getActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setSubtitle(getString(R.string.register_title_few_things));
+        if (actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setSubtitle(getString(R.string.register_title_few_things));
+        }
 
 
         textViewSignIn = (TextView) findViewById(R.id.textViewSignIn);
@@ -59,6 +58,7 @@ public class SignInActivity extends ActionBarActivity {
         signInCheckBox = (CheckBox) findViewById(R.id.checkBoxRegisterAgreement);
 
         intent = new Intent();
+        superToast = new SuperToast(SignInActivity.this);
 
         signGetStartedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,16 +113,23 @@ public class SignInActivity extends ActionBarActivity {
                                     signGetStartedButton.setEnabled(true);
                                     signGetStartedButton.setText(getText(R.string.start));
                                     if (e != null) {
-                                        ToastMessages.showToastLong(SignInActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                                        Log.e("Error", e.toString());
+                                        superToast.setAnimations(SuperToast.Animations.FLYIN);
+                                        superToast.setDuration(SuperToast.Duration.LONG);
+                                        superToast.setBackground(SuperToast.Background.PURPLE);
+                                        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                                        superToast.setText(getResources().getString(R.string.internet_connection_error_dialog_title));
+                                        superToast.show();
                                         return;
                                     } else {
-                                        //If there is no error returned
                                         try {
                                             if (result.has("detail")) {
                                                 signInEmail.setError(result.get("detail").getAsString());
-                                                Crouton.makeText(SignInActivity.this, result.get("detail").getAsString(), Style.ALERT)
-                                                        .show();
+                                                superToast.setAnimations(SuperToast.Animations.FLYIN);
+                                                superToast.setDuration(SuperToast.Duration.LONG);
+                                                superToast.setBackground(SuperToast.Background.RED);
+                                                superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                                                superToast.setText(result.get("detail").getAsString());
+                                                superToast.show();
                                                 return;
                                             }
                                             regUserAuthToken = result.get("auth_token").getAsString();
@@ -152,15 +159,19 @@ public class SignInActivity extends ActionBarActivity {
                                                     DatabaseHelper.class);
                                             userDao = databaseHelper.getUserDao();
                                             List<User> userList = userDao.queryForAll();
-                                            if(!userList.isEmpty()){
-                                               userDao.delete(userList);
+                                            if (!userList.isEmpty()) {
+                                                userDao.delete(userList);
                                             }
                                             User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName, avatar, avatar_thumb, gender, date_of_birth);
                                             userDao.createOrUpdate(user);
-                                           } catch (java.sql.SQLException sqlE) {
+                                        } catch (java.sql.SQLException sqlE) {
                                             sqlE.printStackTrace();
-                                            Crouton.makeText(SignInActivity.this, "Sorry, Try again later", Style.ALERT)
-                                                    .show();
+                                            superToast.setAnimations(SuperToast.Animations.FLYIN);
+                                            superToast.setDuration(SuperToast.Duration.LONG);
+                                            superToast.setBackground(SuperToast.Background.RED);
+                                            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                                            superToast.setText("sorry, try again");
+                                            superToast.show();
                                             return;
                                         }
                                         intent.putExtra("regUserEmail", regUserEmail);

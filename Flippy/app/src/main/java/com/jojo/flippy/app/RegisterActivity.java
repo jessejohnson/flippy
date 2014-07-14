@@ -142,6 +142,7 @@ public class RegisterActivity extends Activity {
                                             superToast.setDuration(SuperToast.Duration.LONG);
                                             superToast.setBackground(SuperToast.Background.RED);
                                             superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                                            superToast.setIcon(R.drawable.ic_action_remove, SuperToast.IconPosition.LEFT);
                                             superToast.setText("email already in use");
                                             superToast.show();
                                             return;

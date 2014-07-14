@@ -19,7 +19,6 @@ public class Flippy extends Application {
     //make the url accessible to all the activities
     public static String channels = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/channels/";
     public static String users = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/";
-    public static String channelsInCommunityURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/communities/";
     public static String communitiesURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/communities/";
     public static String allPostURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/posts/";
     private static Flippy sInstance;

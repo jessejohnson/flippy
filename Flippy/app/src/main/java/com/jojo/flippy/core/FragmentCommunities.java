@@ -3,7 +3,6 @@ package com.jojo.flippy.core;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,15 +30,13 @@ import java.util.List;
  */
 
 public class FragmentCommunities extends Fragment {
-    private ListView listViewCommunity;
+    public static String channelId;
+    public static String channelName;
     List<Channel> rowItems;
+    private ListView listViewCommunity;
     private Intent intent;
     private ProgressBar progressBarCommunityChannelLoader;
     private ChannelAdapter adapter;
-
-    public static String channelId;
-    public static String channelName;
-
     private TextView textViewEmptyCommunityChannel;
 
 
@@ -65,7 +62,7 @@ public class FragmentCommunities extends Fragment {
         adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems, false);
         listViewCommunity.setAdapter(adapter);
-        String url = Flippy.channelsInCommunityURL + CommunityCenterActivity.userCommunityId + "/channels/";
+        String url = Flippy.communitiesURL + CommunityCenterActivity.userCommunityId + "/channels/";
 
         //Loading the list with data from Api call
         Ion.with(getActivity())

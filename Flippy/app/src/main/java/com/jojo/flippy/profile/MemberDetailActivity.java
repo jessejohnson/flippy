@@ -199,7 +199,7 @@ public class MemberDetailActivity extends ActionBarActivity {
     private void getCommunityName(String communityId) {
         //load the creator of the channel
         Ion.with(MemberDetailActivity.this)
-                .load(Flippy.channelsInCommunityURL + communityId + "/")
+                .load(Flippy.communitiesURL + communityId + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

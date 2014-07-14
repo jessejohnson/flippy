@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,6 +17,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -29,7 +29,6 @@ import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
-import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -38,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 ;
 
@@ -46,7 +44,6 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class SelectCommunityActivity extends ActionBarActivity {
     ListView listViewCommunities;
     List<Community> rowItems;
-    //TODO get communityKeyURL
     private String communityKeyURL = "";
     private Intent intent;
     private String regUserEmail;
@@ -55,6 +52,7 @@ public class SelectCommunityActivity extends ActionBarActivity {
     private TextView textViewNoCommunity;
     private CommunityAdapter adapter;
     private ProgressDialog progressDialog;
+    private SuperToast superToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +64,12 @@ public class SelectCommunityActivity extends ActionBarActivity {
         regUserEmail = intent.getStringExtra("regUserEmail");
 
         ActionBar actionbar = getActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-        actionbar.setSubtitle(getString(R.string.last_step));
-        actionbar.setTitle("Select a community");
-
+        if (actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setSubtitle(getString(R.string.last_step));
+            actionbar.setTitle("Select a community");
+        }
+        superToast = new SuperToast(SelectCommunityActivity.this);
         progressDialog = new ProgressDialog(SelectCommunityActivity.this);
         progressDialog.setTitle("Flippy progress");
         progressBarLoadCommunity = (ProgressBar) findViewById(R.id.progressBarLoadCommunity);
@@ -105,8 +105,13 @@ public class SelectCommunityActivity extends ActionBarActivity {
                             updateAdapter();
                         }
                         if (e != null) {
-                            ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
-                            Log.e("error", e.toString());
+                            superToast.setAnimations(SuperToast.Animations.FLYIN);
+                            superToast.setDuration(SuperToast.Duration.LONG);
+                            superToast.setBackground(SuperToast.Background.PURPLE);
+                            superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+                            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                            superToast.setText("Check internet connection");
+                            superToast.show();
                             textViewNoCommunity.setVisibility(View.VISIBLE);
                             textViewNoCommunity.setText("Failed to load communities");
                         }
@@ -150,14 +155,24 @@ public class SelectCommunityActivity extends ActionBarActivity {
                                         startActivity(intent);
                                     } catch (java.sql.SQLException sqlE) {
                                         sqlE.printStackTrace();
-                                        Log.e("Community error", sqlE.toString());
-                                        Crouton.makeText(SelectCommunityActivity.this, "sorry user registration  failed", Style.ALERT)
-                                                .show();
+                                        superToast.setAnimations(SuperToast.Animations.FLYIN);
+                                        superToast.setDuration(SuperToast.Duration.LONG);
+                                        superToast.setBackground(SuperToast.Background.RED);
+                                        superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+                                        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                                        superToast.setText("sorry, Failed to prepare community");
+                                        superToast.show();
                                         return;
                                     }
                                 }
                                 if (e != null) {
-                                    ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
+                                    superToast.setAnimations(SuperToast.Animations.FLYIN);
+                                    superToast.setDuration(SuperToast.Duration.LONG);
+                                    superToast.setBackground(SuperToast.Background.PURPLE);
+                                    superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+                                    superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                                    superToast.setText("Check internet connection");
+                                    superToast.show();
                                     return;
 
                                 }
@@ -170,7 +185,6 @@ public class SelectCommunityActivity extends ActionBarActivity {
     }
 
     private void updateAdapter() {
-
         adapter.notifyDataSetChanged();
         if (adapter.isEmpty()) {
             textViewNoCommunity.setVisibility(View.VISIBLE);
@@ -216,30 +230,31 @@ public class SelectCommunityActivity extends ActionBarActivity {
             alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
                     String key = privateCommunityKeyInput.getText().toString();
-                    ToastMessages.showToastLong(SelectCommunityActivity.this, key);
                     //getCommunityByKey(key);
                 }
             });
-
             alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
 
                 }
             });
-
             alert.show();
             return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void getCommunityByKey(String communityKey) {
-        if (communityKey == "") {
-            ToastMessages.showToastLong(SelectCommunityActivity.this, "Community key is required");
+        if (communityKey.equals("")) {
+            superToast.setAnimations(SuperToast.Animations.FLYIN);
+            superToast.setDuration(SuperToast.Duration.LONG);
+            superToast.setBackground(SuperToast.Background.PURPLE);
+            superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+            superToast.setText("Community key is required");
+            superToast.show();
             return;
         }
-        //TODO submit community key to API. On success, set communitySelected & selectedCommunityID
         if (!communityKey.equalsIgnoreCase("")) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("key", communityKey);
@@ -251,8 +266,13 @@ public class SelectCommunityActivity extends ActionBarActivity {
                         @Override
                         public void onCompleted(Exception e, JsonObject result) {
                             if (e != null) {
-                                ToastMessages.showToastLong(SelectCommunityActivity.this, "Check internet connection");
-                                Log.e("Error", e.toString());
+                                superToast.setAnimations(SuperToast.Animations.FLYIN);
+                                superToast.setDuration(SuperToast.Duration.LONG);
+                                superToast.setBackground(SuperToast.Background.PURPLE);
+                                superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+                                superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+                                superToast.setText("Check internet connection");
+                                superToast.show();
                             } else {
                                 //TODO set communitySelected & selectedCommunityID
                             }
