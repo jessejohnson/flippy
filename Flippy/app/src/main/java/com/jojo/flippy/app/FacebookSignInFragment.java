@@ -39,7 +39,7 @@ public class FacebookSignInFragment extends Fragment {
     Context mContext;
     LoginButton mLoginBtn;
     private Button signInWithEmail;
-    private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName, regAvatar, regGender, regAvatarURL;
+    private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName,regGender;
     private String regDateOfBirth = "";
     private String fbId, first_name, last_name, userEmail, profilePic, profilePicSmall, gender = "", avatar = "", avatar_thumb = "", date_of_birth = "";
     private SuperToast superToast;
@@ -67,8 +67,10 @@ public class FacebookSignInFragment extends Fragment {
         signInWithEmail.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                loginWithEmail();
+                Intent intent = new Intent(getActivity(), RegisterActivity.class);
+                startActivity(intent);
             }
+
         });
         mLoginBtn = (LoginButton) view.findViewById(R.id.authButton);
         mLoginBtn.setFragment(this);
@@ -283,11 +285,6 @@ public class FacebookSignInFragment extends Fragment {
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
         }
-    }
-
-    private void loginWithEmail() {
-        Intent intent = new Intent(getActivity(), RegisterActivity.class);
-        startActivity(intent);
     }
 
 }

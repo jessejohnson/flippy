@@ -199,10 +199,4 @@ public class RegisterActivity extends Activity {
         finish();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        finish();
-    }
-
 }
