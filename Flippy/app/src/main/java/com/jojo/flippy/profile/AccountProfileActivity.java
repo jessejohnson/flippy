@@ -30,8 +30,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-;
-
 public class AccountProfileActivity extends ActionBarActivity {
     ListView profileChannelListView;
     List<ProfileItem> rowItems;
@@ -118,6 +116,7 @@ public class AccountProfileActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
+                        progressBarUserChannelLoad.setVisibility(View.GONE);
                         if (result != null && !result.has("detail")) {
                             JsonArray profileArray = result.getAsJsonArray("results");
                             for (int i = 0; i < profileArray.size(); i++) {
@@ -129,7 +128,6 @@ public class AccountProfileActivity extends ActionBarActivity {
                             updateAdapter();
                         }
                         if (e != null) {
-                            progressBarUserChannelLoad.setVisibility(View.GONE);
                             superToast.setAnimations(SuperToast.Animations.FLYIN);
                             superToast.setDuration(SuperToast.Duration.SHORT);
                             superToast.setBackground(SuperToast.Background.PURPLE);
