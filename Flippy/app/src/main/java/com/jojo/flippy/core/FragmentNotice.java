@@ -154,7 +154,7 @@ public class FragmentNotice extends Fragment {
 
     private void updateListAdapter() {
         listAdapter.notifyDataSetChanged();
-        if(listAdapter.isEmpty()){
+        if (listAdapter.isEmpty()) {
             textViewNoNotice.setVisibility(View.VISIBLE);
             textViewNoNotice.setText("Currently no notice");
         }
@@ -215,7 +215,7 @@ public class FragmentNotice extends Fragment {
 
                         }
                         if (e != null) {
-                            ToastMessages.showToastLong(getActivity(), getResources().getString(R.string.internet_connection_error_dialog_title));
+                            return;
                         }
 
                     }
@@ -245,8 +245,8 @@ public class FragmentNotice extends Fragment {
                     } catch (Exception error) {
                         Log.e("Date error", error.toString());
                     }
-                    String subtitle = post.author_first_name+", " +post.author_first_name;
-                    noticeFeed.add(new Notice(post.notice_id, post.notice_title,subtitle, post.notice_body,post.author_id,post.channel_id, timestamp, URI.create(post.notice_image)));
+                    String subtitle = post.author_first_name + ", " + post.author_first_name;
+                    noticeFeed.add(new Notice(post.notice_id, post.notice_title, subtitle, post.notice_body, post.author_id, post.channel_id, timestamp, URI.create(post.notice_image)));
 
                 }
                 updateListAdapter();
@@ -282,8 +282,8 @@ public class FragmentNotice extends Fragment {
                     } catch (Exception error) {
                         //maintain the first format
                     }
-                    String subtitle = post.author_first_name+", " +post.author_first_name;
-                    noticeFeed.add(new Notice(post.notice_id,post.notice_title,subtitle, post.notice_body,post.author_id,post.channel_id, timestamp, URI.create(post.notice_image)));
+                    String subtitle = post.author_first_name + ", " + post.author_first_name;
+                    noticeFeed.add(new Notice(post.notice_id, post.notice_title, subtitle, post.notice_body, post.author_id, post.channel_id, timestamp, URI.create(post.notice_image)));
 
                 }
                 updateListAdapter();

@@ -164,6 +164,7 @@ public class RegisterActivity extends Activity {
                                             userDao.create(user);
                                         } catch (java.sql.SQLException sqlE) {
                                             sqlE.printStackTrace();
+                                            Log.e("Error creating user", sqlE.toString());
                                             superToast.setAnimations(SuperToast.Animations.FLYIN);
                                             superToast.setDuration(SuperToast.Duration.LONG);
                                             superToast.setBackground(SuperToast.Background.RED);

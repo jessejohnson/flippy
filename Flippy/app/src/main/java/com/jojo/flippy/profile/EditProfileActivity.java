@@ -23,6 +23,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
@@ -55,19 +56,15 @@ public class EditProfileActivity extends ActionBarActivity {
     private ImageView imageViewUploadPhoto;
     private String NewFirstNameUpdate;
     private String NewLastNameUpdate;
-    private String NewNumberUpdate;
     private String NewEmailUpdate;
     private String NewDateOfBirthUpdate;
     private String NewGenderUpdate;
-    private String NewAvatarUpdate;
     private String selectedImagePath;
     private String imagePath;
     private String fileManagerString;
     private int column_index;
     private Cursor cursor;
     private String path;
-
-
     private String userFirstName;
     private String userLastName;
     private String userEmail;
@@ -77,9 +74,6 @@ public class EditProfileActivity extends ActionBarActivity {
     private String userAvatarThumb = "";
     private String userCommunityId;
     private ProgressBar progressBarUpdateAvatar;
-
-    private boolean save = false;
-
     private Dao<User, Integer> userDao;
 
     @Override
@@ -93,7 +87,6 @@ public class EditProfileActivity extends ActionBarActivity {
         editTextEditProfileLastName = (EditText) findViewById(R.id.editTextEditProfileLastName);
         editTextEditProfileEmail = (EditText) findViewById(R.id.editTextEditProfileEmail);
         editTextEditProfileDateOfBirth = (EditText) findViewById(R.id.editTextEditProfileDateOfBirth);
-        editTextEditProfileNumber = (EditText) findViewById(R.id.editTextEditProfileNumber);
         progressBarUpdateAvatar = (ProgressBar) findViewById(R.id.progressBarUpdateAvatar);
         progressBarUpdateAvatar.setVisibility(View.GONE);
         genderSpinner = (Spinner) findViewById(R.id.genderSpinner);
@@ -102,7 +95,6 @@ public class EditProfileActivity extends ActionBarActivity {
         editTextEditProfileEmail.setText(CommunityCenterActivity.regUserEmail);
         editTextEditProfileDateOfBirth.setText(CommunityCenterActivity.userDateOfBirth);
         imageViewUploadPhoto = (ImageView) findViewById(R.id.imageViewUploadPhoto);
-
 
         loadProfile();
 
@@ -119,7 +111,6 @@ public class EditProfileActivity extends ActionBarActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         imageViewMemberEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,16 +139,21 @@ public class EditProfileActivity extends ActionBarActivity {
                 fileManagerString = selectedImageUri.getPath();
                 selectedImagePath = getPath(selectedImageUri);
                 if (imagePath == null) {
-                    ToastMessages.showToastShort(EditProfileActivity.this, "No image selected");
+                    showSuperToast("Upload image with a local source");
                     return;
                 }
                 imagePath.getBytes();
                 path = imagePath.toString();
                 Bitmap bm = BitmapFactory.decodeFile(imagePath);
+                imageViewMemberEdit.setAdjustViewBounds(true);
+                imageViewMemberEdit.setMaxHeight(imageViewMemberEdit.getHeight());
+                imageViewMemberEdit.setMaxWidth(imageViewMemberEdit.getWidth());
+                imageViewMemberEdit.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                 imageViewMemberEdit.setImageBitmap(bm);
 
             } else {
-                ToastMessages.showToastLong(EditProfileActivity.this, "Image not uploaded");
+                showSuperToast("sorry, unable to upload image");
+                return;
             }
 
         }
@@ -175,11 +171,9 @@ public class EditProfileActivity extends ActionBarActivity {
         if (id == R.id.action_profile_done) {
             NewFirstNameUpdate = editTextEditProfileFirstName.getText().toString().trim();
             NewLastNameUpdate = editTextEditProfileLastName.getText().toString().trim();
-            NewNumberUpdate = editTextEditProfileNumber.getText().toString().trim();
             NewEmailUpdate = editTextEditProfileEmail.getText().toString().trim();
             NewDateOfBirthUpdate = editTextEditProfileDateOfBirth.getText().toString().trim();
             NewGenderUpdate = genderSpinner.getSelectedItem().toString();
-            Log.e("New email", NewEmailUpdate);
             updateUserStringDetails(NewEmailUpdate, NewFirstNameUpdate, NewLastNameUpdate, NewGenderUpdate);
             ToastMessages.showToastLong(EditProfileActivity.this, "Profile updated");
             return true;
@@ -210,7 +204,7 @@ public class EditProfileActivity extends ActionBarActivity {
             return;
         }
         progressBarUpdateAvatar.setVisibility(View.VISIBLE);
-        Ion.with(EditProfileActivity.this, Flippy.channels + "upload-avatar/")
+        Ion.with(EditProfileActivity.this, Flippy.users + "upload-avatar/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setMultipartFile("avatar", new File(filePath))
                 .asJsonObject()
@@ -218,17 +212,16 @@ public class EditProfileActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarUpdateAvatar.setVisibility(View.GONE);
-                        if (result.has("details")) {
-                            Crouton.makeText(EditProfileActivity.this, "Failed to upload picture", Style.ALERT)
-                                    .show();
+                        if (result == null) {
+                            showSuperToast("Failed to upload avatar");
                             return;
                         }
-                        if (result != null && !result.has("details")) {
+                        if (result != null) {
                             getUserInfo();
-                            ToastMessages.showToastLong(EditProfileActivity.this, result.get("results").getAsString());
                         }
                         if (e != null) {
-                            ToastMessages.showToastLong(EditProfileActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                            return;
                         }
 
                     }
@@ -248,15 +241,14 @@ public class EditProfileActivity extends ActionBarActivity {
             goToMainActivity();
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
-            Crouton.makeText(EditProfileActivity.this, "Sorry, Try again later", Style.ALERT)
-                    .show();
+            showSuperToast("sorry, try later");
             return;
 
         }
     }
 
     private void getUserInfo() {
-        Ion.with(EditProfileActivity.this, Flippy.channels + CommunityCenterActivity.regUserID + "/")
+        Ion.with(EditProfileActivity.this, Flippy.users + CommunityCenterActivity.regUserID + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -340,5 +332,17 @@ public class EditProfileActivity extends ActionBarActivity {
 
         };
         Flippy.getInstance().getRequestQueue().add(putRequest);
+    }
+
+    private void showSuperToast(String message) {
+        SuperToast superToast = new SuperToast(EditProfileActivity.this);
+        superToast.setAnimations(SuperToast.Animations.FLYIN);
+        superToast.setDuration(SuperToast.Duration.LONG);
+        superToast.setBackground(SuperToast.Background.RED);
+        superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+        superToast.setText(message);
+        superToast.show();
+
     }
 }

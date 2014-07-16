@@ -4,8 +4,6 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -17,6 +15,7 @@ import com.google.gson.JsonObject;
 import com.jojo.flippy.adapter.ChannelMemberAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.profile.MemberDetailActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
@@ -126,7 +125,9 @@ public class SelectChannelActivity extends ActionBarActivity {
                 String channelId = textViewMemberLastName.getText().toString();
                 String channelName = textViewMemberFirstName.getText().toString();
                 if (isPromoteUser) {
-
+                    intent.setClass(SelectChannelActivity.this, MemberDetailActivity.class);
+                    intent.putExtra("channelId", channelId);
+                    setResult(1, intent);
                 }
                 intent.setClass(SelectChannelActivity.this, CreateNoticeActivity.class);
                 intent.putExtra("channelId", channelId);
@@ -151,18 +152,4 @@ public class SelectChannelActivity extends ActionBarActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.select_channel, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

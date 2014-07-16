@@ -4,12 +4,12 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
@@ -40,7 +40,6 @@ public class MemberDetailActivity extends ActionBarActivity {
 
     private Intent intent;
     private Button buttonAddAsAdmin;
-    private ScrollView scrollViewUserDetail;
     private ImageView imageViewMemberAnotherUserProfilePic;
     private TextView textViewAnotherUserEmail;
     private TextView textViewAnotherUserName;
@@ -48,12 +47,10 @@ public class MemberDetailActivity extends ActionBarActivity {
     private TextView textViewAnotherUseLastName;
     private TextView textViewUserCommunityName;
 
-
-    private boolean isManageActivity = false;
-    private int requestCode = 0;
     private TextView textViewUserTotalNumberOfCircles;
     private String TotalChannels;
     private int PROMOTE_USER = 1;
+    private String userDetailURL;
 
 
     @Override
@@ -61,19 +58,19 @@ public class MemberDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_detail);
 
-        ActionBar actionBar = getActionBar();
-
 
         intent = getIntent();
         memberId = intent.getStringExtra("memberId");
-        requestCode = intent.getIntExtra("requestCode", 0);
         memberEmailReceived = intent.getStringExtra("memberEmail");
         memberFullNameReceived = intent.getStringExtra("memberFullName");
-        actionBar.setSubtitle(memberEmailReceived + "'s profile");
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
 
-        String userDetailURL = Flippy.channels + memberId + "/";
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setSubtitle(memberEmailReceived + "'s profile");
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        userDetailURL = Flippy.users + memberId + "/";
         intent.setClass(MemberDetailActivity.this, ImagePreviewActivity.class);
         textViewAnotherUserEmail = (TextView) findViewById(R.id.textViewAnotherUserEmail);
         textViewUserCommunityName = (TextView) findViewById(R.id.textViewUserCommunityName);
@@ -82,10 +79,13 @@ public class MemberDetailActivity extends ActionBarActivity {
         textViewAnotherFirstName = (TextView) findViewById(R.id.textViewAnotherFirstName);
         textViewUserTotalNumberOfCircles = (TextView) findViewById(R.id.textViewUserTotalNumberOfCircles);
         imageViewMemberAnotherUserProfilePic = (ImageView) findViewById(R.id.imageViewMemberAnotherUserProfilePic);
+        textViewAnotherUserEmail.setText(memberEmailReceived);
+        textViewAnotherUserName.setText(memberFullNameReceived);
+
         hideViews();
         buttonAddAsAdmin = (Button) findViewById(R.id.buttonAddAsAdmin);
-        //load the details of a member
-        loadMemberData(userDetailURL);
+        buttonAddAsAdmin.setVisibility(View.GONE);
+        loadMemberData();
         buttonAddAsAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,23 +104,32 @@ public class MemberDetailActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-
     }
 
-    private void loadMemberData(String userDetailURL) {
+    private void loadMemberData() {
         Ion.with(MemberDetailActivity.this)
                 .load(userDetailURL)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
+                        Log.e("Url", userDetailURL);
                         if (result != null) {
+                            if (result.has("detail")) {
+                                buttonAddAsAdmin.setVisibility(View.GONE);
+                                Crouton.makeText(MemberDetailActivity.this, result.get("detail").toString(), Style.INFO).show();
+                                return;
+                            }
                             memberEmail = result.get("email").getAsString();
                             memberCommunity = result.get("community").getAsString();
                             memberFirstNameNew = result.get("first_name").getAsString();
                             memberLastNameNew = result.get("last_name").getAsString();
+                            String currentUser = CommunityCenterActivity.regUserEmail;
                             if (!result.get("avatar").isJsonNull()) {
                                 avatar = result.get("avatar").getAsString();
+                            }
+                            if (!memberEmail.equals(currentUser)) {
+                                buttonAddAsAdmin.setVisibility(View.VISIBLE);
                             }
                             getCommunityName(memberCommunity);
                         }
@@ -133,12 +142,9 @@ public class MemberDetailActivity extends ActionBarActivity {
     }
 
     private void hideViews() {
-        imageViewMemberAnotherUserProfilePic.setVisibility(View.GONE);
         textViewAnotherUseLastName.setVisibility(View.GONE);
-        textViewAnotherUserEmail.setVisibility(View.GONE);
         textViewUserTotalNumberOfCircles.setVisibility(View.GONE);
         textViewAnotherFirstName.setVisibility(View.GONE);
-        textViewAnotherUserName.setVisibility(View.GONE);
         textViewUserCommunityName.setVisibility(View.GONE);
     }
 
@@ -149,6 +155,9 @@ public class MemberDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
+                        if (result.has("detail")) {
+                            return;
+                        }
                         if (result != null) {
                             JsonArray subscriptionArray = result.getAsJsonArray("results");
                             textViewUserTotalNumberOfCircles.setVisibility(View.VISIBLE);
@@ -197,7 +206,6 @@ public class MemberDetailActivity extends ActionBarActivity {
     }
 
     private void getCommunityName(String communityId) {
-        //load the creator of the channel
         Ion.with(MemberDetailActivity.this)
                 .load(Flippy.communitiesURL + communityId + "/")
                 .asJsonObject()
@@ -218,18 +226,12 @@ public class MemberDetailActivity extends ActionBarActivity {
     }
 
     private void showViews() {
-        memberFullName = memberFirstNameNew + ", " + memberLastNameNew;
-        textViewAnotherUserName.setText(memberFullName);
-        textViewAnotherUserName.setVisibility(View.VISIBLE);
         textViewAnotherFirstName.setText(memberFirstNameNew);
         textViewAnotherUseLastName.setText(memberLastNameNew);
         textViewAnotherFirstName.setVisibility(View.VISIBLE);
         textViewAnotherUseLastName.setVisibility(View.VISIBLE);
-        textViewAnotherUserEmail.setVisibility(View.VISIBLE);
-        textViewAnotherUserEmail.setText(memberEmail);
         textViewUserCommunityName.setText(memberCommunityName);
         textViewUserCommunityName.setVisibility(View.VISIBLE);
-        imageViewMemberAnotherUserProfilePic.setVisibility(View.VISIBLE);
         Ion.with(imageViewMemberAnotherUserProfilePic)
                 .placeholder(R.drawable.default_profile_picture)
                 .animateIn(R.anim.fade_in)
@@ -255,7 +257,7 @@ public class MemberDetailActivity extends ActionBarActivity {
                             return;
                         }
                         if (e != null) {
-                            ToastMessages.showToastLong(MemberDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            ToastMessages.showToastShort(MemberDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
                             return;
                         }
 
@@ -269,6 +271,10 @@ public class MemberDetailActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (data == null) {
 
+        } else {
+            if (requestCode == 1 && resultCode == 1) {
+                promoteUser(data.getStringExtra("channelId"));
+            }
         }
     }
 }

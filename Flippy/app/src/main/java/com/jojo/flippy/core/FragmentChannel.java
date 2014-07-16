@@ -38,7 +38,6 @@ public class FragmentChannel extends Fragment {
     private String totalMembers = "";
     private Button buttonAddChannel;
     private String isManageActivity = "false";
-    private String userChannels = "/subscriptions/";
     private ChannelAdapter adapter;
     private TextView textViewEmptyChannel;
 
@@ -64,7 +63,7 @@ public class FragmentChannel extends Fragment {
                 R.layout.channel_listview, rowItems, true);
         ChannelListView.setAdapter(adapter);
         //get the request url
-        String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
+        String url = Flippy.users + CommunityCenterActivity.regUserID + "/subscriptions/";
 
 
         //load the channels user subscribed to

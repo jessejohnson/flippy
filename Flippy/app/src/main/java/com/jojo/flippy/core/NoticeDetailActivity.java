@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -39,6 +40,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 
 public class NoticeDetailActivity extends ActionBarActivity {
+    SuperToast superToast;
     private Button buttonPublishNotice;
     private GoogleMap googleMap;
     private Intent intent;
@@ -47,8 +49,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private String noticeId;
     private String noticeBody;
     private String noticeSubtitle;
-
-
     private TextView textViewNoticeTitleDetail;
     private TextView textViewNoticeSubtitleDetail;
     private TextView textViewNoticeTextDetail;
@@ -61,8 +61,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private ImageView imageViewNoticeCreatorImage;
     private ImageView imageViewStarDetail;
     private ImageView imageViewDeletePost;
-
-
     private String image_link;
     private String author_email;
     private String author_profile = "";
@@ -75,30 +73,30 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private String endDate;
     private int reminderInterval;
     private String noReminder;
-
     private LinearLayout linearLayoutMapView;
-
     private Calendar calendar;
-
     private String noPost = "Sorry, this post has been remove";
+    private String currentUserEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notice_detail);
 
-
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-
         intent = getIntent();
         noticeTitle = intent.getStringExtra("noticeTitle");
         noticeId = intent.getStringExtra("noticeId");
         noticeSubtitle = intent.getStringExtra("noticeSubtitle");
         noticeBody = intent.getStringExtra("noticeBody");
-        actionBar.setSubtitle(noticeTitle);
+        currentUserEmail = CommunityCenterActivity.regUserEmail;
+        String url = Flippy.allPostURL + noticeId + "/";
+        superToast = new SuperToast(NoticeDetailActivity.this);
 
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setSubtitle(noticeTitle);
+        }
         imageViewNoticeImageDetail = (ImageView) findViewById(R.id.imageViewNoticeImageDetail);
         imageViewStarDetail = (ImageView) findViewById(R.id.imageViewStarDetail);
         imageViewNoticeCreatorImage = (ImageView) findViewById(R.id.imageViewNoticeCreatorImage);
@@ -113,15 +111,15 @@ public class NoticeDetailActivity extends ActionBarActivity {
         textViewNoticeTitleDetail.setText(noticeTitle);
         textViewNoticeTextDetail.setText(noticeBody);
         textViewNoticeSubtitleDetail.setText(noticeSubtitle);
-        textViewNoticeSubtitleChannelName.setText("");
         imageViewDeletePost = (ImageView) findViewById(R.id.imageViewDeletePost);
-        imageViewDeletePost.setEnabled(false);
+        imageViewDeletePost.setVisibility(View.INVISIBLE);
 
 
         //place holder texts
         textViewAuthorEmailAddress.setText("");
         textViewNoticeTimeStamp.setText("");
         textViewLikes.setText("");
+        textViewNoticeSubtitleChannelName.setText("");
         textViewNoticeLocation.setText("");
         imageViewNoticeImageDetail.setVisibility(View.GONE);
         textViewNoticeSubtitleChannelName.setVisibility(View.GONE);
@@ -137,11 +135,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
             googleMap = ((SupportMapFragment) getSupportFragmentManager().
                     findFragmentById(R.id.linearLayoutNoticeShowLocation)).getMap();
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
         }
 
-
-        String url = Flippy.allPostURL + noticeId + "/";
         //Loading the list with data from Api call
         Ion.with(NoticeDetailActivity.this)
                 .load(url)
@@ -151,11 +146,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
                     public void onCompleted(Exception e, JsonObject result) {
                         if (result != null) {
                             if (result.has("detail")) {
-                                Crouton.makeText(NoticeDetailActivity.this, "Sorry, this post has been removed", Style.ALERT).show();
+                                showSuperToast("Sorry, this post has been removed");
                                 return;
                             }
                             JsonObject item = result.getAsJsonObject("author");
                             author_email = item.get("email").getAsString();
+                            if (author_email.equals(currentUserEmail)) {
+                                imageViewDeletePost.setVisibility(View.VISIBLE);
+                            }
                             if (!item.get("avatar").isJsonNull()) {
                                 author_profile = item.get("avatar").getAsString();
                             }
@@ -248,20 +246,28 @@ public class NoticeDetailActivity extends ActionBarActivity {
         }
         if (id == R.id.action_share_all) {
             shareNoticeWithOtherApps(noticeTitle, noticeBody, image_link, getString(R.string.splash_screen_url));
-            ToastMessages.showToastLong(NoticeDetailActivity.this, "Notice shared");
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void setAlarm() {
+    private void showSuperToast(String message) {
+        superToast.setAnimations(SuperToast.Animations.FLYIN);
+        superToast.setDuration(SuperToast.Duration.SHORT);
+        superToast.setBackground(SuperToast.Background.PURPLE);
+        superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+        superToast.setText(message);
+        superToast.show();
+    }
 
-        if (noReminder != null) {
-            ToastMessages.showToastLong(NoticeDetailActivity.this, "This notice has no reminder date");
+    private void setAlarm() {
+        if (noReminder == null) {
+            showSuperToast("This notice has no reminder");
             return;
         }
         if (startDate == null) {
-            ToastMessages.showToastLong(NoticeDetailActivity.this, "This notice has no reminder date");
+            showSuperToast("This notice has no reminder date");
             return;
         }
         String actualDate[] = startDate.replace("Z", "").trim().split("T");
@@ -431,7 +437,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 .title(noticeTitle)
                 .position(coordinate)
                 .draggable(false));
-
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(locationLat), Double.parseDouble(locationLon)), 5));
     }
 
@@ -466,6 +471,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         sendIntent.putExtra(Intent.EXTRA_TEXT, title + "\n" + body + "\n" + imageLink + "\n" + footer);
         sendIntent.setType("text/plain");
         startActivity(Intent.createChooser(sendIntent, "Share Flippy notice via ..."));
+        showSuperToast("Noticed shared successfully");
     }
 
     @Override

@@ -14,13 +14,20 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.jojo.flippy.adapter.ChannelMemberAdapter;
+import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ChannelDetailActivity extends ActionBarActivity {
@@ -45,10 +52,12 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private LinearLayout linearLayoutChannelDetailContent;
     private ProgressBar progressBarLoadChannelDetail;
     private Button buttonSubscribeToChannel, buttonManageToChannel, buttonUnSubscribeToChannel;
-    private String channelDetailSubscribeURL;
+    private String aChannelURL;
     private LinearLayout linearLayoutSubscriptions;
 
     private ListView listViewChannelPost;
+    private ChannelMemberAdapter ChannelsPostAdapter;
+    private List<ProfileItem> userChannelItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +68,12 @@ public class ChannelDetailActivity extends ActionBarActivity {
         channelName = intent.getStringExtra("channelName");
         channelId = intent.getStringExtra("channelId");
         String channelDetailsURL = Flippy.channels + channelId + "/";
-        channelDetailSubscribeURL = Flippy.channels + channelId;
-
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setSubtitle(channelName);
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
 
         imageViewChannelLarge = (ImageView) findViewById(R.id.imageViewChannelLarge);
@@ -90,6 +97,10 @@ public class ChannelDetailActivity extends ActionBarActivity {
         imageViewCreator.setVisibility(View.GONE);
 
         listViewChannelPost = (ListView) findViewById(R.id.listViewChannelPost);
+        userChannelItem = new ArrayList<ProfileItem>();
+        ChannelsPostAdapter = new ChannelMemberAdapter(ChannelDetailActivity.this,
+                R.layout.channel_members_listview, userChannelItem, false);
+        listViewChannelPost.setAdapter(ChannelsPostAdapter);
 
         textViewChannelBio.setText("");
         textViewChannelNameDetail.setText(channelName);
@@ -121,6 +132,40 @@ public class ChannelDetailActivity extends ActionBarActivity {
                             image_thumbnail_url = result.get("image_thumbnail_url").getAsString();
                             image_url = result.get("image_url").getAsString();
                             getCommunityName(communityId);
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastLong(ChannelDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                        }
+
+                    }
+                });
+        //load the details of a channel
+        Ion.with(ChannelDetailActivity.this)
+                .load(channelDetailsURL + "posts/")
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        progressBarLoadChannelDetail.setVisibility(View.GONE);
+                        if (result != null) {
+                            if (result.has("detail")) {
+                                return;
+                            } else {
+                                JsonArray channelPostsArray = result.getAsJsonArray("results");
+                                for (int i = 0; i < channelPostsArray.size(); i++) {
+                                    JsonObject item = channelPostsArray.get(i).getAsJsonObject();
+                                    String title = item.get("title").getAsString();
+                                    String content = item.get("content").getAsString();
+                                    String url = "";
+                                    if (!item.get("image_thumbnail_url").isJsonNull()) {
+                                        url = item.get("image_thumbnail_url").getAsString();
+                                    }
+                                    ProfileItem channelItem = new ProfileItem(URI.create(url), title, content, "");
+                                    userChannelItem.add(channelItem);
+                                }
+                                updateChannelPostAdapter();
+                            }
+
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(ChannelDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
@@ -174,6 +219,10 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 });
     }
 
+    private void updateChannelPostAdapter() {
+        ChannelsPostAdapter.notifyDataSetChanged();
+    }
+
     private void showViews() {
         linearLayoutChannelDetailContent.setVisibility(View.VISIBLE);
         progressBarLoadChannelDetail.setVisibility(View.GONE);
@@ -211,7 +260,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         JsonObject json = new JsonObject();
         json.addProperty("id", CommunityCenterActivity.regUserID);
         Ion.with(ChannelDetailActivity.this)
-                .load(channelDetailSubscribeURL + "/subscribe/")
+                .load(aChannelURL + "/subscribe/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()
@@ -245,7 +294,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         JsonObject json = new JsonObject();
         json.addProperty("id", CommunityCenterActivity.regUserID);
         Ion.with(ChannelDetailActivity.this)
-                .load(channelDetailSubscribeURL + "/unsubscribe/")
+                .load(aChannelURL + "/unsubscribe/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()

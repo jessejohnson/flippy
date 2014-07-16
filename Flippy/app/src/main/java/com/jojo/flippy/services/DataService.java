@@ -9,12 +9,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.InternetConnectionDetector;
-import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -114,7 +112,7 @@ public class DataService extends Service {
                                     sendBroadcast(postIntent);
                                 }
                                 if (e != null) {
-                                    ToastMessages.showToastLong(getApplicationContext(), getResources().getString(R.string.internet_connection_error_dialog_title));
+
                                 }
                             }
                         });

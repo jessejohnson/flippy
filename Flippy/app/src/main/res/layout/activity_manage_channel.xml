@@ -26,22 +26,22 @@
                 android:paddingLeft="@dimen/margin_two"
                 android:paddingRight="@dimen/margin_two">
 
-                <com.makeramen.RoundedImageView
-                     xmlns:app="http://schemas.android.com/apk/res-auto"
-                     android:id="@+id/imageViewChannelManageEdit"
-                     android:layout_width="match_parent"
-                     android:layout_height="@dimen/margin_two_hundred"
-                     android:layout_alignParentTop="true"
-                     android:padding="@dimen/margin_two"
-                     android:scaleType="centerCrop"
-                     android:background="@color/flippy_dark_header"
-                     app:border_color="@color/border"
-                     app:border_width="3dp"
-                     app:corner_radius="0dp"
-                     app:oval="false" />
+                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/imageViewChannelManageEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_two_hundred"
+                    android:layout_alignParentTop="true"
+                    android:background="@color/flippy_dark_header"
+                    android:padding="@dimen/margin_two"
+                    android:scaleType="centerCrop"
+                    app:border_color="@color/border"
+                    app:border_width="3dp"
+                    app:corner_radius="0dp"
+                    app:oval="false" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linearLayoutChannelName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_ten"
@@ -70,123 +70,20 @@
                     android:background="@drawable/ic_action_dark_edit" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <ListView
+                android:id="@+id/listViewChannelAdmins"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_ten"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <EditText
-                    android:id="@+id/editTextFirstAdmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/scrollView"
-                    android:layout_weight="0.9"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:singleLine="true"
-                    android:text="@string/dummy_user_email" />
-
-                <ImageView
-                    android:id="@+id/imageViewEditFirstAdmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.1"
-                    android:background="@android:drawable/ic_input_add" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_ten"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <EditText
-                    android:id="@+id/editTextSecondAdmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/scrollView"
-                    android:layout_weight="0.9"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:singleLine="true"
-                    android:text="@string/dummy_user_email" />
-
-                <ImageView
-                    android:id="@+id/imageViewEditSecondAdmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.1"
-                    android:background="@android:drawable/ic_input_add" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_ten"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <EditText
-                    android:id="@+id/editTextThirdAdmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/scrollView"
-                    android:layout_weight="0.9"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:singleLine="true"
-                    android:text="@string/dummy_user_email" />
-
-                <ImageView
-                    android:id="@+id/imageViewEditThirdAdmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.1"
-                    android:background="@android:drawable/ic_input_add" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_ten"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <EditText
-                    android:id="@+id/editTextFourthAdmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/scrollView"
-                    android:layout_weight="0.9"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:singleLine="true"
-                    android:text="@string/dummy_user_email" />
-
-                <ImageView
-                    android:id="@+id/imageViewEditFourthAdmin"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.1"
-                    android:background="@android:drawable/ic_input_add" />
-            </LinearLayout>
+                android:layout_alignBottom="@+id/scrollView"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/linearLayoutChannelName"
+                android:divider="@color/flippy_orange"
+                android:listSelector="@android:color/transparent"
+                android:scrollbars="none" />
         </LinearLayout>
     </ScrollView>
+
 
     <Button
         android:id="@+id/buttonRemoveChannel"
@@ -200,4 +97,5 @@
         android:background="@drawable/flippy_button_default"
         android:text="@string/manage_channel_remove"
         android:textColor="@color/flippy_white" />
+
 </RelativeLayout>

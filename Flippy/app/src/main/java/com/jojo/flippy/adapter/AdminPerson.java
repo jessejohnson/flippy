@@ -2,51 +2,47 @@ package com.jojo.flippy.adapter;
 
 import java.net.URI;
 
-/**
- * Created by odette on 6/14/14.
- */
 public class AdminPerson {
 
-    private URI profileChannelItem;
-    private String profileChannelName,profileChannelTotalNumber,textViewMemberId;
+    private URI adminProfileItem;
+    private String profileEmail, profileFullName, adminId;
 
-
-    public AdminPerson(URI profileChannelItem, String profileChannelName, String profileChannelTotalNumber, String MemberId) {
-        this.profileChannelItem = profileChannelItem;
-        this.profileChannelName = profileChannelName;
-        this.profileChannelTotalNumber = profileChannelTotalNumber;
-        this.textViewMemberId = MemberId;
+    public AdminPerson(URI profileChannelItem, String profileName, String profileFullName, String adminId) {
+        this.adminProfileItem = profileChannelItem;
+        this.profileEmail = profileName;
+        this.profileFullName = profileFullName;
+        this.adminId = adminId;
     }
 
-    public void setProfileChannelItem(URI profileChannelItem) {
-        this.profileChannelItem = profileChannelItem;
+    public void setProfileProfileFullName(String ProfileFullName) {
+        this.profileFullName = ProfileFullName;
     }
 
-    public void setProfileChannelName(String profileChannelName) {
-        this.profileChannelName = profileChannelName;
+    public URI getAdminProfileItem() {
+        return adminProfileItem;
     }
 
-    public void setProfileChannelTotalNumber(String profileChannelTotalNumber) {
-        this.profileChannelTotalNumber = profileChannelTotalNumber;
+    public void setAdminProfileItem(URI adminProfileItem) {
+        this.adminProfileItem = adminProfileItem;
     }
 
-    public URI getProfileChannelItem() {
-        return profileChannelItem;
+    public String getProfileEmail() {
+        return profileEmail;
     }
 
-    public String getProfileChannelName() {
-        return profileChannelName;
+    public void setProfileEmail(String profileEmail) {
+        this.profileEmail = profileEmail;
     }
 
-    public String getProfileChannelTotalNumber() {
-        return profileChannelTotalNumber;
+    public String getProfileFullName() {
+        return profileFullName;
     }
 
-    public String getTextViewMemberId() {
-        return textViewMemberId;
+    public String getAdminId() {
+        return adminId;
     }
 
-    public void setTextViewMemberId(String textViewMemberId) {
-        this.textViewMemberId = textViewMemberId;
+    public void setAdminId(String adminId) {
+        this.adminId = adminId;
     }
 }

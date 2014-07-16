@@ -1,8 +1,5 @@
 package com.jojo.flippy.adapter;
 
-/**
- * Created by bright on 6/12/14.
- */
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jojo.flippy.app.R;
@@ -29,16 +25,8 @@ public class ProfileAdapter extends ArrayAdapter<ProfileItem> {
         this.context = context;
     }
 
-    /*private view holder class*/
-    private class ViewHolder {
-        ImageView  imageViewChannelImage;
-        TextView textViewProfileChannelName, textViewProfileChannelTotalMembers;
-        LinearLayout linearLayoutProfile, linearLayoutProfileChannel;
-
-    }
-
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         ProfileItem rowItem = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context
@@ -50,9 +38,9 @@ public class ProfileAdapter extends ArrayAdapter<ProfileItem> {
             holder.textViewProfileChannelName = (TextView) convertView.findViewById(R.id.textViewProfileChannelName);
             holder.textViewProfileChannelTotalMembers = (TextView) convertView.findViewById(R.id.textViewProfileChannelTotalMembers);
             convertView.setTag(holder);
-        } else
+        } else {
             holder = (ViewHolder) convertView.getTag();
-
+        }
         holder.textViewProfileChannelName.setText(rowItem.getProfileChannelName());
         holder.textViewProfileChannelTotalMembers.setText(rowItem.getProfileChannelTotalNumber());
 
@@ -61,7 +49,13 @@ public class ProfileAdapter extends ArrayAdapter<ProfileItem> {
                 .animateIn(R.anim.fade_in)
                 .load(String.valueOf(rowItem.getProfileChannelItem()));
 
-
         return convertView;
+    }
+
+    /*private view holder class*/
+    private class ViewHolder {
+        ImageView imageViewChannelImage;
+        TextView textViewProfileChannelName, textViewProfileChannelTotalMembers;
+
     }
 }

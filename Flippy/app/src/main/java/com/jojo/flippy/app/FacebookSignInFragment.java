@@ -39,7 +39,7 @@ public class FacebookSignInFragment extends Fragment {
     Context mContext;
     LoginButton mLoginBtn;
     private Button signInWithEmail;
-    private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName,regGender;
+    private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName, regGender;
     private String regDateOfBirth = "";
     private String fbId, first_name, last_name, userEmail, profilePic, profilePicSmall, gender = "", avatar = "", avatar_thumb = "", date_of_birth = "";
     private SuperToast superToast;

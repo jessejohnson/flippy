@@ -42,17 +42,4 @@
         android:text=""
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <Button
-        android:id="@+id/buttonLoadOldPost"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="@dimen/margin_two"
-        android:background="@drawable/flippy_button_default_no_radius"
-        android:drawablePadding="@dimen/margin_five"
-        android:gravity="center"
-        android:text="@string/community_center_old_notice"
-        android:textColor="@color/flippy_white" />
-
 </RelativeLayout>

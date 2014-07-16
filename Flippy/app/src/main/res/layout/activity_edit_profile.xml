@@ -21,8 +21,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <com.makeramen.RoundedImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/imageViewMemberEdit"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_one_fifty"
@@ -33,26 +32,25 @@
                     app:corner_radius="0dp"
                     app:oval="false" />
 
-                <com.makeramen.RoundedImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/imageViewUploadPhoto"
                     android:layout_width="wrap_content"
-                    android:padding="@dimen/margin_ten"
-                    android:layout_margin="@dimen/margin_ten"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:layout_margin="@dimen/margin_ten"
                     android:background="@color/flippy_dark_header"
-                    android:src="@drawable/ic_action_save"
+                    android:padding="@dimen/margin_ten"
                     android:scaleType="centerCrop"
+                    android:src="@drawable/ic_action_save"
                     app:border_color="@color/border"
                     app:border_width="1dp"
                     app:corner_radius="0dp"
-                    app:oval="false"
-                    android:layout_gravity="right|bottom" />
+                    app:oval="false" />
 
                 <ProgressBar
+                    android:id="@+id/progressBarUpdateAvatar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/progressBarUpdateAvatar"
                     android:layout_gravity="center" />
 
             </FrameLayout>
@@ -123,30 +121,6 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/dummy_user_name"
                         android:inputType="text"
-                        android:singleLine="true"
-                        android:textColor="@color/flippy_dark_header" />
-
-                    <TextView
-                        android:id="@+id/textViewMemberNumber"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_ten"
-                        android:text="@string/edit_profile_number"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/flippy_orange" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_margin="@dimen/margin_two"
-                        android:background="@color/flippy_orange" />
-
-                    <EditText
-                        android:id="@+id/editTextEditProfileNumber"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/dummy_user_number"
-                        android:inputType="phone"
                         android:singleLine="true"
                         android:textColor="@color/flippy_dark_header" />
 

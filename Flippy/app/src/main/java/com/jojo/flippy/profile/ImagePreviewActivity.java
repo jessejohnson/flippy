@@ -1,15 +1,8 @@
 package com.jojo.flippy.profile;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,20 +11,16 @@ import android.widget.ProgressBar;
 
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.util.ToastMessages;
-import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.koushikdutta.ion.ProgressCallback;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class ImagePreviewActivity extends ActionBarActivity {
     private ImageView imageViewPreviewShare;
     private Intent intent;
     private ProgressBar progressBarLoadUserImage;
-    private ProgressDialog progressDialog;
     private String avatar;
 
 
@@ -44,7 +33,13 @@ public class ImagePreviewActivity extends ActionBarActivity {
         avatar = intent.getStringExtra("avatar");
         imageViewPreviewShare = (ImageView) findViewById(R.id.imageViewPreviewShare);
         progressBarLoadUserImage = (ProgressBar) findViewById(R.id.progressBarLoadUserImage);
-        progressDialog = new ProgressDialog(ImagePreviewActivity.this);
+
+
+        if (avatar == null || avatar.equals("")) {
+            progressBarLoadUserImage.setVisibility(View.GONE);
+            Crouton.makeText(ImagePreviewActivity.this, "The request cannot be processed", Style.ALERT);
+            return;
+        }
 
         Ion.with(imageViewPreviewShare)
                 .placeholder(R.color.flippy_dark_header)
@@ -58,7 +53,7 @@ public class ImagePreviewActivity extends ActionBarActivity {
                             ToastMessages.showToastLong(ImagePreviewActivity.this, getResources().getString(R.string.internet_connection_error_dialog_message));
                             return;
                         }
-                  }
+                    }
                 });
 
 
