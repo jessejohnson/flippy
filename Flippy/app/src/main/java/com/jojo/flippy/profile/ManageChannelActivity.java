@@ -37,6 +37,7 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -225,15 +226,14 @@ public class ManageChannelActivity extends ActionBarActivity {
                         }
                         if (result != null) {
                             JsonArray adminArray = result.getAsJsonArray("results");
-
-                            Log.e("Resulting array ", adminArray.size() + "");
-                            Log.e("Array", adminArray.toString());
-
                             for (int i = 0; i < adminArray.size(); i++) {
-                                //JsonObject item = adminArray.get(i).getAsJsonObject();
-                                //JsonObject creator = item.getAsJsonObject("creator");
-                                // AdminPerson profileItem = new AdminPerson(URI.create(item.get("image_url").getAsString()), item.get("name").getAsString(), creator.get("email").getAsString(), "");
-                                //rowItems.add(profileItem);
+                                JsonObject item = adminArray.get(i).getAsJsonObject();
+                                String avatar = "";
+                                if (!item.get("avatar").isJsonNull()) {
+                                    avatar = item.get("avatar").getAsString();
+                                }
+                                AdminPerson profileItem = new AdminPerson(URI.create(avatar), item.get("email").getAsString(), item.get("first_name").getAsString() + ", " + item.get("last_name").getAsString(), item.get("id").getAsString());
+                                rowItems.add(profileItem);
                             }
                             updateAdapter();
                         }

@@ -28,8 +28,7 @@
                 android:orientation="vertical"
                 android:padding="@dimen/margin_ten">
 
-                <com.makeramen.RoundedImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/imageViewMemberAnotherUserProfilePic"
                     android:layout_width="@dimen/margin_one_fifty"
                     android:layout_height="@dimen/margin_one_fifty"

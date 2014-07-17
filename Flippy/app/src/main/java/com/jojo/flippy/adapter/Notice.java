@@ -21,7 +21,7 @@ public class Notice {
     String location;
 
 
-    public Notice(String id, String title, String subtitle, String content, String creatorId, String channelId, String dateInfo, URI imageUrl, URI creatorUrl) {
+    public Notice(String id, String title, String subtitle, String content, String creatorId, String channelId, String dateInfo, URI creatorUrl, URI imageUrl) {
         this.id = id;
         this.creatorId = creatorId;
         this.channelId = channelId;
@@ -65,11 +65,11 @@ public class Notice {
         this.title = title;
     }
 
-    public String getSubtitle(){
+    public String getSubtitle() {
         return subtitle;
     }
 
-    public void setSubtitle(String subtitle){
+    public void setSubtitle(String subtitle) {
         this.subtitle = subtitle;
     }
 

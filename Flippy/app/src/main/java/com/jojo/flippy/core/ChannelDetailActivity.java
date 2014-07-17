@@ -139,7 +139,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
 
                     }
                 });
-        //load the details of a channel
+        //load the post i this channel
         Ion.with(ChannelDetailActivity.this)
                 .load(channelDetailsURL + "posts/")
                 .asJsonObject()
@@ -153,15 +153,19 @@ public class ChannelDetailActivity extends ActionBarActivity {
                             } else {
                                 JsonArray channelPostsArray = result.getAsJsonArray("results");
                                 for (int i = 0; i < channelPostsArray.size(); i++) {
-                                    JsonObject item = channelPostsArray.get(i).getAsJsonObject();
-                                    String title = item.get("title").getAsString();
-                                    String content = item.get("content").getAsString();
-                                    String url = "";
-                                    if (!item.get("image_thumbnail_url").isJsonNull()) {
-                                        url = item.get("image_thumbnail_url").getAsString();
+                                    if (i <= 10) {
+                                        JsonObject item = channelPostsArray.get(i).getAsJsonObject();
+                                        String title = item.get("title").getAsString();
+                                        String content = item.get("content").getAsString();
+                                        String url = "";
+                                        if (!item.get("image_thumbnail_url").isJsonNull()) {
+                                            url = item.get("image_thumbnail_url").getAsString();
+                                        }
+                                        ProfileItem channelItem = new ProfileItem(URI.create(url), title, content, "");
+                                        userChannelItem.add(channelItem);
+                                    } else {
+                                        return;
                                     }
-                                    ProfileItem channelItem = new ProfileItem(URI.create(url), title, content, "");
-                                    userChannelItem.add(channelItem);
                                 }
                                 updateChannelPostAdapter();
                             }

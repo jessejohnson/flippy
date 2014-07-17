@@ -63,7 +63,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:gravity="left"
+                    android:gravity="center_horizontal"
                     android:paddingBottom="@dimen/margin_five"
                     android:paddingLeft="@dimen/margin_five"
                     android:paddingRight="@dimen/margin_five"
@@ -82,7 +82,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="@dimen/margin_five">
 
 
                     <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -133,15 +134,16 @@
                             android:textColor="@color/flippy_dark_header" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <ListView
                     android:id="@+id/listViewChannelPost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:listSelector="@android:color/transparent"
                     android:layout_below="@+id/linearLayoutUserProfile"
                     android:layout_marginBottom="@dimen/margin_eighty"
                     android:divider="@color/flippy_orange"
-                    android:dividerHeight="@dimen/margin_one" />
+                    android:dividerHeight="@dimen/margin_one"
+                    android:listSelector="@android:color/transparent" />
 
             </LinearLayout>
         </ScrollView>
