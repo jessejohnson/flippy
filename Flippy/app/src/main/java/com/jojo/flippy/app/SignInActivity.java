@@ -61,8 +61,6 @@ public class SignInActivity extends ActionBarActivity {
         signGetStartedButton = (Button) findViewById(R.id.signGetStartedButton);
         signInEmail = (EditText) findViewById(R.id.editTextSigninEmail);
         signInPassword = (EditText) findViewById(R.id.editTextSigninPassword);
-        signInCheckBox = (CheckBox) findViewById(R.id.checkBoxRegisterAgreement);
-
         intent = new Intent();
 
         signGetStartedButton.setOnClickListener(new View.OnClickListener() {
@@ -82,15 +80,6 @@ public class SignInActivity extends ActionBarActivity {
                     allFieldsValid = true;
                 } else {
                     signInPassword.setError(getString(R.string.registration_error_password));
-                    allFieldsValid = false;
-
-                }
-                if (signInCheckBox.isChecked()) {
-                    signInCheckBox.setError(null);
-                    allFieldsValid = true;
-
-                } else {
-                    signInCheckBox.setError(getString(R.string.registration_error_checkbox));
                     allFieldsValid = false;
 
                 }
