@@ -48,6 +48,7 @@ public class UserAccountLogout extends ActionBarActivity {
         builder.setPositiveButton("Yes, continue", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 deleteAllPost();
                 deleteUser();
                 dialog.dismiss();

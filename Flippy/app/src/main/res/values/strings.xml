@@ -146,8 +146,8 @@
     <string name="settings_accessibility_subtitle">make flippy better for you</string>
     <string name="settings_about">About Flippy</string>
     <string name="settings_about_subtitle">more about flippy</string>
-    <string name="settings_account">Account settings</string>
-    <string name="settings_account_subtitle">log out here</string>
+    <string name="settings_account">Log Out of Flippy</string>
+    <string name="settings_account_subtitle">you can log in again</string>
     <string name="settings_version">Version</string>
     <string name="settings_version_subtitle">version information</string>
 
