@@ -8,15 +8,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jojo.flippy.app.R;
-import com.jojo.flippy.core.CommunityCenterActivity;
-import com.jojo.flippy.core.SelectChannelActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
@@ -39,7 +36,6 @@ public class MemberDetailActivity extends ActionBarActivity {
     private String avatar = "";
 
     private Intent intent;
-    private Button buttonAddAsAdmin;
     private ImageView imageViewMemberAnotherUserProfilePic;
     private TextView textViewAnotherUserEmail;
     private TextView textViewAnotherUserName;
@@ -49,7 +45,6 @@ public class MemberDetailActivity extends ActionBarActivity {
 
     private TextView textViewUserTotalNumberOfCircles;
     private String TotalChannels;
-    private int PROMOTE_USER = 1;
     private String userDetailURL;
 
 
@@ -57,7 +52,6 @@ public class MemberDetailActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_member_detail);
-
 
         intent = getIntent();
         memberId = intent.getStringExtra("memberId");
@@ -83,18 +77,8 @@ public class MemberDetailActivity extends ActionBarActivity {
         textViewAnotherUserName.setText(memberFullNameReceived);
 
         hideViews();
-        buttonAddAsAdmin = (Button) findViewById(R.id.buttonAddAsAdmin);
-        buttonAddAsAdmin.setVisibility(View.GONE);
         loadMemberData();
-        buttonAddAsAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intentChooseChannel = new Intent(MemberDetailActivity.this, SelectChannelActivity.class);
-                intentChooseChannel.putExtra("userId", CommunityCenterActivity.regUserID);
-                intentChooseChannel.putExtra("isPromoteUser", true);
-                startActivityForResult(intentChooseChannel, PROMOTE_USER);
-            }
-        });
+
         imageViewMemberAnotherUserProfilePic = (ImageView) findViewById(R.id.imageViewMemberAnotherUserProfilePic);
         imageViewMemberAnotherUserProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +100,6 @@ public class MemberDetailActivity extends ActionBarActivity {
                         Log.e("Url", userDetailURL);
                         if (result != null) {
                             if (result.has("detail")) {
-                                buttonAddAsAdmin.setVisibility(View.GONE);
                                 Crouton.makeText(MemberDetailActivity.this, result.get("detail").toString(), Style.INFO).show();
                                 return;
                             }
@@ -124,12 +107,8 @@ public class MemberDetailActivity extends ActionBarActivity {
                             memberCommunity = result.get("community").getAsString();
                             memberFirstNameNew = result.get("first_name").getAsString();
                             memberLastNameNew = result.get("last_name").getAsString();
-                            String currentUser = CommunityCenterActivity.regUserEmail;
                             if (!result.get("avatar").isJsonNull()) {
                                 avatar = result.get("avatar").getAsString();
-                            }
-                            if (!memberEmail.equals(currentUser)) {
-                                buttonAddAsAdmin.setVisibility(View.VISIBLE);
                             }
                             getCommunityName(memberCommunity);
                         }
@@ -156,7 +135,7 @@ public class MemberDetailActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         if (result.has("detail")) {
-                            return;
+                            Log.e("Error", result.get("detail").toString());
                         }
                         if (result != null) {
                             JsonArray subscriptionArray = result.getAsJsonArray("results");

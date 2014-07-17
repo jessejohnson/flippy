@@ -38,7 +38,7 @@ public class FacebookSignInFragment extends Fragment {
     private static final String TAG = "FacebookLogin";
     Context mContext;
     LoginButton mLoginBtn;
-    private Button signInWithEmail;
+    private Button signInWithEmail, buttonLoginWithEmail;
     private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName, regGender;
     private String regDateOfBirth = "";
     private String fbId, first_name, last_name, userEmail, profilePic, profilePicSmall, gender = "", avatar = "", avatar_thumb = "", date_of_birth = "";
@@ -62,7 +62,14 @@ public class FacebookSignInFragment extends Fragment {
 
         mContext = getActivity();
         superToast = new SuperToast(mContext);
-
+        buttonLoginWithEmail = (Button) view.findViewById(R.id.buttonLoginWithEmail);
+        buttonLoginWithEmail.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), SignInActivity.class);
+                startActivity(intent);
+            }
+        });
         signInWithEmail = (Button) view.findViewById(R.id.buttonSigninWithEmail);
         signInWithEmail.setOnClickListener(new OnClickListener() {
             @Override

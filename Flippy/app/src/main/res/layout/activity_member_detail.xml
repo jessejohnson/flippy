@@ -9,8 +9,8 @@
     tools:context="com.jojo.flippy.profile.MemberDetailActivity">
 
     <ScrollView
-        android:layout_width="match_parent"
         android:id="@+id/scrollViewUserDetail"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -126,18 +126,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-
-            <Button
-                android:id="@+id/buttonAddAsAdmin"
-                android:layout_margin="@dimen/margin_ten"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/flippy_white"
-                android:background="@drawable/flippy_button_default"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:text="@string/another_member_detail_add_as_admin" />
 
         </LinearLayout>
     </ScrollView>
