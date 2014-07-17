@@ -73,7 +73,6 @@
     <string name="subscription_state_false">Unsubscribe</string>
     <string name="channel_empty">Currently no channel</string>
 
-
     <!-- The facebook application id -->
     <string name="app_id">305971362902085</string>
     <string name="facebook_error_tittle">Facebook sign in error</string>
@@ -303,8 +302,6 @@
     <string name="security_three">        You will not upload viruses or other malicious code.</string>
     <string name="security_four">        You will not solicit login information or access an account belonging to someone else.</string>
     <string name="security_conclusion">       Flippy reserves the rights to deactivate a user\'s\’ account without prior notice if a user is suspected of or is indulging in any activity which is illegal or violates the right or other users or the policy of Flippy.</string>
-
-
     <string name="title_activity_user_account_logout">Logout from my account</string>
     <string name="activity_user_account_logout">LOG ME OUT</string>
     <string name="activity_user_account_logout_title">LOGGING OUT YOUR ACCOUNT WILL:</string>
@@ -313,10 +310,9 @@
     <string name="activity_user_account_logout_info_three">Stop Flippy notifications</string>
     <string name="activity_user_account_logout_info_four">Require a to login next time you come</string>
 
-
-    <!-- strings for version activity-->
+    <!-- strings for version activity -->
     <string name="title_activity_version_info">Flippy version information</string>
     <string name="activity_version_current">Current Version</string>
-
+    <string name="title_activity_preview_post">Notice preview</string>
 
 </resources>

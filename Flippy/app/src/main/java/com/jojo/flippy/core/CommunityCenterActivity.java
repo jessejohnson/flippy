@@ -18,35 +18,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ShareActionProvider;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.CustomDrawer;
 import com.jojo.flippy.adapter.DrawerItem;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.profile.AccountProfileActivity;
-import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by bright on 6/9/14.
- */
 public class CommunityCenterActivity extends ActionBarActivity {
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
     public static String regUserEmail = "";
     public static String userFirstName = "";
     public static String userLastName = "";
@@ -57,15 +43,16 @@ public class CommunityCenterActivity extends ActionBarActivity {
     public static String regUserID;
     public static String userDateOfBirth = "";
     public static String userGender = "";
-    public  static String userAuthToken;
+    public static String userAuthToken;
+    CustomDrawer adapter;
+    List<DrawerItem> dataList;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private ActionBarDrawerToggle mDrawerToggle;
     private User currentUser;
     private Dao<User, Integer> userDao;
-
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    CustomDrawer adapter;
-
-    List<DrawerItem> dataList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,7 +200,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 return true;
             case R.id.action_add:
                 Intent intentChooseChannel = new Intent(CommunityCenterActivity.this, SelectChannelActivity.class);
-                intentChooseChannel.putExtra("userId",regUserID);
+                intentChooseChannel.putExtra("userId", regUserID);
                 startActivity(intentChooseChannel);
                 return true;
             case R.id.action_settings:
@@ -253,17 +240,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
         mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-
-    /* this class set the onclick listener for the various drawer items*/
-    private class DrawerItemClickListener implements
-            ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
-            SelectItem(position);
-        }
     }
 
     @Override
@@ -320,9 +296,19 @@ public class CommunityCenterActivity extends ActionBarActivity {
                     }
                 }).setNegativeButton(R.string.exit_negative, null).show();
     }
+
     @Override
-    protected void onStop()
-    {
+    protected void onStop() {
         super.onStop();
+    }
+
+    /* this class set the onclick listener for the various drawer items*/
+    private class DrawerItemClickListener implements
+            ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            SelectItem(position);
+        }
     }
 }

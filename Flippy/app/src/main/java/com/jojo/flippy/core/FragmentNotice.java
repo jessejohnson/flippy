@@ -162,13 +162,13 @@ public class FragmentNotice extends Fragment {
 
 
     private void persistPost(
-            String notice_id, String notice_title, String notice_body, String notice_image, String start_date, String author_email, String author_id, String author_first_name, String author_last_name, String channel_id) {
+            String notice_id, String notice_title, String notice_body, String notice_image, String start_date, String author_email, String author_id, String author_first_name, String author_last_name, String authorAvatar, String authorAvatarThumb, String channel_id) {
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
                     DatabaseHelper.class);
             postDao = databaseHelper.getPostDao();
             Calendar calendar = Calendar.getInstance();
-            Post post = new Post(notice_id, notice_title, notice_body, notice_image, start_date, author_email, author_id, author_first_name, author_last_name, channel_id, calendar.getTimeInMillis());
+            Post post = new Post(notice_id, notice_title, notice_body, notice_image, start_date, author_email, author_id, author_first_name, author_last_name, authorAvatar, authorAvatarThumb, channel_id, calendar.getTimeInMillis());
             postDao.create(post);
             loadAdapterFromDatabase(view);
 
@@ -206,10 +206,16 @@ public class FragmentNotice extends Fragment {
                                     image_link = item.get("image_url").getAsString();
                                 }
                                 String authorEmail = author.get("email").getAsString();
+                                String authorAvatarThumb = "flip";
+                                String authorAvatar = "flip";
+                                if (!item.get("avatar_thumb").isJsonNull()) {
+                                    authorAvatarThumb = author.get("avatar_thumb").getAsString();
+                                    authorAvatar = author.get("avatar").getAsString();
+                                }
                                 String authorId = author.get("id").getAsString();
                                 String authorFirstName = author.get("first_name").getAsString();
                                 String authorLastName = author.get("last_name").getAsString();
-                                persistPost(id, title, content, image_link, startDate, authorEmail, authorId, authorFirstName, authorLastName, channel);
+                                persistPost(id, title, content, image_link, startDate, authorEmail, authorId, authorFirstName, authorLastName, authorAvatar, authorAvatarThumb, channel);
 
                             }
 
@@ -246,7 +252,7 @@ public class FragmentNotice extends Fragment {
                         Log.e("Date error", error.toString());
                     }
                     String subtitle = post.author_first_name + ", " + post.author_first_name;
-                    noticeFeed.add(new Notice(post.notice_id, post.notice_title, subtitle, post.notice_body, post.author_id, post.channel_id, timestamp, URI.create(post.notice_image)));
+                    noticeFeed.add(new Notice(post.notice_id, post.notice_title, subtitle, post.notice_body, post.author_id, post.channel_id, timestamp, URI.create(post.author_avatar_thumb), URI.create(post.notice_image)));
 
                 }
                 updateListAdapter();
@@ -283,7 +289,7 @@ public class FragmentNotice extends Fragment {
                         //maintain the first format
                     }
                     String subtitle = post.author_first_name + ", " + post.author_first_name;
-                    noticeFeed.add(new Notice(post.notice_id, post.notice_title, subtitle, post.notice_body, post.author_id, post.channel_id, timestamp, URI.create(post.notice_image)));
+                    noticeFeed.add(new Notice(post.notice_id, post.notice_title, subtitle, post.notice_body, post.author_id, post.channel_id, timestamp, URI.create(post.author_avatar_thumb), URI.create(post.notice_image)));
 
                 }
                 updateListAdapter();

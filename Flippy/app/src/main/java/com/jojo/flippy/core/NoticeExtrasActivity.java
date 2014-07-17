@@ -13,11 +13,11 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
@@ -27,13 +27,8 @@ import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-
 import com.google.gson.JsonObject;
-import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.stmt.UpdateBuilder;
 import com.jojo.flippy.app.R;
-import com.jojo.flippy.persistence.DatabaseHelper;
-import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
@@ -41,27 +36,24 @@ import com.koushikdutta.ion.Ion;
 
 import java.util.Calendar;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
-
 public class NoticeExtrasActivity extends ActionBarActivity {
+    private static final int BROWSE_IMAGE = 1;
+    private static final int TAKE_PHOTO = 2;
+    private static final int START_MAP = 3;
+    public static int reminderYear, reminderMonth, reminderDay, reminderHour, reminderMinute;
+    protected static FragmentManager timerSupport;
+    private static String datePicked;
+    private static String timePicked;
+    private static String location;
+    Uri imageUri;
     private Intent intent;
     private String channelToCreateNotice;
     private String noticeContent, noticeTitle;
-    public static int reminderYear, reminderMonth, reminderDay, reminderHour, reminderMinute;
-    protected static FragmentManager timerSupport;
     private Button buttonAddImageToNotice, buttonPreviewCreateNotice, buttonAddMapToNotice;
     private AlertDialog levelDialog;
     private ImageView imageViewNoticeImageCaptured;
     private String lat, lon;
-
-
-    private static final int BROWSE_IMAGE = 1;
-    private static final int TAKE_PHOTO = 2;
-    private static final int START_MAP = 3;
     private Bitmap bitmapNotice;
-    Uri imageUri;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +65,10 @@ public class NoticeExtrasActivity extends ActionBarActivity {
         noticeTitle = intent.getStringExtra("noticeTitle");
 
         ActionBar actionBar = getActionBar();
-        actionBar.setSubtitle(noticeTitle);
+        if (actionBar != null) {
+            actionBar.setSubtitle(noticeTitle);
+        }
+
         timerSupport = getSupportFragmentManager();
 
 
@@ -85,6 +80,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                 intent.putExtra("isPreview", true);
                 intent.putExtra("noticeTitle", noticeTitle);
                 intent.putExtra("noticeContent", noticeContent);
+                createPostWithoutImage(noticeTitle, noticeContent, channelToCreateNotice);
 
             }
         });
@@ -117,57 +113,6 @@ public class NoticeExtrasActivity extends ActionBarActivity {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
-
-    public static class DatePickerFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month, day);
-        }
-
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            // Do something with the date chosen by the user
-            reminderYear = year;
-            reminderMonth = month;
-            reminderDay = day;
-            ToastMessages.showToastLong(getActivity(), "Date picked is  " + year + ": " + month + " : " + day);
-            DialogFragment timer = new TimePickerFragment();
-            timer.show(timerSupport, "timePicker");
-
-        }
-    }
-
-    public static class TimePickerFragment extends DialogFragment
-            implements TimePickerDialog.OnTimeSetListener {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
-
-            // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), this, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
-        }
-
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            // collect the chosen date ready to be sent to server
-            reminderHour = hourOfDay;
-            reminderMinute = minute;
-            ToastMessages.showToastLong(getActivity(), "Time picked is  " + hourOfDay + ": " + minute);
-        }
-    }
-
 
     private void imageUploadOptions() {
         final CharSequence[] items = {"Browse gallery", " Take photo "};
@@ -218,7 +163,6 @@ public class NoticeExtrasActivity extends ActionBarActivity {
 
     }
 
-
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Uri selectedImageUri = null;
         String filePath = null;
@@ -241,7 +185,8 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                 break;
             case START_MAP:
                 if (resultCode == RESULT_OK) {
-                    Log.e("From location",data.getStringExtra("location"));
+                    Log.e("From location", data.getStringExtra("location"));
+                    location = data.getStringExtra("location");
                     String[] location = data.getStringExtra("location").split(",");
                     lat = location[0];
                     lon = location[1];
@@ -315,13 +260,11 @@ public class NoticeExtrasActivity extends ActionBarActivity {
             return null;
     }
 
-    private boolean createPostWithoutImage(String title, String body, String channel, String author) {
+    private boolean createPostWithoutImage(String title, String body, String channel) {
         JsonObject json = new JsonObject();
         json.addProperty("title", title);
         json.addProperty("content", body);
-        json.addProperty("channel", channel);
-        json.addProperty("author", author);
-
+        json.addProperty("channel_id", channel);
         Ion.with(NoticeExtrasActivity.this, Flippy.allPostURL)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
@@ -340,6 +283,54 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                 });
 
         return true;
+    }
+
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            // Do something with the date chosen by the user
+            reminderYear = year;
+            reminderMonth = month;
+            reminderDay = day;
+            datePicked = day + ": " + month + " : " + year;
+            ToastMessages.showToastLong(getActivity(), "Date picked is  " + year + ": " + month + " : " + day);
+            DialogFragment timer = new TimePickerFragment();
+            timer.show(timerSupport, "timePicker");
+
+        }
+    }
+
+    public static class TimePickerFragment extends DialogFragment
+            implements TimePickerDialog.OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current time as the default values for the picker
+            final Calendar c = Calendar.getInstance();
+            int hour = c.get(Calendar.HOUR_OF_DAY);
+            int minute = c.get(Calendar.MINUTE);
+
+            // Create a new instance of TimePickerDialog and return it
+            return new TimePickerDialog(getActivity(), this, hour, minute,
+                    DateFormat.is24HourFormat(getActivity()));
+        }
+
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            reminderHour = hourOfDay;
+            reminderMinute = minute;
+            timePicked = hourOfDay + ": " + minute;
+            ToastMessages.showToastLong(getActivity(), "Time picked is  " + hourOfDay + ": " + minute);
+        }
     }
 
 }

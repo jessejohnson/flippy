@@ -68,20 +68,11 @@ public class NoticeListAdapter extends BaseAdapter {
         content.setText(noticeArrayList.get(i).getContent());
 
 
-        final ImageView star = (ImageView) v.findViewById(R.id.imageViewStar);
-        star.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                noticeArrayList.get(i).setStarred(!noticeArrayList.get(i).isStarred());
-                if (noticeArrayList.get(i).isStarred()) {
-                    star.setImageResource(R.drawable.trans_star);
-                } else {
-                    star.setImageResource(R.drawable.trans_star_white);
-                }
-                rateNotice(noticeArrayList.get(i).getId().toString());
-            }
-        });
-
+        final ImageView creatorImage = (ImageView) v.findViewById(R.id.imageViewNoticeCreator);
+        Ion.with(creatorImage)
+                .error(R.drawable.default_profile_picture)
+                .placeholder(R.drawable.default_profile_picture)
+                .load(noticeArrayList.get(i).getCreatorUrl().toString());
         //if a notice came without an image or with image
         if (String.valueOf(noticeArrayList.get(i).getImageUrl()).equalsIgnoreCase("flip")) {
             image.setVisibility(View.GONE);

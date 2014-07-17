@@ -82,8 +82,14 @@ public class DataService extends Service {
                                         String content = item.get("content").getAsString();
                                         String channel = item.get("channel").getAsString();
                                         String image_link = "flip";
+                                        String avatar = "flip";
+                                        String avatarThumb = "flip";
                                         if (!item.get("image_url").isJsonNull()) {
                                             image_link = item.get("image_url").getAsString();
+                                        }
+                                        if (!author.get("avatar").isJsonNull()) {
+                                            avatar = author.get("avatar").getAsString();
+                                            avatarThumb = author.get("avatar_thumb").getAsString();
                                         }
                                         String authorEmail = author.get("email").getAsString();
                                         String authorId = author.get("id").getAsString();
@@ -91,7 +97,7 @@ public class DataService extends Service {
                                         String authorLastName = author.get("last_name").getAsString();
                                         Calendar calendar = Calendar.getInstance();
                                         Post new_post = new Post(id, title, content, image_link, startDate,
-                                                authorEmail, authorId, authorFirstName, authorLastName, channel, calendar.getTimeInMillis());
+                                                authorEmail, authorId, authorFirstName, authorLastName, avatar, avatarThumb, channel, calendar.getTimeInMillis());
                                         try {
                                             Log.e("ready", "run");
                                             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),

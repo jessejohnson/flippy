@@ -15,13 +15,13 @@ public class Notice {
     String content;
     String dateInfo;
     URI imageUrl;
-    boolean isStarred;
+    URI creatorUrl;
     Date timeStamp;
     Date reminderDate;
     String location;
-    int Starts;
 
-    public Notice(String id,String title, String subtitle, String content, String creatorId, String channelId, String dateInfo,URI imageUrl) {
+
+    public Notice(String id, String title, String subtitle, String content, String creatorId, String channelId, String dateInfo, URI imageUrl, URI creatorUrl) {
         this.id = id;
         this.creatorId = creatorId;
         this.channelId = channelId;
@@ -29,8 +29,8 @@ public class Notice {
         this.subtitle = subtitle;
         this.content = content;
         this.imageUrl = imageUrl;
-        this.isStarred = false;
         this.dateInfo = dateInfo;
+        this.creatorUrl = creatorUrl;
     }
 
     public String getId() {
@@ -89,19 +89,19 @@ public class Notice {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isStarred(){
-        return  this.isStarred;
+    public URI getCreatorUrl() {
+        return creatorUrl;
     }
 
-    public void setStarred(boolean starred){
-        this.isStarred = starred;
-    }
-
-    public void setDateInfo(String dateInfo) {
-        this.dateInfo = dateInfo;
+    public void setCreatorUrl(URI creatorUrl) {
+        this.creatorUrl = creatorUrl;
     }
 
     public String getDateInfo() {
         return dateInfo;
+    }
+
+    public void setDateInfo(String dateInfo) {
+        this.dateInfo = dateInfo;
     }
 }

@@ -1,108 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/margin_two"
+    android:layout_margin="@dimen/margin_five"
     android:background="@drawable/round_edge"
-    android:layout_margin="@dimen/margin_five">
+    android:orientation="vertical"
+    android:padding="@dimen/margin_two">
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
-        android:weightSum="1"
         android:background="@color/flippy_dark_header"
-        android:id="@+id/linearLayout">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.95"
+            android:orientation="vertical"
             android:padding="10dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmallInverse"
-                android:text="@string/notice_title"
                 android:id="@+id/textViewNoticeId"
-                android:visibility="gone"
-                android:textColor="@color/flippy_white" />
-
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmallInverse"
                 android:text="@string/notice_title"
-                android:textStyle="bold"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:id="@+id/textViewNoticeTitle"
-                android:textColor="@color/flippy_white" />
+                android:textAppearance="?android:attr/textAppearanceSmallInverse"
+                android:textColor="@color/flippy_white"
+                android:visibility="gone" />
 
             <TextView
+                android:id="@+id/textViewNoticeTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/notice_subtitle"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:singleLine="true"
+                android:text="@string/notice_title"
+                android:textAppearance="?android:attr/textAppearanceSmallInverse"
+                android:textColor="@color/flippy_white"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/textViewNoticeSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="@string/notice_subtitle"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/flippy_white"
                 android:textStyle="italic" />
             <TextView
+                android:id="@+id/textViewNoticeDateInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="@string/notice_subtitle"
-                android:id="@+id/textViewNoticeDateInfo"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:singleLine="true"
+                android:text="@string/notice_subtitle"
+                android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/flippy_orange"
                 android:textStyle="italic" />
         </LinearLayout>
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:id="@+id/imageViewStar"
-            android:src="@drawable/trans_star_white"
-            android:scaleType="fitCenter"
-            android:layout_marginTop="20dp" />
+
+        <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/imageViewNoticeCreator"
+            android:layout_width="@dimen/margin_fifty"
+            android:layout_height="@dimen/margin_fifty"
+            android:layout_margin="@dimen/margin_two"
+            android:background="@drawable/default_profile_picture"
+            android:scaleType="centerCrop"
+            app:border_color="@color/border_white"
+            app:border_width="3dp"
+            app:corner_radius="@dimen/margin_hundred"
+            app:oval="false" />
+
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/imageViewNoticeImage"
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_one_fifty"
-        android:id="@+id/imageViewNoticeImage"
-        android:scaleType="centerCrop"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/textViewNoticeText"
-        android:layout_below="@+id/imageViewNoticeImage"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/textViewNoticeText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/imageViewNoticeImage"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/imageViewNoticeImage"
+        android:layout_below="@+id/imageViewNoticeImage"
+        android:background="@color/flippy_light_header"
+        android:ellipsize="end"
+        android:maxLines="5"
+        android:padding="@dimen/margin_five"
         android:shadowColor="@color/flippy_dark_header"
         android:shadowDx="1"
         android:shadowDy="1"
-        android:ellipsize="end"
-        android:maxLines="5"
         android:shadowRadius="2"
-        android:layout_alignRight="@+id/imageViewNoticeImage"
-        android:layout_alignEnd="@+id/imageViewNoticeImage"
-        android:padding="@dimen/margin_five"
-        android:textColor="@color/flippy_white"
-        android:background="@color/flippy_light_header" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/flippy_white" />
 
 </RelativeLayout>
