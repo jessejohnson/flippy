@@ -89,7 +89,6 @@ public class AccountProfileActivity extends ActionBarActivity {
         profileAdapter = new ProfileAdapter(AccountProfileActivity.this,
                 R.layout.profile_listview, rowItems);
         profileChannelListView.setAdapter(profileAdapter);
-
         linearLayoutUserProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

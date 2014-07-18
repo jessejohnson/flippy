@@ -9,6 +9,10 @@
     android:paddingRight="@dimen/margin_five"
     android:paddingTop="@dimen/margin_two"
     tools:context="com.jojo.flippy.core.ChannelDetailActivity">
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:orientation="vertical"
+     android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/linearLayoutChannelDetailContent"
@@ -16,137 +20,147 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ScrollView
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/margin_fifty"
-            android:scrollbars="none">
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imageViewChannelLarge"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_two_hundred"
+                    android:scaleType="centerCrop" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/textViewChannelBio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:background="@android:drawable/screen_background_dark_transparent"
+                android:gravity="left"
+                android:paddingBottom="@dimen/margin_five"
+                android:paddingLeft="@dimen/margin_five"
+                android:paddingRight="@dimen/margin_five"
+                android:paddingTop="@dimen/margin_five"
+                android:shadowColor="@color/flippy_dark_header"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:text="@string/channel_detail_bio"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/flippy_white" />
+
+            <TextView
+                android:id="@+id/textViewChannelNameDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/margin_five"
+                android:paddingLeft="@dimen/margin_five"
+                android:paddingRight="@dimen/margin_five"
+                android:paddingTop="@dimen/margin_five"
+                android:shadowColor="@color/flippy_white"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:text="@string/default_channel_name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/flippy_orange" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:padding="@dimen/margin_five">
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
-                    <ImageView
-                        android:id="@+id/imageViewChannelLarge"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/margin_two_hundred"
-                        android:scaleType="centerCrop" />
-
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/textViewChannelBio"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|bottom"
-                    android:background="@android:drawable/screen_background_dark_transparent"
-                    android:gravity="left"
-                    android:paddingBottom="@dimen/margin_five"
-                    android:paddingLeft="@dimen/margin_five"
-                    android:paddingRight="@dimen/margin_five"
-                    android:paddingTop="@dimen/margin_five"
-                    android:shadowColor="@color/flippy_dark_header"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="2"
-                    android:text="@string/channel_detail_bio"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/flippy_white" />
-
-                <TextView
-                    android:id="@+id/textViewChannelNameDetail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
-                    android:paddingBottom="@dimen/margin_five"
-                    android:paddingLeft="@dimen/margin_five"
-                    android:paddingRight="@dimen/margin_five"
-                    android:paddingTop="@dimen/margin_five"
-                    android:shadowColor="@color/flippy_white"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="2"
-                    android:text="@string/default_channel_name"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/flippy_orange" />
+                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/imageViewCreator"
+                    android:layout_width="@dimen/margin_hundred"
+                    android:layout_height="@dimen/margin_hundred"
+                    android:padding="@dimen/margin_five"
+                    android:scaleType="center"
+                    app:border_color="@color/border"
+                    app:border_width="3dip"
+                    app:corner_radius="@dimen/margin_hundred"
+                    app:oval="false" />
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_gravity="center_vertical"
                     android:gravity="center_horizontal"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/margin_five">
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/margin_five">
 
-
-                    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/imageViewCreator"
-                        android:layout_width="@dimen/margin_hundred"
-                        android:layout_height="@dimen/margin_hundred"
-                        android:padding="@dimen/margin_five"
-                        android:scaleType="center"
-                        app:border_color="@color/border"
-                        app:border_width="3dip"
-                        app:corner_radius="@dimen/margin_hundred"
-                        app:oval="false" />
-
-
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/textViewChannelCreatorEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical"
-                        android:paddingLeft="@dimen/margin_five">
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="left"
+                        android:paddingLeft="@dimen/margin_five"
+                        android:paddingTop="@dimen/margin_five"
+                        android:text="@string/flippy_email"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
-                        <TextView
-                            android:id="@+id/textViewChannelCreatorEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:gravity="left"
-                            android:paddingLeft="@dimen/margin_five"
-                            android:paddingTop="@dimen/margin_five"
-                            android:text="@string/flippy_email"
-                            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                        <TextView
-                            android:id="@+id/textViewNameChannelDetailFullName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left|bottom"
-                            android:gravity="left"
-                            android:paddingLeft="@dimen/margin_five"
-                            android:paddingRight="@dimen/margin_five"
-                            android:shadowColor="@color/flippy_white"
-                            android:shadowDx="1"
-                            android:shadowDy="1"
-                            android:shadowRadius="2"
-                            android:text="@string/channel_detail_members"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="@color/flippy_dark_header" />
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/textViewNameChannelDetailFullName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left|bottom"
+                        android:gravity="left"
+                        android:paddingLeft="@dimen/margin_five"
+                        android:paddingRight="@dimen/margin_five"
+                        android:shadowColor="@color/flippy_white"
+                        android:shadowDx="1"
+                        android:shadowDy="1"
+                        android:shadowRadius="2"
+                        android:text="@string/channel_detail_members"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/flippy_dark_header" />
                 </LinearLayout>
-
-                <ListView
-                    android:id="@+id/listViewChannelPost"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/linearLayoutUserProfile"
-                    android:layout_marginBottom="@dimen/margin_eighty"
-                    android:divider="@color/flippy_orange"
-                    android:dividerHeight="@dimen/margin_one"
-                    android:listSelector="@android:color/transparent" />
-
             </LinearLayout>
-        </ScrollView>
+
+            <TextView
+                android:id="@+id/textViewNameSomePost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|bottom"
+                android:gravity="left"
+                android:paddingLeft="@dimen/margin_five"
+                android:paddingRight="@dimen/margin_five"
+                android:shadowColor="@color/flippy_white"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:text="@string/channel_detail_some_posts"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/flippy_dark_header" />
+            <ListView
+                android:id="@+id/listViewChannelPost"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:layout_below="@+id/linearLayoutUserProfile"
+                android:layout_marginBottom="@dimen/margin_eighty"
+                android:divider="@color/flippy_orange"
+                android:dividerHeight="@dimen/margin_one"
+                android:listSelector="@android:color/transparent" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -211,4 +225,5 @@
         android:layout_gravity="center"
         gpb:colors="@array/flippy_rainbow"
         gpb:type="folding_circles" />
+ </LinearLayout>
 </RelativeLayout>

@@ -14,11 +14,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jojo.flippy.adapter.ChannelMemberAdapter;
+import com.jojo.flippy.adapter.ChannelPostAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.profile.ImagePreviewActivity;
 import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
@@ -31,7 +34,6 @@ import java.util.List;
 
 
 public class ChannelDetailActivity extends ActionBarActivity {
-    String channelCommunityDetail = Flippy.communitiesURL;
     private Intent intent;
     private String name;
     private String id;
@@ -48,16 +50,18 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private ImageView imageViewChannelLarge, imageViewCreator;
     private TextView textViewChannelNameDetail;
     private TextView textViewChannelBio;
-    private TextView textViewNameChannelDetailFullName, textViewChannelCreatorEmail;
+    private TextView textViewNameChannelDetailFullName, textViewChannelCreatorEmail, textViewNameSomePost;
     private LinearLayout linearLayoutChannelDetailContent;
     private ProgressBar progressBarLoadChannelDetail;
     private Button buttonSubscribeToChannel, buttonManageToChannel, buttonUnSubscribeToChannel;
-    private String aChannelURL;
     private LinearLayout linearLayoutSubscriptions;
 
     private ListView listViewChannelPost;
-    private ChannelMemberAdapter ChannelsPostAdapter;
+    private ChannelPostAdapter ChannelsPostAdapter;
     private List<ProfileItem> userChannelItem;
+    private String channelDetailsURL;
+
+    private SuperToast superToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +69,10 @@ public class ChannelDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_channel_detail);
 
         intent = getIntent();
+        superToast = new SuperToast(ChannelDetailActivity.this);
         channelName = intent.getStringExtra("channelName");
         channelId = intent.getStringExtra("channelId");
-        String channelDetailsURL = Flippy.channels + channelId + "/";
+        channelDetailsURL = Flippy.channels + channelId + "/";
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -79,6 +84,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         imageViewChannelLarge = (ImageView) findViewById(R.id.imageViewChannelLarge);
         imageViewCreator = (ImageView) findViewById(R.id.imageViewCreator);
         textViewChannelNameDetail = (TextView) findViewById(R.id.textViewChannelNameDetail);
+        textViewNameSomePost = (TextView) findViewById(R.id.textViewNameSomePost);
         textViewChannelBio = (TextView) findViewById(R.id.textViewChannelBio);
         textViewNameChannelDetailFullName = (TextView) findViewById(R.id.textViewNameChannelDetailFullName);
         textViewChannelCreatorEmail = (TextView) findViewById(R.id.textViewChannelCreatorEmail);
@@ -95,11 +101,12 @@ public class ChannelDetailActivity extends ActionBarActivity {
         textViewNameChannelDetailFullName.setVisibility(View.GONE);
         textViewChannelCreatorEmail.setVisibility(View.GONE);
         imageViewCreator.setVisibility(View.GONE);
+        textViewNameSomePost.setVisibility(View.GONE);
 
         listViewChannelPost = (ListView) findViewById(R.id.listViewChannelPost);
         userChannelItem = new ArrayList<ProfileItem>();
-        ChannelsPostAdapter = new ChannelMemberAdapter(ChannelDetailActivity.this,
-                R.layout.channel_members_listview, userChannelItem, false);
+        ChannelsPostAdapter = new ChannelPostAdapter(ChannelDetailActivity.this,
+                R.layout.channel_post_listview, userChannelItem);
         listViewChannelPost.setAdapter(ChannelsPostAdapter);
 
         textViewChannelBio.setText("");
@@ -115,7 +122,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                         progressBarLoadChannelDetail.setVisibility(View.GONE);
                         if (result != null) {
                             if (result.has("detail")) {
-                                ToastMessages.showToastLong(ChannelDetailActivity.this, "Sorry, channel has been removed");
+                                showSuperToast("Sorry, channel has been removed");
                                 finish();
                                 return;
                             }
@@ -134,7 +141,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                             getCommunityName(communityId);
                         }
                         if (e != null) {
-                            ToastMessages.showToastLong(ChannelDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+
                         }
 
                     }
@@ -151,21 +158,23 @@ public class ChannelDetailActivity extends ActionBarActivity {
                             if (result.has("detail")) {
                                 return;
                             } else {
+                                //showing only the first ten posts
+                                int arrayEnd = 10;
                                 JsonArray channelPostsArray = result.getAsJsonArray("results");
-                                for (int i = 0; i < channelPostsArray.size(); i++) {
-                                    if (i <= 10) {
-                                        JsonObject item = channelPostsArray.get(i).getAsJsonObject();
-                                        String title = item.get("title").getAsString();
-                                        String content = item.get("content").getAsString();
-                                        String url = "";
-                                        if (!item.get("image_thumbnail_url").isJsonNull()) {
-                                            url = item.get("image_thumbnail_url").getAsString();
-                                        }
-                                        ProfileItem channelItem = new ProfileItem(URI.create(url), title, content, "");
-                                        userChannelItem.add(channelItem);
-                                    } else {
-                                        return;
+                                if (channelPostsArray.size() < arrayEnd) {
+                                    arrayEnd = channelPostsArray.size();
+                                }
+                                for (int i = 0; i < arrayEnd; i++) {
+                                    JsonObject item = channelPostsArray.get(i).getAsJsonObject();
+                                    String title = item.get("title").getAsString();
+                                    String content = item.get("content").getAsString();
+                                    String url = "";
+                                    if (!item.get("image_thumbnail_url").isJsonNull()) {
+                                        url = item.get("image_thumbnail_url").getAsString();
                                     }
+                                    ProfileItem channelItem = new ProfileItem(URI.create(url), title, content, "");
+                                    userChannelItem.add(channelItem);
+
                                 }
                                 updateChannelPostAdapter();
                             }
@@ -200,11 +209,19 @@ public class ChannelDetailActivity extends ActionBarActivity {
             }
 
         });
+        imageViewChannelLarge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent.putExtra("avatar", image_url);
+                intent.setClass(ChannelDetailActivity.this, ImagePreviewActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void getCommunityName(String communityURL) {
         Ion.with(ChannelDetailActivity.this)
-                .load(channelCommunityDetail + communityURL + "/")
+                .load(channelDetailsURL + communityURL + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -225,6 +242,9 @@ public class ChannelDetailActivity extends ActionBarActivity {
 
     private void updateChannelPostAdapter() {
         ChannelsPostAdapter.notifyDataSetChanged();
+        if (!ChannelsPostAdapter.isEmpty()) {
+            textViewNameSomePost.setVisibility(View.VISIBLE);
+        }
     }
 
     private void showViews() {
@@ -264,7 +284,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         JsonObject json = new JsonObject();
         json.addProperty("id", CommunityCenterActivity.regUserID);
         Ion.with(ChannelDetailActivity.this)
-                .load(aChannelURL + "/subscribe/")
+                .load(channelDetailsURL + "/subscribe/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()
@@ -298,7 +318,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         JsonObject json = new JsonObject();
         json.addProperty("id", CommunityCenterActivity.regUserID);
         Ion.with(ChannelDetailActivity.this)
-                .load(aChannelURL + "/unsubscribe/")
+                .load(channelDetailsURL + "/unsubscribe/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()
@@ -358,5 +378,14 @@ public class ChannelDetailActivity extends ActionBarActivity {
         buttonSubscribeToChannel.setVisibility(View.GONE);
         buttonManageToChannel.setVisibility(View.VISIBLE);
         buttonUnSubscribeToChannel.setVisibility(View.GONE);
+    }
+    private void showSuperToast(String message){
+        superToast.setAnimations(SuperToast.Animations.FLYIN);
+        superToast.setDuration(SuperToast.Duration.LONG);
+        superToast.setBackground(SuperToast.Background.RED);
+        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+        superToast.setIcon(R.drawable.ic_action_warning, SuperToast.IconPosition.LEFT);
+        superToast.setText(message);
+        superToast.show();
     }
 }

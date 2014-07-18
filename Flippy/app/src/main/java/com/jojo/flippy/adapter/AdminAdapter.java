@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.core.CommunityCenterActivity;
 import com.koushikdutta.ion.Ion;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
             convertView = mInflater.inflate(R.layout.channel_admis_listview, null);
             holder = new ViewHolder();
             holder.imageViewAdminOne = (ImageView) convertView.findViewById(R.id.imageViewAdminOne);
+            holder.imageViewDemoteUser = (ImageView) convertView.findViewById(R.id.imageViewDemoteUser);
             holder.textViewAdminEmail = (TextView) convertView.findViewById(R.id.textViewAdminEmail);
             holder.textViewAdminFullName = (TextView) convertView.findViewById(R.id.textViewAdminFullName);
             holder.textViewAdminId = (TextView) convertView.findViewById(R.id.textViewAdminId);
@@ -45,15 +47,20 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
         holder.textViewAdminFullName.setText(rowItem.getProfileFullName());
 
         Ion.with(holder.imageViewAdminOne)
-                .placeholder(R.color.flippy_orange)
+                .placeholder(R.drawable.default_profile_picture)
+                .error(R.drawable.default_profile_picture)
                 .animateIn(R.anim.fade_in)
                 .load(String.valueOf(rowItem.getAdminProfileItem()));
+        //check if the  current user or the admin
+        if(CommunityCenterActivity.regUserID.equals(rowItem.getAdminId())){
+            holder.imageViewDemoteUser.setVisibility(View.GONE);
+        }
 
         return convertView;
     }
 
     private class ViewHolder {
-        ImageView imageViewAdminOne;
+        ImageView imageViewAdminOne,imageViewDemoteUser;
         TextView textViewAdminEmail,
                 textViewAdminFullName,
                 textViewAdminId;

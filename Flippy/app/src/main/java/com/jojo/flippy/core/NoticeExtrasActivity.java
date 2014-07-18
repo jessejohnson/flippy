@@ -48,7 +48,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
     Uri imageUri;
     private Intent intent;
     private String channelToCreateNotice;
-    private String noticeContent, noticeTitle;
+    private String noticeTitle;
     private Button buttonAddImageToNotice, buttonPreviewCreateNotice, buttonAddMapToNotice;
     private AlertDialog levelDialog;
     private ImageView imageViewNoticeImageCaptured;
@@ -77,11 +77,14 @@ public class NoticeExtrasActivity extends ActionBarActivity {
         buttonPreviewCreateNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                intent.putExtra("isPreview", true);
+                intent.putExtra("channelId", channelToCreateNotice);
                 intent.putExtra("noticeTitle", noticeTitle);
-                intent.putExtra("noticeContent", noticeContent);
-                createPostWithoutImage(noticeTitle, noticeContent, channelToCreateNotice);
-
+                intent.putExtra("lat", lat);
+                intent.putExtra("lon", lon);
+                intent.putExtra("datePicked", datePicked);
+                intent.putExtra("timePicked", timePicked);
+                intent.setClass(NoticeExtrasActivity.this,PreviewPost.class);
+                startActivity(intent);
             }
         });
         buttonAddImageToNotice = (Button) findViewById(R.id.buttonAddImageToNotice);
@@ -260,30 +263,6 @@ public class NoticeExtrasActivity extends ActionBarActivity {
             return null;
     }
 
-    private boolean createPostWithoutImage(String title, String body, String channel) {
-        JsonObject json = new JsonObject();
-        json.addProperty("title", title);
-        json.addProperty("content", body);
-        json.addProperty("channel_id", channel);
-        Ion.with(NoticeExtrasActivity.this, Flippy.allPostURL)
-                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
-                .setJsonObjectBody(json)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        if (e != null) {
-                            ToastMessages.showToastLong(NoticeExtrasActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                        } else {
-
-
-                        }
-                    }
-
-                });
-
-        return true;
-    }
 
     public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {

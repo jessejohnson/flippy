@@ -2,17 +2,18 @@
     android:id="@+id/linearLayoutFirstAdmin"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="@dimen/margin_ten"
     android:layout_margin="@dimen/margin_ten"
-    android:orientation="horizontal"
-    android:weightSum="1">
+    android:orientation="horizontal">
 
-    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.makeramen.RoundedImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/imageViewAdminOne"
         android:layout_width="@dimen/margin_eighty"
         android:layout_height="@dimen/margin_eighty"
         android:scaleType="centerCrop"
         app:border_color="@color/border_white"
-        app:border_width="3dip"
+        app:border_width="2dp"
         app:corner_radius="@dimen/margin_hundred"
         app:oval="false" />
 
@@ -21,18 +22,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:orientation="vertical"
+        android:gravity="center_vertical"
         android:paddingLeft="@dimen/margin_five">
 
         <TextView
             android:id="@+id/textViewAdminEmail"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Small Text"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
             android:id="@+id/textViewAdminFullName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Small Text"
             android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -43,10 +45,10 @@
             android:layout_height="wrap_content"
             android:text="Small Text"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/imageViewDemoteUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"

@@ -216,6 +216,7 @@
     <string name="channel_manage">Manage channel</string>
     <string name="manage_channel_remove">remove this channel</string>
     <string name="select_member_from_list">choose member</string>
+    <string name="manage_channel_add_admin">add administrator</string>
 
     <!-- temporary string section -->
     <string name="dummy_community">University of Cape coast</string>
@@ -240,7 +241,10 @@
 
     <string name="title_activity_pick_map_location">Notice Location</string>
     <string name="pick_location_add_location">Add location</string>
+
+    <!--chanel detail strings-->
     <string name="title_activity_channel_detail">Channel Detail</string>
+    <string name="channel_detail_some_posts">Some common posts</string>
 
     <!-- about flippy section and strings -->
     <string name="title_activity_about">About Flippy</string>
@@ -314,6 +318,10 @@
     <!-- strings for version activity -->
     <string name="title_activity_version_info">Flippy version information</string>
     <string name="activity_version_current">Current Version</string>
+
+
+    <!--preview post strings -->
     <string name="title_activity_preview_post">Notice preview</string>
+    <string name="preview_post_publish_post">Publish post</string>
 
 </resources>

@@ -33,7 +33,6 @@ public class StartingService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         final String url = Flippy.allPostURL;
-        Log.e("Intent started", startId + "");
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override

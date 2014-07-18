@@ -11,12 +11,16 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -43,6 +47,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
+
 public class ManageChannelActivity extends ActionBarActivity {
     private static final int PICK_FROM_CAMERA = 5;
     private static final int CROP_FROM_CAMERA = 6;
@@ -53,7 +60,8 @@ public class ManageChannelActivity extends ActionBarActivity {
     private String channelName, channelId, image_url;
     private Uri mImageCaptureUri;
     private AlertDialog dialog;
-    private Button buttonRemoveChannel;
+    private Button buttonAddAdmin;
+    private ProgressBar progressBarLoadAdmin;
     private SuperToast superToast;
 
     private ListView listViewChannelAdmins;
@@ -77,7 +85,9 @@ public class ManageChannelActivity extends ActionBarActivity {
 
         //the edit text views
         superToast = new SuperToast(ManageChannelActivity.this);
-        buttonRemoveChannel = (Button) findViewById(R.id.buttonRemoveChannel);
+        progressBarLoadAdmin = (ProgressBar) findViewById(R.id.progressBarLoadAdmin);
+        buttonAddAdmin = (Button) findViewById(R.id.buttonAddAdminChannel);
+        buttonAddAdmin.setVisibility(View.GONE);
         editTextManageChannelChannelName = (EditText) findViewById(R.id.editTextManageChannelChannelName);
         editTextManageChannelChannelName.setText(channelName);
 
@@ -87,7 +97,6 @@ public class ManageChannelActivity extends ActionBarActivity {
         adminAdapter = new AdminAdapter(ManageChannelActivity.this,
                 R.layout.channel_admis_listview, rowItems);
         listViewChannelAdmins.setAdapter(adminAdapter);
-
         imageViewChannelManageEdit = (ImageView) findViewById(R.id.imageViewChannelManageEdit);
         imageViewEditChannelName = (ImageView) findViewById(R.id.imageViewEditChannelName);
         String adminURL = Flippy.channels + channelId + "/admins/";
@@ -117,36 +126,14 @@ public class ManageChannelActivity extends ActionBarActivity {
                 editTextManageChannelChannelName.setFocusable(true);
             }
         });
-        buttonRemoveChannel.setOnClickListener(new View.OnClickListener() {
+
+        listViewChannelAdmins.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                String url = Flippy.channels + channelId + "/";
-                StringRequest delete = new StringRequest(Request.Method.DELETE, url,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                showSuperToast("successfully removed");
-                                goToMainActivity();
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.e("Error", error.toString());
-                            }
-                        }
-                ) {
-                    @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
-                        HashMap<String, String> headers = new HashMap<String, String>();
-                        headers.put("Content-Type", "application/json");
-                        headers.put("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
-                        return headers;
-                    }
-                };
-                Flippy.getInstance().getRequestQueue().add(delete);
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
             }
         });
+
 
     }
 
@@ -220,12 +207,16 @@ public class ManageChannelActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
+                        progressBarLoadAdmin.setVisibility(View.GONE);
                         if (result.has("detail")) {
                             showSuperToast("sorry, an error occurred");
                             return;
                         }
                         if (result != null) {
                             JsonArray adminArray = result.getAsJsonArray("results");
+                            if (adminArray.size() < 5) {
+                                buttonAddAdmin.setVisibility(View.VISIBLE);
+                            }
                             for (int i = 0; i < adminArray.size(); i++) {
                                 JsonObject item = adminArray.get(i).getAsJsonObject();
                                 String avatar = "";
@@ -239,7 +230,6 @@ public class ManageChannelActivity extends ActionBarActivity {
                         }
                         if (e != null) {
                             showSuperToast("sorry, internet connection occurred");
-                            Log.e("Error loading channel", e.toString());
                         }
 
                     }
@@ -255,5 +245,72 @@ public class ManageChannelActivity extends ActionBarActivity {
         superToast.setText(message);
         superToast.show();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.manage_channel, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_remove_channel) {
+            String url = Flippy.channels + channelId + "/";
+            StringRequest delete = new StringRequest(Request.Method.DELETE, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            showSuperToast("successfully removed");
+                            goToMainActivity();
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("Error", error.toString());
+                        }
+                    }
+            ) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+                    headers.put("Content-Type", "application/json");
+                    headers.put("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
+                    return headers;
+                }
+            };
+            Flippy.getInstance().getRequestQueue().add(delete);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void promoteUser(String memberId) {
+        String URL = Flippy.channels + memberId + "/promote_user/";
+        Ion.with(ManageChannelActivity.this)
+                .load(URL)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (result != null) {
+                            if (result.has("detail")) {
+                                Crouton.makeText(ManageChannelActivity.this, result.get("detail").toString(), Style.ALERT);
+                                return;
+                            }
+                            Crouton.makeText(ManageChannelActivity.this, result.get("results").toString(), Style.CONFIRM);
+                            return;
+                        }
+                        if (e != null) {
+                            ToastMessages.showToastShort(ManageChannelActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            return;
+                        }
+
+                    }
+                });
+
+    }
+
 
 }

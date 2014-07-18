@@ -134,9 +134,6 @@ public class MemberDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result.has("detail")) {
-                            Log.e("Error", result.get("detail").toString());
-                        }
                         if (result != null) {
                             JsonArray subscriptionArray = result.getAsJsonArray("results");
                             textViewUserTotalNumberOfCircles.setVisibility(View.VISIBLE);
@@ -217,44 +214,6 @@ public class MemberDetailActivity extends ActionBarActivity {
                 .error(R.drawable.default_profile_picture)
                 .load(avatar);
 
-    }
-
-    private void promoteUser(String channelId) {
-        String URL = Flippy.channels + memberId + "/promote_user/";
-        Ion.with(MemberDetailActivity.this)
-                .load(URL)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            if (result.has("detail")) {
-                                Crouton.makeText(MemberDetailActivity.this, result.get("detail").toString(), Style.ALERT);
-                                return;
-                            }
-                            Crouton.makeText(MemberDetailActivity.this, result.get("results").toString(), Style.CONFIRM);
-                            return;
-                        }
-                        if (e != null) {
-                            ToastMessages.showToastShort(MemberDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                            return;
-                        }
-
-                    }
-                });
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (data == null) {
-
-        } else {
-            if (requestCode == 1 && resultCode == 1) {
-                promoteUser(data.getStringExtra("channelId"));
-            }
-        }
     }
 }
 

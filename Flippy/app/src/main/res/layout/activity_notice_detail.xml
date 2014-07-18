@@ -126,7 +126,8 @@
                 android:layout_margin="@dimen/margin_ten"
                 android:orientation="horizontal">
 
-                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.makeramen.RoundedImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/imageViewNoticeCreatorImage"
                     android:layout_width="@dimen/margin_hundred"
                     android:layout_height="@dimen/margin_hundred"

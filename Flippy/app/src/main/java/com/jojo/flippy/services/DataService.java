@@ -99,12 +99,10 @@ public class DataService extends Service {
                                         Post new_post = new Post(id, title, content, image_link, startDate,
                                                 authorEmail, authorId, authorFirstName, authorLastName, avatar, avatarThumb, channel, calendar.getTimeInMillis());
                                         try {
-                                            Log.e("ready", "run");
                                             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
                                                     DatabaseHelper.class);
                                             postDao = databaseHelper.getPostDao();
                                             if (!savedPostIds.contains(id)) {
-                                                Log.e("ready id", id);
                                                 postDao.createOrUpdate(new_post);
                                             }
                                         } catch (java.sql.SQLException sqlE) {

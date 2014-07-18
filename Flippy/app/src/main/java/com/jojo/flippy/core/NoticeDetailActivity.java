@@ -41,7 +41,6 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class NoticeDetailActivity extends ActionBarActivity {
     SuperToast superToast;
-    private Button buttonPublishNotice;
     private GoogleMap googleMap;
     private Intent intent;
     private PendingIntent pendingIntent;
@@ -182,7 +181,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-
+        imageViewNoticeCreatorImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent.putExtra("avatar", author_profile);
+                intent.setClass(NoticeDetailActivity.this, ImagePreviewActivity.class);
+                startActivity(intent);
+            }
+        });
         //loads the post rating from the api
         getPostCount(noticeId);
         getPostLocation(noticeId);
