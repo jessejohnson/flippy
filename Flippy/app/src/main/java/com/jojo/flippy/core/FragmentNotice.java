@@ -323,7 +323,7 @@ public class FragmentNotice extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().unregisterReceiver(postReceiver);
+        //getActivity().unregisterReceiver(postReceiver);
 
     }
 }

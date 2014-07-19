@@ -3,6 +3,7 @@ package com.jojo.flippy.profile;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -34,7 +35,6 @@ public class MemberDetailActivity extends ActionBarActivity {
     private String memberCommunity;
     private String memberCommunityName;
     private String avatar = "";
-
     private Intent intent;
     private ImageView imageViewMemberAnotherUserProfilePic;
     private TextView textViewAnotherUserEmail;
@@ -46,6 +46,7 @@ public class MemberDetailActivity extends ActionBarActivity {
     private TextView textViewUserTotalNumberOfCircles;
     private String TotalChannels;
     private String userDetailURL;
+    private ContentLoadingProgressBar progressMemberDetail;
 
 
     @Override
@@ -66,6 +67,7 @@ public class MemberDetailActivity extends ActionBarActivity {
         }
         userDetailURL = Flippy.users + memberId + "/";
         intent.setClass(MemberDetailActivity.this, ImagePreviewActivity.class);
+        progressMemberDetail = (ContentLoadingProgressBar) findViewById(R.id.progressMemberDetail);
         textViewAnotherUserEmail = (TextView) findViewById(R.id.textViewAnotherUserEmail);
         textViewUserCommunityName = (TextView) findViewById(R.id.textViewUserCommunityName);
         textViewAnotherUserName = (TextView) findViewById(R.id.textViewAnotherUserName);
@@ -97,7 +99,7 @@ public class MemberDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        Log.e("Url", userDetailURL);
+                        progressMemberDetail.setVisibility(View.GONE);
                         if (result != null) {
                             if (result.has("detail")) {
                                 Crouton.makeText(MemberDetailActivity.this, result.get("detail").toString(), Style.INFO).show();
@@ -129,20 +131,27 @@ public class MemberDetailActivity extends ActionBarActivity {
 
     private void memberTotalChannels() {
         Ion.with(MemberDetailActivity.this)
-                .load(Flippy.channels + memberId + "/subscriptions/")
+                .load(Flippy.users + memberId + "/subscriptions/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            JsonArray subscriptionArray = result.getAsJsonArray("results");
-                            textViewUserTotalNumberOfCircles.setVisibility(View.VISIBLE);
-                            TotalChannels = " channels " + "(" + subscriptionArray.size() + ")";
-                            textViewUserTotalNumberOfCircles.setText(TotalChannels);
-                        }
                         if (e != null) {
+                            Log.e("Total member error occurred", e.toString());
                             ToastMessages.showToastLong(MemberDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            return;
                         }
+                        JsonArray subscriptionArray = result.getAsJsonArray("results");
+                        if (result != null) {
+                            textViewUserTotalNumberOfCircles.setVisibility(View.VISIBLE);
+                            TotalChannels = "0";
+                            if (subscriptionArray.size() != 0) {
+                                TotalChannels = " channels " + "(" + subscriptionArray.size() + ")";
+                            }
+                            textViewUserTotalNumberOfCircles.setText(TotalChannels);
+                            return;
+                        }
+
 
                     }
                 });

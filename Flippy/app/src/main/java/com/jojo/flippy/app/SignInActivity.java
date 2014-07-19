@@ -182,10 +182,8 @@ public class SignInActivity extends ActionBarActivity {
                                                 //TODO probably start next activity here
                                             } else {
                                                 current = userList.get(0);
-
                                                 String communityId = current.community_id;
                                                 if(communityId.equalsIgnoreCase("")){
-                                                    //user has not set commuinty. Redirect to right activity
                                                     startActivity(new Intent(SignInActivity.this, SelectCommunityActivity.class));
                                                     Toast.makeText(SignInActivity.this, "community not set...", Toast.LENGTH_LONG).show();
                                                 } else {

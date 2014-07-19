@@ -15,9 +15,6 @@ import com.koushikdutta.ion.Ion;
 
 import java.util.List;
 
-/**
- * Created by bright on 6/13/14.
- */
 public class ChannelPostAdapter extends ArrayAdapter<ProfileItem> {
     Context context;
 
@@ -37,7 +34,7 @@ public class ChannelPostAdapter extends ArrayAdapter<ProfileItem> {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         ProfileItem rowItem = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context

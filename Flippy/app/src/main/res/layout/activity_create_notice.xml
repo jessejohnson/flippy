@@ -104,6 +104,18 @@
                     android:scrollbars="vertical"
                     android:singleLine="false"
                     android:textColor="@color/flippy_white" />
+
+                <EditText
+                    android:layout_margin="@dimen/margin_five"
+                    android:layout_width="match_parent"
+                    android:textColor="@color/flippy_white"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="left"
+                    android:id="@+id/editTextNewNoticeLocation"
+                    android:inputType="text"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/notice_new_add_location_hint"
+                    android:singleLine="true"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

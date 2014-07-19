@@ -8,7 +8,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/margin_fifty"
         android:scrollbars="none">
 
         <LinearLayout
@@ -35,7 +34,7 @@
                     android:padding="@dimen/margin_five">
 
                     <TextView
-                        android:id="@+id/textViewNoticeTitleDetail"
+                        android:id="@+id/textViewPreviewNoticeTitleDetail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/notice_title"
@@ -69,7 +68,7 @@
 
 
                 <TextView
-                    android:id="@+id/textViewLikes"
+                    android:id="@+id/textViewPreviewLikes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|bottom"
@@ -80,14 +79,14 @@
                     android:shadowDx="1"
                     android:shadowDy="1"
                     android:shadowRadius="1"
-                    android:text="@string/dummy_flippy_likes"
+                    android:text="@string/preview_post_likes"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/flippy_white" />
 
             </FrameLayout>
 
             <TextView
-                android:id="@+id/textViewNoticeSubtitleChannelName"
+                android:id="@+id/textViewPreviewNoticeChannelName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/margin_five"
@@ -97,7 +96,7 @@
                 android:textStyle="normal" />
 
             <TextView
-                android:id="@+id/textViewNoticeTextDetail"
+                android:id="@+id/textViewPreviewNoticeTextDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/imageViewNoticeImage"
@@ -107,7 +106,7 @@
                 android:layout_below="@+id/imageViewNoticeImage"
                 android:gravity="left"
                 android:padding="@dimen/margin_five"
-                android:text="@string/dummy_user_name"
+                android:text=""
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/flippy_dark_header" />
 
@@ -126,8 +125,9 @@
                 android:layout_margin="@dimen/margin_ten"
                 android:orientation="horizontal">
 
-                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/imageViewNoticeCreatorImage"
+                <com.makeramen.RoundedImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/imageViewPreviewNoticeCreatorImage"
                     android:layout_width="@dimen/margin_hundred"
                     android:layout_height="@dimen/margin_hundred"
                     android:layout_alignParentTop="true"
@@ -146,20 +146,13 @@
                     android:paddingLeft="@dimen/margin_five">
 
                     <TextView
-                        android:id="@+id/textViewAuthorEmailAddress"
+                        android:id="@+id/textViewPreviewAuthorEmailAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
                         android:text="@string/dummy_user_email"
                         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-                    <TextView
-                        android:id="@+id/textViewNoticeTimeStamp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:text="@string/dummy_user_email"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <TextView
                         android:id="@+id/textViewNoticeLocation"
@@ -178,9 +171,11 @@
                 android:id="@+id/linearLayoutPreviewMapView"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:layout_marginBottom="@dimen/margin_twenty"
                 android:layout_margin="0dp">
 
-                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                <fragment
+                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/linearLayoutPreviewNoticeShowLocation"
                     class="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
@@ -194,6 +189,7 @@
                 android:background="@drawable/flippy_button_default"
                 android:text="@string/preview_post_publish_post"
                 android:id="@+id/buttonPublishPost"
+                android:textColor="@color/flippy_white"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />

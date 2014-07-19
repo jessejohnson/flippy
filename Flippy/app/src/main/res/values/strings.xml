@@ -192,6 +192,7 @@
     <string name="notice_new_title_field">notice title</string>
     <string name="notice_new_content">notice content</string>
     <string name="notice_new_next">next</string>
+    <string name="notice_new_add_location_hint">add a location</string>
 
     <!-- optional notice information strings -->
     <string name="title_activity_notice_extras">Notice Optionals</string>
@@ -231,6 +232,7 @@
     <!-- the member detail strings -->
     <string name="another_member_detail_add_as_admin">promote user</string>
     <string name="title_activity_member_detail">Member Profile</string>
+    <string name="activity_member_detail_title">Other related details</string>
 
     <!-- the spinner for the edit profile gender -->
     <string-array name="gender_array">
@@ -323,5 +325,6 @@
     <!--preview post strings -->
     <string name="title_activity_preview_post">Notice preview</string>
     <string name="preview_post_publish_post">Publish post</string>
+    <string name="preview_post_likes">0 stars</string>
 
 </resources>
