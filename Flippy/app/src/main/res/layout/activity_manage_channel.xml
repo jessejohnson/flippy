@@ -12,8 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal">
 
-        <com.makeramen.RoundedImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageViewChannelManageEdit"
             android:layout_width="match_parent"
             android:layout_height="@dimen/margin_one_fifty"
@@ -57,12 +56,12 @@
 
     <ListView
         android:id="@+id/listViewChannelAdmins"
-        android:layout_margin="@dimen/margin_five"
+        android:layout_margin="@dimen/margin_one"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:dividerHeight="@dimen/margin_one"
+        android:dividerHeight="@dimen/margin_half"
         android:divider="@color/flippy_orange"
         android:listSelector="@android:color/transparent"
         android:scrollbars="none" />

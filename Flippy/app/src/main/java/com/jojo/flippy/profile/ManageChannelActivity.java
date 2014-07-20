@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -54,6 +55,7 @@ public class ManageChannelActivity extends ActionBarActivity {
     private static final int PICK_FROM_CAMERA = 5;
     private static final int CROP_FROM_CAMERA = 6;
     private static final int PICK_FROM_FILE = 7;
+    private static final int PROMOTE_USER = 8;
     private EditText editTextManageChannelChannelName;
     private ImageView imageViewChannelManageEdit, imageViewEditChannelName;
     private Intent intent;
@@ -126,11 +128,26 @@ public class ManageChannelActivity extends ActionBarActivity {
                 editTextManageChannelChannelName.setFocusable(true);
             }
         });
-
+        listViewChannelAdmins.setClickable(false);
         listViewChannelAdmins.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //remove the user when selected
+                TextView textViewAdminEmail = (TextView) view.findViewById(R.id.textViewAdminEmail);
+                TextView textViewAdminId = (TextView) view.findViewById(R.id.textViewAdminId);
+                String adminId = textViewAdminId.getText().toString();
+                String adminEmail = textViewAdminEmail.getText().toString();
+                confirmDemotion(adminEmail, adminId);
+            }
+        });
 
+        buttonAddAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //start an activity for result and promote the user
+                intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
+                intent.putExtra("isManage", true);
+                startActivityForResult(intent, PROMOTE_USER);
             }
         });
 
@@ -147,14 +164,18 @@ public class ManageChannelActivity extends ActionBarActivity {
         String noMember = "No member selected";
         // check if the request code is same as what is passed  here it is 2
         if (requestCode != RESULT_OK) {
-            ToastMessages.showToastLong(ManageChannelActivity.this, noMember);
+            showSuperToastError(noMember);
             return;
         }
         if (data == null) {
-            ToastMessages.showToastLong(ManageChannelActivity.this, noMember);
+            showSuperToastError(noMember);
             return;
         }
-        ToastMessages.showToastLong(ManageChannelActivity.this, noMember);
+        if (requestCode == PROMOTE_USER && resultCode == RESULT_OK) {
+            //Promote the user
+            promoteUser(data.getStringExtra("memberId"));
+        }
+        showSuperToastError(noMember);
     }
 
     private void showDialog() {
@@ -209,7 +230,8 @@ public class ManageChannelActivity extends ActionBarActivity {
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarLoadAdmin.setVisibility(View.GONE);
                         if (result.has("detail")) {
-                            showSuperToast("sorry, an error occurred");
+                            showSuperToastError("sorry, an error occurred");
+                            Log.e("Error form get admin list", "Admin list not found");
                             return;
                         }
                         if (result != null) {
@@ -229,14 +251,14 @@ public class ManageChannelActivity extends ActionBarActivity {
                             updateAdapter();
                         }
                         if (e != null) {
-                            showSuperToast("sorry, internet connection occurred");
+                            showSuperToastError("sorry, internet connection occurred");
                         }
 
                     }
                 });
     }
 
-    private void showSuperToast(String message) {
+    private void showSuperToastError(String message) {
         superToast.setAnimations(SuperToast.Animations.FLYIN);
         superToast.setDuration(SuperToast.Duration.SHORT);
         superToast.setBackground(SuperToast.Background.PURPLE);
@@ -261,14 +283,14 @@ public class ManageChannelActivity extends ActionBarActivity {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            showSuperToast("successfully removed");
+                            showSuperToastError("successfully removed");
                             goToMainActivity();
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.e("Error", error.toString());
+                            Log.e("Error from removing post", error.toString());
                         }
                     }
             ) {
@@ -299,11 +321,11 @@ public class ManageChannelActivity extends ActionBarActivity {
                                 Crouton.makeText(ManageChannelActivity.this, result.get("detail").toString(), Style.ALERT);
                                 return;
                             }
-                            Crouton.makeText(ManageChannelActivity.this, result.get("results").toString(), Style.CONFIRM);
+                            showSuperToastSuccess(result.get("results").toString());
                             return;
                         }
                         if (e != null) {
-                            ToastMessages.showToastShort(ManageChannelActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            showSuperToastError(getResources().getString(R.string.internet_connection_error_dialog_title));
                             return;
                         }
 
@@ -312,5 +334,60 @@ public class ManageChannelActivity extends ActionBarActivity {
 
     }
 
+    private void demoteUser(String memberId) {
+        String URL = Flippy.channels + memberId + "/demote_user/";
+        Ion.with(ManageChannelActivity.this)
+                .load(URL)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        if (result != null) {
+                            if (result.has("detail")) {
+                                showSuperToastError("The user was not found");
+                                Log.e("Error removing user", "user not found");
+                                return;
+                            }
+                            showSuperToastError(result.get("results").toString());
+                            return;
+                        }
+                        if (e != null) {
+                            showSuperToastError(getResources().getString(R.string.internet_connection_error_dialog_title));
+                            return;
+                        }
 
+                    }
+                });
+
+    }
+
+    private void showSuperToastSuccess(String message) {
+        superToast.setAnimations(SuperToast.Animations.FLYIN);
+        superToast.setDuration(SuperToast.Duration.SHORT);
+        superToast.setBackground(SuperToast.Background.BLUE);
+        superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+        superToast.setText(message);
+        superToast.show();
+
+    }
+
+    private void confirmDemotion(String adminName, final String memberId) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ManageChannelActivity.this);
+        builder.setTitle("Confirm your action");
+        builder.setMessage("Are you sure you want to demote  " + adminName);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                demoteUser(memberId);
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
 }

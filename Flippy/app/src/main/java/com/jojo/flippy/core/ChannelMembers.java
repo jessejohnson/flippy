@@ -136,11 +136,10 @@ public class ChannelMembers extends Activity {
                 userEmail = textViewMemberEmail.getText().toString();
                 userFullName = textViewMemberFullName.getText().toString();
                 if (isManage) {
-                    ToastMessages.showToastLong(ChannelMembers.this, "clicked");
                     intent.putExtra("memberEmail", userEmail);
+                    intent.putExtra("memberId", userId);
                     setResult(Activity.RESULT_OK, intent);
                     finish();
-
                 } else {
                     intent.putExtra("memberId", userId);
                     intent.putExtra("memberEmail", userEmail);

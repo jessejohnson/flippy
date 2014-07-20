@@ -51,10 +51,6 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
                 .error(R.drawable.default_profile_picture)
                 .animateIn(R.anim.fade_in)
                 .load(String.valueOf(rowItem.getAdminProfileItem()));
-        //check if the  current user or the admin
-        if(CommunityCenterActivity.regUserID.equals(rowItem.getAdminId())){
-            holder.imageViewDemoteUser.setVisibility(View.GONE);
-        }
 
         return convertView;
     }
