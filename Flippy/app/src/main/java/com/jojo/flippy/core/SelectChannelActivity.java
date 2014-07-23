@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.jojo.flippy.adapter.AdminPerson;
 import com.jojo.flippy.adapter.ChannelMemberAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
@@ -41,7 +43,8 @@ public class SelectChannelActivity extends ActionBarActivity {
     private String channelId;
     private String channelName;
     private String subTitle = "a step to more to go";
-    private boolean isPromoteUser;
+    private boolean isReFLIP;
+    private ArrayList<String> admins = new ArrayList<String>();
 
 
     @Override
@@ -51,7 +54,7 @@ public class SelectChannelActivity extends ActionBarActivity {
 
 
         intent = getIntent();
-        isPromoteUser = intent.getBooleanExtra("isPromoteUser", false);
+        isReFLIP = intent.getBooleanExtra("isReFLIP", false);
         String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
         ActionBar actionBar = getActionBar();
         actionBar.setSubtitle(subTitle);
@@ -69,7 +72,7 @@ public class SelectChannelActivity extends ActionBarActivity {
                 R.layout.channel_members_listview, userChannelItem, false);
         userChannelList.setAdapter(userChannelsAdapter);
 
-
+        //getAdminList(Flippy.channels+channelId+"/admins/");
         //load the channels of user
         Ion.with(SelectChannelActivity.this)
                 .load(url)
@@ -78,40 +81,43 @@ public class SelectChannelActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarLoadUserChannels.setVisibility(View.INVISIBLE);
-                        if (result != null) {
-                            if (result.has("detail")) {
-                                Crouton.makeText(SelectChannelActivity.this, "The requested user was not found", Style.ALERT)
-                                        .show();
-                                return;
-                            }
-                            JsonArray channelArray = result.getAsJsonArray("results");
-                            for (int i = 0; i < channelArray.size(); i++) {
-                                JsonObject item = channelArray.get(i).getAsJsonObject();
-                                JsonObject creator = item.get("creator").getAsJsonObject();
-                                String creatorId = creator.get("id").getAsString();
-                                channelId = item.get("id").getAsString();
-                                String url = "";
-                                if (!item.get("image_thumbnail_url").isJsonNull()) {
-                                    url = item.get("image_thumbnail_url").getAsString();
+                        try {
+                            if (result != null) {
+                                if (result.has("detail")) {
+                                    Crouton.makeText(SelectChannelActivity.this, "The requested channel was not found", Style.ALERT)
+                                            .show();
+                                    return;
                                 }
-                                channelName = item.get("name").getAsString();
-                                if (creatorId.equals(CommunityCenterActivity.regUserID)) {
-                                    ProfileItem channelItem = new ProfileItem(URI.create(url), channelName, channelId, "");
-                                    userChannelItem.add(channelItem);
+                                JsonArray channelArray = result.getAsJsonArray("results");
+                                for (int i = 0; i < channelArray.size(); i++) {
+                                    JsonObject item = channelArray.get(i).getAsJsonObject();
+                                    JsonObject creator = item.get("creator").getAsJsonObject();
+                                    String creatorId = creator.get("id").getAsString();
+                                    channelId = item.get("id").getAsString();
+                                    String url = "";
+                                    if (!item.get("image_thumbnail_url").isJsonNull()) {
+                                        url = item.get("image_thumbnail_url").getAsString();
+                                    }
+                                    channelName = item.get("name").getAsString();
+                                    if (creatorId.equals(CommunityCenterActivity.regUserID)) {
+                                        ProfileItem channelItem = new ProfileItem(URI.create(url), channelName, channelId, "");
+                                        userChannelItem.add(channelItem);
+                                    }
                                 }
+                                updateAdapter();
+
                             }
-                            updateAdapter();
-                            if (userChannelsAdapter.isEmpty()) {
+                            if (e != null) {
                                 textViewNoChannelHelp.setVisibility(View.VISIBLE);
                                 textViewNoChannel.setVisibility(View.VISIBLE);
+                                ToastMessages.showToastLong(SelectChannelActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                                return;
                             }
+
+                        } catch (Exception exception) {
+                            Log.e("Error occurred", "Error retrieving a list of user subscribed channels");
                         }
-                        if (e != null) {
-                            textViewNoChannelHelp.setVisibility(View.VISIBLE);
-                            textViewNoChannel.setVisibility(View.VISIBLE);
-                            ToastMessages.showToastLong(SelectChannelActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                            return;
-                        }
+
 
                     }
                 });
@@ -124,8 +130,8 @@ public class SelectChannelActivity extends ActionBarActivity {
                 TextView textViewMemberFirstName = (TextView) view.findViewById(R.id.textViewMemberEmail);
                 String channelId = textViewMemberLastName.getText().toString();
                 String channelName = textViewMemberFirstName.getText().toString();
-                if (isPromoteUser) {
-                    intent.setClass(SelectChannelActivity.this, MemberDetailActivity.class);
+                if (isReFLIP) {
+                    intent.setClass(SelectChannelActivity.this, NoticeDetailActivity.class);
                     intent.putExtra("channelId", channelId);
                     setResult(1, intent);
                 }
@@ -149,7 +155,40 @@ public class SelectChannelActivity extends ActionBarActivity {
 
     private void updateAdapter() {
         userChannelsAdapter.notifyDataSetChanged();
+        if (userChannelsAdapter.isEmpty()) {
+            textViewNoChannelHelp.setVisibility(View.VISIBLE);
+            textViewNoChannel.setVisibility(View.VISIBLE);
+        }
 
+    }
+
+    private void getAdminList(String url) {
+        Ion.with(SelectChannelActivity.this)
+                .load(url)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            if (result.has("detail")) {
+                                Log.e("Error form get admin list", "Admin list not found");
+                                return;
+                            }
+                            if (result != null) {
+                                JsonArray adminArray = result.getAsJsonArray("results");
+                                for (int i = 0; i < adminArray.size(); i++) {
+                                    JsonObject item = adminArray.get(i).getAsJsonObject();
+                                    admins.add(item.get("id").getAsString());
+                                }
+                            }
+                            if (e != null) {
+                                Log.e("Error", "sorry, internet connection occurred");
+                            }
+                        } catch (Exception error) {
+                            Log.e("Error try catch", "Error occurred when getting admin list");
+                        }
+                    }
+                });
     }
 
 }

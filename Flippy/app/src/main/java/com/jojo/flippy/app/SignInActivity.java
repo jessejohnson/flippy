@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,14 +31,13 @@ public class SignInActivity extends ActionBarActivity {
     private TextView textViewSignIn;
     private Button signGetStartedButton;
     private EditText signInEmail, signInPassword;
-    private CheckBox signInCheckBox;
     private Intent intent;
     private String regUserEmail;
     private String regUserAuthToken;
     private String regUserID;
     private String regFirstName;
     private String regLastName;
-    private String avatar, avatar_thumb, date_of_birth, gender;
+    private String avatar = "", avatar_thumb = "", date_of_birth = "", gender = "";
     private Dao<User, Integer> userDao;
     private SuperToast superToast;
 
@@ -104,23 +104,13 @@ public class SignInActivity extends ActionBarActivity {
                                     signGetStartedButton.setEnabled(true);
                                     signGetStartedButton.setText(getText(R.string.start));
                                     if (e != null) {
-                                        superToast.setAnimations(SuperToast.Animations.FLYIN);
-                                        superToast.setDuration(SuperToast.Duration.LONG);
-                                        superToast.setBackground(SuperToast.Background.PURPLE);
-                                        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-                                        superToast.setText(getResources().getString(R.string.internet_connection_error_dialog_title));
-                                        superToast.show();
+                                        showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
                                         return;
                                     } else {
                                         try {
                                             if (result.has("detail")) {
                                                 signInEmail.setError(result.get("detail").getAsString());
-                                                superToast.setAnimations(SuperToast.Animations.FLYIN);
-                                                superToast.setDuration(SuperToast.Duration.LONG);
-                                                superToast.setBackground(SuperToast.Background.RED);
-                                                superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-                                                superToast.setText(result.get("detail").getAsString());
-                                                superToast.show();
+                                                showSuperToast(result.get("detail").getAsString());
                                                 return;
                                             }
                                             regUserAuthToken = result.get("auth_token").getAsString();
@@ -128,16 +118,14 @@ public class SignInActivity extends ActionBarActivity {
                                             regFirstName = result.get("first_name").getAsString();
                                             regUserEmail = result.get("email").getAsString();
                                             regLastName = result.get("last_name").getAsString();
-                                            if (result.get("avatar").isJsonNull()) {
-                                                avatar = "";
-                                            } else {
+                                            if (!result.get("avatar").isJsonNull()) {
                                                 avatar = result.get("avatar").getAsString();
+                                                avatar_thumb = result.get("avatar_thumb").getAsString();
                                             }
-                                            avatar_thumb = result.get("avatar_thumb").getAsString();
-                                            gender = result.get("gender").getAsString();
-                                            if (result.get("date_of_birth").isJsonNull()) {
-                                                date_of_birth = "";
-                                            } else {
+                                            if (!result.get("gender").isJsonNull()) {
+                                                gender = result.get("gender").getAsString();
+                                            }
+                                            if (!result.get("date_of_birth").isJsonNull()) {
                                                 date_of_birth = result.get("date_of_birth").getAsString();
                                             }
                                         } catch (UnsupportedOperationException e1) {
@@ -157,12 +145,8 @@ public class SignInActivity extends ActionBarActivity {
                                             userDao.createOrUpdate(user);
                                         } catch (java.sql.SQLException sqlE) {
                                             sqlE.printStackTrace();
-                                            superToast.setAnimations(SuperToast.Animations.FLYIN);
-                                            superToast.setDuration(SuperToast.Duration.LONG);
-                                            superToast.setBackground(SuperToast.Background.RED);
-                                            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-                                            superToast.setText("sorry, try again");
-                                            superToast.show();
+                                            showSuperToast("sorry, try again");
+                                            Log.e("Error saving to db login", sqlE.toString());
                                             return;
                                         }
                                         intent.putExtra("regUserEmail", regUserEmail);
@@ -170,32 +154,31 @@ public class SignInActivity extends ActionBarActivity {
                                         intent.putExtra("regUserID", regUserID);
                                         //TODO if the user has selected their community already, redirect to notice page
                                         //get user from db
-                                        try{
+                                        try {
                                             DatabaseHelper databaseHelper = OpenHelperManager
                                                     .getHelper(SignInActivity.this, DatabaseHelper.class);
                                             userDao = databaseHelper.getUserDao();
                                             List<User> userList = userDao.queryForAll();
-                                            User current;
+                                            User current = null;
 
-                                            if(userList.isEmpty()){
-                                                current = null;
+                                            if (userList.isEmpty()) {
                                                 //TODO probably start next activity here
                                             } else {
                                                 current = userList.get(0);
                                                 String communityId = current.community_id;
-                                                if(communityId.equalsIgnoreCase("")){
+                                                if (communityId.equalsIgnoreCase("")) {
                                                     startActivity(new Intent(SignInActivity.this, SelectCommunityActivity.class));
-                                                    Toast.makeText(SignInActivity.this, "community not set...", Toast.LENGTH_LONG).show();
+                                                    showSuperToast("community not set...");
                                                 } else {
                                                     startActivity(new Intent(SignInActivity.this, CommunityCenterActivity.class));
-                                                    Toast.makeText(SignInActivity.this, "community already set...", Toast.LENGTH_LONG).show();
+                                                    showSuperToast("community already set...");
                                                 }
                                             }
 
-                                        } catch (Exception ex){
+                                        } catch (Exception ex) {
                                             ex.printStackTrace();
                                         }
-                                        Toast.makeText(SignInActivity.this, "did not pass through checks...", Toast.LENGTH_LONG).show();
+                                        showSuperToast("did not pass through checks...");
                                         intent.setClass(SignInActivity.this, SelectCommunityActivity.class);
                                         startActivity(intent);
                                     }
@@ -214,5 +197,14 @@ public class SignInActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void showSuperToast(String message) {
+        superToast.setAnimations(SuperToast.Animations.FLYIN);
+        superToast.setDuration(SuperToast.Duration.LONG);
+        superToast.setBackground(SuperToast.Background.PURPLE);
+        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+        superToast.setText(message);
+        superToast.show();
     }
 }

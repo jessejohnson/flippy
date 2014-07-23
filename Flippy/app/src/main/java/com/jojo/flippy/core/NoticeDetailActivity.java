@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 
 public class NoticeDetailActivity extends ActionBarActivity {
+    private final String TAG = "NoticeDetailActivity";
     SuperToast superToast;
     private GoogleMap googleMap;
     private Intent intent;
@@ -76,6 +78,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private Calendar calendar;
     private String noPost = "Sorry, this post has been remove";
     private String currentUserEmail;
+    private final int RE_FLIP = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,33 +146,39 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            if (result.has("detail")) {
-                                showSuperToast("Sorry, this post has been removed");
+                        try {
+                            if (result != null) {
+                                if (result.has("detail")) {
+                                    showSuperToast("Sorry, this post has been removed");
+                                    return;
+                                }
+                                JsonObject item = result.getAsJsonObject("author");
+                                author_email = item.get("email").getAsString();
+                                if (author_email.equals(currentUserEmail)) {
+                                    imageViewDeletePost.setVisibility(View.VISIBLE);
+                                }
+                                if (!item.get("avatar").isJsonNull()) {
+                                    author_profile = item.get("avatar").getAsString();
+                                }
+                                channelId = result.get("channel").getAsString();
+                                String[] timestampArray = result.get("timestamp").getAsString().replace("Z", "").split("T");
+                                time_stamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0, 8);
+                                image_link = "";
+                                if (!result.get("image_url").isJsonNull()) {
+                                    imageViewNoticeImageDetail.setVisibility(View.VISIBLE);
+                                    image_link = result.get("image_url").getAsString();
+                                }
+                                getChannelName(channelId);
+                                showView();
+                            }
+                            if (e != null) {
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
                                 return;
                             }
-                            JsonObject item = result.getAsJsonObject("author");
-                            author_email = item.get("email").getAsString();
-                            if (author_email.equals(currentUserEmail)) {
-                                imageViewDeletePost.setVisibility(View.VISIBLE);
-                            }
-                            if (!item.get("avatar").isJsonNull()) {
-                                author_profile = item.get("avatar").getAsString();
-                            }
-                            channelId = result.get("channel").getAsString();
-                            String[] timestampArray = result.get("timestamp").getAsString().replace("Z", "").split("T");
-                            time_stamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0, 8);
-                            image_link = "";
-                            if (!result.get("image_url").isJsonNull()) {
-                                imageViewNoticeImageDetail.setVisibility(View.VISIBLE);
-                                image_link = result.get("image_url").getAsString();
-                            }
-                            getChannelName(channelId);
-                            showView();
+                        } catch (Exception exception) {
+                            Log.e(TAG, "Try catch, something went wrong getting detail");
                         }
-                        if (e != null) {
-                            ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                        }
+
 
                     }
                 });
@@ -209,21 +218,25 @@ public class NoticeDetailActivity extends ActionBarActivity {
                         .setCallback(new FutureCallback<JsonObject>() {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
-                                if (result != null) {
-                                    if (result.has("detail")) {
-                                        Crouton.makeText(NoticeDetailActivity.this, noPost, Style.ALERT);
-                                        return;
+                                try {
+                                    if (result != null) {
+                                        if (result.has("detail")) {
+                                            Crouton.makeText(NoticeDetailActivity.this, noPost, Style.ALERT);
+                                            return;
+                                        }
+                                        showSuperToast(result.get("results").getAsString());
                                     }
-                                    ToastMessages.showToastLong(NoticeDetailActivity.this, result.get("results").getAsString());
-                                }
-                                if (e != null) {
-                                    ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                                }
-                                getPostCount(noticeId);
+                                    if (e != null) {
+                                        showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                                    }
+                                    getPostCount(noticeId);
 
+                                } catch (Exception exception) {
+                                    Log.e(TAG, "Error try catch rating a notice");
+                                }
                             }
-
                         });
+
             }
 
         });
@@ -241,9 +254,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings_re_flip) {
             intent.setClass(NoticeDetailActivity.this, SelectChannelActivity.class);
-            //pass data along and create a notice based on the selected channel
-            startActivity(intent);
-            ToastMessages.showToastLong(NoticeDetailActivity.this, "sharing in other channels");
+            intent.putExtra("isReFlip", true);
+            startActivityForResult(intent, RE_FLIP);
             return true;
         }
         if (id == R.id.action_notice_alarm) {
@@ -261,6 +273,16 @@ public class NoticeDetailActivity extends ActionBarActivity {
         superToast.setAnimations(SuperToast.Animations.FLYIN);
         superToast.setDuration(SuperToast.Duration.SHORT);
         superToast.setBackground(SuperToast.Background.PURPLE);
+        superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+        superToast.setText(message);
+        superToast.show();
+    }
+
+    private void showSuperToastSuccess(String message) {
+        superToast.setAnimations(SuperToast.Animations.FLYIN);
+        superToast.setDuration(SuperToast.Duration.SHORT);
+        superToast.setBackground(SuperToast.Background.BLUE);
         superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
         superToast.setTextSize(SuperToast.TextSize.MEDIUM);
         superToast.setText(message);
@@ -285,11 +307,12 @@ public class NoticeDetailActivity extends ActionBarActivity {
             Calendar c = Calendar.getInstance();
             Date dateConverted = dateFormat.parse(date.toString());
             if (dateConverted.compareTo(c.getTime()) < 1) {
-                ToastMessages.showToastLong(NoticeDetailActivity.this, "Notice is long due");
+                showSuperToast("Notice is long due");
                 return;
             }
         } catch (ParseException e) {
             e.printStackTrace();
+            Log.e(TAG, "Error doing date comparison to set reminder");
         }
 
         try {
@@ -302,8 +325,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
             minute = Integer.parseInt(timeArray[1]);
             seconds = Integer.parseInt(timeArray[2]);
         } catch (Exception e) {
-            Crouton.makeText(NoticeDetailActivity.this, "Failed to set reminder", Style.ALERT)
-                    .show();
+            showSuperToast("Failed to set reminder");
             return;
         }
         setCalenderReminder(month, year, day, hour, minute, seconds);
@@ -329,7 +351,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         pendingIntent = PendingIntent.getBroadcast(NoticeDetailActivity.this, 0, alarmIntent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        ToastMessages.showToastLong(NoticeDetailActivity.this, "Reminder set successfully");
+        showSuperToastSuccess("Reminder set successfully");
     }
 
     private void showView() {
@@ -340,7 +362,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 .load(image_link);
         Ion.with(imageViewNoticeCreatorImage)
                 .animateIn(R.anim.fade_in)
-                .placeholder(R.drawable.default_profile_picture)
+                .placeholder(R.drawable.default_medium)
                 .error(R.color.flippy_orange)
                 .load(author_profile);
         textViewAuthorEmailAddress.setText(author_email);
@@ -359,19 +381,25 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            if (result.has("detail")) {
-                                Crouton.makeText(NoticeDetailActivity.this, noPost, Style.ALERT);
+                        try {
+                            if (result != null) {
+                                if (result.has("detail")) {
+                                    Crouton.makeText(NoticeDetailActivity.this, noPost, Style.ALERT);
+                                    return;
+                                }
+                                String item = result.get("results").getAsString();
+                                textViewLikes.setText(item + " Star(s)");
                                 return;
                             }
-                            String item = result.get("results").getAsString();
-                            textViewLikes.setText(item + " Star(s)");
-                            return;
+                            if (e != null) {
+                                ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                                return;
+                            }
+
+                        } catch (Exception e1) {
+                            Log.e(TAG, "Error getting the rating count of a notice");
                         }
-                        if (e != null) {
-                            ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                            return;
-                        }
+
 
                     }
                 });
@@ -385,21 +413,24 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            if (result.has("detail")) {
-                                Crouton.makeText(NoticeDetailActivity.this, noPost, Style.ALERT);
-                                return;
+                        try {
+                            if (result != null) {
+                                if (result.has("detail")) {
+                                    showSuperToast(noPost);
+                                    return;
+                                }
+                                JsonObject item = result.getAsJsonObject("results");
+                                locationName = item.get("local_name").getAsString();
+                                locationLat = item.get("latitude").getAsString();
+                                locationLon = item.get("longitude").getAsString();
+                                showMap();
                             }
-                            JsonObject item = result.getAsJsonObject("results");
-                            locationName = item.get("local_name").getAsString();
-                            locationLat = item.get("latitude").getAsString();
-                            locationLon = item.get("longitude").getAsString();
-                            showMap();
+                            if (e != null) {
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                            }
+                        } catch (Exception el) {
+                            Log.e(TAG, "Error getting the location of a notice");
                         }
-                        if (e != null) {
-                            ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                        }
-
                     }
                 });
     }
@@ -412,18 +443,23 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            if (result.has("detail")) {
-                                noReminder = result.get("detail").getAsString();
-                                return;
+                        try {
+                            if (result != null) {
+                                if (result.has("detail")) {
+                                    noReminder = result.get("detail").getAsString();
+                                    return;
+                                }
+                                JsonObject item = result.getAsJsonObject("results");
+                                startDate = item.get("start_date").getAsString();
+                                endDate = item.get("end_date").getAsString();
+                                reminderInterval = item.get("repeat_interval").getAsInt();
                             }
-                            JsonObject item = result.getAsJsonObject("results");
-                            startDate = item.get("start_date").getAsString();
-                            endDate = item.get("end_date").getAsString();
-                            reminderInterval = item.get("repeat_interval").getAsInt();
-                        }
-                        if (e != null) {
-                            ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            if (e != null) {
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                            }
+
+                        } catch (Exception el) {
+                            Log.e(TAG, "Error get the reminder " + el.toString());
                         }
 
                     }
@@ -447,24 +483,27 @@ public class NoticeDetailActivity extends ActionBarActivity {
     }
 
     private void getChannelName(String id) {
-        //load the channel name using the channel id
         Ion.with(NoticeDetailActivity.this)
                 .load(Flippy.channels + id + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception ex, JsonObject nameResult) {
-
-                        if (nameResult != null) {
-                            if (nameResult.has("detail")) {
-                                Crouton.makeText(NoticeDetailActivity.this, noPost, Style.ALERT);
-                                return;
+                        try {
+                            if (nameResult != null) {
+                                if (nameResult.has("detail")) {
+                                    showSuperToast(noPost);
+                                    return;
+                                }
+                                textViewNoticeSubtitleChannelName.setVisibility(View.VISIBLE);
+                                textViewNoticeSubtitleChannelName.setText(nameResult.get("name").getAsString());
                             }
-                            textViewNoticeSubtitleChannelName.setVisibility(View.VISIBLE);
-                            textViewNoticeSubtitleChannelName.setText(nameResult.get("name").getAsString());
-                        }
-                        if (ex != null) {
-                            ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            if (ex != null) {
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                            }
+
+                        } catch (Exception exception) {
+                            Log.e(TAG, "Error getting the channel name " + exception.toString());
                         }
 
                     }
@@ -493,5 +532,23 @@ public class NoticeDetailActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+            showSuperToast("No channel selected");
+            return;
+        }
+        if (resultCode == RESULT_OK && requestCode == RE_FLIP) {
+            //process and send to create notice
+            showSuperToastSuccess("Create a new notice passing all this details");
+
+        } else {
+            showSuperToast("No channel selected");
+            Log.e(TAG, "something went wrong on result of re-flip");
+            return;
+        }
     }
 }

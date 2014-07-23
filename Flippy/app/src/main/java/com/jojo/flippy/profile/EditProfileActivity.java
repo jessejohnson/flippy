@@ -51,7 +51,6 @@ public class EditProfileActivity extends ActionBarActivity {
     private EditText editTextEditProfileLastName;
     private EditText editTextEditProfileEmail;
     private EditText editTextEditProfileDateOfBirth;
-    private EditText editTextEditProfileNumber;
     private Spinner genderSpinner;
     private ImageView imageViewUploadPhoto;
     private String NewFirstNameUpdate;
@@ -212,15 +211,22 @@ public class EditProfileActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarUpdateAvatar.setVisibility(View.GONE);
-                        if (result == null) {
+                        try {
+                            if (result == null) {
+                                showSuperToast("Failed to upload avatar");
+                                return;
+                            }
+                            if (result != null) {
+                                getUserInfo();
+                            }
+                            if (e != null) {
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                                return;
+                            }
+
+                        } catch (Exception exception) {
+                            Log.e("Error try catch", "Error while updating profile image");
                             showSuperToast("Failed to upload avatar");
-                            return;
-                        }
-                        if (result != null) {
-                            getUserInfo();
-                        }
-                        if (e != null) {
-                            showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
                             return;
                         }
 
@@ -253,33 +259,36 @@ public class EditProfileActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result.has("details")) {
-                            Crouton.makeText(EditProfileActivity.this, "Failed to update user", Style.ALERT)
-                                    .show();
-                            return;
-                        }
-                        if (result != null && !result.has("details")) {
-                            if (!result.get("avatar").isJsonNull()) {
-                                userAvatar = result.get("avatar").getAsString();
+                        try {
+                            if (result.has("details")) {
+                                showSuperToast("Failed to update user");
+                                return;
                             }
-                            if (!result.get("avatar_thumb").isJsonNull()) {
-                                userAvatarThumb = result.get("avatar_thumb").getAsString();
-                            }
-                            userEmail = result.get("email").getAsString();
-                            userCommunityId = result.get("community").getAsString();
-                            userLastName = result.get("last_name").getAsString();
-                            userFirstName = result.get("first_name").getAsString();
-                            if (!result.get("gender").isJsonNull()) {
-                                userGender = result.get("gender").getAsString();
-                            }
-                            if (!result.get("date_of_birth").isJsonNull()) {
-                                userDateOfBirth = result.get("date_of_birth").getAsString();
-                            }
+                            if (result != null && !result.has("details")) {
+                                if (!result.get("avatar").isJsonNull()) {
+                                    userAvatar = result.get("avatar").getAsString();
+                                }
+                                if (!result.get("avatar_thumb").isJsonNull()) {
+                                    userAvatarThumb = result.get("avatar_thumb").getAsString();
+                                }
+                                userEmail = result.get("email").getAsString();
+                                userCommunityId = result.get("community").getAsString();
+                                userLastName = result.get("last_name").getAsString();
+                                userFirstName = result.get("first_name").getAsString();
+                                if (!result.get("gender").isJsonNull()) {
+                                    userGender = result.get("gender").getAsString();
+                                }
+                                if (!result.get("date_of_birth").isJsonNull()) {
+                                    userDateOfBirth = result.get("date_of_birth").getAsString();
+                                }
 
-                        }
-                        if (e != null) {
-                            ToastMessages.showToastLong(EditProfileActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                            return;
+                            }
+                            if (e != null) {
+                                ToastMessages.showToastLong(EditProfileActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                                return;
+                            }
+                        } catch (Exception e1) {
+                            Log.e("Error updating user", "Occurred when updating user");
                         }
                         updateUser();
                     }

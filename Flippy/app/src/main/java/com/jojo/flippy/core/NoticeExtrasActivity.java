@@ -229,13 +229,10 @@ public class NoticeExtrasActivity extends ActionBarActivity {
 
     public void decodeFile(String filePath) {
         Log.e("File path", filePath);
-        // Decode image size
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(filePath, o);
-        // The new size we want to scale to
         final int REQUIRED_SIZE = 1024;
-        // Find the correct scale value. It should be the power of 2.
         int width_tmp = o.outWidth, height_tmp = o.outHeight;
         int scale = 1;
         while (true) {

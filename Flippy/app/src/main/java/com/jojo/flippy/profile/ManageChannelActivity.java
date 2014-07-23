@@ -229,31 +229,35 @@ public class ManageChannelActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarLoadAdmin.setVisibility(View.GONE);
-                        if (result.has("detail")) {
-                            showSuperToastError("sorry, an error occurred");
-                            Log.e("Error form get admin list", "Admin list not found");
-                            return;
-                        }
-                        if (result != null) {
-                            JsonArray adminArray = result.getAsJsonArray("results");
-                            if (adminArray.size() < 5) {
-                                buttonAddAdmin.setVisibility(View.VISIBLE);
-                            }
-                            for (int i = 0; i < adminArray.size(); i++) {
-                                JsonObject item = adminArray.get(i).getAsJsonObject();
-                                String avatar = "";
-                                if (!item.get("avatar").isJsonNull()) {
-                                    avatar = item.get("avatar").getAsString();
-                                }
-                                AdminPerson profileItem = new AdminPerson(URI.create(avatar), item.get("email").getAsString(), item.get("first_name").getAsString() + ", " + item.get("last_name").getAsString(), item.get("id").getAsString());
-                                rowItems.add(profileItem);
-                            }
-                            updateAdapter();
-                        }
-                        if (e != null) {
-                            showSuperToastError("sorry, internet connection occurred");
-                        }
 
+                        try {
+                            if (result.has("detail")) {
+                                showSuperToastError("sorry, an error occurred");
+                                Log.e("Error form get admin list", "Admin list not found");
+                                return;
+                            }
+                            if (result != null) {
+                                JsonArray adminArray = result.getAsJsonArray("results");
+                                if (adminArray.size() < 5) {
+                                    buttonAddAdmin.setVisibility(View.VISIBLE);
+                                }
+                                for (int i = 0; i < adminArray.size(); i++) {
+                                    JsonObject item = adminArray.get(i).getAsJsonObject();
+                                    String avatar = "";
+                                    if (!item.get("avatar").isJsonNull()) {
+                                        avatar = item.get("avatar").getAsString();
+                                    }
+                                    AdminPerson profileItem = new AdminPerson(URI.create(avatar), item.get("email").getAsString(), item.get("first_name").getAsString() + ", " + item.get("last_name").getAsString(), item.get("id").getAsString());
+                                    rowItems.add(profileItem);
+                                }
+                                updateAdapter();
+                            }
+                            if (e != null) {
+                                showSuperToastError("sorry, internet connection occurred");
+                            }
+                        } catch (Exception error) {
+                            Log.e("Error try catch", "Error occurred when getting admin list");
+                        }
                     }
                 });
     }

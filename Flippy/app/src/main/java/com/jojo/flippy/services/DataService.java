@@ -25,6 +25,7 @@ import java.util.TimerTask;
 public class DataService extends Service {
     private Dao<Post, Integer> postDao;
     private ArrayList<String> savedPostIds;
+    private static String TAG = "DataService";
 
 
     @Override
@@ -52,79 +53,86 @@ public class DataService extends Service {
                     savedPostIds.add(post.notice_id);
                 }
             }
-
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
-
+            Log.e(TAG, "Error occurred retrieving post ids");
         }
         InternetConnectionDetector internetConnectionDetector = new InternetConnectionDetector(getApplicationContext());
         if (internetConnectionDetector.isConnectingToInternet()) {
-
+            Timer dataTimer = new Timer();
+            dataTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    getNewPost();
+                }
+            }, 1000, 1000);
         }
-        Timer dataTimer = new Timer();
-        dataTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Ion.with(getApplicationContext())
-                        .load(Flippy.allPostURL)
-                        .asJsonObject()
-                        .setCallback(new FutureCallback<JsonObject>() {
-                            @Override
-                            public void onCompleted(Exception e, JsonObject result) {
-                                if (result != null && result.has("results")) {
-                                    JsonArray postArray = result.getAsJsonArray("results");
-                                    for (int i = 0; i < postArray.size(); i++) {
-                                        JsonObject item = postArray.get(i).getAsJsonObject();
-                                        JsonObject author = item.getAsJsonObject("author");
-                                        String startDate = item.get("timestamp").getAsString();
-                                        String title = item.get("title").getAsString();
-                                        String id = item.get("id").getAsString();
-                                        String content = item.get("content").getAsString();
-                                        String channel = item.get("channel").getAsString();
-                                        String image_link = "flip";
-                                        String avatar = "flip";
-                                        String avatarThumb = "flip";
-                                        if (!item.get("image_url").isJsonNull()) {
-                                            image_link = item.get("image_url").getAsString();
-                                        }
-                                        if (!author.get("avatar").isJsonNull()) {
-                                            avatar = author.get("avatar").getAsString();
-                                            avatarThumb = author.get("avatar_thumb").getAsString();
-                                        }
-                                        String authorEmail = author.get("email").getAsString();
-                                        String authorId = author.get("id").getAsString();
-                                        String authorFirstName = author.get("first_name").getAsString();
-                                        String authorLastName = author.get("last_name").getAsString();
-                                        Calendar calendar = Calendar.getInstance();
-                                        Post new_post = new Post(id, title, content, image_link, startDate,
-                                                authorEmail, authorId, authorFirstName, authorLastName, avatar, avatarThumb, channel, calendar.getTimeInMillis());
-                                        try {
-                                            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
-                                                    DatabaseHelper.class);
-                                            postDao = databaseHelper.getPostDao();
-                                            if (!savedPostIds.contains(id)) {
-                                                postDao.createOrUpdate(new_post);
-                                            }
-                                        } catch (java.sql.SQLException sqlE) {
-                                            sqlE.printStackTrace();
 
-                                        }
-                                    }
-
-                                    Intent postIntent = new Intent();
-                                    postIntent.setAction("newPostArrived");
-                                    sendBroadcast(postIntent);
-                                }
-                                if (e != null) {
-
-                                }
-                            }
-                        });
-            }
-        }, 1000, 1000);
 
         return START_STICKY;
+    }
 
+    private void getNewPost() {
+        Ion.with(getApplicationContext())
+                .load(Flippy.allPostURL)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            if (result != null && result.has("results")) {
+                                JsonArray postArray = result.getAsJsonArray("results");
+                                for (int i = 0; i < postArray.size(); i++) {
+                                    JsonObject item = postArray.get(i).getAsJsonObject();
+                                    JsonObject author = item.getAsJsonObject("author");
+                                    String startDate = item.get("timestamp").getAsString();
+                                    String title = item.get("title").getAsString();
+                                    String id = item.get("id").getAsString();
+                                    String content = item.get("content").getAsString();
+                                    String channel = item.get("channel").getAsString();
+                                    String image_link = "flip";
+                                    String avatar = "flip";
+                                    String avatarThumb = "flip";
+                                    if (!item.get("image_url").isJsonNull()) {
+                                        image_link = item.get("image_url").getAsString();
+                                    }
+                                    if (!author.get("avatar").isJsonNull()) {
+                                        avatar = author.get("avatar").getAsString();
+                                        avatarThumb = author.get("avatar_thumb").getAsString();
+                                    }
+                                    String authorEmail = author.get("email").getAsString();
+                                    String authorId = author.get("id").getAsString();
+                                    String authorFirstName = author.get("first_name").getAsString();
+                                    String authorLastName = author.get("last_name").getAsString();
+                                    Calendar calendar = Calendar.getInstance();
+                                    Post new_post = new Post(id, title, content, image_link, startDate,
+                                            authorEmail, authorId, authorFirstName, authorLastName, avatar, avatarThumb, channel, calendar.getTimeInMillis());
+                                    try {
+                                        DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
+                                                DatabaseHelper.class);
+                                        postDao = databaseHelper.getPostDao();
+                                        if (!savedPostIds.contains(id)) {
+                                            postDao.createOrUpdate(new_post);
+                                        }
+                                    } catch (java.sql.SQLException sqlE) {
+                                        sqlE.printStackTrace();
+
+                                    }
+                                }
+
+                                Intent postIntent = new Intent();
+                                postIntent.setAction("newPostArrived");
+                                sendBroadcast(postIntent);
+                            }
+                            if (e != null) {
+                                Log.e(TAG, "Error occurred internet connection");
+                            }
+                        } catch (Exception exception) {
+                            Log.e(TAG, "Try catch errors getting post data from server");
+                        }
+
+                    }
+                });
     }
 
     @Override

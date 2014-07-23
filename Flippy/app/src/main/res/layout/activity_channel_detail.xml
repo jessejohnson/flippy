@@ -17,250 +17,253 @@
         android:indeterminate="true"
         android:padding="0dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/margin_five"
+        android:layout_height="match_parent">
+
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_margin="@dimen/margin_five"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imageViewChannelLarge"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_one_fifty"
+                    android:scaleType="centerCrop" />
+
+            </FrameLayout>
 
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/textViewChannelNameDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:paddingBottom="@dimen/margin_five"
+                android:paddingLeft="@dimen/margin_five"
+                android:paddingRight="@dimen/margin_five"
+                android:paddingTop="@dimen/margin_five"
+                android:shadowColor="@color/flippy_white"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:text="@string/default_channel_name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/flippy_orange" />
+
+            <TabHost
+                android:id="@+id/tabhost"
+                android:layout_marginTop="@dimen/margin_five"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="#C5C6E1">
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/imageViewChannelLarge"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/margin_one_fifty"
-                        android:scaleType="centerCrop" />
-
-                </FrameLayout>
-
-
-                <TextView
-                    android:id="@+id/textViewChannelNameDetail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
-                    android:paddingBottom="@dimen/margin_five"
-                    android:paddingLeft="@dimen/margin_five"
-                    android:paddingRight="@dimen/margin_five"
-                    android:paddingTop="@dimen/margin_five"
-                    android:shadowColor="@color/flippy_white"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="2"
-                    android:text="@string/default_channel_name"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/flippy_orange" />
-
-                <TabHost
-                    android:id="@+id/tabhost"
-                    android:layout_marginTop="@dimen/margin_five"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:background="#C5C6E1">
+                    android:background="#C5C6E1"
+                    android:orientation="vertical">
 
-                    <LinearLayout
+                    <TabWidget
+                        android:id="@android:id/tabs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/flippy_white"></TabWidget>
+
+                    <FrameLayout
+                        android:id="@android:id/tabcontent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="#C5C6E1"
-                        android:orientation="vertical">
+                        android:background="@color/flippy_white">
 
-                        <TabWidget
-                            android:id="@android:id/tabs"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@color/flippy_white"></TabWidget>
-
-                        <FrameLayout
-                            android:id="@android:id/tabcontent"
+                        <LinearLayout
+                            android:id="@+id/tab1"
+                            android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:padding="@dimen/margin_five"
                             android:background="@color/flippy_white">
 
-                            <LinearLayout
-                                android:id="@+id/tab1"
-                                android:orientation="vertical"
+                            <TextView
+                                android:id="@+id/textViewChannelBio"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:padding="@dimen/margin_five"
-                                android:background="@color/flippy_white">
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left|bottom"
+                                android:gravity="left"
+                                android:paddingBottom="@dimen/margin_five"
+                                android:paddingLeft="@dimen/margin_five"
+                                android:paddingRight="@dimen/margin_five"
+                                android:paddingTop="@dimen/margin_five"
+                                android:text="@string/channel_detail_bio"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textColor="@color/flippy_dark_header" />
 
-                                <TextView
-                                    android:id="@+id/textViewChannelBio"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="left|bottom"
-                                    android:gravity="left"
-                                    android:paddingBottom="@dimen/margin_five"
-                                    android:paddingLeft="@dimen/margin_five"
-                                    android:paddingRight="@dimen/margin_five"
-                                    android:paddingTop="@dimen/margin_five"
-                                    android:text="@string/channel_detail_bio"
-                                    android:textAppearance="?android:attr/textAppearanceMedium"
-                                    android:textColor="@color/flippy_dark_header" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical"
+                                android:padding="@dimen/margin_five">
+
+
+                                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    android:id="@+id/imageViewCreator"
+                                    android:layout_width="@dimen/margin_hundred"
+                                    android:layout_height="@dimen/margin_hundred"
+                                    android:padding="@dimen/margin_five"
+                                    android:scaleType="center"
+                                    app:border_color="@color/border"
+                                    app:border_width="3dip"
+                                    app:corner_radius="@dimen/margin_hundred"
+                                    app:oval="false" />
+
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
+                                    android:layout_gravity="center_vertical"
                                     android:gravity="center_horizontal"
                                     android:orientation="vertical"
-                                    android:padding="@dimen/margin_five">
+                                    android:paddingLeft="@dimen/margin_five">
 
-
-                                    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                                        android:id="@+id/imageViewCreator"
-                                        android:layout_width="@dimen/margin_hundred"
-                                        android:layout_height="@dimen/margin_hundred"
-                                        android:padding="@dimen/margin_five"
-                                        android:scaleType="center"
-                                        app:border_color="@color/border"
-                                        app:border_width="3dip"
-                                        app:corner_radius="@dimen/margin_hundred"
-                                        app:oval="false" />
-
-
-                                    <LinearLayout
+                                    <TextView
+                                        android:id="@+id/textViewChannelCreatorEmail"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical"
+                                        android:layout_gravity="center_horizontal"
                                         android:gravity="center_horizontal"
-                                        android:orientation="vertical"
-                                        android:paddingLeft="@dimen/margin_five">
+                                        android:paddingLeft="@dimen/margin_five"
+                                        android:paddingTop="@dimen/margin_five"
+                                        android:text="@string/flippy_email"
+                                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
-                                        <TextView
-                                            android:id="@+id/textViewChannelCreatorEmail"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center_horizontal"
-                                            android:gravity="center_horizontal"
-                                            android:paddingLeft="@dimen/margin_five"
-                                            android:paddingTop="@dimen/margin_five"
-                                            android:text="@string/flippy_email"
-                                            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                                        <TextView
-                                            android:id="@+id/textViewNameChannelDetailFullName"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="left|bottom"
-                                            android:gravity="center_horizontal"
-                                            android:paddingLeft="@dimen/margin_five"
-                                            android:paddingRight="@dimen/margin_five"
-                                            android:shadowColor="@color/flippy_white"
-                                            android:shadowDx="1"
-                                            android:shadowDy="1"
-                                            android:shadowRadius="2"
-                                            android:text="@string/channel_detail_members"
-                                            android:textAppearance="?android:attr/textAppearanceSmall"
-                                            android:textColor="@color/flippy_dark_header" />
-                                    </LinearLayout>
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/linearLayoutSubscriptions"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_marginBottom="@dimen/margin_twenty"
-                                    android:gravity="center_horizontal"
-                                    android:orientation="horizontal"
-                                    android:weightSum="1">
-
-                                    <Button
-                                        android:id="@+id/buttonSubscribeToChannel"
-                                        style="?android:attr/buttonStyleSmall"
-                                        android:layout_width="0dp"
+                                    <TextView
+                                        android:id="@+id/textViewNameChannelDetailFullName"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_alignParentBottom="true"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true"
-                                        android:layout_marginRight="@dimen/margin_one"
-                                        android:layout_weight="0.5"
-                                        android:background="@drawable/flippy_button_default"
-                                        android:text="@string/subscription_state_true"
-                                        android:textColor="@color/flippy_white" />
-
-                                    <Button
-                                        android:id="@+id/buttonUnSubscribeToChannel"
-                                        style="?android:attr/buttonStyleSmall"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentBottom="true"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentStart="true"
-                                        android:layout_marginLeft="@dimen/margin_one"
-                                        android:layout_weight="0.5"
-                                        android:background="@drawable/flippy_button_default"
-                                        android:text="@string/subscription_state_false"
-                                        android:textColor="@color/flippy_white" />
-
+                                        android:layout_gravity="left|bottom"
+                                        android:gravity="center_horizontal"
+                                        android:paddingLeft="@dimen/margin_five"
+                                        android:paddingRight="@dimen/margin_five"
+                                        android:shadowColor="@color/flippy_white"
+                                        android:shadowDx="1"
+                                        android:shadowDy="1"
+                                        android:shadowRadius="2"
+                                        android:text="@string/channel_detail_members"
+                                        android:textAppearance="?android:attr/textAppearanceSmall"
+                                        android:textColor="@color/flippy_dark_header" />
                                 </LinearLayout>
+                            </LinearLayout>
 
+                            <LinearLayout
+                                android:id="@+id/linearLayoutSubscriptions"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingTop="@dimen/margin_five"
+                                android:layout_alignParentBottom="true"
+                                android:layout_marginBottom="@dimen/margin_twenty"
+                                android:gravity="center_horizontal"
+                                android:orientation="horizontal"
+                                android:weightSum="1">
 
                                 <Button
-                                    android:id="@+id/buttonManageToChannel"
+                                    android:id="@+id/buttonSubscribeToChannel"
                                     style="?android:attr/buttonStyleSmall"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginBottom="@dimen/margin_twenty"
                                     android:layout_alignParentBottom="true"
                                     android:layout_alignParentLeft="true"
                                     android:layout_alignParentStart="true"
-                                    android:background="@drawable/flippy_button_default"
-                                    android:text="@string/manage_channel"
-                                    android:textColor="@color/flippy_white"
-                                    android:visibility="gone" />
+                                    android:layout_marginRight="@dimen/margin_one"
+                                    android:layout_weight="0.45"
+                                    android:background="@drawable/flippy_button_default_plain"
+                                    android:text="@string/subscription_state_true"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/flippy_orange" />
 
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/tab2"
-                                android:layout_width="wrap_content"
-                                android:orientation="vertical"
-                                android:padding="@dimen/margin_five"
-                                android:layout_height="match_parent">
-
-                                <TextView
-                                    android:id="@+id/textViewNameSomePost"
-                                    android:layout_width="match_parent"
+                                <Button
+                                    android:id="@+id/buttonUnSubscribeToChannel"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_horizontal"
-                                    android:gravity="center_horizontal"
-                                    android:paddingLeft="@dimen/margin_five"
-                                    android:paddingRight="@dimen/margin_five"
-                                    android:shadowColor="@color/flippy_white"
-                                    android:shadowDx="1"
-                                    android:shadowDy="1"
-                                    android:text="@string/channel_detail_some_posts"
-                                    android:textAppearance="?android:attr/textAppearanceSmall"
-                                    android:textColor="@color/flippy_dark_header" />
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_marginLeft="@dimen/margin_one"
+                                    android:layout_weight="0.45"
+                                    android:background="@drawable/flippy_button_default_plain"
+                                    android:text="@string/subscription_state_false"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/flippy_orange" />
 
-                                <ListView
-                                    android:id="@+id/listViewChannelPost"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:scrollbars="none"
-                                    android:layout_below="@+id/textViewNameSomePost"
-                                    android:layout_marginBottom="@dimen/margin_five"
-                                    android:divider="@color/flippy_orange"
-                                    android:dividerHeight="@dimen/margin_one"
-                                    android:listSelector="@android:color/transparent" />
                             </LinearLayout>
-                        </FrameLayout>
-                    </LinearLayout>
 
-                </TabHost>
-            </LinearLayout>
+
+                            <Button
+                                android:id="@+id/buttonManageToChannel"
+                                style="?android:attr/buttonStyleSmall"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/margin_twenty"
+                                android:layout_alignParentBottom="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:background="@drawable/flippy_button_default"
+                                android:text="@string/manage_channel"
+                                android:textColor="@color/flippy_white"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/tab2"
+                            android:layout_width="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="@dimen/margin_five"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/textViewNameSomePost"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:gravity="center_horizontal"
+                                android:paddingLeft="@dimen/margin_five"
+                                android:paddingRight="@dimen/margin_five"
+                                android:shadowColor="@color/flippy_white"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
+                                android:text="@string/channel_detail_some_posts"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:textColor="@color/flippy_dark_header" />
+
+                            <ListView
+                                android:id="@+id/listViewChannelPost"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scrollbars="none"
+                                android:layout_below="@+id/textViewNameSomePost"
+                                android:layout_marginBottom="@dimen/margin_five"
+                                android:divider="@color/flippy_orange"
+                                android:dividerHeight="@dimen/margin_one"
+                                android:listSelector="@android:color/transparent" />
+                        </LinearLayout>
+                    </FrameLayout>
+                </LinearLayout>
+
+            </TabHost>
         </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

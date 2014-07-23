@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/margin_five"
@@ -40,7 +41,7 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:text="@string/notice_title"
-                android:textAppearance="?android:attr/textAppearanceSmallInverse"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/flippy_white"
                 android:textStyle="bold" />
 
@@ -54,7 +55,7 @@
                 android:text="@string/notice_subtitle"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/flippy_white"
-                android:textStyle="italic" />
+                android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/textViewNoticeDateInfo"
@@ -69,7 +70,8 @@
                 android:textStyle="italic" />
         </LinearLayout>
 
-        <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.makeramen.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageViewNoticeCreator"
             android:layout_width="@dimen/margin_fifty"
             android:background="@drawable/default_small"
@@ -87,7 +89,7 @@
         android:id="@+id/imageViewNoticeImage"
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_one_fifty"
-        android:background="@color/flippy_light_header"
+        android:background="@drawable/default_medium"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/linearLayout"
@@ -105,11 +107,9 @@
         android:background="@color/flippy_light_header"
         android:ellipsize="end"
         android:maxLines="5"
+        android:fontFamily="san-serif-light"
+        android:lineSpacingMultiplier="1"
         android:padding="@dimen/margin_five"
-        android:shadowColor="@color/flippy_dark_header"
-        android:shadowDx="1"
-        android:shadowDy="1"
-        android:shadowRadius="2"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/flippy_white" />
 

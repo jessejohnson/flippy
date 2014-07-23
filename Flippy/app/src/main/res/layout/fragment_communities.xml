@@ -47,4 +47,19 @@
         android:textColor="@color/flippy_orange"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/textViewEmptyNoInternetCommunity"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        android:text="@string/internet_connection_error_dialog_title"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/flippy_light_header"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
 </RelativeLayout>

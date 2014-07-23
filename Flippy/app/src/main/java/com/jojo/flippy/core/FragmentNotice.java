@@ -170,7 +170,6 @@ public class FragmentNotice extends Fragment {
             Calendar calendar = Calendar.getInstance();
             Post post = new Post(notice_id, notice_title, notice_body, notice_image, start_date, author_email, author_id, author_first_name, author_last_name, authorAvatar, authorAvatarThumb, channel_id, calendar.getTimeInMillis());
             postDao.create(post);
-            loadAdapterFromDatabase(view);
 
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
@@ -218,6 +217,8 @@ public class FragmentNotice extends Fragment {
                                 persistPost(id, title, content, image_link, startDate, authorEmail, authorId, authorFirstName, authorLastName, authorAvatar, authorAvatarThumb, channel);
 
                             }
+                            //after persistence load from database
+                            loadAdapterFromDatabase(view);
 
                         }
                         if (e != null) {

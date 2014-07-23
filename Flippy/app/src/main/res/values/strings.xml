@@ -224,10 +224,10 @@
     <string name="dummy_user_number_of_channels_own">admin (3)</string>
     <string name="dummy_user_number_channels_in">5 channels</string>
     <string name="channel_detail_bio">A brief of the channel information</string>
-    <string name="channel_detail_members">122 creator FullName</string>
+    <string name="channel_detail_members">creator FullName</string>
     <string name="custom_flippy_alert">Flippy notification</string>
     <string name="custom_flippy_ok">Ok</string>
-    <string name="dummy_flippy_likes">12 likes</string>
+    <string name="dummy_flippy_likes">0 likes</string>
 
     <!-- the member detail strings -->
     <string name="another_member_detail_add_as_admin">promote user</string>
@@ -315,7 +315,7 @@
     <string name="activity_user_account_logout_info_one">Remove your account settings</string>
     <string name="activity_user_account_logout_info_two">Remove all data saved on your device</string>
     <string name="activity_user_account_logout_info_three">Stop Flippy notifications</string>
-    <string name="activity_user_account_logout_info_four">Require a to login next time you come</string>
+    <string name="activity_user_account_logout_info_four">Require login next time you come</string>
 
     <!-- strings for version activity -->
     <string name="title_activity_version_info">Flippy version information</string>

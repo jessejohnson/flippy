@@ -91,30 +91,30 @@ public class SelectCommunityActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarLoadCommunity.setVisibility(View.GONE);
-                        if (result != null) {
-                            JsonArray communityArray = result.getAsJsonArray("results");
-                            for (int i = 0; i < communityArray.size(); i++) {
-                                JsonObject item = communityArray.get(i).getAsJsonObject();
-                                String communityName = item.get("name").getAsString();
-                                String communityId = item.get("id").getAsString();
-                                String communityBio = item.get("bio").getAsString();
-                                String communityImage = item.get("image_url").getAsString();
-                                Community communityItem = new Community(URI.create(communityImage), communityId, communityName, communityBio);
-                                rowItems.add(communityItem);
+                        try {
+                            if (result != null) {
+                                JsonArray communityArray = result.getAsJsonArray("results");
+                                for (int i = 0; i < communityArray.size(); i++) {
+                                    JsonObject item = communityArray.get(i).getAsJsonObject();
+                                    String communityName = item.get("name").getAsString();
+                                    String communityId = item.get("id").getAsString();
+                                    String communityBio = item.get("bio").getAsString();
+                                    String communityImage = item.get("image_url").getAsString();
+                                    Community communityItem = new Community(URI.create(communityImage), communityId, communityName, communityBio);
+                                    rowItems.add(communityItem);
+                                }
+                                updateAdapter();
                             }
-                            updateAdapter();
+                            if (e != null) {
+                                showSuperToast("Check internet connection");
+                                textViewNoCommunity.setVisibility(View.VISIBLE);
+                                textViewNoCommunity.setText("Failed to load communities");
+                            }
+
+                        } catch (Exception exception) {
+
                         }
-                        if (e != null) {
-                            superToast.setAnimations(SuperToast.Animations.FLYIN);
-                            superToast.setDuration(SuperToast.Duration.LONG);
-                            superToast.setBackground(SuperToast.Background.PURPLE);
-                            superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
-                            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-                            superToast.setText("Check internet connection");
-                            superToast.show();
-                            textViewNoCommunity.setVisibility(View.VISIBLE);
-                            textViewNoCommunity.setText("Failed to load communities");
-                        }
+
 
                     }
                 });
@@ -155,24 +155,12 @@ public class SelectCommunityActivity extends ActionBarActivity {
                                         startActivity(intent);
                                     } catch (java.sql.SQLException sqlE) {
                                         sqlE.printStackTrace();
-                                        superToast.setAnimations(SuperToast.Animations.FLYIN);
-                                        superToast.setDuration(SuperToast.Duration.LONG);
-                                        superToast.setBackground(SuperToast.Background.RED);
-                                        superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
-                                        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-                                        superToast.setText("sorry, Failed to prepare community");
-                                        superToast.show();
+                                        showSuperToast("sorry, Failed to prepare community");
                                         return;
                                     }
                                 }
                                 if (e != null) {
-                                    superToast.setAnimations(SuperToast.Animations.FLYIN);
-                                    superToast.setDuration(SuperToast.Duration.LONG);
-                                    superToast.setBackground(SuperToast.Background.PURPLE);
-                                    superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
-                                    superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-                                    superToast.setText("Check internet connection");
-                                    superToast.show();
+                                    showSuperToast("Check internet connection");
                                     return;
 
                                 }
@@ -182,6 +170,16 @@ public class SelectCommunityActivity extends ActionBarActivity {
 
             }
         });
+    }
+
+    private void showSuperToast(String message) {
+        superToast.setAnimations(SuperToast.Animations.FLYIN);
+        superToast.setDuration(SuperToast.Duration.LONG);
+        superToast.setBackground(SuperToast.Background.PURPLE);
+        superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+        superToast.setText(message);
+        superToast.show();
     }
 
     private void updateAdapter() {
@@ -246,13 +244,7 @@ public class SelectCommunityActivity extends ActionBarActivity {
 
     private void getCommunityByKey(String communityKey) {
         if (communityKey.equals("")) {
-            superToast.setAnimations(SuperToast.Animations.FLYIN);
-            superToast.setDuration(SuperToast.Duration.LONG);
-            superToast.setBackground(SuperToast.Background.PURPLE);
-            superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
-            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-            superToast.setText("Community key is required");
-            superToast.show();
+            showSuperToast("Community key is required");
             return;
         }
         if (!communityKey.equalsIgnoreCase("")) {
@@ -266,13 +258,7 @@ public class SelectCommunityActivity extends ActionBarActivity {
                         @Override
                         public void onCompleted(Exception e, JsonObject result) {
                             if (e != null) {
-                                superToast.setAnimations(SuperToast.Animations.FLYIN);
-                                superToast.setDuration(SuperToast.Duration.LONG);
-                                superToast.setBackground(SuperToast.Background.PURPLE);
-                                superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
-                                superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-                                superToast.setText("Check internet connection");
-                                superToast.show();
+                                showSuperToast("Check internet connection");
                             } else {
                                 //TODO set communitySelected & selectedCommunityID
                             }

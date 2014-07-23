@@ -163,6 +163,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
         fragment.setArguments(args);
         FragmentManager frgManager = getFragmentManager();
         frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+                .addToBackStack("")
                 .commit();
 
         mDrawerList.setItemChecked(position, true);

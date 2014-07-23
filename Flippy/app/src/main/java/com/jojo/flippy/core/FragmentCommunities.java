@@ -3,6 +3,7 @@ package com.jojo.flippy.core;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class FragmentCommunities extends Fragment {
     private Intent intent;
     private ProgressBar progressBarCommunityChannelLoader;
     private ChannelAdapter adapter;
-    private TextView textViewEmptyCommunityChannel;
+    private TextView textViewEmptyCommunityChannel,textViewEmptyNoInternetCommunity;
 
 
     public FragmentCommunities() {
@@ -56,6 +57,7 @@ public class FragmentCommunities extends Fragment {
         progressBarCommunityChannelLoader = (ProgressBar) view.findViewById(R.id.progressBarCommunityChannelLoader);
         listViewCommunity = (ListView) view.findViewById(R.id.listViewCommunity);
         textViewEmptyCommunityChannel = (TextView) view.findViewById(R.id.textViewEmptyCommunityChannel);
+        textViewEmptyNoInternetCommunity = (TextView) view.findViewById(R.id.textViewEmptyNoInternetCommunity);
         textViewEmptyCommunityChannel.setVisibility(View.GONE);
 
 
@@ -72,21 +74,23 @@ public class FragmentCommunities extends Fragment {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarCommunityChannelLoader.setVisibility(view.GONE);
-                        if (result != null) {
-                            JsonArray communityArray = result.getAsJsonArray("results");
-                            for (int i = 0; i < communityArray.size(); i++) {
-                                JsonObject item = communityArray.get(i).getAsJsonObject();
-                                JsonObject creator = item.getAsJsonObject("creator");
-                                Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), item.get("id").getAsString(), item.get("name").getAsString(), creator.get("email").getAsString(), creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString());
-                                rowItems.add(channelItem);
+                        try {
+                            if (result != null) {
+                                JsonArray communityArray = result.getAsJsonArray("results");
+                                for (int i = 0; i < communityArray.size(); i++) {
+                                    JsonObject item = communityArray.get(i).getAsJsonObject();
+                                    JsonObject creator = item.getAsJsonObject("creator");
+                                    Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), item.get("id").getAsString(), item.get("name").getAsString(), creator.get("email").getAsString(), creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString());
+                                    rowItems.add(channelItem);
+                                }
+                                updateListAdapter();
                             }
-                            updateListAdapter();
-
+                            if (e != null) {
+                                textViewEmptyNoInternetCommunity.setVisibility(View.VISIBLE);
+                            }
+                        } catch (Exception exception) {
+                            Log.e("Error community channels", "error loading channels in a community");
                         }
-                        if (e != null) {
-                            ToastMessages.showToastLong(getActivity(), getResources().getString(R.string.internet_connection_error_dialog_title));
-                        }
-
                     }
                 });
 
@@ -117,6 +121,7 @@ public class FragmentCommunities extends Fragment {
         adapter.notifyDataSetChanged();
         if (adapter.isEmpty()) {
             textViewEmptyCommunityChannel.setVisibility(View.VISIBLE);
+            textViewEmptyNoInternetCommunity.setVisibility(View.GONE);
         }
     }
 

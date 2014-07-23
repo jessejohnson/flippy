@@ -39,7 +39,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/notice_title"
-                        android:textAppearance="?android:attr/textAppearanceSmallInverse"
+                        android:textStyle="bold"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="@color/flippy_white" />
 
                     <TextView
@@ -49,7 +50,7 @@
                         android:text="@string/notice_subtitle"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/flippy_white"
-                        android:textStyle="italic" />
+                        android:textStyle="normal" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -105,6 +106,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignRight="@+id/imageViewNoticeImage"
                 android:layout_below="@+id/imageViewNoticeImage"
+                android:fontFamily="san-serif-light"
+                android:lineSpacingMultiplier="1"
+                android:textIsSelectable="true"
                 android:gravity="left"
                 android:padding="@dimen/margin_five"
                 android:text="@string/dummy_user_name"
@@ -133,7 +137,7 @@
                     android:layout_height="@dimen/margin_hundred"
                     android:layout_alignParentTop="true"
                     android:padding="1dp"
-                    android:scaleType="center"
+                    android:scaleType="centerInside"
                     app:border_color="@color/border_white"
                     app:border_width="2dp"
                     app:corner_radius="100dp"
@@ -198,51 +202,56 @@
         android:gravity="center_horizontal"
         android:orientation="horizontal"
         android:padding="@dimen/margin_five"
-        android:weightSum="4">
+        android:weightSum="3">
 
-        <ImageView
+        <com.makeramen.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageViewRemovePost"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginLeft="@dimen/margin_five"
             android:layout_marginRight="@dimen/margin_five"
-            android:layout_weight="1"
-            android:background="@color/flippy_orange"
+            android:padding="5dp"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_action_remove" />
+            android:src="@drawable/ic_action_remove"
+            app:border_color="@color/border_white"
+            app:border_width="2dp"
+            app:corner_radius="100dp"
+            app:oval="false" />
 
-        <ImageView
+        <com.makeramen.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageViewDeletePost"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginLeft="@dimen/margin_five"
             android:layout_marginRight="@dimen/margin_five"
-            android:layout_weight="1"
-            android:background="@color/flippy_orange"
+            android:padding="5dp"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_action_discard" />
+            android:src="@drawable/ic_action_discard"
+            app:border_color="@color/border_white"
+            app:border_width="2dp"
+            app:corner_radius="100dp"
+            app:oval="false" />
 
-        <ImageView
-            android:id="@+id/imageViewPublishPost"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_five"
-            android:layout_marginRight="@dimen/margin_five"
-            android:layout_weight="1"
-            android:background="@color/flippy_orange"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_action_send_now" />
 
-        <ImageView
+        <com.makeramen.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageViewStarDetail"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_marginLeft="@dimen/margin_five"
             android:layout_marginRight="@dimen/margin_five"
-            android:layout_weight="1"
-            android:background="@color/flippy_orange"
+            android:padding="5dp"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_action_important" />
+            android:src="@drawable/ic_action_important"
+            app:border_color="@color/border_white"
+            app:border_width="2dp"
+            app:corner_radius="100dp"
+            app:oval="false" />
 
     </LinearLayout>
 </RelativeLayout>

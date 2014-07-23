@@ -138,13 +138,7 @@ public class RegisterActivity extends Activity {
                                     } else {
                                         if (result.has("detail")) {
                                             editTextRegisterEmail.setError("email already in use");
-                                            superToast.setAnimations(SuperToast.Animations.FLYIN);
-                                            superToast.setDuration(SuperToast.Duration.LONG);
-                                            superToast.setBackground(SuperToast.Background.RED);
-                                            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-                                            superToast.setIcon(R.drawable.ic_action_remove, SuperToast.IconPosition.LEFT);
-                                            superToast.setText("email already in use");
-                                            superToast.show();
+                                            showSuperToast("email already in use");
                                             return;
                                         }
                                         regUserAuthToken = result.get("auth_token").getAsString();
@@ -165,13 +159,7 @@ public class RegisterActivity extends Activity {
                                         } catch (java.sql.SQLException sqlE) {
                                             sqlE.printStackTrace();
                                             Log.e("Error creating user", sqlE.toString());
-                                            superToast.setAnimations(SuperToast.Animations.FLYIN);
-                                            superToast.setDuration(SuperToast.Duration.LONG);
-                                            superToast.setBackground(SuperToast.Background.RED);
-                                            superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
-                                            superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-                                            superToast.setText("sorry, user creation failed");
-                                            superToast.show();
+                                            showSuperToast("sorry, user creation failed");
                                             return;
                                         }
 
@@ -192,6 +180,16 @@ public class RegisterActivity extends Activity {
             }
         });
 
+    }
+
+    private void showSuperToast(String message) {
+        superToast.setAnimations(SuperToast.Animations.FLYIN);
+        superToast.setDuration(SuperToast.Duration.LONG);
+        superToast.setBackground(SuperToast.Background.RED);
+        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+        superToast.setIcon(R.drawable.ic_action_remove, SuperToast.IconPosition.LEFT);
+        superToast.setText(message);
+        superToast.show();
     }
 
     @Override

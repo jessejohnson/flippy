@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -15,6 +16,7 @@ import com.google.gson.JsonObject;
 import com.jojo.flippy.adapter.ChannelMemberAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.profile.MemberDetailActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
@@ -86,34 +88,37 @@ public class ChannelMembers extends Activity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarMemberChannelLoader.setVisibility(View.GONE);
-                        if (result != null) {
-                            if (result.has("detail")) {
+                        try {
+                            if (result != null) {
+                                if (result.has("detail")) {
 
-                                textViewNoChannelMember.setVisibility(View.VISIBLE);
-                                textViewNoChannelMember.setText("Sorry, channel has been removed");
+                                    textViewNoChannelMember.setVisibility(View.VISIBLE);
+                                    textViewNoChannelMember.setText("Sorry, channel has been removed");
+                                    return;
+                                }
+                                JsonArray profileArray = result.getAsJsonArray("results");
+                                totalMembers = profileArray.size() + "";
+                                for (int i = 0; i < profileArray.size(); i++) {
+                                    JsonObject item = profileArray.get(i).getAsJsonObject();
+                                    memberId = item.get("id").getAsString();
+                                    String url = "";
+                                    if (!item.get("avatar").isJsonNull()) {
+                                        url = item.get("avatar").getAsString();
+                                    }
+                                    memberFirstName = item.get("first_name").getAsString();
+                                    ProfileItem profileItem = new ProfileItem(URI.create(url), item.get("email").getAsString(), memberFirstName + ", " + item.get("last_name").getAsString(), memberId);
+                                    ChannelMemberItem.add(profileItem);
+                                }
+                                updateAdapter();
+                            }
+                            if (e != null) {
+                                ToastMessages.showToastLong(ChannelMembers.this, getResources().getString(R.string.internet_connection_error_dialog_title));
                                 return;
                             }
-                            JsonArray profileArray = result.getAsJsonArray("results");
-                            totalMembers = profileArray.size() + "";
-                            for (int i = 0; i < profileArray.size(); i++) {
-                                JsonObject item = profileArray.get(i).getAsJsonObject();
-                                memberId = item.get("id").getAsString();
-                                String url = "";
-                                if (!item.get("avatar").isJsonNull()) {
-                                    url = item.get("avatar").getAsString();
-                                }
-                                memberFirstName = item.get("first_name").getAsString();
-                                ProfileItem profileItem = new ProfileItem(URI.create(url), item.get("email").getAsString(), memberFirstName + ", " + item.get("last_name").getAsString(), memberId);
-                                ChannelMemberItem.add(profileItem);
-                            }
-                            updateAdapter();
-
-
+                        } catch (Exception exception) {
+                            Log.e("something went wrong", "Loading channel members");
                         }
-                        if (e != null) {
-                            ToastMessages.showToastLong(ChannelMembers.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                            return;
-                        }
+
 
                     }
                 });
@@ -127,7 +132,6 @@ public class ChannelMembers extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 //setting the click action for each of the items
-
                 intent.setClass(ChannelMembers.this, MemberDetailActivity.class);
                 TextView textViewMemberId = (TextView) view.findViewById(R.id.textViewMemberId);
                 TextView textViewMemberEmail = (TextView) view.findViewById(R.id.textViewMemberEmail);
@@ -136,6 +140,7 @@ public class ChannelMembers extends Activity {
                 userEmail = textViewMemberEmail.getText().toString();
                 userFullName = textViewMemberFullName.getText().toString();
                 if (isManage) {
+                    intent.setClass(ChannelMembers.this, ManageChannelActivity.class);
                     intent.putExtra("memberEmail", userEmail);
                     intent.putExtra("memberId", userId);
                     setResult(Activity.RESULT_OK, intent);
@@ -146,12 +151,8 @@ public class ChannelMembers extends Activity {
                     intent.putExtra("memberFullName", userFullName);
                     startActivity(intent);
                 }
-
-
             }
         });
-
-
     }
 
     private void updateAdapter() {
