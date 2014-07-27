@@ -2,7 +2,9 @@ package com.jojo.flippy.services;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -26,6 +28,7 @@ public class DataService extends Service {
     private Dao<Post, Integer> postDao;
     private ArrayList<String> savedPostIds;
     private static String TAG = "DataService";
+    private String minutes;
 
 
     @Override
@@ -40,6 +43,10 @@ public class DataService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        minutes = SP.getString("sync_frequency", "180");
+        long millis = Integer.parseInt(minutes) * 60 * 1000;
 
 
         savedPostIds = new ArrayList<String>();
@@ -65,7 +72,7 @@ public class DataService extends Service {
                 public void run() {
                     getNewPost();
                 }
-            }, 1000, 1000);
+            }, millis, millis);
         }
 
 

@@ -6,8 +6,9 @@
     android:layout_margin="@dimen/margin_one"
     android:orientation="horizontal">
 
-    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/imageViewAdminOne"
+    <com.makeramen.RoundedImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/imageViewAChannelImage"
         android:layout_width="@dimen/margin_eighty"
         android:layout_height="@dimen/margin_eighty"
         android:scaleType="centerCrop"
@@ -25,41 +26,26 @@
         android:paddingLeft="@dimen/margin_five">
 
         <TextView
-            android:id="@+id/textViewAdminEmail"
+            android:id="@+id/textViewChannelName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/dummy_user_email"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
-            android:id="@+id/textViewAdminFullName"
+            android:id="@+id/textViewChannelDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/dummy_user_name"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
-            android:id="@+id/textViewAdminId"
+            android:id="@+id/textViewChannelId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:visibility="gone" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/margin_thirty"
-            android:paddingLeft="@dimen/margin_ten"
-            android:paddingRight="@dimen/margin_ten"
-            android:paddingTop="@dimen/margin_one"
-            android:paddingBottom="@dimen/margin_one"
-            android:layout_margin="@dimen/margin_one"
-            android:background="@drawable/flippy_button_default_small"
-            android:text="@string/manage_channel_demote_admin"
-            android:textStyle="normal"
-            android:textSize="14sp"
-            android:textColor="@color/flippy_white"
-            android:id="@+id/buttonDemoteAdmin" />
 
     </LinearLayout>
 </LinearLayout>

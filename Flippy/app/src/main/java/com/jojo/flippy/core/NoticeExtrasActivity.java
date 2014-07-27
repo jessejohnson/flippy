@@ -51,9 +51,9 @@ public class NoticeExtrasActivity extends ActionBarActivity {
     private String noticeTitle;
     private Button buttonAddImageToNotice, buttonPreviewCreateNotice, buttonAddMapToNotice;
     private AlertDialog levelDialog;
-    private ImageView imageViewNoticeImageCaptured;
     private String lat, lon;
-    private Bitmap bitmapNotice;
+    Uri selectedImageUri = null;
+    private String filePath = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +83,8 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                 intent.putExtra("lon", lon);
                 intent.putExtra("datePicked", datePicked);
                 intent.putExtra("timePicked", timePicked);
-                intent.setClass(NoticeExtrasActivity.this,PreviewPost.class);
+                intent.putExtra("noticeImage",filePath);
+                intent.setClass(NoticeExtrasActivity.this, PreviewPost.class);
                 startActivity(intent);
             }
         });
@@ -167,8 +168,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Uri selectedImageUri = null;
-        String filePath = null;
+
         switch (requestCode) {
             case BROWSE_IMAGE:
                 if (resultCode == Activity.RESULT_OK) {
@@ -201,51 +201,27 @@ public class NoticeExtrasActivity extends ActionBarActivity {
 
         if (selectedImageUri != null) {
             try {
-                String fileManagerString = selectedImageUri.getPath();
                 String selectedImagePath = getPath(selectedImageUri);
-
                 if (selectedImagePath != null) {
                     filePath = selectedImagePath;
-                } else if (fileManagerString != null) {
-                    filePath = fileManagerString;
                 } else {
                     Toast.makeText(getApplicationContext(), "Unknown path",
                             Toast.LENGTH_LONG).show();
                     Log.e("Bitmap", "Unknown path");
                 }
 
-                if (filePath != null) {
+            /*    if (filePath != null) {
                     decodeFile(filePath);
                 } else {
                     bitmapNotice = null;
                 }
+            */
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "Sorry, Something went wrong",
                         Toast.LENGTH_LONG).show();
                 Log.e(e.getClass().getName(), e.getMessage(), e);
             }
         }
-    }
-
-    public void decodeFile(String filePath) {
-        Log.e("File path", filePath);
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, o);
-        final int REQUIRED_SIZE = 1024;
-        int width_tmp = o.outWidth, height_tmp = o.outHeight;
-        int scale = 1;
-        while (true) {
-            if (width_tmp < REQUIRED_SIZE && height_tmp < REQUIRED_SIZE)
-                break;
-            width_tmp /= 2;
-            height_tmp /= 2;
-            scale *= 2;
-        }
-        // Decode with inSampleSize
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        bitmapNotice = BitmapFactory.decodeFile(filePath, o2);
     }
 
     public String getPath(Uri uri) {

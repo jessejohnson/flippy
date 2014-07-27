@@ -88,6 +88,7 @@ public class NoticeListAdapter extends BaseAdapter {
                 Intent intent = new Intent();
                 intent.setClass(context, ImagePreviewActivity.class);
                 intent.putExtra("avatar", noticeArrayList.get(i).getImageUrl().toString());
+                intent.putExtra("imageName",noticeArrayList.get(i).getTitle());
                 context.startActivity(intent);
             }
         });

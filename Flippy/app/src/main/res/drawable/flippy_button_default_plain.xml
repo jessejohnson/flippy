@@ -3,21 +3,21 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <corners android:radius="2dp" />
+            <corners android:radius="1dp" />
             <stroke android:width="@dimen/margin_two" android:color="@color/flippy_orange" />
             <gradient android:startColor="@color/flippy_white" android:endColor="@color/flippy_white" />
         </shape>
     </item>
     <item android:state_focused="true">
         <shape android:shape="rectangle">
-            <corners android:radius="2dp" />
+            <corners android:radius="1dp" />
             <stroke android:width="@dimen/margin_one" android:color="@color/flippy_orange" />
             <gradient android:startColor="@color/flippy_white" android:endColor="@color/flippy_white" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <corners android:radius="2dp" />
+            <corners android:radius="1dp" />
             <stroke android:width="@dimen/margin_one" android:color="@color/flippy_orange" />
             <gradient android:startColor="@color/flippy_white" android:endColor="@color/flippy_white" />
         </shape>

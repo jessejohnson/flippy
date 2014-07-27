@@ -15,6 +15,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jojo.flippy.adapter.AdminPerson;
 import com.jojo.flippy.adapter.ChannelMemberAdapter;
+import com.jojo.flippy.adapter.ChannelSelectItem;
+import com.jojo.flippy.adapter.ChannelSelectionItemAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.profile.MemberDetailActivity;
@@ -32,19 +34,18 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class SelectChannelActivity extends ActionBarActivity {
     private Intent intent;
-    private ChannelMemberAdapter userChannelsAdapter;
-
+    private ChannelSelectionItemAdapter userChannelsAdapter;
     private ListView userChannelList;
-    private List<ProfileItem> userChannelItem;
+    private List<ChannelSelectItem> userChannelItem;
     private String userChannels = "/subscriptions/";
     private ProgressBar progressBarLoadUserChannels;
     private TextView textViewNoChannel;
     private TextView textViewNoChannelHelp;
     private String channelId;
     private String channelName;
+    private String channelBio;
     private String subTitle = "a step to more to go";
     private boolean isReFLIP;
-    private ArrayList<String> admins = new ArrayList<String>();
 
 
     @Override
@@ -57,22 +58,21 @@ public class SelectChannelActivity extends ActionBarActivity {
         isReFLIP = intent.getBooleanExtra("isReFLIP", false);
         String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
         ActionBar actionBar = getActionBar();
-        actionBar.setSubtitle(subTitle);
-
+        if (actionBar != null) {
+            actionBar.setSubtitle(subTitle);
+        }
 
         //finding all the views with their appropriate ids
-        userChannelItem = new ArrayList<ProfileItem>();
+        userChannelItem = new ArrayList<ChannelSelectItem>();
         userChannelList = (ListView) findViewById(R.id.listViewUserChannelSelect);
         textViewNoChannel = (TextView) findViewById(R.id.textViewNoChannel);
         textViewNoChannel.setVisibility(View.GONE);
         textViewNoChannelHelp = (TextView) findViewById(R.id.textViewNoChannelHelp);
         textViewNoChannelHelp.setVisibility(View.GONE);
         progressBarLoadUserChannels = (ProgressBar) findViewById(R.id.progressBarLoadUserChannels);
-        userChannelsAdapter = new ChannelMemberAdapter(SelectChannelActivity.this,
-                R.layout.channel_members_listview, userChannelItem, false);
+        userChannelsAdapter = new ChannelSelectionItemAdapter(SelectChannelActivity.this,
+                R.layout.channel_select_listview, userChannelItem);
         userChannelList.setAdapter(userChannelsAdapter);
-
-        //getAdminList(Flippy.channels+channelId+"/admins/");
         //load the channels of user
         Ion.with(SelectChannelActivity.this)
                 .load(url)
@@ -94,13 +94,14 @@ public class SelectChannelActivity extends ActionBarActivity {
                                     JsonObject creator = item.get("creator").getAsJsonObject();
                                     String creatorId = creator.get("id").getAsString();
                                     channelId = item.get("id").getAsString();
+                                    channelBio = item.get("bio").getAsString();
                                     String url = "";
                                     if (!item.get("image_thumbnail_url").isJsonNull()) {
                                         url = item.get("image_thumbnail_url").getAsString();
                                     }
                                     channelName = item.get("name").getAsString();
                                     if (creatorId.equals(CommunityCenterActivity.regUserID)) {
-                                        ProfileItem channelItem = new ProfileItem(URI.create(url), channelName, channelId, "");
+                                        ChannelSelectItem channelItem = new ChannelSelectItem(URI.create(url), channelId, channelName, channelBio);
                                         userChannelItem.add(channelItem);
                                     }
                                 }
@@ -126,10 +127,10 @@ public class SelectChannelActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                TextView textViewMemberLastName = (TextView) view.findViewById(R.id.textViewMemberFullName);
-                TextView textViewMemberFirstName = (TextView) view.findViewById(R.id.textViewMemberEmail);
-                String channelId = textViewMemberLastName.getText().toString();
-                String channelName = textViewMemberFirstName.getText().toString();
+                TextView textViewChannelId = (TextView) view.findViewById(R.id.textViewChannelId);
+                TextView textViewChannelName = (TextView) view.findViewById(R.id.textViewChannelName);
+                String channelId = textViewChannelId.getText().toString();
+                String channelName = textViewChannelName.getText().toString();
                 if (isReFLIP) {
                     intent.setClass(SelectChannelActivity.this, NoticeDetailActivity.class);
                     intent.putExtra("channelId", channelId);
@@ -162,33 +163,5 @@ public class SelectChannelActivity extends ActionBarActivity {
 
     }
 
-    private void getAdminList(String url) {
-        Ion.with(SelectChannelActivity.this)
-                .load(url)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        try {
-                            if (result.has("detail")) {
-                                Log.e("Error form get admin list", "Admin list not found");
-                                return;
-                            }
-                            if (result != null) {
-                                JsonArray adminArray = result.getAsJsonArray("results");
-                                for (int i = 0; i < adminArray.size(); i++) {
-                                    JsonObject item = adminArray.get(i).getAsJsonObject();
-                                    admins.add(item.get("id").getAsString());
-                                }
-                            }
-                            if (e != null) {
-                                Log.e("Error", "sorry, internet connection occurred");
-                            }
-                        } catch (Exception error) {
-                            Log.e("Error try catch", "Error occurred when getting admin list");
-                        }
-                    }
-                });
-    }
 
 }

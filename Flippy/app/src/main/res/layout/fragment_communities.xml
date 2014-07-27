@@ -55,11 +55,23 @@
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
         android:gravity="center_horizontal"
+        android:layout_marginRight="@dimen/margin_ten"
+        android:layout_marginLeft="@dimen/margin_ten"
         android:background="@android:color/transparent"
         android:text="@string/internet_connection_error_dialog_title"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/flippy_light_header"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@drawable/ic_action_network_wifi"
+        android:id="@+id/imageViewNoInternetCommunities"
+        android:layout_above="@+id/textViewEmptyNoInternetCommunity"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

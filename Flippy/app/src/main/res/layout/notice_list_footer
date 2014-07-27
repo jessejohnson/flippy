@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:background="@drawable/flippy_button_default"
+        android:textColor="@color/flippy_white"
+        android:layout_margin="@dimen/margin_ten"
+        android:layout_height="wrap_content"
+        android:text="@string/community_center_old_notice"
+        android:id="@+id/buttonLoadOldPost" />
+</LinearLayout>

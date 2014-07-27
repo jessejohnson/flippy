@@ -101,6 +101,7 @@
     <string name="dummy_user_email">info@flippy.co</string>
     <string name="dummy_user_number">(+233) 0000000</string>
     <string name="profile_list_channels">My Channels</string>
+    <string name="profile_list_channels_footer">we\'ve got your back, cheers</string>
     <string name="profile_edit">Edit profile</string>
     <string name="profile_upload">Upload photo</string>
 
@@ -218,6 +219,7 @@
     <string name="manage_channel_remove">remove this channel</string>
     <string name="select_member_from_list">choose member</string>
     <string name="manage_channel_add_admin">add administrator</string>
+    <string name="manage_channel_demote_admin">Demote admin</string>
 
     <!-- temporary string section -->
     <string name="dummy_community">University of Cape coast</string>
@@ -246,7 +248,7 @@
 
     <!--chanel detail strings-->
     <string name="title_activity_channel_detail">Channel Detail</string>
-    <string name="channel_detail_some_posts">Some common posts</string>
+    <string name="channel_detail_some_posts">Some Related Posts</string>
 
     <!-- about flippy section and strings -->
     <string name="title_activity_about">About Flippy</string>

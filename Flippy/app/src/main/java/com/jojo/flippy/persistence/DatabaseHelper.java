@@ -24,10 +24,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     // the DAO object we use to access the SimpleData table
     private Dao<User, Integer> userDao = null;
     private Dao<Post, Integer> postDao = null;
-    private Dao<Channel, Integer> channelDao = null;
+    private Dao<Channels, Integer> channelDao = null;
     private RuntimeExceptionDao<User, Integer> simpleRuntimeUserDao = null;
     private RuntimeExceptionDao<Post, Integer> simpleRuntimePostDao = null;
-    private RuntimeExceptionDao<Channel, Integer> simpleRuntimeChannelDao = null;
+    private RuntimeExceptionDao<Channels, Integer> simpleRuntimeChannelDao = null;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,7 +39,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(DatabaseHelper.class.getName(), "onCreate");
             TableUtils.createTable(connectionSource, User.class);
             TableUtils.createTable(connectionSource, Post.class);
-            TableUtils.createTable(connectionSource, Channel.class);
+            TableUtils.createTable(connectionSource, Channels.class);
         } catch (SQLException e) {
             Log.e(DatabaseHelper.class.getName(), "Can't create database", e);
             throw new RuntimeException(e);
@@ -52,7 +52,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             Log.i(DatabaseHelper.class.getName(), "onUpgrade");
             TableUtils.dropTable(connectionSource, User.class, true);
             TableUtils.dropTable(connectionSource, Post.class, true);
-            TableUtils.dropTable(connectionSource, Channel.class, true);
+            TableUtils.dropTable(connectionSource, Channels.class, true);
             // after we drop the old databases, we create the new ones
             onCreate(db, connectionSource);
         } catch (SQLException e) {
@@ -75,9 +75,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return postDao;
     }
 
-    public Dao<Channel, Integer> getChannelDao() throws SQLException {
+    public Dao<Channels, Integer> getChannelDao() throws SQLException {
         if (channelDao == null) {
-            channelDao = getDao(Channel.class);
+            channelDao = getDao(Channels.class);
         }
         return channelDao;
     }
@@ -100,9 +100,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         return simpleRuntimePostDao;
     }
 
-    public RuntimeExceptionDao<Channel, Integer> getSimpleChannelDataDao() {
+    public RuntimeExceptionDao<Channels, Integer> getSimpleChannelDataDao() {
         if (simpleRuntimeChannelDao == null) {
-            simpleRuntimeChannelDao = getRuntimeExceptionDao(Channel.class);
+            simpleRuntimeChannelDao = getRuntimeExceptionDao(Channels.class);
         }
         return simpleRuntimeChannelDao;
     }

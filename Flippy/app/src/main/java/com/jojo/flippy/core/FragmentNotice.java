@@ -70,6 +70,7 @@ public class FragmentNotice extends Fragment {
     private View view;
     private TextView textViewNoNotice;
 
+
     public FragmentNotice() {
 
     }
@@ -81,12 +82,15 @@ public class FragmentNotice extends Fragment {
         view = inflater.inflate(R.layout.fragment_notice, container,
                 false);
 
+        View v = inflater.inflate(R.layout.notice_list_footer, null);
+
 
         listAdapter = new NoticeListAdapter(this.getActivity(), noticeFeed);
         noticeList = (ListView) view.findViewById(R.id.listViewNoticeList);
         textViewNoNotice = (TextView) view.findViewById(R.id.textViewNoNotice);
         textViewNoNotice.setVisibility(View.GONE);
         progressBarCommunityCenterLoader = (ProgressBar) view.findViewById(R.id.progressBarLoadNoticeData);
+        noticeList.addFooterView(v);
         noticeList.setAdapter(listAdapter);
 
 
@@ -190,44 +194,46 @@ public class FragmentNotice extends Fragment {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarCommunityCenterLoader.setVisibility(view.GONE);
-                        if (result != null && result.has("results")) {
-                            JsonArray communityArray = result.getAsJsonArray("results");
-                            for (int i = 0; i < communityArray.size(); i++) {
-                                JsonObject item = communityArray.get(i).getAsJsonObject();
-                                JsonObject author = item.getAsJsonObject("author");
-                                String startDate = item.get("timestamp").getAsString();
-                                String title = item.get("title").getAsString();
-                                String id = item.get("id").getAsString();
-                                String content = item.get("content").getAsString();
-                                String channel = item.get("channel").getAsString();
-                                String image_link = "flip";
-                                if (!item.get("image_url").isJsonNull()) {
-                                    image_link = item.get("image_url").getAsString();
-                                }
-                                String authorEmail = author.get("email").getAsString();
-                                String authorAvatarThumb = "flip";
-                                String authorAvatar = "flip";
-                                if (!item.get("avatar_thumb").isJsonNull()) {
-                                    authorAvatarThumb = author.get("avatar_thumb").getAsString();
-                                    authorAvatar = author.get("avatar").getAsString();
-                                }
-                                String authorId = author.get("id").getAsString();
-                                String authorFirstName = author.get("first_name").getAsString();
-                                String authorLastName = author.get("last_name").getAsString();
-                                persistPost(id, title, content, image_link, startDate, authorEmail, authorId, authorFirstName, authorLastName, authorAvatar, authorAvatarThumb, channel);
+                        try {
+                            if (result != null && result.has("results")) {
+                                JsonArray communityArray = result.getAsJsonArray("results");
+                                for (int i = 0; i < communityArray.size(); i++) {
+                                    JsonObject item = communityArray.get(i).getAsJsonObject();
+                                    JsonObject author = item.getAsJsonObject("author");
+                                    String startDate = item.get("timestamp").getAsString();
+                                    String title = item.get("title").getAsString();
+                                    String id = item.get("id").getAsString();
+                                    String content = item.get("content").getAsString();
+                                    String channel = item.get("channel").getAsString();
+                                    String image_link = "flip";
+                                    if (!item.get("image_url").isJsonNull()) {
+                                        image_link = item.get("image_url").getAsString();
+                                    }
+                                    String authorEmail = author.get("email").getAsString();
+                                    String authorAvatarThumb = "flip";
+                                    String authorAvatar = "flip";
+                                    if (!author.get("avatar_thumb").isJsonNull()) {
+                                        authorAvatarThumb = author.get("avatar_thumb").getAsString();
+                                        authorAvatar = author.get("avatar").getAsString();
+                                    }
+                                    String authorId = author.get("id").getAsString();
+                                    String authorFirstName = author.get("first_name").getAsString();
+                                    String authorLastName = author.get("last_name").getAsString();
+                                    persistPost(id, title, content, image_link, startDate, authorEmail, authorId, authorFirstName, authorLastName, authorAvatar, authorAvatarThumb, channel);
 
+                                }
+                                //after persistence load from database
+                                loadAdapterFromDatabase(view);
                             }
-                            //after persistence load from database
-                            loadAdapterFromDatabase(view);
+                            if (e != null) {
+                                return;
+                            }
 
+                        } catch (Exception exception) {
+                            Log.e("Fragment Notice", "Error occurred getting post from server");
                         }
-                        if (e != null) {
-                            return;
-                        }
-
                     }
                 });
-
     }
 
     private void loadAdapterFromDatabase(View view) {

@@ -87,6 +87,7 @@ public class MemberDetailActivity extends ActionBarActivity {
             public void onClick(View view) {
                 intent.setClass(MemberDetailActivity.this, ImagePreviewActivity.class);
                 intent.putExtra("avatar", avatar);
+                intent.putExtra("imageName", memberFirstNameNew);
                 startActivity(intent);
             }
         });
@@ -169,6 +170,7 @@ public class MemberDetailActivity extends ActionBarActivity {
         if (id == R.id.action_full_screen) {
             intent.setClass(MemberDetailActivity.this, ImagePreviewActivity.class);
             intent.putExtra("avatar", avatar);
+            intent.putExtra("imageName", textViewAnotherFirstName.getText());
             startActivity(intent);
             return true;
         }
@@ -199,7 +201,7 @@ public class MemberDetailActivity extends ActionBarActivity {
                     public void onCompleted(Exception e, JsonObject result) {
                         if (!result.isJsonNull()) {
                             memberCommunityName = result.get("name").getAsString();
-                            showViews();
+                            showViews(avatar);
                         }
                         if (e != null) {
                             ToastMessages.showToastLong(MemberDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
@@ -210,18 +212,20 @@ public class MemberDetailActivity extends ActionBarActivity {
 
     }
 
-    private void showViews() {
+    private void showViews(String avatar) {
         textViewAnotherFirstName.setText(memberFirstNameNew);
         textViewAnotherUseLastName.setText(memberLastNameNew);
         textViewAnotherFirstName.setVisibility(View.VISIBLE);
         textViewAnotherUseLastName.setVisibility(View.VISIBLE);
         textViewUserCommunityName.setText(memberCommunityName);
         textViewUserCommunityName.setVisibility(View.VISIBLE);
+
         Ion.with(imageViewMemberAnotherUserProfilePic)
-                .placeholder(R.drawable.default_profile_picture)
+                .placeholder(R.color.flippy_orange)
                 .animateIn(R.anim.fade_in)
-                .error(R.drawable.default_profile_picture)
+                .error(R.color.flippy_orange)
                 .load(avatar);
+
 
     }
 }

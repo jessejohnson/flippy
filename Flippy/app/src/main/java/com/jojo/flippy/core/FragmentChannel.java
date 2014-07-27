@@ -9,15 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.ChannelAdapter;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.persistence.Channels;
+import com.jojo.flippy.persistence.DatabaseHelper;
+import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
@@ -28,15 +34,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentChannel extends Fragment {
-    ListView ChannelListView;
-    List<Channel> rowItems;
+    private ListView ChannelListView;
+    private List<Channel> rowItems;
     private ProgressBar progressBarChannelDataLoad;
     private Intent intent;
-    private String totalMembers = "";
     private Button buttonAddChannel;
-    private String isManageActivity = "false";
     private ChannelAdapter adapter;
     private TextView textViewEmptyChannel, textViewEmptyNoInternetChannel;
+    private ImageView imageViewNoNetworkChannel;
+    private Dao<Channels, Integer> channelDao;
+    private List<Channels> channelList;
+    private Channels channels;
 
     public FragmentChannel() {
 
@@ -50,18 +58,28 @@ public class FragmentChannel extends Fragment {
                 false);
 
         intent = new Intent();
-        //Loading the list with a dummy data
         rowItems = new ArrayList<Channel>();
         ChannelListView = (ListView) view.findViewById(R.id.listViewChannels);
         textViewEmptyChannel = (TextView) view.findViewById(R.id.textViewEmptyChannel);
         textViewEmptyNoInternetChannel = (TextView) view.findViewById(R.id.textViewEmptyNoInternetChannel);
         textViewEmptyChannel.setVisibility(View.GONE);
         progressBarChannelDataLoad = (ProgressBar) view.findViewById(R.id.progressBarChannelDataLoad);
+        imageViewNoNetworkChannel = (ImageView) view.findViewById(R.id.imageViewNoNetworkChannel);
         adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems, true);
         ChannelListView.setAdapter(adapter);
         //get the request url
         String url = Flippy.users + CommunityCenterActivity.regUserID + "/subscriptions/";
+
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
+                    DatabaseHelper.class);
+            channelDao = databaseHelper.getChannelDao();
+            channelList = channelDao.queryForAll();
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            Log.e("Fragment", "Error getting all user channels");
+        }
 
 
         //load the channels user subscribed to
@@ -78,14 +96,22 @@ public class FragmentChannel extends Fragment {
                                 for (int i = 0; i < communityArray.size(); i++) {
                                     JsonObject item = communityArray.get(i).getAsJsonObject();
                                     JsonObject creator = item.getAsJsonObject("creator");
-                                    Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), item.get("id").getAsString(), item.get("name").getAsString(), creator.get("email").getAsString(), creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString());
+                                    String channel_id = item.get("id").getAsString();
+                                    Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), channel_id, item.get("name").getAsString(), creator.get("email").getAsString(), creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString());
+                                    if (!channelList.isEmpty()) {
+                                        channels = new Channels(channel_id);
+                                        channelDao.createOrUpdate(channels);
+                                    }
                                     rowItems.add(channelItem);
                                 }
                                 updateAdapter();
 
-                            }
-                            if (e != null) {
+                            } else if (e != null) {
                                 textViewEmptyNoInternetChannel.setVisibility(View.VISIBLE);
+                                imageViewNoNetworkChannel.setVisibility(View.VISIBLE);
+                            } else {
+                                Log.e("Fragment channels", "something else went wrong");
+                                return;
                             }
                         } catch (Exception exception) {
                             Log.e("Fragment channels", "Error loading channels " + exception.toString());
@@ -105,8 +131,6 @@ public class FragmentChannel extends Fragment {
                 intent.setClass(getActivity(), ChannelDetailActivity.class);
                 intent.putExtra("channelId", channelId);
                 intent.putExtra("channelName", channelName);
-                intent.putExtra("totalMembers", totalMembers);
-                intent.putExtra("isManageActivity", isManageActivity);
                 getActivity().startActivity(intent);
 
             }

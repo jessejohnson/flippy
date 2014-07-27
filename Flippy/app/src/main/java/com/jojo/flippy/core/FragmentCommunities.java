@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,7 +19,6 @@ import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.ChannelAdapter;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.util.Flippy;
-import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -39,7 +39,7 @@ public class FragmentCommunities extends Fragment {
     private ProgressBar progressBarCommunityChannelLoader;
     private ChannelAdapter adapter;
     private TextView textViewEmptyCommunityChannel,textViewEmptyNoInternetCommunity;
-
+    private ImageView imageViewNoInternetCommunities;
 
     public FragmentCommunities() {
 
@@ -56,6 +56,7 @@ public class FragmentCommunities extends Fragment {
         rowItems = new ArrayList<Channel>();
         progressBarCommunityChannelLoader = (ProgressBar) view.findViewById(R.id.progressBarCommunityChannelLoader);
         listViewCommunity = (ListView) view.findViewById(R.id.listViewCommunity);
+        imageViewNoInternetCommunities = (ImageView)view.findViewById(R.id.imageViewNoInternetCommunities);
         textViewEmptyCommunityChannel = (TextView) view.findViewById(R.id.textViewEmptyCommunityChannel);
         textViewEmptyNoInternetCommunity = (TextView) view.findViewById(R.id.textViewEmptyNoInternetCommunity);
         textViewEmptyCommunityChannel.setVisibility(View.GONE);
@@ -87,6 +88,7 @@ public class FragmentCommunities extends Fragment {
                             }
                             if (e != null) {
                                 textViewEmptyNoInternetCommunity.setVisibility(View.VISIBLE);
+                                imageViewNoInternetCommunities.setVisibility(View.VISIBLE);
                             }
                         } catch (Exception exception) {
                             Log.e("Error community channels", "error loading channels in a community");
@@ -100,7 +102,6 @@ public class FragmentCommunities extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-
                 TextView textViewChannelId = (TextView) view.findViewById(R.id.textViewChannelId);
                 TextView textViewChannelName = (TextView) view.findViewById(R.id.textViewChannelNameCustom);
                 channelId = textViewChannelId.getText().toString();

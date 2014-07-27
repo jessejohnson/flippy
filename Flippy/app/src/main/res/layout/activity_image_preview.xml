@@ -23,4 +23,19 @@
         android:id="@+id/progressBarLoadUserImage"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/textViewImageDescription"
+        android:layout_alignParentBottom="true"
+        android:shadowColor="@color/flippy_white"
+        android:shadowDy="1"
+        android:shadowDx="1"
+        android:layout_margin="@dimen/margin_five"
+        android:textColor="@color/flippy_white"
+        android:layout_alignRight="@+id/imageViewPreviewShare"
+        android:layout_alignEnd="@+id/imageViewPreviewShare" />
 </RelativeLayout>

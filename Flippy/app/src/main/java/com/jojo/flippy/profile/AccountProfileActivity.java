@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,6 +50,7 @@ public class AccountProfileActivity extends ActionBarActivity {
     private TextView textViewProfileUserCommunity;
     private ProgressBar progressBarUserChannelLoad;
     private SuperToast superToast;
+    private LayoutInflater inflater;
 
 
     @Override
@@ -73,8 +75,15 @@ public class AccountProfileActivity extends ActionBarActivity {
         superToast = new SuperToast(AccountProfileActivity.this);
         final String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
         intent = getIntent();
+
+        View header = getLayoutInflater().inflate(R.layout.activity_account_header,null);
+        View footer = getLayoutInflater().inflate(R.layout.activity_account_footer,null);
         rowItems = new ArrayList<ProfileItem>();
         profileChannelListView = (ListView) findViewById(R.id.profileChannelListView);
+        profileAdapter = new ProfileAdapter(AccountProfileActivity.this,
+                R.layout.profile_listview, rowItems);
+        profileChannelListView.addHeaderView(header);
+        profileChannelListView.addFooterView(footer);
         textViewProfileUserEmailNew = (TextView) findViewById(R.id.textViewProfileUserEmailNew);
         textViewProfileUserNameNew = (TextView) findViewById(R.id.textViewProfileUserNameNew);
         textViewProfileUserCommunity = (TextView) findViewById(R.id.textViewProfileUserCommunity);
@@ -82,10 +91,6 @@ public class AccountProfileActivity extends ActionBarActivity {
         imageViewProfilePic = (ImageView) findViewById(R.id.imageViewProfilePic);
         imageViewProfileUserCommunity = (ImageView) findViewById(R.id.imageViewProfileUserCommunity);
         progressBarUserChannelLoad = (ProgressBar) findViewById(R.id.progressBarUserChannelLoad);
-
-
-        profileAdapter = new ProfileAdapter(AccountProfileActivity.this,
-                R.layout.profile_listview, rowItems);
         profileChannelListView.setAdapter(profileAdapter);
         imageViewProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override

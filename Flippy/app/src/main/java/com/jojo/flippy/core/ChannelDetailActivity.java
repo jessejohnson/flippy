@@ -14,16 +14,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.adapter.ChannelPostAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.persistence.Channels;
+import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.profile.ImagePreviewActivity;
 import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.util.Flippy;
@@ -51,19 +54,25 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private String channelId;
     private String channelName;
     private ImageView imageViewChannelLarge, imageViewCreator;
-    private TextView textViewChannelNameDetail;
-    private TextView textViewChannelBio;
+    private TextView textViewChannelNameDetail, textViewChannelBio;
     private TextView textViewNameChannelDetailFullName, textViewChannelCreatorEmail, textViewNameSomePost;
     private Button buttonSubscribeToChannel, buttonManageToChannel, buttonUnSubscribeToChannel;
     private LinearLayout linearLayoutSubscriptions;
     private ContentLoadingProgressBar progressLoadChannel;
-
+    private TabHost tabHost;
     private ListView listViewChannelPost;
     private ChannelPostAdapter ChannelsPostAdapter;
     private List<ProfileItem> userChannelItem;
     private String channelDetailsURL;
 
     private SuperToast superToast;
+    private static String TAG = "ChannelDetailActivity";
+    private ArrayList<String> channelAdmins = new ArrayList<String>();
+
+    private Dao<Channels, Integer> channelDao;
+    private List<Channels> channelList;
+
+    private static ArrayList<String> channelIdList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +84,8 @@ public class ChannelDetailActivity extends ActionBarActivity {
         channelName = intent.getStringExtra("channelName");
         channelId = intent.getStringExtra("channelId");
         channelDetailsURL = Flippy.channels + channelId + "/";
+        String adminURL = Flippy.channels + channelId + "/admins/";
+        getUserSubscribedChannelId();
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -111,34 +122,29 @@ public class ChannelDetailActivity extends ActionBarActivity {
         textViewChannelBio.setText("");
         textViewChannelNameDetail.setText(channelName);
 
-        final TabHost tabHost = (TabHost) findViewById(R.id.tabhost);
+        tabHost = (TabHost) findViewById(R.id.tabHost);
         tabHost.setup();
 
-        TabHost.TabSpec spec1 = tabHost.newTabSpec("Details");
-        spec1.setContent(R.id.tab1);
-        spec1.setIndicator("Details", null);
+        TabHost.TabSpec detailTabSpec = tabHost.newTabSpec("Details");
+        detailTabSpec.setContent(R.id.tab1);
+        detailTabSpec.setIndicator("Details", getResources().getDrawable(R.drawable.ic_action_about));
 
-        TabHost.TabSpec spec2 = tabHost.newTabSpec("Posts");
-        spec2.setContent(R.id.tab2);
-        spec2.setIndicator("Posts", null);
-
-
-        tabHost.addTab(spec1);
-        tabHost.addTab(spec2);
+        TabHost.TabSpec postsTabSpec = tabHost.newTabSpec("Posts");
+        postsTabSpec.setContent(R.id.tab2);
+        postsTabSpec.setIndicator("Posts", getResources().getDrawable(R.drawable.ic_notices));
 
 
+        tabHost.addTab(detailTabSpec);
+        tabHost.addTab(postsTabSpec);
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-
             @Override
-            public void onTabChanged(String arg0) {
+            public void onTabChanged(String specString) {
                 setTabColor(tabHost);
             }
         });
         setTabColor(tabHost);
 
-
-        //tab host section
-
+        getAdminsList(adminURL);
         //load the details of a channel
         Ion.with(ChannelDetailActivity.this)
                 .load(channelDetailsURL)
@@ -146,32 +152,37 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            if (result.has("detail")) {
-                                showSuperToast("Sorry, channel has been removed");
-                                finish();
+                        try {
+                            if (result != null) {
+                                if (result.has("detail")) {
+                                    showSuperToast("Sorry, channel has been removed");
+                                    return;
+                                }
+                                name = result.get("name").getAsString();
+                                id = result.get("id").getAsString();
+                                JsonObject creator = result.getAsJsonObject("creator");
+                                creatorName = creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString();
+                                creatorEmail = creator.get("email").getAsString();
+                                if (!creator.get("avatar").isJsonNull()) {
+                                    creatorAvatarURL = creator.get("avatar").getAsString();
+                                }
+                                bio = result.get("bio").getAsString();
+                                communityId = result.get("community").getAsString();
+                                image_thumbnail_url = result.get("image_thumbnail_url").getAsString();
+                                image_url = result.get("image_url").getAsString();
+                                getCommunityName(communityId);
+                                progressLoadChannel.setVisibility(View.GONE);
+                                showViews();
+                            } else if (e != null) {
+                                Log.e("Error from channel detail", e.toString());
                                 return;
+                            } else {
+                                Log.e(TAG, "Something else went wrong getting channel detail");
                             }
-                            name = result.get("name").getAsString();
-                            id = result.get("id").getAsString();
-                            JsonObject creator = result.getAsJsonObject("creator");
-                            creatorName = creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString();
-                            creatorEmail = creator.get("email").getAsString();
-                            if (!creator.get("avatar").isJsonNull()) {
-                                creatorAvatarURL = creator.get("avatar").getAsString();
-                            }
-                            bio = result.get("bio").getAsString();
-                            communityId = result.get("community").getAsString();
-                            image_thumbnail_url = result.get("image_thumbnail_url").getAsString();
-                            image_url = result.get("image_url").getAsString();
-                            getCommunityName(communityId);
-                            progressLoadChannel.setVisibility(View.GONE);
-                            showViews();
-                        }
-                        if (e != null) {
-                            Log.e("Error from channel detail", e.toString());
-                        }
 
+                        } catch (Exception exception) {
+                            Log.e(TAG, "Error getting channel details " + channelId);
+                        }
                     }
                 });
         //load the post in this channel
@@ -181,39 +192,43 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            if (result.has("detail")) {
-                                return;
-                            } else {
-
-                                //showing only the first ten posts
-                                int arrayEnd = 10;
-                                JsonArray channelPostsArray = result.getAsJsonArray("results");
-                                if (channelPostsArray.size() < arrayEnd) {
-                                    arrayEnd = channelPostsArray.size();
-                                }
-                                for (int i = 0; i < arrayEnd; i++) {
-                                    JsonObject item = channelPostsArray.get(i).getAsJsonObject();
-                                    String title = item.get("title").getAsString();
-                                    String content = item.get("content").getAsString();
-                                    String url = "";
-                                    if (!item.get("image_thumbnail_url").isJsonNull()) {
-                                        url = item.get("image_thumbnail_url").getAsString();
+                        try {
+                            if (result != null) {
+                                if (result.has("detail")) {
+                                    return;
+                                } else if (result != null) {
+                                    //showing only the first ten posts
+                                    int arrayEnd = 10;
+                                    JsonArray channelPostsArray = result.getAsJsonArray("results");
+                                    if (channelPostsArray.size() < arrayEnd) {
+                                        arrayEnd = channelPostsArray.size();
                                     }
-                                    Log.e("channel post", title);
-                                    ProfileItem channelItem = new ProfileItem(URI.create(url), title, content, "");
-                                    userChannelItem.add(channelItem);
+                                    for (int i = 0; i < arrayEnd; i++) {
+                                        JsonObject item = channelPostsArray.get(i).getAsJsonObject();
+                                        String title = item.get("title").getAsString();
+                                        String content = item.get("content").getAsString();
+                                        String url = "";
+                                        if (!item.get("image_thumbnail_url").isJsonNull()) {
+                                            url = item.get("image_thumbnail_url").getAsString();
+                                        }
+                                        ProfileItem channelItem = new ProfileItem(URI.create(url), title, content, "");
+                                        userChannelItem.add(channelItem);
+                                    }
+                                    updateChannelPostAdapter();
 
                                 }
-                                updateChannelPostAdapter();
 
+                            } else if (e != null) {
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                                Log.e(TAG, "Error from Post " + e.toString());
+                            } else {
+                                Log.e(TAG, "Something else went wrong getting post in a channel");
                             }
 
+                        } catch (Exception exception) {
+                            Log.e(TAG, "Error getting post from the channel " + exception.toString());
                         }
-                        if (e != null) {
-                            showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
-                            Log.e("Error from Post", e.toString());
-                        }
+
 
                     }
                 });
@@ -244,6 +259,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 intent.putExtra("avatar", image_url);
+                intent.putExtra("ImageName", channelName);
                 intent.setClass(ChannelDetailActivity.this, ImagePreviewActivity.class);
                 startActivity(intent);
             }
@@ -272,7 +288,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
 
     private void updateChannelPostAdapter() {
         ChannelsPostAdapter.notifyDataSetChanged();
-        Log.e("Total items",ChannelsPostAdapter.getCount()+"");
+        Log.e("Total items", ChannelsPostAdapter.getCount() + "");
         if (!ChannelsPostAdapter.isEmpty()) {
             textViewNameSomePost.setVisibility(View.VISIBLE);
         }
@@ -298,11 +314,6 @@ public class ChannelDetailActivity extends ActionBarActivity {
         textViewChannelBio.setVisibility(View.VISIBLE);
         imageViewCreator.setVisibility(View.VISIBLE);
 
-        if (CommunityCenterActivity.regUserEmail.equals(creatorEmail)) {
-            showManageButton();
-        } else {
-            showSubscribeButton();
-        }
     }
 
     private void setSubscribe() {
@@ -313,27 +324,33 @@ public class ChannelDetailActivity extends ActionBarActivity {
         JsonObject json = new JsonObject();
         json.addProperty("id", CommunityCenterActivity.regUserID);
         Ion.with(ChannelDetailActivity.this)
-                .load(channelDetailsURL + "/subscribe/")
+                .load(channelDetailsURL + "subscribe/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            if (result.has("results")) {
-                                showSuperToast(result.get("results").getAsString());
+                        try {
+                            if (result != null) {
+                                if (result.has("results")) {
+                                    showSuperToast(result.get("results").getAsString());
+                                }
+                                if (result.has("detail")) {
+                                    showSuperToast("sorry, channel has been removed");
+                                    return;
+                                }
+
                             }
-                            if (result.has("detail")) {
-                                showSuperToast("sorry, channel has been removed");
-                                return;
+                            if (e != null) {
+                                Log.e("Error", e.toString());
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
                             }
+                        } catch (Exception exception) {
+                            Log.e(TAG, "Error subscribing to channel " + channelId + exception.toString());
 
                         }
-                        if (e != null) {
-                            Log.e("Error", e.toString());
-                            showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
-                        }
+
                     }
 
                 });
@@ -347,24 +364,27 @@ public class ChannelDetailActivity extends ActionBarActivity {
         JsonObject json = new JsonObject();
         json.addProperty("id", CommunityCenterActivity.regUserID);
         Ion.with(ChannelDetailActivity.this)
-                .load(channelDetailsURL + "/unsubscribe/")
+                .load(channelDetailsURL + "unsubscribe/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            if (result.has("results")) {
-                                ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("results").getAsString());
+                        try {
+                            if (result != null) {
+                                if (result.has("results")) {
+                                    showSuperToastSuccess(result.get("results").getAsString());
+                                } else if (result.has("detail")) {
+                                    showSuperToast(result.get("detail").getAsString());
+                                }
                             }
-                            if (result.has("detail")) {
-                                ToastMessages.showToastLong(ChannelDetailActivity.this, result.get("detail").getAsString());
+                            if (e != null) {
+                                Log.e("Error", e.toString());
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
                             }
-                        }
-                        if (e != null) {
-                            Log.e("Error", e.toString());
-                            ToastMessages.showToastLong(ChannelDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                        } catch (Exception exception) {
+                            Log.e(TAG, "Error un-subscribing to channel " + channelId + exception.toString());
                         }
                     }
 
@@ -398,9 +418,16 @@ public class ChannelDetailActivity extends ActionBarActivity {
 
     private void showSubscribeButton() {
         linearLayoutSubscriptions.setVisibility(View.VISIBLE);
-        buttonSubscribeToChannel.setVisibility(View.VISIBLE);
         buttonManageToChannel.setVisibility(View.GONE);
-        buttonUnSubscribeToChannel.setVisibility(View.VISIBLE);
+        if (channelIdList.contains(channelId)) {
+            buttonSubscribeToChannel.setVisibility(View.GONE);
+            buttonUnSubscribeToChannel.setVisibility(View.VISIBLE);
+        } else {
+            buttonSubscribeToChannel.setVisibility(View.VISIBLE);
+            buttonUnSubscribeToChannel.setVisibility(View.GONE);
+        }
+
+
     }
 
     private void showManageButton() {
@@ -415,13 +442,22 @@ public class ChannelDetailActivity extends ActionBarActivity {
         superToast.setDuration(SuperToast.Duration.LONG);
         superToast.setBackground(SuperToast.Background.RED);
         superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-        superToast.setIcon(R.drawable.ic_action_warning, SuperToast.IconPosition.LEFT);
+        superToast.setIcon(R.drawable.ic_action_warning_light, SuperToast.IconPosition.LEFT);
+        superToast.setText(message);
+        superToast.show();
+    }
+
+    private void showSuperToastSuccess(String message) {
+        superToast.setAnimations(SuperToast.Animations.FLYIN);
+        superToast.setDuration(SuperToast.Duration.LONG);
+        superToast.setBackground(SuperToast.Background.BLUE);
+        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
+        superToast.setIcon(R.drawable.icon_light_info, SuperToast.IconPosition.LEFT);
         superToast.setText(message);
         superToast.show();
     }
 
     public void setTabColor(TabHost tabhost) {
-
         for (int i = 0; i < tabhost.getTabWidget().getChildCount(); i++) {
             TextView tv = (TextView) tabhost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
             tv.setTextColor(Color.parseColor("#E47E26"));
@@ -429,5 +465,61 @@ public class ChannelDetailActivity extends ActionBarActivity {
 
         TextView tv = (TextView) tabhost.getCurrentTabView().findViewById(android.R.id.title);
         tv.setTextColor(Color.parseColor("#E47E26"));
+    }
+
+    private void getAdminsList(String url) {
+        Ion.with(ChannelDetailActivity.this)
+                .load(url)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            if (result.has("detail")) {
+                                Log.e(TAG, "Admin list not found");
+                                return;
+                            } else if (e != null) {
+                                Log.e(TAG, e.toString());
+                                return;
+                            } else if (result != null) {
+                                JsonArray adminArray = result.getAsJsonArray("results");
+                                for (int i = 0; i < adminArray.size(); i++) {
+                                    JsonObject item = adminArray.get(i).getAsJsonObject();
+                                    channelAdmins.add(item.get("id").getAsString());
+                                }
+                            } else {
+                                Log.e(TAG, "Something else happened");
+                                return;
+                            }
+                            //managing the channel buttons
+                            String userId = CommunityCenterActivity.regUserID;
+                            if (channelAdmins.contains(userId)) {
+                                showManageButton();
+                            } else {
+                                showSubscribeButton();
+                            }
+                        } catch (Exception error) {
+                            Log.e(TAG, "Error occurred when getting admin list " + error.toString());
+                        }
+                    }
+                });
+    }
+
+    private void getUserSubscribedChannelId() {
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(ChannelDetailActivity.this,
+                    DatabaseHelper.class);
+            channelDao = databaseHelper.getChannelDao();
+            channelList = channelDao.queryForAll();
+            channelIdList = new ArrayList<String>();
+            if (!channelList.isEmpty()) {
+                for (Channels channels : channelList) {
+                    channelIdList.add(channels.channel_id);
+                }
+            }
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            Log.e(TAG, "Error getting all user channels");
+        }
     }
 }
