@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.util.ToastMessages;
@@ -19,9 +20,10 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class ImagePreviewActivity extends ActionBarActivity {
     private ImageView imageViewPreviewShare;
+    private TextView textViewImageDescription;
     private Intent intent;
     private ProgressBar progressBarLoadUserImage;
-    private String avatar;
+    private String avatar, description = "";
 
 
     @Override
@@ -31,8 +33,12 @@ public class ImagePreviewActivity extends ActionBarActivity {
 
         intent = getIntent();
         avatar = intent.getStringExtra("avatar");
+        if (intent.getStringExtra("imageName") != null) {
+            description = intent.getStringExtra("imageName");
+        }
         imageViewPreviewShare = (ImageView) findViewById(R.id.imageViewPreviewShare);
         progressBarLoadUserImage = (ProgressBar) findViewById(R.id.progressBarLoadUserImage);
+        textViewImageDescription = (TextView) findViewById(R.id.textViewImageDescription);
 
 
         if (avatar == null || avatar.equals("")) {
@@ -55,7 +61,7 @@ public class ImagePreviewActivity extends ActionBarActivity {
                         }
                     }
                 });
-
+        textViewImageDescription.setText(description);
 
     }
 

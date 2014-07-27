@@ -7,16 +7,16 @@ import com.j256.ormlite.table.DatabaseTable;
  * Created by bright on 7/23/14.
  */
 @DatabaseTable(tableName = "channelTable")
-public class Channel {
+public class Channels {
 
     @DatabaseField(id = true)
     public String channel_id;
 
 
-    public Channel() {
+    public Channels() {
     }
 
-    public Channel(String channel_id) {
+    public Channels(String channel_id) {
         this.channel_id = channel_id;
     }
 

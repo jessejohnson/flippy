@@ -72,7 +72,7 @@ public class SignInActivity extends ActionBarActivity {
                     allFieldsValid = false;
 
                 }
-                if (Validator.isValidPassword(signInPassword.getText().toString())) {
+                if (true) {
                     signInPassword.setError(null);
                     allFieldsValid = true;
                 } else {

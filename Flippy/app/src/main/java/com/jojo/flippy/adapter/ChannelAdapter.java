@@ -3,6 +3,7 @@ package com.jojo.flippy.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +12,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.persistence.Channels;
+import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChannelAdapter extends ArrayAdapter<Channel> {
@@ -26,6 +32,10 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
     String channelDetailSubscribeURL = Flippy.channels;
     private boolean isUserChannel;
     private ViewHolder holder;
+    private Dao<Channels, Integer> channelDao;
+    private List<Channels> channelList;
+
+    private static ArrayList<String> channelId = new ArrayList<String>();
 
 
     public ChannelAdapter(Context context, int resourceId,
@@ -33,14 +43,33 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         super(context, resourceId, items);
         this.context = context;
         this.isUserChannel = isUserChannels;
+
+    }
+
+    private void getUserSubscribedChannelId(Context context) {
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(context,
+                    DatabaseHelper.class);
+            channelDao = databaseHelper.getChannelDao();
+            channelList = channelDao.queryForAll();
+            channelId = new ArrayList<String>();
+            if (!channelList.isEmpty()) {
+                for (Channels channels : channelList) {
+                    channelId.add(channels.channel_id);
+                }
+            }
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            Log.e("Channel adapter", "Error getting all user channels");
+        }
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
         holder = null;
         final Channel rowItem = getItem(position);
-
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        getUserSubscribedChannelId(context);
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.channel_listview, null);
             holder = new ViewHolder();
@@ -70,6 +99,16 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             holder.imageViewUnSubscribe.setVisibility(convertView.GONE);
         } else {
             //check the subscription states
+            if (!channelId.isEmpty()) {
+                if (channelId.contains(rowItem.getId())) {
+                    holder.imageViewSubscribe.setVisibility(View.GONE);
+                    holder.imageViewUnSubscribe.setVisibility(View.VISIBLE);
+                } else {
+                    holder.imageViewSubscribe.setVisibility(View.VISIBLE);
+                    holder.imageViewUnSubscribe.setVisibility(View.GONE);
+                }
+
+            }
         }
 
         holder.imageViewSubscribe.setOnClickListener(new View.OnClickListener() {
@@ -87,7 +126,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         return convertView;
     }
 
-    private void setSubscribe(String channelId) {
+    private void setSubscribe(final String channelId) {
         if (CommunityCenterActivity.userAuthToken.equals("")) {
             ToastMessages.showToastLong(context, "Sorry, request cannot be made");
             return;
@@ -102,24 +141,33 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            if (result != null) {
+                                if (result.has("results")) {
+                                    //add the channel id to the local channelTable
+                                    Channels channels = new Channels(channelId);
+                                    channelDao.create(channels);
+                                    holder.imageViewUnSubscribe.setVisibility(View.VISIBLE);
+                                    holder.imageViewSubscribe.setVisibility(View.GONE);
+                                    ToastMessages.showToastLong(context, result.get("results").getAsString());
+                                }
+                                if (result.has("detail")) {
+                                    ToastMessages.showToastLong(context, result.get("detail").getAsString());
+                                }
 
-                        if (result != null) {
-                            if (result.has("results")) {
-                                ToastMessages.showToastLong(context, result.get("results").getAsString());
                             }
-                            if (result.has("detail")) {
-                                ToastMessages.showToastLong(context, result.get("detail").getAsString());
+                            if (e != null) {
+                                ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
                             }
+                        } catch (Exception exception) {
+                            Log.e("Channel Adapter", "Error subscribing to a channel " + channelId);
+                        }
 
-                        }
-                        if (e != null) {
-                            ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
-                        }
                     }
                 });
     }
 
-    private void setUnSubscribe(String channelId) {
+    private void setUnSubscribe(final String channelId) {
         if (CommunityCenterActivity.userAuthToken.equals("")) {
             ToastMessages.showToastLong(context, "Sorry, request cannot be made");
             return;
@@ -134,16 +182,24 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            if (result.has("results")) {
-                                ToastMessages.showToastLong(context, result.get("results").getAsString());
+                        try {
+                            if (result != null) {
+                                if (result.has("results")) {
+                                    //removing the channel id
+                                    channelDao.deleteById(Integer.parseInt(channelId));
+                                    holder.imageViewUnSubscribe.setVisibility(View.GONE);
+                                    holder.imageViewSubscribe.setVisibility(View.VISIBLE);
+                                    ToastMessages.showToastLong(context, result.get("results").getAsString());
+                                }
+                                if (result.has("detail")) {
+                                    ToastMessages.showToastLong(context, result.get("detail").getAsString());
+                                }
                             }
-                            if (result.has("detail")) {
-                                ToastMessages.showToastLong(context, result.get("detail").getAsString());
+                            if (e != null) {
+                                ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
                             }
-                        }
-                        if (e != null) {
-                            ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
+                        } catch (Exception exception) {
+                            Log.e("Channel adapter", "Error un-subscribing to the channel " + channelId);
                         }
                     }
                 });

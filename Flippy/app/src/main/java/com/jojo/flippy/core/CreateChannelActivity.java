@@ -41,11 +41,8 @@ public class CreateChannelActivity extends ActionBarActivity {
     private CheckBox checkBoxChannelIsPublic;
     private Button buttonCreateNewChannel;
     private String selectedImagePath;
-    private String imagePath;
     private String fileManagerString;
     private int column_index;
-    private Cursor cursor;
-    private String path;
     private ProgressBar progressBar;
     private ProgressDialog progressDialog;
 
@@ -91,17 +88,16 @@ public class CreateChannelActivity extends ActionBarActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
-                fileManagerString = selectedImageUri.getPath();
+                //fileManagerString = selectedImageUri.getPath();
                 selectedImagePath = getPath(selectedImageUri);
-                if (imagePath == null) {
+                if (selectedImagePath == null) {
                     ToastMessages.showToastLong(CreateChannelActivity.this, "Choose an image with local source");
                     return;
                 }
-                imagePath.getBytes();
-                path = imagePath.toString();
+                selectedImagePath.getBytes();
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 8;
-                Bitmap bm = BitmapFactory.decodeFile(imagePath, options);
+                Bitmap bm = BitmapFactory.decodeFile(selectedImagePath, options);
                 imageViewCreateChannel.setImageBitmap(bm);
 
             } else {
@@ -137,7 +133,6 @@ public class CreateChannelActivity extends ActionBarActivity {
         column_index = cursor
                 .getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
         cursor.moveToFirst();
-        imagePath = cursor.getString(column_index);
 
         return cursor.getString(column_index);
     }

@@ -2,7 +2,9 @@ package com.jojo.flippy.core;
 
 import android.app.ActionBar;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -10,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,8 +22,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.persistence.DatabaseHelper;
+import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.profile.ImagePreviewActivity;
 import com.jojo.flippy.services.FlippyReceiver;
 import com.jojo.flippy.util.Flippy;
@@ -33,6 +39,7 @@ import com.koushikdutta.ion.Ion;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -61,9 +68,10 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private ImageView imageViewNoticeImageDetail;
     private ImageView imageViewNoticeCreatorImage;
     private ImageView imageViewStarDetail;
-    private ImageView imageViewDeletePost;
+    private ImageView imageViewDeletePost, imageViewRemovePost;
     private String image_link;
     private String author_email;
+    private String author_first_name = " ";
     private String author_profile = "";
     private String time_stamp = "";
     private String locationName = "";
@@ -77,8 +85,10 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private LinearLayout linearLayoutMapView;
     private Calendar calendar;
     private String noPost = "Sorry, this post has been remove";
-    private String currentUserEmail;
     private final int RE_FLIP = 1;
+
+    private Dao<Post, Integer> postDao;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +100,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
         noticeId = intent.getStringExtra("noticeId");
         noticeSubtitle = intent.getStringExtra("noticeSubtitle");
         noticeBody = intent.getStringExtra("noticeBody");
-        currentUserEmail = CommunityCenterActivity.regUserEmail;
         String url = Flippy.allPostURL + noticeId + "/";
         superToast = new SuperToast(NoticeDetailActivity.this);
 
@@ -114,6 +123,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         textViewNoticeTextDetail.setText(noticeBody);
         textViewNoticeSubtitleDetail.setText(noticeSubtitle);
         imageViewDeletePost = (ImageView) findViewById(R.id.imageViewDeletePost);
+        imageViewRemovePost = (ImageView) findViewById(R.id.imageViewRemovePost);
         imageViewDeletePost.setVisibility(View.INVISIBLE);
 
 
@@ -149,14 +159,13 @@ public class NoticeDetailActivity extends ActionBarActivity {
                         try {
                             if (result != null) {
                                 if (result.has("detail")) {
-                                    showSuperToast("Sorry, this post has been removed");
+                                    showSuperToast("Sorry, this post has been removed", false);
                                     return;
                                 }
                                 JsonObject item = result.getAsJsonObject("author");
                                 author_email = item.get("email").getAsString();
-                                if (author_email.equals(currentUserEmail)) {
-                                    imageViewDeletePost.setVisibility(View.VISIBLE);
-                                }
+                                author_first_name = item.get("first_name").getAsString();
+
                                 if (!item.get("avatar").isJsonNull()) {
                                     author_profile = item.get("avatar").getAsString();
                                 }
@@ -169,10 +178,12 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                     image_link = result.get("image_url").getAsString();
                                 }
                                 getChannelName(channelId);
+                                String adminUrl = Flippy.channels + channelId + "/admins/";
+                                getAdminsList(adminUrl);
                                 showView();
                             }
                             if (e != null) {
-                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                                 return;
                             }
                         } catch (Exception exception) {
@@ -186,6 +197,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 intent.putExtra("avatar", image_link);
+                intent.putExtra("imageName", noticeTitle);
                 intent.setClass(NoticeDetailActivity.this, ImagePreviewActivity.class);
                 startActivity(intent);
             }
@@ -194,8 +206,15 @@ public class NoticeDetailActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 intent.putExtra("avatar", author_profile);
+                intent.putExtra("imageName", author_first_name);
                 intent.setClass(NoticeDetailActivity.this, ImagePreviewActivity.class);
                 startActivity(intent);
+            }
+        });
+        imageViewRemovePost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confirmNoticeDelete(noticeId);
             }
         });
         //loads the post rating from the api
@@ -224,10 +243,10 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                             Crouton.makeText(NoticeDetailActivity.this, noPost, Style.ALERT);
                                             return;
                                         }
-                                        showSuperToast(result.get("results").getAsString());
+                                        showSuperToast(result.get("results").getAsString(), true);
                                     }
                                     if (e != null) {
-                                        showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                                        showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                                     }
                                     getPostCount(noticeId);
 
@@ -269,33 +288,29 @@ public class NoticeDetailActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showSuperToast(String message) {
+    private void showSuperToast(String message, boolean isSuccess) {
         superToast.setAnimations(SuperToast.Animations.FLYIN);
         superToast.setDuration(SuperToast.Duration.SHORT);
-        superToast.setBackground(SuperToast.Background.PURPLE);
+        if (isSuccess) {
+            superToast.setDuration(SuperToast.Duration.SHORT);
+        } else {
+            superToast.setBackground(SuperToast.Background.PURPLE);
+        }
+
         superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
         superToast.setTextSize(SuperToast.TextSize.MEDIUM);
         superToast.setText(message);
         superToast.show();
     }
 
-    private void showSuperToastSuccess(String message) {
-        superToast.setAnimations(SuperToast.Animations.FLYIN);
-        superToast.setDuration(SuperToast.Duration.SHORT);
-        superToast.setBackground(SuperToast.Background.BLUE);
-        superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
-        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-        superToast.setText(message);
-        superToast.show();
-    }
 
     private void setAlarm() {
         if (noReminder == null) {
-            showSuperToast("This notice has no reminder");
+            showSuperToast("This notice has no reminder", false);
             return;
         }
         if (startDate == null) {
-            showSuperToast("This notice has no reminder date");
+            showSuperToast("This notice has no reminder date", false);
             return;
         }
         String actualDate[] = startDate.replace("Z", "").trim().split("T");
@@ -307,7 +322,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
             Calendar c = Calendar.getInstance();
             Date dateConverted = dateFormat.parse(date.toString());
             if (dateConverted.compareTo(c.getTime()) < 1) {
-                showSuperToast("Notice is long due");
+                showSuperToast("Notice is long due", false);
                 return;
             }
         } catch (ParseException e) {
@@ -325,7 +340,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
             minute = Integer.parseInt(timeArray[1]);
             seconds = Integer.parseInt(timeArray[2]);
         } catch (Exception e) {
-            showSuperToast("Failed to set reminder");
+            showSuperToast("Failed to set reminder", false);
+            Log.e(TAG, e.toString());
             return;
         }
         setCalenderReminder(month, year, day, hour, minute, seconds);
@@ -351,7 +367,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         pendingIntent = PendingIntent.getBroadcast(NoticeDetailActivity.this, 0, alarmIntent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        showSuperToastSuccess("Reminder set successfully");
+        showSuperToast("Reminder set successfully", true);
     }
 
     private void showView() {
@@ -416,7 +432,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                         try {
                             if (result != null) {
                                 if (result.has("detail")) {
-                                    showSuperToast(noPost);
+                                    showSuperToast(noPost, false);
                                     return;
                                 }
                                 JsonObject item = result.getAsJsonObject("results");
@@ -426,7 +442,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                 showMap();
                             }
                             if (e != null) {
-                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                             }
                         } catch (Exception el) {
                             Log.e(TAG, "Error getting the location of a notice");
@@ -455,7 +471,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                 reminderInterval = item.get("repeat_interval").getAsInt();
                             }
                             if (e != null) {
-                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                             }
 
                         } catch (Exception el) {
@@ -492,14 +508,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
                         try {
                             if (nameResult != null) {
                                 if (nameResult.has("detail")) {
-                                    showSuperToast(noPost);
+                                    showSuperToast(noPost, false);
                                     return;
                                 }
                                 textViewNoticeSubtitleChannelName.setVisibility(View.VISIBLE);
                                 textViewNoticeSubtitleChannelName.setText(nameResult.get("name").getAsString());
                             }
                             if (ex != null) {
-                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                             }
 
                         } catch (Exception exception) {
@@ -516,7 +532,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         sendIntent.putExtra(Intent.EXTRA_TEXT, title + "\n" + body + "\n" + imageLink + "\n" + footer);
         sendIntent.setType("text/plain");
         startActivity(Intent.createChooser(sendIntent, "Share Flippy notice via ..."));
-        showSuperToast("Noticed shared successfully");
+        showSuperToast("Noticed shared successfully", true);
     }
 
     @Override
@@ -538,17 +554,94 @@ public class NoticeDetailActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data == null) {
-            showSuperToast("No channel selected");
+            showSuperToast("No channel selected", false);
             return;
         }
         if (resultCode == RESULT_OK && requestCode == RE_FLIP) {
             //process and send to create notice
-            showSuperToastSuccess("Create a new notice passing all this details");
+            showSuperToast("Create a new notice passing all this details", true);
 
         } else {
-            showSuperToast("No channel selected");
+            showSuperToast("No channel selected", false);
             Log.e(TAG, "something went wrong on result of re-flip");
             return;
         }
     }
+
+    private void confirmNoticeDelete(final String noticeId) {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Confirm your action");
+        alert.setIcon(R.drawable.icon_dark_info);
+        alert.setMessage("Removing this notice is irreversible, are you sure you want to continue ?");
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                removeNoticeFormDb(noticeId);
+
+            }
+        });
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+
+            }
+        });
+        alert.show();
+    }
+
+    private void removeNoticeFormDb(String noticeId) {
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(NoticeDetailActivity.this,
+                    DatabaseHelper.class);
+            postDao = databaseHelper.getPostDao();
+            Post post = postDao.queryForId(Integer.parseInt(noticeId));
+            if (post != null) {
+                postDao.delete(post);
+            }
+            showSuperToast("Notice successfully removed from board", true);
+
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            Log.e("Channel adapter", "Error getting all user channels");
+        }
+    }
+
+    private void getAdminsList(String url) {
+        final ArrayList<String> channelAdmins = new ArrayList<String>();
+        Ion.with(NoticeDetailActivity.this)
+                .load(url)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            if (result.has("detail")) {
+                                Log.e(TAG, "Admin list not found");
+                                return;
+                            } else if (e != null) {
+                                Log.e(TAG, e.toString());
+                                return;
+                            } else if (result != null) {
+                                JsonArray adminArray = result.getAsJsonArray("results");
+                                for (int i = 0; i < adminArray.size(); i++) {
+                                    JsonObject item = adminArray.get(i).getAsJsonObject();
+                                    channelAdmins.add(item.get("id").getAsString());
+                                }
+                            } else {
+                                Log.e(TAG, "Something else happened");
+                                return;
+                            }
+                            //managing the channel buttons
+                            String userId = CommunityCenterActivity.regUserID;
+                            if (channelAdmins.contains(userId)) {
+                                imageViewDeletePost.setVisibility(View.VISIBLE);
+                            } else {
+                                imageViewDeletePost.setVisibility(View.GONE);
+                            }
+                        } catch (Exception error) {
+                            Log.e(TAG, "Error occurred when getting admin list " + error.toString());
+                        }
+                    }
+                });
+    }
+
 }

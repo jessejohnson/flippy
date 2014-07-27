@@ -2,6 +2,7 @@ package com.jojo.flippy.profile;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,9 +48,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
-
 public class ManageChannelActivity extends ActionBarActivity {
     private static final int PICK_FROM_CAMERA = 5;
     private static final int CROP_FROM_CAMERA = 6;
@@ -59,7 +56,7 @@ public class ManageChannelActivity extends ActionBarActivity {
     private EditText editTextManageChannelChannelName;
     private ImageView imageViewChannelManageEdit, imageViewEditChannelName;
     private Intent intent;
-    private String channelName, channelId, image_url;
+    private String channelName, image_url;
     private Uri mImageCaptureUri;
     private AlertDialog dialog;
     private Button buttonAddAdmin;
@@ -69,6 +66,13 @@ public class ManageChannelActivity extends ActionBarActivity {
     private ListView listViewChannelAdmins;
     private List<AdminPerson> rowItems;
     private AdminAdapter adminAdapter;
+
+
+    public static String channelId;
+    private ProgressDialog progressDialog;
+
+
+    private static String TAG = "ManageChannelActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,18 +88,17 @@ public class ManageChannelActivity extends ActionBarActivity {
         if (actionBar != null) {
             actionBar.setSubtitle(channelName);
         }
-
-        //the edit text views
+        View header = getLayoutInflater().inflate(R.layout.activity_manage_channel_header, null);
+        listViewChannelAdmins = (ListView) findViewById(R.id.listViewChannelAdmins);
+        listViewChannelAdmins.addHeaderView(header);
+        progressDialog = new ProgressDialog(ManageChannelActivity.this);
         superToast = new SuperToast(ManageChannelActivity.this);
         progressBarLoadAdmin = (ProgressBar) findViewById(R.id.progressBarLoadAdmin);
         buttonAddAdmin = (Button) findViewById(R.id.buttonAddAdminChannel);
         buttonAddAdmin.setVisibility(View.GONE);
         editTextManageChannelChannelName = (EditText) findViewById(R.id.editTextManageChannelChannelName);
         editTextManageChannelChannelName.setText(channelName);
-
-        //the image views
         rowItems = new ArrayList<AdminPerson>();
-        listViewChannelAdmins = (ListView) findViewById(R.id.listViewChannelAdmins);
         adminAdapter = new AdminAdapter(ManageChannelActivity.this,
                 R.layout.channel_admis_listview, rowItems);
         listViewChannelAdmins.setAdapter(adminAdapter);
@@ -129,17 +132,7 @@ public class ManageChannelActivity extends ActionBarActivity {
             }
         });
         listViewChannelAdmins.setClickable(false);
-        listViewChannelAdmins.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //remove the user when selected
-                TextView textViewAdminEmail = (TextView) view.findViewById(R.id.textViewAdminEmail);
-                TextView textViewAdminId = (TextView) view.findViewById(R.id.textViewAdminId);
-                String adminId = textViewAdminId.getText().toString();
-                String adminEmail = textViewAdminEmail.getText().toString();
-                confirmDemotion(adminEmail, adminId);
-            }
-        });
+
 
         buttonAddAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,20 +155,26 @@ public class ManageChannelActivity extends ActionBarActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         String noMember = "No member selected";
-        // check if the request code is same as what is passed  here it is 2
-        if (requestCode != RESULT_OK) {
-            showSuperToastError(noMember);
+        if (requestCode == RESULT_CANCELED) {
+            Log.e(TAG, "Cancelled");
+            showSuperToast(noMember, false);
             return;
         }
         if (data == null) {
-            showSuperToastError(noMember);
+            showSuperToast(noMember, false);
+            Log.e(TAG, "Null data");
             return;
         }
-        if (requestCode == PROMOTE_USER && resultCode == RESULT_OK) {
-            //Promote the user
-            promoteUser(data.getStringExtra("memberId"));
+        if (requestCode == PROMOTE_USER) {
+            if (resultCode == RESULT_OK) {
+                Log.e(TAG, data.getStringExtra("memberId") + " " + data.getStringExtra("memberEmail"));
+                promoteUser(data.getStringExtra("memberId"));
+                return;
+            }
+        } else {
+            showSuperToast(noMember, false);
         }
-        showSuperToastError(noMember);
+
     }
 
     private void showDialog() {
@@ -229,14 +228,12 @@ public class ManageChannelActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarLoadAdmin.setVisibility(View.GONE);
-
                         try {
                             if (result.has("detail")) {
-                                showSuperToastError("sorry, an error occurred");
+                                showSuperToast("sorry, an error occurred", false);
                                 Log.e("Error form get admin list", "Admin list not found");
                                 return;
-                            }
-                            if (result != null) {
+                            } else if (result != null) {
                                 JsonArray adminArray = result.getAsJsonArray("results");
                                 if (adminArray.size() < 5) {
                                     buttonAddAdmin.setVisibility(View.VISIBLE);
@@ -251,22 +248,28 @@ public class ManageChannelActivity extends ActionBarActivity {
                                     rowItems.add(profileItem);
                                 }
                                 updateAdapter();
-                            }
-                            if (e != null) {
-                                showSuperToastError("sorry, internet connection occurred");
+                            } else if (e != null) {
+                                showSuperToast("sorry, internet connection occurred", false);
+                            } else {
+                                Log.e(TAG, "something else went wrong");
                             }
                         } catch (Exception error) {
-                            Log.e("Error try catch", "Error occurred when getting admin list");
+                            Log.e("Error try catch", "Error occurred when getting admin list " + error.toString());
                         }
                     }
                 });
     }
 
-    private void showSuperToastError(String message) {
+    private void showSuperToast(String message, boolean isSuccess) {
         superToast.setAnimations(SuperToast.Animations.FLYIN);
         superToast.setDuration(SuperToast.Duration.SHORT);
-        superToast.setBackground(SuperToast.Background.PURPLE);
-        superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
+        if (isSuccess) {
+            superToast.setBackground(SuperToast.Background.BLUE);
+        } else {
+            superToast.setBackground(SuperToast.Background.PURPLE);
+        }
+
+        superToast.setIcon(R.drawable.icon_light_info, SuperToast.IconPosition.LEFT);
         superToast.setTextSize(SuperToast.TextSize.MEDIUM);
         superToast.setText(message);
         superToast.show();
@@ -282,116 +285,100 @@ public class ManageChannelActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_remove_channel) {
-            String url = Flippy.channels + channelId + "/";
-            StringRequest delete = new StringRequest(Request.Method.DELETE, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            showSuperToastError("successfully removed");
-                            goToMainActivity();
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.e("Error from removing post", error.toString());
-                        }
-                    }
-            ) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap<String, String> headers = new HashMap<String, String>();
-                    headers.put("Content-Type", "application/json");
-                    headers.put("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
-                    return headers;
-                }
-            };
-            Flippy.getInstance().getRequestQueue().add(delete);
+            confirmChannelDelete(channelId);
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    private void promoteUser(String memberId) {
-        String URL = Flippy.channels + memberId + "/promote_user/";
-        Ion.with(ManageChannelActivity.this)
-                .load(URL)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
+    private void deleteChannel(String channelId) {
+        String url = Flippy.channels + channelId + "/";
+        StringRequest delete = new StringRequest(Request.Method.DELETE, url,
+                new Response.Listener<String>() {
                     @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            if (result.has("detail")) {
-                                Crouton.makeText(ManageChannelActivity.this, result.get("detail").toString(), Style.ALERT);
-                                return;
-                            }
-                            showSuperToastSuccess(result.get("results").toString());
-                            return;
-                        }
-                        if (e != null) {
-                            showSuperToastError(getResources().getString(R.string.internet_connection_error_dialog_title));
-                            return;
-                        }
-
+                    public void onResponse(String response) {
+                        showSuperToast("successfully removed", true);
+                        goToMainActivity();
                     }
-                });
-
-    }
-
-    private void demoteUser(String memberId) {
-        String URL = Flippy.channels + memberId + "/demote_user/";
-        Ion.with(ManageChannelActivity.this)
-                .load(URL)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
+                },
+                new Response.ErrorListener() {
                     @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        if (result != null) {
-                            if (result.has("detail")) {
-                                showSuperToastError("The user was not found");
-                                Log.e("Error removing user", "user not found");
-                                return;
-                            }
-                            showSuperToastError(result.get("results").toString());
-                            return;
-                        }
-                        if (e != null) {
-                            showSuperToastError(getResources().getString(R.string.internet_connection_error_dialog_title));
-                            return;
-                        }
-
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("Error from removing post", error.toString());
                     }
-                });
-
-    }
-
-    private void showSuperToastSuccess(String message) {
-        superToast.setAnimations(SuperToast.Animations.FLYIN);
-        superToast.setDuration(SuperToast.Duration.SHORT);
-        superToast.setBackground(SuperToast.Background.BLUE);
-        superToast.setIcon(R.drawable.icon_dark_info, SuperToast.IconPosition.LEFT);
-        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-        superToast.setText(message);
-        superToast.show();
-
-    }
-
-    private void confirmDemotion(String adminName, final String memberId) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ManageChannelActivity.this);
-        builder.setTitle("Confirm your action");
-        builder.setMessage("Are you sure you want to demote  " + adminName);
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                }
+        ) {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                demoteUser(memberId);
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
+                return headers;
+            }
+        };
+        Flippy.getInstance().getRequestQueue().add(delete);
+    }
+
+    private void promoteUser(final String memberId) {
+        progressDialog.setMessage("Promoting user...");
+        progressDialog.show();
+        String url = Flippy.channels + channelId + "/promote_user/";
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", memberId);
+        jsonObject.addProperty("channel_id", channelId);
+        Ion.with(ManageChannelActivity.this)
+                .load(url)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .setJsonObjectBody(jsonObject)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        progressDialog.dismiss();
+                        try {
+                            if (result != null) {
+                                if (result.has("detail")) {
+                                    Log.e(TAG, result.toString());
+                                    showSuperToast(result.get("detail").toString(), false);
+                                    return;
+                                } else {
+                                    showSuperToast(result.get("results").toString(), true);
+                                    intent.setClass(ManageChannelActivity.this, CommunityCenterActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            } else if (e != null) {
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
+                                Log.e("Error promoting user",e.toString());
+                                return;
+                            } else {
+                                Log.e(TAG, "Something else went wrong promoting a user");
+                            }
+                        } catch (Exception exception) {
+                            Log.e(TAG, "Error promoting the user " + memberId + exception.toString());
+
+                        }
+
+                    }
+                });
+    }
+
+
+    private void confirmChannelDelete(final String channelId) {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Confirm your action");
+        alert.setIcon(R.drawable.icon_dark_info);
+        alert.setMessage("Removing this channel is irreversible, are you sure you want to continue ?");
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                deleteChannel(channelId);
             }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
+        alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
                 dialog.dismiss();
+
             }
         });
-        builder.show();
+        alert.show();
     }
 }

@@ -1,6 +1,7 @@
 apply plugin: 'android'
 
 android {
+
     compileSdkVersion 19
     buildToolsVersion '19.1.0'
 
@@ -12,6 +13,9 @@ android {
 
     }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+        }
         release {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'

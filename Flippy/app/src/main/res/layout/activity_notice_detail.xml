@@ -130,8 +130,7 @@
                 android:layout_margin="@dimen/margin_ten"
                 android:orientation="horizontal">
 
-                <com.makeramen.RoundedImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/imageViewNoticeCreatorImage"
                     android:layout_width="@dimen/margin_hundred"
                     android:layout_height="@dimen/margin_hundred"
@@ -165,19 +164,21 @@
                         android:layout_gravity="left"
                         android:text="@string/dummy_user_email"
                         android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                    <TextView
-                        android:id="@+id/textViewNoticeLocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:text="@string/dummy_user_email"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
-
                 </LinearLayout>
 
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/textViewNoticeLocation"
+                android:layout_width="match_parent"
+                android:layout_margin="@dimen/margin_five"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/dummy_user_email"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
 
             <LinearLayout
                 android:id="@+id/linearLayoutMapView"
@@ -204,8 +205,7 @@
         android:padding="@dimen/margin_five"
         android:weightSum="3">
 
-        <com.makeramen.RoundedImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageViewRemovePost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -220,8 +220,7 @@
             app:corner_radius="100dp"
             app:oval="false" />
 
-        <com.makeramen.RoundedImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageViewDeletePost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -237,8 +236,7 @@
             app:oval="false" />
 
 
-        <com.makeramen.RoundedImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageViewStarDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,11 +1,17 @@
 package com.jojo.flippy.core;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,9 +35,14 @@ public class PreviewPost extends ActionBarActivity {
             textViewPreviewNoticeTextDetail,
             textViewPreviewNoticeChannelName, textViewPreviewAuthorEmailAddress, textViewNoticeLocation;
 
-    private ImageView imageViewPreviewNoticeCreatorImage;
+    private ImageView imageViewPreviewNoticeCreatorImage, imageViewPreviewNoticeImageDetail;
     private GoogleMap googleMap;
     private LinearLayout linearLayoutPreviewMapView;
+    private Bitmap bitmap;
+    private Button buttonPublishPost;
+    private String imagePath;
+    private static String TAG = "PreviewPost";
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +55,12 @@ public class PreviewPost extends ActionBarActivity {
         noticeContent = intent.getStringExtra("noticeContent");
         channelName = intent.getStringExtra("channelName");
         noticeLocation = intent.getStringExtra("noticeLocation");
-        lat = intent.getStringExtra("lat");
-        lon = intent.getStringExtra("lon");
+        if (intent.getStringExtra("lat") != null) {
+            lat = intent.getStringExtra("lat");
+            lon = intent.getStringExtra("lon");
+        }
 
-
+        imageViewPreviewNoticeImageDetail = (ImageView) findViewById(R.id.imageViewPreviewNoticeImageDetail);
         textViewPreviewNoticeTitleDetail = (TextView) findViewById(R.id.textViewPreviewNoticeTitleDetail);
         textViewPreviewNoticeSubtitle = (TextView) findViewById(R.id.textViewPreviewNoticeSubtitle);
         textViewPreviewNoticeTextDetail = (TextView) findViewById(R.id.textViewPreviewNoticeTextDetail);
@@ -55,7 +68,16 @@ public class PreviewPost extends ActionBarActivity {
         textViewPreviewAuthorEmailAddress = (TextView) findViewById(R.id.textViewPreviewAuthorEmailAddress);
         textViewNoticeLocation = (TextView) findViewById(R.id.textViewNoticeLocation);
         imageViewPreviewNoticeCreatorImage = (ImageView) findViewById(R.id.imageViewPreviewNoticeCreatorImage);
+        buttonPublishPost = (Button) findViewById(R.id.buttonPublishPost);
+        progressDialog = new ProgressDialog(PreviewPost.this);
 
+        if (intent.getStringExtra("noticeImage") != null) {
+            imagePath = intent.getStringExtra("noticeImage");
+            if (imagePath == null || imagePath == "") {
+                imageViewPreviewNoticeImageDetail.setVisibility(View.GONE);
+            }
+            decodeFile(imagePath);
+        }
 
         googleMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.linearLayoutPreviewNoticeShowLocation))
                 .getMap();
@@ -83,6 +105,16 @@ public class PreviewPost extends ActionBarActivity {
         showMap();
 
 
+        buttonPublishPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (imagePath == null || imagePath == "") {
+                    createPostWithoutImage(noticeTitle, noticeContent, channelId);
+                }
+            }
+        });
+
+
     }
 
 
@@ -103,6 +135,8 @@ public class PreviewPost extends ActionBarActivity {
     }
 
     private boolean createPostWithoutImage(String title, String body, String channel) {
+        progressDialog.setMessage("publishing post ...");
+        progressDialog.show();
         JsonObject json = new JsonObject();
         json.addProperty("title", title);
         json.addProperty("content", body);
@@ -114,11 +148,18 @@ public class PreviewPost extends ActionBarActivity {
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        if (e != null) {
-                            ToastMessages.showToastLong(PreviewPost.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                        } else {
-
-
+                        progressDialog.dismiss();
+                        try {
+                            if (e != null) {
+                                ToastMessages.showToastLong(PreviewPost.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            } else if (result != null) {
+                                Log.e("Result", result.toString());
+                            } else {
+                                Log.e("Result has details", result.toString());
+                            }
+                        } catch (Resources.NotFoundException error) {
+                            error.printStackTrace();
+                            Log.e(TAG, error.toString());
                         }
                     }
 
@@ -129,7 +170,7 @@ public class PreviewPost extends ActionBarActivity {
 
     private void showMap() {
         //get this data from the intent
-        if (lat.equalsIgnoreCase("") || lon.equalsIgnoreCase("") || lat == null || lon == null) {
+        if (lat == null || lon == null || lat.equalsIgnoreCase("") || lon.equalsIgnoreCase("")) {
             return;
         }
         linearLayoutPreviewMapView.setVisibility(View.VISIBLE);
@@ -140,5 +181,27 @@ public class PreviewPost extends ActionBarActivity {
                 .position(coordinate)
                 .draggable(false));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(lat), Double.parseDouble(lon)), 5));
+    }
+
+    public void decodeFile(String filePath) {
+        Log.e("File path", filePath);
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, o);
+        final int REQUIRED_SIZE = 1024;
+        int width_tmp = o.outWidth, height_tmp = o.outHeight;
+        int scale = 1;
+        while (true) {
+            if (width_tmp < REQUIRED_SIZE && height_tmp < REQUIRED_SIZE)
+                break;
+            width_tmp /= 2;
+            height_tmp /= 2;
+            scale *= 2;
+        }
+        // Decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        o2.inSampleSize = scale;
+        bitmap = BitmapFactory.decodeFile(filePath, o2);
+        imageViewPreviewNoticeImageDetail.setImageBitmap(bitmap);
     }
 }

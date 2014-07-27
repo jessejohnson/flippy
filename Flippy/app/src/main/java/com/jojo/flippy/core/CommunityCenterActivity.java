@@ -11,6 +11,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.adapter.CustomDrawer;
@@ -27,8 +27,6 @@ import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.profile.AccountProfileActivity;
-import com.jojo.flippy.util.ToastMessages;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,15 +42,19 @@ public class CommunityCenterActivity extends ActionBarActivity {
     public static String userDateOfBirth = "";
     public static String userGender = "";
     public static String userAuthToken;
-    CustomDrawer adapter;
-    List<DrawerItem> dataList;
+    private CustomDrawer adapter;
+    private List<DrawerItem> dataList;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private User currentUser;
     private Dao<User, Integer> userDao;
+
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+
+
+    private static String TAG = "CommunityCenterActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,9 +83,10 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 userAuthToken = currentUser.user_auth;
             }
 
+
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
-            ToastMessages.showToastLong(CommunityCenterActivity.this, "Unfortunately a system error occurred");
+            Log.e(TAG, "Unfortunately a system error occurred");
         }
 
 
@@ -163,6 +166,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
         fragment.setArguments(args);
         FragmentManager frgManager = getFragmentManager();
         frgManager.beginTransaction().replace(R.id.content_frame, fragment)
+                .setTransition(R.anim.fade_in)
                 .addToBackStack("")
                 .commit();
 
