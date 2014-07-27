@@ -43,9 +43,10 @@ public class MemberDetailActivity extends ActionBarActivity {
     private TextView textViewAnotherUseLastName;
     private TextView textViewUserCommunityName;
 
-    private TextView textViewUserTotalNumberOfCircles;
+    private TextView textViewUserTotalNumberOfCircles, myImageViewText;
     private String TotalChannels;
     private String userDetailURL;
+    private String userFirstLetter = "";
     private ContentLoadingProgressBar progressMemberDetail;
 
 
@@ -73,6 +74,7 @@ public class MemberDetailActivity extends ActionBarActivity {
         textViewAnotherUserName = (TextView) findViewById(R.id.textViewAnotherUserName);
         textViewAnotherUseLastName = (TextView) findViewById(R.id.textViewAnotherUseLastName);
         textViewAnotherFirstName = (TextView) findViewById(R.id.textViewAnotherFirstName);
+        myImageViewText = (TextView) findViewById(R.id.myImageViewText);
         textViewUserTotalNumberOfCircles = (TextView) findViewById(R.id.textViewUserTotalNumberOfCircles);
         imageViewMemberAnotherUserProfilePic = (ImageView) findViewById(R.id.imageViewMemberAnotherUserProfilePic);
         textViewAnotherUserEmail.setText(memberEmailReceived);
@@ -109,6 +111,7 @@ public class MemberDetailActivity extends ActionBarActivity {
                             memberEmail = result.get("email").getAsString();
                             memberCommunity = result.get("community").getAsString();
                             memberFirstNameNew = result.get("first_name").getAsString();
+                            userFirstLetter = memberFirstNameNew.trim().substring(0, 1).toUpperCase();
                             memberLastNameNew = result.get("last_name").getAsString();
                             if (!result.get("avatar").isJsonNull()) {
                                 avatar = result.get("avatar").getAsString();
@@ -220,6 +223,9 @@ public class MemberDetailActivity extends ActionBarActivity {
         textViewUserCommunityName.setText(memberCommunityName);
         textViewUserCommunityName.setVisibility(View.VISIBLE);
 
+        if (avatar.equalsIgnoreCase("")) {
+            myImageViewText.setText(userFirstLetter);
+        }
         Ion.with(imageViewMemberAnotherUserProfilePic)
                 .placeholder(R.color.flippy_orange)
                 .animateIn(R.anim.fade_in)
