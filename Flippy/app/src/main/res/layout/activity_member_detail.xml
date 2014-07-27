@@ -51,6 +51,8 @@
 
                     <FrameLayout
                         android:layout_width="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
                         android:layout_height="wrap_content">
 
                         <com.makeramen.RoundedImageView
@@ -68,18 +70,19 @@
 
                         <TextView
                             android:id="@+id/myImageViewText"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center_horizontal"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignTop="@+id/imageViewMemberAnotherUserProfilePic"
                             android:layout_alignRight="@+id/imageViewMemberAnotherUserProfilePic"
                             android:layout_alignBottom="@+id/imageViewMemberAnotherUserProfilePic"
                             android:layout_margin="1dp"
-                            android:gravity="center"
                             android:text=""
                             android:textStyle="bold"
                             android:textSize="100sp"
                             android:textColor="@color/flippy_white"
-                            android:layout_gravity="center" />
+                             />
                     </FrameLayout>
 
 

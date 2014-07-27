@@ -59,7 +59,6 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private Button buttonSubscribeToChannel, buttonManageToChannel, buttonUnSubscribeToChannel;
     private LinearLayout linearLayoutSubscriptions;
     private ContentLoadingProgressBar progressLoadChannel;
-    private TabHost tabHost;
     private ListView listViewChannelPost;
     private ChannelPostAdapter ChannelsPostAdapter;
     private List<ProfileItem> userChannelItem;
@@ -92,6 +91,11 @@ public class ChannelDetailActivity extends ActionBarActivity {
             actionBar.setSubtitle(channelName);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        View header = getLayoutInflater().inflate(R.layout.activity_channel_detail_header, null);
+        View footer = getLayoutInflater().inflate(R.layout.activity_channel_detail_footer, null);
+        listViewChannelPost = (ListView) findViewById(R.id.listViewChannelPost);
+        listViewChannelPost.addHeaderView(header);
+        listViewChannelPost.addFooterView(footer);
 
         progressLoadChannel = (ContentLoadingProgressBar) findViewById(R.id.progressLoadChannel);
         imageViewChannelLarge = (ImageView) findViewById(R.id.imageViewChannelLarge);
@@ -113,7 +117,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         imageViewCreator.setVisibility(View.GONE);
         textViewNameSomePost.setVisibility(View.GONE);
 
-        listViewChannelPost = (ListView) findViewById(R.id.listViewChannelPost);
+
         userChannelItem = new ArrayList<ProfileItem>();
         ChannelsPostAdapter = new ChannelPostAdapter(ChannelDetailActivity.this,
                 R.layout.channel_post_listview, userChannelItem);
@@ -122,27 +126,6 @@ public class ChannelDetailActivity extends ActionBarActivity {
         textViewChannelBio.setText("");
         textViewChannelNameDetail.setText(channelName);
 
-        tabHost = (TabHost) findViewById(R.id.tabHost);
-        tabHost.setup();
-
-        TabHost.TabSpec detailTabSpec = tabHost.newTabSpec("Details");
-        detailTabSpec.setContent(R.id.tab1);
-        detailTabSpec.setIndicator("Details", getResources().getDrawable(R.drawable.ic_action_about));
-
-        TabHost.TabSpec postsTabSpec = tabHost.newTabSpec("Posts");
-        postsTabSpec.setContent(R.id.tab2);
-        postsTabSpec.setIndicator("Posts", getResources().getDrawable(R.drawable.ic_notices));
-
-
-        tabHost.addTab(detailTabSpec);
-        tabHost.addTab(postsTabSpec);
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-            @Override
-            public void onTabChanged(String specString) {
-                setTabColor(tabHost);
-            }
-        });
-        setTabColor(tabHost);
 
         getAdminsList(adminURL);
         //load the details of a channel
@@ -457,15 +440,6 @@ public class ChannelDetailActivity extends ActionBarActivity {
         superToast.show();
     }
 
-    public void setTabColor(TabHost tabhost) {
-        for (int i = 0; i < tabhost.getTabWidget().getChildCount(); i++) {
-            TextView tv = (TextView) tabhost.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
-            tv.setTextColor(Color.parseColor("#E47E26"));
-        }
-
-        TextView tv = (TextView) tabhost.getCurrentTabView().findViewById(android.R.id.title);
-        tv.setTextColor(Color.parseColor("#E47E26"));
-    }
 
     private void getAdminsList(String url) {
         Ion.with(ChannelDetailActivity.this)

@@ -71,7 +71,6 @@ public class SelectCommunityActivity extends ActionBarActivity {
         }
         superToast = new SuperToast(SelectCommunityActivity.this);
         progressDialog = new ProgressDialog(SelectCommunityActivity.this);
-        progressDialog.setTitle("Flippy progress");
         progressBarLoadCommunity = (ProgressBar) findViewById(R.id.progressBarLoadCommunity);
 
         rowItems = new ArrayList<Community>();

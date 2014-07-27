@@ -65,21 +65,23 @@ public class UserAccountLogout extends ActionBarActivity {
         });
         builder.show();
     }
-    private void deleteAllPost(){
+
+    private void deleteAllPost() {
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
                     DatabaseHelper.class);
             postDao = databaseHelper.getPostDao();
             List<Post> postList = postDao.queryForAll();
             if (!postList.isEmpty()) {
-               postDao.delete(postList);
+                postDao.delete(postList);
             }
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
 
         }
     }
-    private void deleteUser(){
+
+    private void deleteUser() {
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
                     DatabaseHelper.class);

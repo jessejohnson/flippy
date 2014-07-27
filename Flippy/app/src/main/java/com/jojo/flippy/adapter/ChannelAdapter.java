@@ -146,7 +146,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                                 if (result.has("results")) {
                                     //add the channel id to the local channelTable
                                     Channels channels = new Channels(channelId);
-                                    channelDao.create(channels);
+                                    channelDao.createOrUpdate(channels);
                                     holder.imageViewUnSubscribe.setVisibility(View.VISIBLE);
                                     holder.imageViewSubscribe.setVisibility(View.GONE);
                                     ToastMessages.showToastLong(context, result.get("results").getAsString());
