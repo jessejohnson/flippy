@@ -92,6 +92,7 @@ public class AccountProfileActivity extends ActionBarActivity {
         imageViewProfileUserCommunity = (ImageView) findViewById(R.id.imageViewProfileUserCommunity);
         progressBarUserChannelLoad = (ProgressBar) findViewById(R.id.progressBarUserChannelLoad);
         profileChannelListView.setAdapter(profileAdapter);
+        profileChannelListView.setClickable(false);
         imageViewProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -60,8 +60,14 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
         holder.textViewAdminId.setText(rowItem.getAdminId());
         holder.textViewAdminFullName.setText(rowItem.getProfileFullName());
 
+        String creator = ManageChannelActivity.creatorId;
+        if (creator != null && creator.equalsIgnoreCase(rowItem.getAdminId())) {
+            holder.buttonDemoteAdmin.setVisibility(View.GONE);
+        }
+
         Ion.with(holder.imageViewAdminOne)
-                .error(R.drawable.default_medium)
+                .placeholder(R.drawable.default_profile_picture)
+                .error(R.drawable.default_profile_picture)
                 .animateIn(R.anim.fade_in)
                 .load(String.valueOf(rowItem.getAdminProfileItem()));
         holder.buttonDemoteAdmin.setOnClickListener(new View.OnClickListener() {
@@ -115,8 +121,8 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
                         try {
                             if (result != null) {
                                 if (result.has("detail")) {
-                                    showSuperToast("Sorry unable to demote user " , false);
-                                    Log.e("Error removing user",  result.toString());
+                                    showSuperToast("Sorry unable to demote user ", false);
+                                    Log.e("Error removing user", result.toString());
                                     return;
                                 } else {
                                     showSuperToast("successfully demoted admin", true);

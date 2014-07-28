@@ -98,6 +98,7 @@ public class FragmentChannel extends Fragment {
                                     JsonObject creator = item.getAsJsonObject("creator");
                                     String channel_id = item.get("id").getAsString();
                                     Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), channel_id, item.get("name").getAsString(), creator.get("email").getAsString(), creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString());
+
                                     if (channelList.isEmpty()) {
                                         channels = new Channels(channel_id);
                                         channelDao.createOrUpdate(channels);
@@ -111,7 +112,6 @@ public class FragmentChannel extends Fragment {
                                 imageViewNoNetworkChannel.setVisibility(View.VISIBLE);
                             } else {
                                 Log.e("Fragment channels", "something else went wrong");
-                                return;
                             }
                         } catch (Exception exception) {
                             Log.e("Fragment channels", "Error loading channels " + exception.toString());

@@ -45,4 +45,5 @@ dependencies {
     compile 'com.jpardogo.googleprogressbar:library:+'
     compile 'com.mcxiaoke.volley:library:1.0.+'
     compile 'com.github.johnpersano:supertoasts:1.3.4@aar'
+
 }

@@ -89,7 +89,6 @@
                 app:border_width="2dip"
                 app:corner_radius="@dimen/margin_five"
                 app:oval="false" />
-
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

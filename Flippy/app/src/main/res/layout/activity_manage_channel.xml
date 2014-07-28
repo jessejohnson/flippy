@@ -41,7 +41,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin_fifty"
+        android:layout_marginTop="@dimen/margin_eighty"
         gpb:colors="@array/flippy_rainbow"
         gpb:type="folding_circles" />
 

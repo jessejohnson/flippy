@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,17 +58,15 @@ public class ManageChannelActivity extends ActionBarActivity {
     private ImageView imageViewChannelManageEdit, imageViewEditChannelName;
     private Intent intent;
     private String channelName, image_url;
+    public static String creatorId;
     private Uri mImageCaptureUri;
     private AlertDialog dialog;
     private Button buttonAddAdmin;
     private ProgressBar progressBarLoadAdmin;
     private SuperToast superToast;
-
     private ListView listViewChannelAdmins;
     private List<AdminPerson> rowItems;
     private AdminAdapter adminAdapter;
-
-
     public static String channelId;
     private ProgressDialog progressDialog;
 
@@ -83,6 +82,7 @@ public class ManageChannelActivity extends ActionBarActivity {
         channelName = intent.getStringExtra("channelName");
         channelId = intent.getStringExtra("channelId");
         image_url = intent.getStringExtra("image_url");
+        creatorId = intent.getStringExtra("creatorId");
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -98,6 +98,7 @@ public class ManageChannelActivity extends ActionBarActivity {
         buttonAddAdmin.setVisibility(View.GONE);
         editTextManageChannelChannelName = (EditText) findViewById(R.id.editTextManageChannelChannelName);
         editTextManageChannelChannelName.setText(channelName);
+        //textViewChannelAdmins.setText(channelName + " channel administrators");
         rowItems = new ArrayList<AdminPerson>();
         adminAdapter = new AdminAdapter(ManageChannelActivity.this,
                 R.layout.channel_admis_listview, rowItems);
@@ -108,6 +109,23 @@ public class ManageChannelActivity extends ActionBarActivity {
         getAdminsList(adminURL);
         showDialog();
 
+        listViewChannelAdmins.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView textViewAdminEmail = (TextView) view.findViewById(R.id.textViewAdminEmail);
+                TextView textViewAdminFullName = (TextView) view.findViewById(R.id.textViewAdminFullName);
+                TextView textViewAdminId = (TextView) view.findViewById(R.id.textViewAdminId);
+                String memberEmail = textViewAdminEmail.getText().toString();
+                String memberFullName = textViewAdminFullName.getText().toString();
+                String memberId = textViewAdminId.getText().toString();
+                intent.putExtra("memberEmail", memberEmail);
+                intent.putExtra("memberFullName", memberFullName);
+                intent.putExtra("memberId", memberId);
+                intent.setClass(ManageChannelActivity.this, MemberDetailActivity.class);
+                startActivity(intent);
+
+            }
+        });
         Ion.with(imageViewChannelManageEdit)
                 .placeholder(R.drawable.channel_bg)
                 .animateIn(R.anim.fade_in)
@@ -131,8 +149,6 @@ public class ManageChannelActivity extends ActionBarActivity {
                 editTextManageChannelChannelName.setFocusable(true);
             }
         });
-        listViewChannelAdmins.setClickable(false);
-
 
         buttonAddAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +162,7 @@ public class ManageChannelActivity extends ActionBarActivity {
 
 
     }
+
 
     private void updateAdapter() {
         adminAdapter.notifyDataSetChanged();
@@ -169,10 +186,9 @@ public class ManageChannelActivity extends ActionBarActivity {
             if (resultCode == RESULT_OK) {
                 Log.e(TAG, data.getStringExtra("memberId") + " " + data.getStringExtra("memberEmail"));
                 promoteUser(data.getStringExtra("memberId"));
-                return;
             }
-        } else {
-            showSuperToast(noMember, false);
+        } else if(requestCode ==PICK_FROM_FILE) {
+
         }
 
     }

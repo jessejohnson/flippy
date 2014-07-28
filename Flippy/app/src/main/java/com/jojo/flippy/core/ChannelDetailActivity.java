@@ -22,6 +22,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.ChannelPostAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
@@ -46,6 +47,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private String id;
     private String bio;
     private String creatorName;
+    private String creatorId;
     private String creatorAvatarURL = "";
     private String creatorEmail;
     private String communityId;
@@ -117,6 +119,16 @@ public class ChannelDetailActivity extends ActionBarActivity {
         textViewNameSomePost.setVisibility(View.GONE);
 
 
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(ChannelDetailActivity.this,
+                    DatabaseHelper.class);
+            channelDao = databaseHelper.getChannelDao();
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            Log.e("ChannelDetailActivity", "Error getting all user channels");
+        }
+
+
         userChannelItem = new ArrayList<ProfileItem>();
         ChannelsPostAdapter = new ChannelPostAdapter(ChannelDetailActivity.this,
                 R.layout.channel_post_listview, userChannelItem);
@@ -137,7 +149,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                         try {
                             if (result != null) {
                                 if (result.has("detail")) {
-                                    showSuperToast("Sorry, channel has been removed");
+                                    showSuperToast("Sorry, channel has been removed", false);
                                     return;
                                 }
                                 name = result.get("name").getAsString();
@@ -146,6 +158,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                                 letter = StripCharacter.getFirstLetter(creator.get("first_name").getAsString());
                                 creatorName = creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString();
                                 creatorEmail = creator.get("email").getAsString();
+                                creatorId = creator.get("id").getAsString();
                                 if (!creator.get("avatar").isJsonNull()) {
                                     creatorAvatarURL = creator.get("avatar").getAsString();
                                 }
@@ -202,7 +215,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                                 }
 
                             } else if (e != null) {
-                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                                 Log.e(TAG, "Error from Post " + e.toString());
                             } else {
                                 Log.e(TAG, "Something else went wrong getting post in a channel");
@@ -219,6 +232,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 intent.putExtra("image_url", image_url);
+                intent.putExtra("creatorId", creatorId);
                 intent.setClass(ChannelDetailActivity.this, ManageChannelActivity.class);
                 startActivity(intent);
             }
@@ -262,7 +276,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                         }
                         if (e != null) {
                             Log.e("Error from community", e.toString());
-                            showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                            showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                         }
 
                     }
@@ -271,7 +285,6 @@ public class ChannelDetailActivity extends ActionBarActivity {
 
     private void updateChannelPostAdapter() {
         ChannelsPostAdapter.notifyDataSetChanged();
-        Log.e("Total items", ChannelsPostAdapter.getCount() + "");
         if (!ChannelsPostAdapter.isEmpty()) {
             textViewNameSomePost.setVisibility(View.VISIBLE);
         }
@@ -284,10 +297,11 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 .load(image_url);
         if (creatorAvatarURL == null || creatorAvatarURL.equalsIgnoreCase("")) {
             Ion.with(imageViewCreator)
-                    .placeholder(R.color.flippy_orange);
+                    .placeholder(R.drawable.default_small);
+
         } else {
             Ion.with(imageViewCreator)
-                    .placeholder(R.color.flippy_orange)
+                    .placeholder(R.drawable.default_small)
                     .animateIn(R.anim.fade_in)
                     .load(creatorAvatarURL);
         }
@@ -307,7 +321,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
 
     private void setSubscribe() {
         if (CommunityCenterActivity.userAuthToken.equals("")) {
-            showSuperToast("sorry, request could not be made");
+            showSuperToast("sorry, request could not be made", false);
             return;
         }
         JsonObject json = new JsonObject();
@@ -323,17 +337,19 @@ public class ChannelDetailActivity extends ActionBarActivity {
                         try {
                             if (result != null) {
                                 if (result.has("results")) {
-                                    showSuperToast(result.get("results").getAsString());
+                                    showSuperToast(result.get("results").getAsString(), true);
+                                    Channels channel = new Channels(channelId);
+                                    channelDao.createOrUpdate(channel);
                                 }
                                 if (result.has("detail")) {
-                                    showSuperToast("sorry, channel has been removed");
+                                    showSuperToast("sorry, channel has been removed", false);
                                     return;
                                 }
 
                             }
                             if (e != null) {
                                 Log.e("Error", e.toString());
-                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                             }
                         } catch (Exception exception) {
                             Log.e(TAG, "Error subscribing to channel " + channelId + exception.toString());
@@ -363,14 +379,15 @@ public class ChannelDetailActivity extends ActionBarActivity {
                         try {
                             if (result != null) {
                                 if (result.has("results")) {
-                                    showSuperToastSuccess(result.get("results").getAsString());
+                                    showSuperToast(result.get("results").getAsString(), true);
+                                    channelDao.deleteById(Integer.parseInt(channelId));
                                 } else if (result.has("detail")) {
-                                    showSuperToast(result.get("detail").getAsString());
+                                    showSuperToast(result.get("detail").getAsString(), false);
                                 }
                             }
                             if (e != null) {
                                 Log.e("Error", e.toString());
-                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                             }
                         } catch (Exception exception) {
                             Log.e(TAG, "Error un-subscribing to channel " + channelId + exception.toString());
@@ -426,26 +443,21 @@ public class ChannelDetailActivity extends ActionBarActivity {
         buttonUnSubscribeToChannel.setVisibility(View.GONE);
     }
 
-    private void showSuperToast(String message) {
+    private void showSuperToast(String message, boolean isSuccess) {
         superToast.setAnimations(SuperToast.Animations.FLYIN);
         superToast.setDuration(SuperToast.Duration.LONG);
-        superToast.setBackground(SuperToast.Background.RED);
+
+        if (isSuccess) {
+            superToast.setBackground(SuperToast.Background.BLUE);
+        } else {
+            superToast.setBackground(SuperToast.Background.RED);
+        }
+
         superToast.setTextSize(SuperToast.TextSize.MEDIUM);
         superToast.setIcon(R.drawable.ic_action_warning_light, SuperToast.IconPosition.LEFT);
         superToast.setText(message);
         superToast.show();
     }
-
-    private void showSuperToastSuccess(String message) {
-        superToast.setAnimations(SuperToast.Animations.FLYIN);
-        superToast.setDuration(SuperToast.Duration.LONG);
-        superToast.setBackground(SuperToast.Background.BLUE);
-        superToast.setTextSize(SuperToast.TextSize.MEDIUM);
-        superToast.setIcon(R.drawable.icon_light_info, SuperToast.IconPosition.LEFT);
-        superToast.setText(message);
-        superToast.show();
-    }
-
 
     private void getAdminsList(String url) {
         Ion.with(ChannelDetailActivity.this)

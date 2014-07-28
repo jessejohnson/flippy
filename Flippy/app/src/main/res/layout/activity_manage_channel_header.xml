@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayoutChannelImage"
-        android:layout_margin="@dimen/margin_ten"
+        android:layout_margin="@dimen/margin_five"
         android:orientation="horizontal"
         android:weightSum="1">
 
@@ -53,5 +53,16 @@
             android:layout_weight="0.1"
             android:background="@drawable/ic_action_dark_edit" />
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:padding="@dimen/margin_two"
+        android:id="@+id/textViewChannelAdmins"
+        android:textStyle="normal"
+        android:textColor="@color/flippy_orange"
+        android:layout_gravity="center_horizontal"
+        android:textSize="14sp"
+        android:gravity="center_horizontal"
+        android:text="@string/manage_channel_admin_list_title"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
