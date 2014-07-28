@@ -16,6 +16,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.StripCharacter;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -66,6 +67,7 @@ public class MemberDetailActivity extends ActionBarActivity {
             actionBar.setSubtitle(memberEmailReceived + "'s profile");
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
         userDetailURL = Flippy.users + memberId + "/";
         intent.setClass(MemberDetailActivity.this, ImagePreviewActivity.class);
         progressMemberDetail = (ContentLoadingProgressBar) findViewById(R.id.progressMemberDetail);
@@ -111,7 +113,7 @@ public class MemberDetailActivity extends ActionBarActivity {
                             memberEmail = result.get("email").getAsString();
                             memberCommunity = result.get("community").getAsString();
                             memberFirstNameNew = result.get("first_name").getAsString();
-                            userFirstLetter = memberFirstNameNew.trim().substring(0, 1).toUpperCase();
+                            userFirstLetter = StripCharacter.getFirstLetter(memberFirstNameNew);
                             memberLastNameNew = result.get("last_name").getAsString();
                             if (!result.get("avatar").isJsonNull()) {
                                 avatar = result.get("avatar").getAsString();

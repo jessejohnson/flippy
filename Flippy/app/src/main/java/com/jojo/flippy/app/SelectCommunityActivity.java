@@ -42,8 +42,8 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 
 public class SelectCommunityActivity extends ActionBarActivity {
-    ListView listViewCommunities;
-    List<Community> rowItems;
+    private ListView listViewCommunities;
+    private List<Community> rowItems;
     private String communityKeyURL = "";
     private Intent intent;
     private String regUserEmail;

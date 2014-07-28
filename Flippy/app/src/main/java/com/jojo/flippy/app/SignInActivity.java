@@ -13,10 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.johnpersano.supertoasts.SuperToast;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.persistence.Channels;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
@@ -24,6 +27,8 @@ import com.jojo.flippy.util.Validator;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.net.URI;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -37,8 +42,13 @@ public class SignInActivity extends ActionBarActivity {
     private String regUserID;
     private String regFirstName;
     private String regLastName;
+    private String regUserCommunity;
     private String avatar = "", avatar_thumb = "", date_of_birth = "", gender = "";
     private Dao<User, Integer> userDao;
+    private User user;
+    private Dao<Channels, Integer> channelDao;
+    private List<Channels> channelList;
+    private Channels channels;
     private SuperToast superToast;
 
     @Override
@@ -100,9 +110,7 @@ public class SignInActivity extends ActionBarActivity {
                             .setCallback(new FutureCallback<JsonObject>() {
                                 @Override
                                 public void onCompleted(Exception e, JsonObject result) {
-
-                                    signGetStartedButton.setEnabled(true);
-                                    signGetStartedButton.setText(getText(R.string.start));
+                                    signGetStartedButton.setText("just a minute ...");
                                     if (e != null) {
                                         showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
                                         return;
@@ -118,6 +126,9 @@ public class SignInActivity extends ActionBarActivity {
                                             regFirstName = result.get("first_name").getAsString();
                                             regUserEmail = result.get("email").getAsString();
                                             regLastName = result.get("last_name").getAsString();
+                                            if (!result.get("community").isJsonNull()) {
+                                                regUserCommunity = result.get("community").getAsString();
+                                            }
                                             if (!result.get("avatar").isJsonNull()) {
                                                 avatar = result.get("avatar").getAsString();
                                                 avatar_thumb = result.get("avatar_thumb").getAsString();
@@ -131,7 +142,6 @@ public class SignInActivity extends ActionBarActivity {
                                         } catch (UnsupportedOperationException e1) {
                                             e1.printStackTrace();
                                         }
-
                                         //Save the information in the database
                                         try {
                                             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(SignInActivity.this,
@@ -141,7 +151,7 @@ public class SignInActivity extends ActionBarActivity {
                                             if (!userList.isEmpty()) {
                                                 userDao.delete(userList);
                                             }
-                                            User user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName, avatar, avatar_thumb, gender, date_of_birth);
+                                            user = new User(regUserID, regUserAuthToken, regUserEmail, regFirstName, regLastName, avatar, avatar_thumb, gender, date_of_birth);
                                             userDao.createOrUpdate(user);
                                         } catch (java.sql.SQLException sqlE) {
                                             sqlE.printStackTrace();
@@ -152,35 +162,21 @@ public class SignInActivity extends ActionBarActivity {
                                         intent.putExtra("regUserEmail", regUserEmail);
                                         intent.putExtra("regUserAuthToken", regUserAuthToken);
                                         intent.putExtra("regUserID", regUserID);
-                                        //TODO if the user has selected their community already, redirect to notice page
                                         //get user from db
-                                        try {
-                                            DatabaseHelper databaseHelper = OpenHelperManager
-                                                    .getHelper(SignInActivity.this, DatabaseHelper.class);
-                                            userDao = databaseHelper.getUserDao();
-                                            List<User> userList = userDao.queryForAll();
-                                            User current = null;
-
-                                            if (userList.isEmpty()) {
-                                                //TODO probably start next activity here
-                                            } else {
-                                                current = userList.get(0);
-                                                String communityId = current.community_id;
-                                                if (communityId.equalsIgnoreCase("")) {
-                                                    startActivity(new Intent(SignInActivity.this, SelectCommunityActivity.class));
-                                                    showSuperToast("community not set...");
-                                                } else {
-                                                    startActivity(new Intent(SignInActivity.this, CommunityCenterActivity.class));
-                                                    showSuperToast("community already set...");
-                                                }
+                                        if (regUserCommunity != null) {
+                                            user.community_id = regUserCommunity;
+                                            try {
+                                                userDao.update(user);
+                                            } catch (SQLException e1) {
+                                                e1.printStackTrace();
                                             }
-
-                                        } catch (Exception ex) {
-                                            ex.printStackTrace();
+                                            saveUserChannels();
+                                        } else {
+                                            signGetStartedButton.setEnabled(true);
+                                            signGetStartedButton.setText("get started");
+                                            intent.setClass(SignInActivity.this, SelectCommunityActivity.class);
+                                            startActivity(intent);
                                         }
-                                        showSuperToast("did not pass through checks...");
-                                        intent.setClass(SignInActivity.this, SelectCommunityActivity.class);
-                                        startActivity(intent);
                                     }
                                 }
 
@@ -206,5 +202,53 @@ public class SignInActivity extends ActionBarActivity {
         superToast.setTextSize(SuperToast.TextSize.MEDIUM);
         superToast.setText(message);
         superToast.show();
+    }
+
+    private void saveUserChannels() {
+        String url = Flippy.users + regUserID + "/subscriptions/";
+        signGetStartedButton.setText("retrieving your channels ...");
+        if (regUserID == null || regUserID == "") {
+            showSuperToast("Unfortunately something went wrong, try again later");
+            return;
+        }
+        Ion.with(SignInActivity.this)
+                .load(url)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        signGetStartedButton.setEnabled(true);
+                        signGetStartedButton.setText("get started");
+                        try {
+                            if (result != null) {
+                                JsonArray channelArray = result.getAsJsonArray("results");
+                                for (int i = 0; i < channelArray.size(); i++) {
+                                    JsonObject item = channelArray.get(i).getAsJsonObject();
+                                    String channel_id = item.get("id").getAsString();
+                                    try {
+                                        DatabaseHelper databaseHelper = OpenHelperManager.getHelper(SignInActivity.this,
+                                                DatabaseHelper.class);
+                                        channelDao = databaseHelper.getChannelDao();
+                                        channels = new Channels(channel_id);
+                                        channelDao.createOrUpdate(channels);
+                                    } catch (java.sql.SQLException sqlE) {
+                                        sqlE.printStackTrace();
+                                        Log.e("Sign in activity", "Error getting all user channels");
+                                    }
+                                }
+                                intent.setClass(SignInActivity.this, CommunityCenterActivity.class);
+                                startActivity(intent);
+                            } else if (e != null) {
+                                showSuperToast("Internet connection error occurred");
+                            } else {
+                                Log.e("Fragment channels", "something else went wrong");
+                                return;
+                            }
+                        } catch (Exception exception) {
+                            Log.e("Fragment channels", "Error loading channels " + exception.toString());
+                        }
+                    }
+                });
+
     }
 }

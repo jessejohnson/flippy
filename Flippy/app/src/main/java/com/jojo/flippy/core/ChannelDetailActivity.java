@@ -30,6 +30,7 @@ import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.profile.ImagePreviewActivity;
 import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.StripCharacter;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -63,15 +64,13 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private ChannelPostAdapter ChannelsPostAdapter;
     private List<ProfileItem> userChannelItem;
     private String channelDetailsURL;
-
     private SuperToast superToast;
     private static String TAG = "ChannelDetailActivity";
     private ArrayList<String> channelAdmins = new ArrayList<String>();
-
     private Dao<Channels, Integer> channelDao;
     private List<Channels> channelList;
-
     private static ArrayList<String> channelIdList = new ArrayList<String>();
+    private String letter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +143,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                                 name = result.get("name").getAsString();
                                 id = result.get("id").getAsString();
                                 JsonObject creator = result.getAsJsonObject("creator");
+                                letter = StripCharacter.getFirstLetter(creator.get("first_name").getAsString());
                                 creatorName = creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString();
                                 creatorEmail = creator.get("email").getAsString();
                                 if (!creator.get("avatar").isJsonNull()) {
@@ -282,10 +282,16 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 .placeholder(R.color.flippy_light_header)
                 .animateIn(R.anim.fade_in)
                 .load(image_url);
-        Ion.with(imageViewCreator)
-                .placeholder(R.drawable.default_profile_picture)
-                .animateIn(R.anim.fade_in)
-                .load(creatorAvatarURL);
+        if (creatorAvatarURL == null || creatorAvatarURL.equalsIgnoreCase("")) {
+            Ion.with(imageViewCreator)
+                    .placeholder(R.color.flippy_orange);
+        } else {
+            Ion.with(imageViewCreator)
+                    .placeholder(R.color.flippy_orange)
+                    .animateIn(R.anim.fade_in)
+                    .load(creatorAvatarURL);
+        }
+
         textViewChannelNameDetail.setText(channelName);
         textViewNameChannelDetailFullName.setText(creatorName);
         textViewChannelCreatorEmail.setText(creatorEmail);
