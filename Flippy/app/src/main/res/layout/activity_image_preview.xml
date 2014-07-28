@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:text=""
         android:id="@+id/textViewImageDescription"
         android:layout_alignParentBottom="true"
         android:shadowColor="@color/flippy_white"

@@ -164,7 +164,7 @@ public class CreateChannelActivity extends ActionBarActivity {
                     public void onProgress(int downloaded, int total) {
                         progressBar.setProgress(downloaded);
                         buttonCreateNewChannel.setText("Please wait ... ");
-                        progressDialog.setTitle("Just a minute ...");
+                        progressDialog.setCancelable(false);
                         progressDialog.setMessage("Creating " + channelName);
                         progressDialog.show();
                     }

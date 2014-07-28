@@ -18,7 +18,7 @@
         android:dividerHeight="@dimen/margin_five"
         android:footerDividersEnabled="true"
         android:headerDividersEnabled="true"
-        android:paddingBottom="@dimen/margin_five"
+        android:paddingBottom="@dimen/margin_fifty"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="none" />
 
@@ -36,12 +36,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginBottom="@dimen/margin_five"
-            android:layout_marginLeft="@dimen/margin_five"
-            android:layout_marginRight="@dimen/margin_five"
+            android:layout_marginLeft="@dimen/margin_two"
+            android:layout_marginRight="@dimen/margin_two"
+            android:layout_marginBottom="@dimen/margin_two"
             android:layout_marginTop="@dimen/margin_five"
             android:layout_weight="1"
-
             android:background="@drawable/flippy_button_dark"
             android:text="@string/add_channel"
             android:textColor="@color/flippy_white" />

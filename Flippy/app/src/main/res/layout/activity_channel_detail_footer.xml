@@ -1,53 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/linearLayoutSubscriptions"
-        android:layout_width="match_parent"
-        android:layout_marginBottom="0dp"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/margin_one"
-        android:layout_below="@+id/linearLayoutCreatorDetail"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/buttonSubscribeToChannel"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/flippy_button_default_plain"
-            android:text="@string/subscription_state_true"
-            android:textStyle="bold"
-            android:textColor="@color/flippy_orange" />
-
-        <Button
-            android:id="@+id/buttonUnSubscribeToChannel"
-            android:layout_alignParentBottom="true"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/flippy_button_default_plain"
-            android:text="@string/subscription_state_false"
-            android:textStyle="bold"
-            android:textColor="@color/flippy_orange" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/buttonManageToChannel"
-        android:layout_alignParentBottom="true"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginBottom="@dimen/margin_two"
-        android:background="@drawable/flippy_button_default_plain"
-        android:text="@string/manage_channel"
-        android:textColor="@color/flippy_orange" />
-
-
-</LinearLayout>
+</RelativeLayout>

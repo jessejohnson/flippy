@@ -2,13 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/margin_two"
+    android:layout_margin="@dimen/margin_ten"
     android:layout_gravity="center_vertical"
     android:orientation="horizontal">
 
 
-    <com.makeramen.RoundedImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/imageViewChannelImage"
         android:layout_width="@dimen/margin_eighty"
         android:layout_height="@dimen/margin_eighty"
@@ -31,25 +30,29 @@
         android:layout_toRightOf="@+id/imageViewChannelImage"
         android:layout_alignBottom="@+id/imageViewChannelImage">
 
-            <TextView
-                android:id="@+id/textViewProfileChannelName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="@dimen/margin_two"
-                android:gravity="left"
-                android:text="@string/settings_title"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/flippy_dark_header" />
+        <TextView
+            android:id="@+id/textViewProfileChannelName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginTop="@dimen/margin_two"
+            android:gravity="left"
+            android:text="@string/settings_title"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/flippy_dark_header" />
 
-            <TextView
-                android:id="@+id/textViewProfileChannelTotalMembers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_subtitle"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/flippy_dark_header"
-                android:textStyle="italic" />
-
+        <TextView
+            android:id="@+id/textViewProfileChannelTotalMembers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_subtitle"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/flippy_dark_header"
+            android:textStyle="italic" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/flippy_orange"
+        android:layout_height="@dimen/margin_half" />
 </RelativeLayout>

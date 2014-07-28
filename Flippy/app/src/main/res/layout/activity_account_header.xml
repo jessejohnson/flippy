@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
-            android:padding="@dimen/margin_ten"
+            android:padding="@dimen/margin_two"
             android:layout_margin="@dimen/margin_ten"
             android:text="@string/dummy_user_email"
             android:textAppearance="?android:attr/textAppearanceMedium"

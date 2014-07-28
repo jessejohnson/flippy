@@ -5,6 +5,6 @@
     <color name="flippy_light_header">#555353</color>
     <color name="flippy_orange_light">#F2805B</color>
     <color name="flippy_white">#FFFFFF</color>
-    <color name="flippy_accent_color">#bf6518</color>
+    <color name="flippy_accent_color">#BF6518</color>
     <color name="flippy_background_color">#E0EEEE</color>
 </resources>

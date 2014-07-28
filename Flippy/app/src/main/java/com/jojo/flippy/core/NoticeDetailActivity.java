@@ -6,7 +6,9 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -351,11 +353,16 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private void setCalenderReminder(int month, int year, int day, int hour, int minute, int seconds) {
         calendar = Calendar.getInstance();
 
+        //getting the alarm settings
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String minutes = SP.getString("alarm_delay", "0");
+        int alarmAlert = Integer.parseInt(minutes);
+
         calendar.set(Calendar.MONTH, month - 1);
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.DAY_OF_MONTH, day);
         calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.MINUTE, minute - alarmAlert);
         calendar.set(Calendar.SECOND, seconds);
         calendar.set(Calendar.AM_PM, Calendar.PM);
 

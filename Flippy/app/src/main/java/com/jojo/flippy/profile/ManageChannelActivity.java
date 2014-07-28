@@ -324,7 +324,6 @@ public class ManageChannelActivity extends ActionBarActivity {
         String url = Flippy.channels + channelId + "/promote_user/";
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", memberId);
-        jsonObject.addProperty("channel_id", channelId);
         Ion.with(ManageChannelActivity.this)
                 .load(url)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
@@ -336,26 +335,20 @@ public class ManageChannelActivity extends ActionBarActivity {
                         progressDialog.dismiss();
                         try {
                             if (result != null) {
-                                if (result.has("detail")) {
-                                    Log.e(TAG, result.toString());
-                                    showSuperToast(result.get("detail").toString(), false);
-                                    return;
-                                } else {
-                                    showSuperToast(result.get("results").toString(), true);
-                                    intent.setClass(ManageChannelActivity.this, CommunityCenterActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
+                                showSuperToast(result.get("result").getAsString(), true);
+                                intent.setClass(ManageChannelActivity.this, CommunityCenterActivity.class);
+                                startActivity(intent);
+                                finish();
                             } else if (e != null) {
                                 showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
-                                Log.e("Error promoting user",e.toString());
+                                Log.e("Error promoting user", e.toString());
                                 return;
                             } else {
                                 Log.e(TAG, "Something else went wrong promoting a user");
                             }
-                        } catch (Exception exception) {
-                            Log.e(TAG, "Error promoting the user " + memberId + exception.toString());
 
+                        } catch (Exception exception) {
+                            Log.e(TAG, "Error promoting the user " + memberId + " " + exception.toString());
                         }
 
                     }

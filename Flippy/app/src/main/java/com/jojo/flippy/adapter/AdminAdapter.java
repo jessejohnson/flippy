@@ -115,7 +115,7 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
                         try {
                             if (result != null) {
                                 if (result.has("detail")) {
-                                    showSuperToast("Sorry unable to demote user " + result.toString(), false);
+                                    showSuperToast("Sorry unable to demote user " , false);
                                     Log.e("Error removing user",  result.toString());
                                     return;
                                 } else {

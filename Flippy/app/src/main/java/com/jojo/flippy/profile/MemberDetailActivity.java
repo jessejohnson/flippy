@@ -89,7 +89,7 @@ public class MemberDetailActivity extends ActionBarActivity {
             public void onClick(View view) {
                 intent.setClass(MemberDetailActivity.this, ImagePreviewActivity.class);
                 intent.putExtra("avatar", avatar);
-                intent.putExtra("imageName", memberFirstNameNew);
+                intent.putExtra("imageName", memberFullNameReceived);
                 startActivity(intent);
             }
         });
