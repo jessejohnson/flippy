@@ -37,7 +37,7 @@ public class ChannelSelectionItemAdapter extends ArrayAdapter<ChannelSelectItem>
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         ChannelSelectItem rowItem = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context
@@ -51,7 +51,7 @@ public class ChannelSelectionItemAdapter extends ArrayAdapter<ChannelSelectItem>
             holder.imageViewAChannelImage = (ImageView) convertView.findViewById(R.id.imageViewAChannelImage);
             convertView.setTag(holder);
         } else
-            holder = (ViewHolder) convertView.getTag();
+        holder = (ViewHolder) convertView.getTag();
         holder.textViewChannelId.setText(rowItem.getId());
         holder.textViewChannelName.setText(rowItem.getChannelName());
         holder.textViewChannelDescription.setText(rowItem.getChannelBio());

@@ -2,13 +2,20 @@ package com.jojo.flippy.core;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
@@ -27,7 +34,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChannelMembers extends Activity {
+public class ChannelMembers extends ActionBarActivity implements SearchView.OnQueryTextListener {
 
     private String channelName;
     private String channelId;
@@ -78,6 +85,7 @@ public class ChannelMembers extends Activity {
         channelMemberAdapter = new ChannelMemberAdapter(ChannelMembers.this,
                 R.layout.channel_members_listview, ChannelMemberItem, isManage);
         membershipList.setAdapter(channelMemberAdapter);
+        membershipList.setTextFilterEnabled(true);
 
 
         //load the channels members
@@ -179,5 +187,35 @@ public class ChannelMembers extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.channel_members, menu);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_channel_members_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(this);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String search) {
+        if (TextUtils.isEmpty(search)) {
+            membershipList.clearTextFilter();
+        } else {
+           // membershipList.setFilterText(search.toString());
+            ChannelMembers.this.channelMemberAdapter.getFilter().filter(search);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
     }
 }

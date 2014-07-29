@@ -20,7 +20,7 @@ import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.adapter.Notice;
-import com.jojo.flippy.adapter.NoticeListAdapter;
+import com.jojo.flippy.adapter.NoticeAdapter;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
@@ -46,8 +46,8 @@ public class FragmentNotice extends Fragment {
 
     public static IntentFilter postIntentFilter;
     ListView noticeList;
-    NoticeListAdapter listAdapter;
-    ArrayList<Notice> noticeFeed = new ArrayList<Notice>();
+    private NoticeAdapter listAdapter;
+    List<Notice> noticeFeed;
     BroadcastReceiver postReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -84,8 +84,8 @@ public class FragmentNotice extends Fragment {
 
         View v = inflater.inflate(R.layout.notice_list_footer, null);
 
-
-        listAdapter = new NoticeListAdapter(this.getActivity(), noticeFeed);
+        noticeFeed = new ArrayList<Notice>();
+        listAdapter = new NoticeAdapter(getActivity(),R.layout.notice_list_item, noticeFeed);
         noticeList = (ListView) view.findViewById(R.id.listViewNoticeList);
         textViewNoNotice = (TextView) view.findViewById(R.id.textViewNoNotice);
         textViewNoNotice.setVisibility(View.GONE);
@@ -147,12 +147,10 @@ public class FragmentNotice extends Fragment {
                 intent.putExtra("noticeBody", noticeBody);
                 intent.putExtra("noticeId", noticeId);
                 startActivity(intent);
-
-
             }
         });
 
-        registerForContextMenu(noticeList);
+        //registerForContextMenu(noticeList);
         return view;
     }
 

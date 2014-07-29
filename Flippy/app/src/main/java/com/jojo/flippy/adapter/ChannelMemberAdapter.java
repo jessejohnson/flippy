@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,12 +19,12 @@ import java.util.List;
 /**
  * Created by bright on 6/13/14.
  */
-public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> {
+public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> implements Filterable {
     Context context;
     boolean isManage;
 
     public ChannelMemberAdapter(Context context, int resourceId,
-                                List<ProfileItem> items,boolean isManage) {
+                                List<ProfileItem> items, boolean isManage) {
         super(context, resourceId, items);
         this.context = context;
         this.isManage = isManage;
@@ -32,7 +33,7 @@ public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> {
 
     /*private view holder class*/
     private class ViewHolder {
-        ImageView imageView,imageViewMemberAdded;
+        ImageView imageView;
         TextView textViewChannelMemberFirstName;
         TextView getTextViewChannelMemberSecondName;
         TextView textViewMemberId;
@@ -40,7 +41,7 @@ public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         ProfileItem rowItem = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context
@@ -51,19 +52,13 @@ public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> {
             holder.textViewChannelMemberFirstName = (TextView) convertView.findViewById(R.id.textViewMemberEmail);
             holder.textViewMemberId = (TextView) convertView.findViewById(R.id.textViewMemberId);
             holder.imageView = (ImageView) convertView.findViewById(R.id.imageViewMember);
-            holder.imageViewMemberAdded = (ImageView) convertView.findViewById(R.id.imageViewMemberAdded);
             holder.getTextViewChannelMemberSecondName = (TextView) convertView.findViewById(R.id.textViewMemberFullName);
             holder.linearLayoutChannelMember = (LinearLayout) convertView.findViewById(R.id.linearLayoutChannelMember);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        if (position % 2 ==0) {
-          holder.linearLayoutChannelMember.setBackgroundResource(R.drawable.flippy_background_light_dark);
-        }
-        if(!isManage){
-           holder.imageViewMemberAdded.setVisibility(View.GONE);
-        }
+
         holder.textViewChannelMemberFirstName.setText(rowItem.getProfileChannelName());
         holder.textViewMemberId.setText(rowItem.getTextViewMemberId());
         holder.getTextViewChannelMemberSecondName.setText(rowItem.getProfileChannelTotalNumber());

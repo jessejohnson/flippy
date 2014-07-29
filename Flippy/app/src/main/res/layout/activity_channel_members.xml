@@ -6,13 +6,17 @@
     android:layout_margin="@dimen/margin_two"
     android:orientation="vertical">
 
+
+
     <ListView
         android:id="@+id/listViewChannelMembers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:listSelector="@android:color/transparent"
         android:choiceMode="singleChoice"
-        android:dividerHeight="@dimen/margin_one" />
+        android:divider="@color/flippy_orange"
+        android:dividerHeight="0.2dp" />
 
 
     <com.jpardogo.android.googleprogressbar.library.GoogleProgressBar
@@ -28,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:text=""
         android:layout_centerInParent="true"
         android:textColor="@color/flippy_orange"
         android:textStyle="normal"
@@ -40,5 +44,6 @@
         android:id="@+id/textViewNoChannelMember"
         android:layout_alignBottom="@+id/progressBarMemberChannelLoader"
         android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>

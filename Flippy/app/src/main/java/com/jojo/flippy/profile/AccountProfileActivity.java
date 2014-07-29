@@ -220,4 +220,9 @@ public class AccountProfileActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 }

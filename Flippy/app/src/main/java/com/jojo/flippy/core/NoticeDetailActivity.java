@@ -148,7 +148,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         if (googleMap == null) {
             googleMap = ((SupportMapFragment) getSupportFragmentManager().
                     findFragmentById(R.id.linearLayoutNoticeShowLocation)).getMap();
-            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+          //  googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
 
         //Loading the list with data from Api call

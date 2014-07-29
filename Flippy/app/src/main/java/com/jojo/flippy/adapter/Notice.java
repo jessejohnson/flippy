@@ -3,9 +3,7 @@ package com.jojo.flippy.adapter;
 import java.net.URI;
 import java.util.Date;
 
-/**
- * Created by odette on 6/11/14.
- */
+
 public class Notice {
     String id;
     String creatorId;
