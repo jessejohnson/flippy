@@ -87,9 +87,9 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         holder.textViewNumberOfMembers.setText(rowItem.getCreatorFullName());
         holder.textViewChannelName.setText(rowItem.getChannelName());
         Ion.with(holder.imageView)
-                .placeholder(R.drawable.channel_bg)
+                .placeholder(R.drawable.channel_place)
                 .animateIn(R.anim.fade_in)
-                .error(R.color.flippy_orange)
+                .error(R.drawable.channel_error)
                 .load(String.valueOf(rowItem.getImageUrl()));
         holder.textViewStatus.setText(rowItem.getCreatorEmail());
         holder.textViewChannelId.setText(rowItem.getId());
@@ -157,7 +157,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
 
                             }
                             if (e != null) {
-                                ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
+                                Log.e("Channel adapter", e.toString());
                             }
                         } catch (Exception exception) {
                             Log.e("Channel Adapter", "Error subscribing to a channel " + channelId);

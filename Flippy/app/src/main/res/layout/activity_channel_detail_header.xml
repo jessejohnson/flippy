@@ -21,7 +21,6 @@
         android:id="@+id/imageViewChannelLarge"
         android:layout_width="match_parent"
         android:layout_margin="@dimen/margin_two"
-        android:background="@color/flippy_orange"
         android:layout_height="@dimen/margin_one_fifty"
         android:scaleType="centerCrop" />
 

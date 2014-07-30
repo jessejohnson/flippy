@@ -103,9 +103,9 @@ public class AccountProfileActivity extends ActionBarActivity {
 
         //set the user profile
         Ion.with(imageViewProfilePic)
-                .placeholder(R.drawable.default_profile_picture)
+                .placeholder(R.drawable.user_place_small)
                 .animateIn(R.anim.fade_in)
-                .error(R.drawable.default_profile_picture)
+                .error(R.drawable.user_error_small)
                 .load(CommunityCenterActivity.userAvatarURL);
 
         textViewProfileUserNameNew.setText(userFullName);
@@ -132,7 +132,6 @@ public class AccountProfileActivity extends ActionBarActivity {
                                 updateAdapter();
                             }
                             if (e != null) {
-                                showSuperToast("sorry, failed to load your channels");
                                 Log.e("Error loading channel", e.toString());
                             }
                         } catch (Exception el) {
@@ -168,7 +167,6 @@ public class AccountProfileActivity extends ActionBarActivity {
                                 loadCommunityImage(userCommunityImageLink);
                             }
                             if (e != null) {
-                                showSuperToast("sorry, failed to get community image");
                                 Log.e("error", e.toString());
                             }
                         } catch (Exception exception) {
@@ -191,15 +189,14 @@ public class AccountProfileActivity extends ActionBarActivity {
 
     private void loadCommunityImage(String url) {
         if (url == null) {
-            showSuperToast("sorry, internal error occurred");
             Log.e("Error loading community image", "url is null");
             return;
         }
         textViewProfileUserCommunity.setText("Community: " + userCommunityName);
         textViewProfileUserCommunity.setVisibility(View.VISIBLE);
         Ion.with(imageViewProfileUserCommunity)
-                .placeholder(R.drawable.default_profile_picture)
-                .error(R.color.flippy_light_header)
+                .placeholder(R.drawable.community_place)
+                .error(R.drawable.community_error)
                 .animateIn(R.anim.fade_in)
                 .load(url);
     }

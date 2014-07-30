@@ -35,7 +35,7 @@ public class SettingsAdapter extends ArrayAdapter<SettingsItem> {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         SettingsItem rowItem = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context

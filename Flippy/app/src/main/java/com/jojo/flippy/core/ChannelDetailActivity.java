@@ -276,7 +276,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                         }
                         if (e != null) {
                             Log.e("Error from community", e.toString());
-                            showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
+
                         }
 
                     }
@@ -292,16 +292,18 @@ public class ChannelDetailActivity extends ActionBarActivity {
 
     private void showViews() {
         Ion.with(imageViewChannelLarge)
-                .placeholder(R.color.flippy_light_header)
+                .placeholder(R.drawable.channel_place)
                 .animateIn(R.anim.fade_in)
+                .error(R.drawable.channel_error)
                 .load(image_url);
         if (creatorAvatarURL == null || creatorAvatarURL.equalsIgnoreCase("")) {
             Ion.with(imageViewCreator)
-                    .placeholder(R.drawable.default_small);
+                    .placeholder(R.drawable.user_place_small);
 
         } else {
             Ion.with(imageViewCreator)
-                    .placeholder(R.drawable.default_small)
+                    .placeholder(R.drawable.user_place_small)
+                    .error(R.drawable.user_error_small)
                     .animateIn(R.anim.fade_in)
                     .load(creatorAvatarURL);
         }

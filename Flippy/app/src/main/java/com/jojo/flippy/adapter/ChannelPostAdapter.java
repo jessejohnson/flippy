@@ -52,8 +52,8 @@ public class ChannelPostAdapter extends ArrayAdapter<ProfileItem> {
         holder.textViewNoticeChannelTitle.setText(rowItem.getProfileChannelName());
         holder.textViewChannelNoticeDetail.setText(rowItem.getProfileChannelTotalNumber());
         Ion.with(holder.imageViewChannelNoticeImage)
-                .placeholder(R.drawable.default_profile_picture)
-                .error(R.drawable.default_profile_picture)
+                .placeholder(R.drawable.notice_place)
+                .error(R.drawable.notice_error)
                 .animateIn(R.anim.fade_in)
                 .load(String.valueOf(rowItem.getProfileChannelItem()));
 

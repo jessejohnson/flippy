@@ -380,13 +380,13 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private void showView() {
         Ion.with(imageViewNoticeImageDetail)
                 .animateIn(R.anim.fade_in)
-                .error(R.color.flippy_orange)
-                .placeholder(R.drawable.channel_bg)
+                .error(R.drawable.notice_error)
+                .placeholder(R.drawable.notice_place)
                 .load(image_link);
         Ion.with(imageViewNoticeCreatorImage)
                 .animateIn(R.anim.fade_in)
-                .placeholder(R.drawable.default_medium)
-                .error(R.color.flippy_orange)
+                .placeholder(R.drawable.user_place_small)
+                .error(R.drawable.user_error_small)
                 .load(author_profile);
         textViewAuthorEmailAddress.setText(author_email);
         textViewNoticeTimeStamp.setText(time_stamp);

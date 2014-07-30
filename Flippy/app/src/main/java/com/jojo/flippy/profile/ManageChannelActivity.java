@@ -127,7 +127,8 @@ public class ManageChannelActivity extends ActionBarActivity {
             }
         });
         Ion.with(imageViewChannelManageEdit)
-                .placeholder(R.drawable.channel_bg)
+                .placeholder(R.drawable.channel_place)
+                .error(R.drawable.channel_error)
                 .animateIn(R.anim.fade_in)
                 .load(image_url);
         imageViewChannelManageEdit.setOnClickListener(new View.OnClickListener() {

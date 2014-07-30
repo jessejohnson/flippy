@@ -99,8 +99,8 @@ public class PreviewPost extends ActionBarActivity {
         textViewNoticeLocation.setText("location: " + noticeLocation);
         textViewPreviewNoticeSubtitle.setText(CommunityCenterActivity.userFirstName + ", " + CommunityCenterActivity.userLastName);
         Ion.with(imageViewPreviewNoticeCreatorImage)
-                .error(R.drawable.default_profile_picture)
-                .placeholder(R.drawable.default_profile_picture)
+                .error(R.drawable.user_error_small)
+                .placeholder(R.drawable.user_place_small)
                 .load(CommunityCenterActivity.userAvatarURL);
         showMap();
 

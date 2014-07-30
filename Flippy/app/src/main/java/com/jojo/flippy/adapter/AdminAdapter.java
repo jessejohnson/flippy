@@ -66,8 +66,8 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
         }
 
         Ion.with(holder.imageViewAdminOne)
-                .placeholder(R.drawable.default_profile_picture)
-                .error(R.drawable.default_profile_picture)
+                .placeholder(R.drawable.user_place_small)
+                .error(R.drawable.user_error_small)
                 .animateIn(R.anim.fade_in)
                 .load(String.valueOf(rowItem.getAdminProfileItem()));
         holder.buttonDemoteAdmin.setOnClickListener(new View.OnClickListener() {

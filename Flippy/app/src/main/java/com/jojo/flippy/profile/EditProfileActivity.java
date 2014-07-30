@@ -308,44 +308,14 @@ public class EditProfileActivity extends ActionBarActivity {
 
     private void loadProfile() {
         Ion.with(imageViewMemberEdit)
-                .placeholder(R.drawable.default_profile_picture)
+                .placeholder(R.drawable.user_place_large)
+                .error(R.drawable.user_error_large)
                 .animateIn(R.anim.fade_in)
                 .load(CommunityCenterActivity.userAvatarURL);
     }
 
     private void updateUserStringDetails(final String email, final String firstName, final String lastName, final String gender) {
         String url = Flippy.users + "me/";
-        /*
-        Map<String, String> jsonParams = new HashMap<String, String>();
-        jsonParams.put("email", email);
-        jsonParams.put("first_name", firstName);
-        jsonParams.put("last_name", lastName);
-        jsonParams.put("gender", gender);
-        JsonObjectRequest myRequest = new JsonObjectRequest(Request.Method.PUT,url,new JSONObject(jsonParams),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.e("Response", response.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Error", error.toString());
-                    }
-                }
-        ) {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
-                return headers;
-            }
-        };
-        Flippy.getInstance().getRequestQueue().add(myRequest);
-        */
         StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
                 new Response.Listener<String>() {
                     @Override

@@ -34,7 +34,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChannelMembers extends ActionBarActivity implements SearchView.OnQueryTextListener {
+public class ChannelMembers extends ActionBarActivity {
 
     private String channelName;
     private String channelId;
@@ -199,23 +199,23 @@ public class ChannelMembers extends ActionBarActivity implements SearchView.OnQu
                 (SearchView) menu.findItem(R.id.action_channel_members_search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-        searchView.setOnQueryTextListener(this);
+        SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                channelMemberAdapter.getFilter().filter(newText);
+                Log.e("The channel members", "on text change text: " + newText);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                channelMemberAdapter.getFilter().filter(query);
+                Log.e("The query", "on query submit: " + query);
+                return true;
+            }
+        };
+        searchView.setOnQueryTextListener(textChangeListener);
         return true;
     }
 
-    @Override
-    public boolean onQueryTextChange(String search) {
-        if (TextUtils.isEmpty(search)) {
-            membershipList.clearTextFilter();
-        } else {
-           // membershipList.setFilterText(search.toString());
-            ChannelMembers.this.channelMemberAdapter.getFilter().filter(search);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
 }
