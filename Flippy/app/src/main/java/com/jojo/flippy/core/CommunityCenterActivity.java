@@ -233,7 +233,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
             case R.id.action_favourite_notice:
                 //call the user favourite function
             case R.id.action_remove_notice:
-                //remove the notice from the users board
+                //remove the notice from the USERS_URL board
                 return true;
             default:
                 return super.onContextItemSelected(item);

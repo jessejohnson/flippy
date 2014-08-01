@@ -65,7 +65,7 @@ public class FragmentCommunities extends Fragment {
         adapter = new ChannelAdapter(getActivity(),
                 R.layout.channel_listview, rowItems, false);
         listViewCommunity.setAdapter(adapter);
-        String url = Flippy.communitiesURL + CommunityCenterActivity.userCommunityId + "/channels/";
+        String url = Flippy.COMMUNITIES_URL + CommunityCenterActivity.userCommunityId + "/channels/";
 
         //Loading the list with data from Api call
         Ion.with(getActivity())
@@ -91,7 +91,7 @@ public class FragmentCommunities extends Fragment {
                                 imageViewNoInternetCommunities.setVisibility(View.VISIBLE);
                             }
                         } catch (Exception exception) {
-                            Log.e("Error community channels", "error loading channels in a community");
+                            Log.e("Error community CHANNELS_URL", "error loading CHANNELS_URL in a community");
                         }
                     }
                 });

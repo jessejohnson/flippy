@@ -101,7 +101,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         noticeId = intent.getStringExtra("noticeId");
         noticeSubtitle = intent.getStringExtra("noticeSubtitle");
         noticeBody = intent.getStringExtra("noticeBody");
-        String url = Flippy.allPostURL + noticeId + "/";
+        String url = Flippy.POST_URL + noticeId + "/";
         superToast = new SuperToast(NoticeDetailActivity.this);
 
         ActionBar actionBar = getActionBar();
@@ -180,7 +180,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                     image_link = result.get("image_url").getAsString();
                                 }
                                 getChannelName(channelId);
-                                String adminUrl = Flippy.channels + channelId + "/admins/";
+                                String adminUrl = Flippy.CHANNELS_URL + channelId + "/admins/";
                                 getAdminsList(adminUrl);
                                 showView();
                             }
@@ -234,7 +234,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         imageViewStarDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String ratingURL = Flippy.allPostURL + noticeId + "/star/";
+                String ratingURL = Flippy.POST_URL + noticeId + "/star/";
                 JsonObject json = new JsonObject();
                 json.addProperty("id", noticeId);
                 Ion.with(NoticeDetailActivity.this)
@@ -403,7 +403,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
     }
 
     private void getPostCount(String id) {
-        String URL = Flippy.allPostURL + id + "/count_ratings/";
+        String URL = Flippy.POST_URL + id + "/count_ratings/";
         Ion.with(NoticeDetailActivity.this)
                 .load(URL)
                 .asJsonObject()
@@ -435,7 +435,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
     }
 
     private void getPostLocation(String id) {
-        String postLocationURL = Flippy.allPostURL + id + "/location/";
+        String postLocationURL = Flippy.POST_URL + id + "/location/";
         Ion.with(NoticeDetailActivity.this)
                 .load(postLocationURL)
                 .asJsonObject()
@@ -465,7 +465,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
     }
 
     private void getNoticeReminder(String id) {
-        String postReminderURL = Flippy.allPostURL + id + "/reminder/";
+        String postReminderURL = Flippy.POST_URL + id + "/reminder/";
         Ion.with(NoticeDetailActivity.this)
                 .load(postReminderURL)
                 .asJsonObject()
@@ -514,7 +514,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
     private void getChannelName(String id) {
         Ion.with(NoticeDetailActivity.this)
-                .load(Flippy.channels + id + "/")
+                .load(Flippy.CHANNELS_URL + id + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -587,7 +587,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         alert.setTitle("Confirm your action");
         alert.setIcon(R.drawable.icon_dark_info);
         if (isDelete) {
-            alert.setMessage("Deleting this notice is irreversible and your channels members will longer have access to the details, are you sure you want to continue ?");
+            alert.setMessage("Deleting this notice is irreversible and your CHANNELS_URL members will longer have access to the details, are you sure you want to continue ?");
         } else {
             alert.setMessage("Removing this notice is irreversible, are you sure you want to continue ?");
 
@@ -623,7 +623,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
-            Log.e("Channel adapter", "Error getting all user channels");
+            Log.e("Channel adapter", "Error getting all user CHANNELS_URL");
         }
     }
 
@@ -667,7 +667,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
     }
 
     private void deleteNotice(final String id) {
-        Ion.with(NoticeDetailActivity.this, Flippy.allPostURL + id + "/")
+        Ion.with(NoticeDetailActivity.this, Flippy.POST_URL + id + "/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {

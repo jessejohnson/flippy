@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -73,7 +72,7 @@ public class AccountProfileActivity extends ActionBarActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         superToast = new SuperToast(AccountProfileActivity.this);
-        final String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
+        final String url = Flippy.USERS_URL + CommunityCenterActivity.regUserID + userChannels;
         intent = getIntent();
 
         View header = getLayoutInflater().inflate(R.layout.activity_account_header,null);
@@ -112,7 +111,7 @@ public class AccountProfileActivity extends ActionBarActivity {
         textViewProfileUserEmailNew.setText(userEmail);
         getCommunityImage(CommunityCenterActivity.userCommunityId);
 
-        //load the channels user subscribed to
+        //load the CHANNELS_URL user subscribed to
         Ion.with(AccountProfileActivity.this)
                 .load(url)
                 .asJsonObject()
@@ -155,7 +154,7 @@ public class AccountProfileActivity extends ActionBarActivity {
 
     private void getCommunityImage(String id) {
         Ion.with(AccountProfileActivity.this)
-                .load(Flippy.communitiesURL + id + "/")
+                .load(Flippy.COMMUNITIES_URL + id + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

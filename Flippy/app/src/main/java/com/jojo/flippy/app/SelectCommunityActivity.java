@@ -7,9 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,8 +28,6 @@ import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
-import com.jojo.flippy.util.StripCharacter;
-import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -100,7 +96,7 @@ public class SelectCommunityActivity extends ActionBarActivity {
 
 
         Ion.with(SelectCommunityActivity.this)
-                .load(Flippy.communitiesURL)
+                .load(Flippy.COMMUNITIES_URL)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -147,7 +143,7 @@ public class SelectCommunityActivity extends ActionBarActivity {
                                                            JsonObject jsonObject = new JsonObject();
                                                            jsonObject.addProperty("community_id", communityId);
                                                            Ion.with(SelectCommunityActivity.this)
-                                                                   .load(Flippy.users + intent.getStringExtra("regUserID") + "/community/")
+                                                                   .load(Flippy.USERS_URL + intent.getStringExtra("regUserID") + "/community/")
                                                                    .setHeader("Authorization", "Token " + intent.getStringExtra("regUserAuthToken"))
                                                                    .setJsonObjectBody(jsonObject)
                                                                    .asJsonObject()

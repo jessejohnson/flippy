@@ -24,7 +24,6 @@ import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.stmt.UpdateBuilder;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.persistence.DatabaseHelper;
@@ -43,7 +42,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.sql.SQLException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 
 public class EditProfileActivity extends ActionBarActivity {
@@ -78,6 +80,7 @@ public class EditProfileActivity extends ActionBarActivity {
     private Dao<User, Integer> userDao;
     private Context context;
     private ActionBar actionBar;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,7 +234,7 @@ public class EditProfileActivity extends ActionBarActivity {
             return;
         }
         progressBarUpdateAvatar.setVisibility(View.VISIBLE);
-        Ion.with(EditProfileActivity.this, Flippy.users + "upload-avatar/")
+        Ion.with(EditProfileActivity.this, Flippy.USERS_URL + "upload-avatar/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setMultipartFile("avatar", new File(filePath))
                 .asJsonObject()
@@ -243,7 +246,7 @@ public class EditProfileActivity extends ActionBarActivity {
                             if (result == null) {
                                 showSuperToast("Failed to upload avatar", false);
                                 return;
-                            } else if (result != null) {
+                            } else if (result != null && !result.has("detail")) {
                                 getUserInfo();
                             } else if (e != null) {
                                 showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
@@ -269,7 +272,8 @@ public class EditProfileActivity extends ActionBarActivity {
                     DatabaseHelper.class);
 
             userDao = databaseHelper.getUserDao();
-            User user = userDao.queryForId(Integer.parseInt(userId));
+            List<User> userList = userDao.queryForAll();
+            user = userList.get(0);
             user.user_email = userEmail;
             user.avatar = userAvatar;
             user.date_of_birth = userDateOfBirth;
@@ -290,7 +294,7 @@ public class EditProfileActivity extends ActionBarActivity {
     }
 
     private void getUserInfo() {
-        Ion.with(EditProfileActivity.this, Flippy.users + CommunityCenterActivity.regUserID + "/")
+        Ion.with(EditProfileActivity.this, Flippy.USERS_URL + CommunityCenterActivity.regUserID + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -344,7 +348,7 @@ public class EditProfileActivity extends ActionBarActivity {
         if (actionBar != null) {
             actionBar.setSubtitle("updating profile...");
         }
-        String url = Flippy.users + "me/";
+        String url = Flippy.USERS_URL + "me/";
         RequestParams params = new RequestParams();
         params.put("email", email);
         params.put("first_name", firstName);

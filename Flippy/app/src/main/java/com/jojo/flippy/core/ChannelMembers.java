@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -66,7 +65,7 @@ public class ChannelMembers extends ActionBarActivity {
         channelName = intent.getStringExtra("channelName");
         channelId = intent.getStringExtra("channelId");
         isManage = intent.getBooleanExtra("isManage", false);
-        String channelDetailsURL = Flippy.channels + channelId + membersURL;
+        String channelDetailsURL = Flippy.CHANNELS_URL + channelId + membersURL;
 
 
         actionBar = getActionBar();
@@ -88,7 +87,7 @@ public class ChannelMembers extends ActionBarActivity {
         membershipList.setTextFilterEnabled(true);
 
 
-        //load the channels members
+        //load the CHANNELS_URL members
         Ion.with(ChannelMembers.this)
                 .load(channelDetailsURL)
                 .asJsonObject()

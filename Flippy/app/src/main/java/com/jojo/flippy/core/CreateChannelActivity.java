@@ -35,7 +35,6 @@ import com.koushikdutta.ion.ProgressCallback;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.List;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -53,6 +52,7 @@ public class CreateChannelActivity extends ActionBarActivity {
     private ProgressDialog progressDialog;
     private Dao<Channels, Integer> channelDao;
     private Channels channels;
+    private final String TAG ="CreateChannelActivity";
 
 
     @Override
@@ -96,7 +96,7 @@ public class CreateChannelActivity extends ActionBarActivity {
             channelDao = databaseHelper.getChannelDao();
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
-            Log.e("Fragment", "Error getting all user channels");
+            Log.e("Fragment", "Error getting all user CHANNELS_URL");
         }
 
     }
@@ -174,7 +174,7 @@ public class CreateChannelActivity extends ActionBarActivity {
             return;
         }
         buttonCreateNewChannel.setEnabled(false);
-        Ion.with(CreateChannelActivity.this, Flippy.channels)
+        Ion.with(CreateChannelActivity.this, Flippy.CHANNELS_URL)
                 .uploadProgressBar(progressBar)
                 .uploadProgressHandler(new ProgressCallback() {
                     @Override

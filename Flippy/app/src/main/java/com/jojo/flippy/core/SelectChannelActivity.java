@@ -50,7 +50,7 @@ public class SelectChannelActivity extends ActionBarActivity {
 
         intent = getIntent();
         isReFLIP = intent.getBooleanExtra("isReFLIP", false);
-        String url = Flippy.users + CommunityCenterActivity.regUserID + "/admin_channels/";
+        String url = Flippy.USERS_URL + CommunityCenterActivity.regUserID + "/admin_channels/";
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setSubtitle(subTitle);
@@ -67,7 +67,7 @@ public class SelectChannelActivity extends ActionBarActivity {
         userChannelsAdapter = new ChannelSelectionItemAdapter(SelectChannelActivity.this,
                 R.layout.channel_select_listview, userChannelItem);
         userChannelList.setAdapter(userChannelsAdapter);
-        //load the channels of user
+        //load the CHANNELS_URL of user
         Ion.with(SelectChannelActivity.this)
                 .load(url)
                 .asJsonObject()
@@ -109,7 +109,7 @@ public class SelectChannelActivity extends ActionBarActivity {
                             }
 
                         } catch (Exception exception) {
-                            Log.e("Error occurred", "Error retrieving a list of user admin channels");
+                            Log.e("Error occurred", "Error retrieving a list of user admin CHANNELS_URL");
                         }
 
 

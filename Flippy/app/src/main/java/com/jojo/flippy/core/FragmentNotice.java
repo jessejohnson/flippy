@@ -182,7 +182,7 @@ public class FragmentNotice extends Fragment {
     }
 
     private void getAllPost(final View view) {
-        String url = Flippy.allPostURL;
+        String url = Flippy.POST_URL;
         Ion.with(getActivity())
                 .load(url)
                 .setTimeout(60 * 60 * 1000)

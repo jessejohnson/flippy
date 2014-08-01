@@ -23,9 +23,7 @@ import com.jojo.flippy.adapter.ChannelAdapter;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.Channels;
 import com.jojo.flippy.persistence.DatabaseHelper;
-import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
-import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -69,7 +67,7 @@ public class FragmentChannel extends Fragment {
                 R.layout.channel_listview, rowItems, true);
         ChannelListView.setAdapter(adapter);
         //get the request url
-        String url = Flippy.users + CommunityCenterActivity.regUserID + "/subscriptions/";
+        String url = Flippy.USERS_URL + CommunityCenterActivity.regUserID + "/subscriptions/";
 
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
@@ -78,11 +76,11 @@ public class FragmentChannel extends Fragment {
             channelList = channelDao.queryForAll();
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
-            Log.e("Fragment", "Error getting all user channels");
+            Log.e("Fragment", "Error getting all user CHANNELS_URL");
         }
 
 
-        //load the channels user subscribed to
+        //load the CHANNELS_URL user subscribed to
         Ion.with(getActivity())
                 .load(url)
                 .asJsonObject()
@@ -111,10 +109,10 @@ public class FragmentChannel extends Fragment {
                                 textViewEmptyNoInternetChannel.setVisibility(View.VISIBLE);
                                 imageViewNoNetworkChannel.setVisibility(View.VISIBLE);
                             } else {
-                                Log.e("Fragment channels", "something else went wrong");
+                                Log.e("Fragment CHANNELS_URL", "something else went wrong");
                             }
                         } catch (Exception exception) {
-                            Log.e("Fragment channels", "Error loading channels " + exception.toString());
+                            Log.e("Fragment CHANNELS_URL", "Error loading CHANNELS_URL " + exception.toString());
                         }
                     }
                 });

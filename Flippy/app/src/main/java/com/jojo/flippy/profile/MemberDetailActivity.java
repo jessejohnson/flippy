@@ -68,7 +68,7 @@ public class MemberDetailActivity extends ActionBarActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        userDetailURL = Flippy.users + memberId + "/";
+        userDetailURL = Flippy.USERS_URL + memberId + "/";
         intent.setClass(MemberDetailActivity.this, ImagePreviewActivity.class);
         progressMemberDetail = (ContentLoadingProgressBar) findViewById(R.id.progressMemberDetail);
         textViewAnotherUserEmail = (TextView) findViewById(R.id.textViewAnotherUserEmail);
@@ -137,7 +137,7 @@ public class MemberDetailActivity extends ActionBarActivity {
 
     private void memberTotalChannels() {
         Ion.with(MemberDetailActivity.this)
-                .load(Flippy.users + memberId + "/subscriptions/")
+                .load(Flippy.USERS_URL + memberId + "/subscriptions/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -152,7 +152,7 @@ public class MemberDetailActivity extends ActionBarActivity {
                             textViewUserTotalNumberOfCircles.setVisibility(View.VISIBLE);
                             TotalChannels = "0";
                             if (subscriptionArray.size() != 0) {
-                                TotalChannels = " channels " + "(" + subscriptionArray.size() + ")";
+                                TotalChannels = " CHANNELS_URL " + "(" + subscriptionArray.size() + ")";
                             }
                             textViewUserTotalNumberOfCircles.setText(TotalChannels);
                             return;
@@ -199,7 +199,7 @@ public class MemberDetailActivity extends ActionBarActivity {
 
     private void getCommunityName(String communityId) {
         Ion.with(MemberDetailActivity.this)
-                .load(Flippy.communitiesURL + communityId + "/")
+                .load(Flippy.COMMUNITIES_URL + communityId + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

@@ -112,7 +112,7 @@ public class ManageChannelActivity extends ActionBarActivity {
         listViewChannelAdmins.setAdapter(adminAdapter);
         imageViewChannelManageEdit = (ImageView) findViewById(R.id.imageViewChannelManageEdit);
         imageViewEditChannelName = (ImageView) findViewById(R.id.imageViewEditChannelName);
-        String adminURL = Flippy.channels + channelId + "/admins/";
+        String adminURL = Flippy.CHANNELS_URL + channelId + "/admins/";
         getAdminsList(adminURL);
         showDialog();
 
@@ -315,7 +315,7 @@ public class ManageChannelActivity extends ActionBarActivity {
     }
 
     private void deleteChannel(final String channelId) {
-        String url = Flippy.channels + channelId + "/";
+        String url = Flippy.CHANNELS_URL + channelId + "/";
         StringRequest delete = new StringRequest(Request.Method.DELETE, url,
                 new Response.Listener<String>() {
                     @Override
@@ -356,7 +356,7 @@ public class ManageChannelActivity extends ActionBarActivity {
     private void promoteUser(final String memberId) {
         progressDialog.setMessage("Promoting user...");
         progressDialog.show();
-        String url = Flippy.channels + channelId + "/promote_user/";
+        String url = Flippy.CHANNELS_URL + channelId + "/promote_user/";
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("user_id", memberId);
         Ion.with(ManageChannelActivity.this)

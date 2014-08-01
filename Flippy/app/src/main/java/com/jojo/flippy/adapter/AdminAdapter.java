@@ -22,7 +22,6 @@ import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.util.Flippy;
-import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -106,7 +105,7 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Demoting an admin ...");
         progressDialog.show();
-        String URL = Flippy.channels + ManageChannelActivity.channelId + "/demote_user/";
+        String URL = Flippy.CHANNELS_URL + ManageChannelActivity.channelId + "/demote_user/";
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("user_id", memberId);
         Ion.with(context)

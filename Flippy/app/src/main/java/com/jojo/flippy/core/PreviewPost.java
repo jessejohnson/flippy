@@ -22,26 +22,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonObject;
-import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.jojo.flippy.app.R;
-import com.jojo.flippy.persistence.Channels;
-import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.util.Flippy;
-import com.jojo.flippy.util.StripCharacter;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.koushikdutta.ion.ProgressCallback;
 
 import java.io.File;
-import java.sql.SQLException;
-
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class PreviewPost extends ActionBarActivity {
     private Intent intent;
-    private String channelId, noticeTitle, noticeContent, lat=Flippy.defaultLat, lon=Flippy.defaultLon, channelName, noticeLocation;
+    private String channelId, noticeTitle, noticeContent, lat = Flippy.defaultLat, lon = Flippy.defaultLon, channelName, noticeLocation;
     private TextView textViewPreviewNoticeTitleDetail, textViewPreviewNoticeSubtitle,
             textViewPreviewNoticeTextDetail,
             textViewPreviewNoticeChannelName, textViewPreviewAuthorEmailAddress, textViewNoticeLocation;
@@ -124,7 +115,7 @@ public class PreviewPost extends ActionBarActivity {
                 if (imagePath == null || imagePath == "") {
                     createPost(noticeTitle, noticeContent, channelId, noticeLocation, lat, lon, reminderDateTime);
                 } else {
-                    creatPost(noticeTitle, noticeContent, channelId, imagePath, noticeLocation, lat, lon, reminderDateTime);
+                    createPost(noticeTitle, noticeContent, channelId, imagePath, noticeLocation, lat, lon, reminderDateTime);
                 }
             }
         });
@@ -159,8 +150,8 @@ public class PreviewPost extends ActionBarActivity {
         json.addProperty("location_name", location);
         json.addProperty("latitude", latitude);
         json.addProperty("longitude", longitude);
-        json.addProperty("reminder_date", reminder);
-        Ion.with(PreviewPost.this, Flippy.allPostURL)
+        //json.addProperty("reminder_date", reminder);
+        Ion.with(PreviewPost.this, Flippy.POST_URL)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()
@@ -171,9 +162,13 @@ public class PreviewPost extends ActionBarActivity {
                         try {
                             if (e != null) {
                                 ToastMessages.showToastLong(PreviewPost.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                            } else if (result != null) {
+                                Log.e(TAG, e.toString());
+                            } else if (result != null && !result.has("detail")) {
+                                ToastMessages.showToastLong(PreviewPost.this, "Notice created successfully");
+                                goToHome();
                                 Log.e("Result", result.toString());
                             } else {
+                                ToastMessages.showToastLong(PreviewPost.this, "sorry,unable to create notice");
                                 Log.e("Result has details", result.toString());
                             }
                         } catch (Resources.NotFoundException error) {
@@ -186,11 +181,11 @@ public class PreviewPost extends ActionBarActivity {
 
     }
 
-    private void creatPost(String noticeTitle, String noticeContent, String channelId, final String image, String location, String latitude, String longitude, String reminder) {
+    private void createPost(String noticeTitle, String noticeContent, String channelId, final String image, String location, String latitude, String longitude, String reminder) {
         progressDialog.setMessage("creating the notice...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        Ion.with(PreviewPost.this, Flippy.channels)
+        Ion.with(PreviewPost.this, Flippy.POST_URL)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setMultipartParameter("title", noticeTitle)
                 .setMultipartParameter("content", noticeContent)
@@ -198,27 +193,28 @@ public class PreviewPost extends ActionBarActivity {
                 .setMultipartParameter("location_name", location)
                 .setMultipartParameter("latitude", latitude)
                 .setMultipartParameter("longitude", longitude)
-                .setMultipartParameter("reminder_date", reminder)
+                        //.setMultipartParameter("reminder_date", reminder)
                 .setMultipartFile("image", new File(image))
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
-                        Log.e("file", image);
+                        Log.e("Notice image", image);
                         buttonPublishPost.setEnabled(true);
                         buttonPublishPost.setText(getText(R.string.preview_post_publish_post));
                         progressDialog.dismiss();
                         try {
-                            if (result.has("details")) {
-                                Crouton.makeText(PreviewPost.this, "Failed to create post", Style.ALERT)
-                                        .show();
+                            if (result.has("detail")) {
+                                ToastMessages.showToastLong(PreviewPost.this, "Failed to create post");
+                                Log.e(TAG, result.toString());
                                 return;
-                            }
-                            if (result != null && !result.has("details")) {
-
-                            }
-                            if (e != null) {
+                            } else if (result != null) {
+                                ToastMessages.showToastLong(PreviewPost.this, "Notice created successfully");
+                                Log.e(TAG, result.toString());
+                                goToHome();
+                            } else {
                                 ToastMessages.showToastLong(PreviewPost.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                                Log.e(TAG, e.toString());
                                 return;
                             }
                         } catch (Exception exception) {
@@ -268,5 +264,10 @@ public class PreviewPost extends ActionBarActivity {
         o2.inSampleSize = scale;
         bitmap = BitmapFactory.decodeFile(filePath, o2);
         imageViewPreviewNoticeImageDetail.setImageBitmap(bitmap);
+    }
+
+    private void goToHome() {
+        Intent intentHome = new Intent(PreviewPost.this, CommunityCenterActivity.class);
+        startActivity(intentHome);
     }
 }

@@ -29,7 +29,7 @@ import java.util.List;
 public class ChannelAdapter extends ArrayAdapter<Channel> {
 
     Context context;
-    String channelDetailSubscribeURL = Flippy.channels;
+    String channelDetailSubscribeURL = Flippy.CHANNELS_URL;
     private boolean isUserChannel;
     private ViewHolder holder;
     private Dao<Channels, Integer> channelDao;

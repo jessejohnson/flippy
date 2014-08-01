@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,13 +16,18 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.toolbox.ImageRequest;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.ProgressCallback;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.Calendar;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -31,8 +38,6 @@ public class ImagePreviewActivity extends ActionBarActivity {
     private Intent intent;
     private ProgressBar progressBarLoadUserImage;
     private String avatar, description = "";
-    private Bitmap bitmap;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,19 +106,23 @@ public class ImagePreviewActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void sharePhoto(String image) {
+    private void sharePhoto(final String image) {
         if (image == null) {
             ToastMessages.showToastLong(ImagePreviewActivity.this, "Sharing failed");
             return;
         }
+        progressBarLoadUserImage.setVisibility(View.VISIBLE);
+        ImageRequest imageRequest = new ImageRequest(image, new Response.Listener<Bitmap>() {
+            @Override
+            public void onResponse(Bitmap response) {
+                progressBarLoadUserImage.setVisibility(View.GONE);
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("image/*");
+                share.putExtra(Intent.EXTRA_STREAM, response);
+                startActivity(Intent.createChooser(share, "Share Image"));
+            }
 
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Download flippy resource at :" + image);
-        sendIntent.setType("text/plain");
-        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.app_name)));
-
+        }, 0, 0, null, null);
     }
-
 }
 

@@ -175,7 +175,7 @@ public class FacebookSignInFragment extends Fragment {
                                 jsonObject.addProperty("profile_pic_url", profilePic);
                                 jsonObject.addProperty("gender", gender.toString().substring(0, 1).toUpperCase());
                                 Ion.with(mContext)
-                                        .load(Flippy.users + "social-signup/")
+                                        .load(Flippy.USERS_URL + "social-signup/")
                                         .setJsonObjectBody(jsonObject)
                                         .asJsonObject()
                                         .setCallback(new FutureCallback<JsonObject>() {
@@ -259,7 +259,7 @@ public class FacebookSignInFragment extends Fragment {
     }
 
     private void saveUserChannels(String userId) {
-        String url = Flippy.users + userId + "/subscriptions/";
+        String url = Flippy.USERS_URL + userId + "/subscriptions/";
         if (userId == null || userId == "") {
             ToastMessages.showToastShort(mContext, "Unfortunately something went wrong, try again later");
             return;
@@ -295,16 +295,14 @@ public class FacebookSignInFragment extends Fragment {
                             } else if (e != null) {
                                 ToastMessages.showToastShort(mContext, "Internet connection error occurred");
                             } else {
-                                Log.e("Fragment channels", "something else went wrong");
+                                Log.e("Fragment Facebook", "something else went wrong");
                                 return;
                             }
                         } catch (Exception exception) {
-                            Log.e("Fragment channels", "Error loading channels " + exception.toString());
+                            Log.e("Fragment Facebook", "Error loading channels " + exception.toString());
                         }
                     }
                 });
 
     }
-
-
 }

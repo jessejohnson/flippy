@@ -81,7 +81,7 @@ public class DataService extends Service {
 
     private void getNewPost() {
         Ion.with(getApplicationContext())
-                .load(Flippy.allPostURL)
+                .load(Flippy.POST_URL)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
