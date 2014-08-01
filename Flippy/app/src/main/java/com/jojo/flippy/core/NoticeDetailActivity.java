@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -81,8 +82,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private String locationLon = "";
     private String channelId = "";
     private String startDate;
-    private String endDate;
-    private int reminderInterval;
     private String noReminder;
     private LinearLayout linearLayoutMapView;
     private Calendar calendar;
@@ -127,6 +126,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         imageViewDeletePost = (ImageView) findViewById(R.id.imageViewDeletePost);
         imageViewRemovePost = (ImageView) findViewById(R.id.imageViewRemovePost);
         imageViewDeletePost.setVisibility(View.INVISIBLE);
+        textViewNoticeLocation.setVisibility(View.GONE);
 
 
         //place holder texts
@@ -148,7 +148,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         if (googleMap == null) {
             googleMap = ((SupportMapFragment) getSupportFragmentManager().
                     findFragmentById(R.id.linearLayoutNoticeShowLocation)).getMap();
-          //  googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            //  googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
 
         //Loading the list with data from Api call
@@ -216,7 +216,13 @@ public class NoticeDetailActivity extends ActionBarActivity {
         imageViewRemovePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                confirmNoticeDelete(noticeId);
+                confirmNoticeDelete(noticeId, false);
+            }
+        });
+        imageViewDeletePost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confirmNoticeDelete(noticeId, true);
             }
         });
         //loads the post rating from the api
@@ -311,14 +317,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
             showSuperToast("This notice has no reminder", false);
             return;
         }
-        if (startDate == null) {
+        if (startDate == null || startDate.equalsIgnoreCase(Flippy.defaultDate + "T" + Flippy.defaultTime + "Z")) {
             showSuperToast("This notice has no reminder date", false);
             return;
         }
         String actualDate[] = startDate.replace("Z", "").trim().split("T");
         String date = actualDate[0];
         String time = actualDate[1];
-        int month, year, day, hour, minute, seconds = 0;
+        int month, year, day, hour, minute, seconds;
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Calendar c = Calendar.getInstance();
@@ -474,8 +480,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                 }
                                 JsonObject item = result.getAsJsonObject("results");
                                 startDate = item.get("start_date").getAsString();
-                                endDate = item.get("end_date").getAsString();
-                                reminderInterval = item.get("repeat_interval").getAsInt();
                             }
                             if (e != null) {
                                 showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
@@ -491,11 +495,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
     private void showMap() {
         //get this data from the intent
-        if (locationLon.equalsIgnoreCase("") || locationLat.equalsIgnoreCase("")) {
+        if (locationLon.equalsIgnoreCase("") || locationLat.equalsIgnoreCase("") || locationLat.equalsIgnoreCase(Flippy.defaultLat) || locationLon.equalsIgnoreCase(Flippy.defaultLon)) {
             return;
         }
         linearLayoutMapView.setVisibility(View.VISIBLE);
-        textViewNoticeLocation.setText("location : " + locationName);
+        if (!locationName.equalsIgnoreCase("")) {
+            textViewNoticeLocation.setVisibility(View.VISIBLE);
+            textViewNoticeLocation.setText("location : " + locationName);
+        }
         LatLng coordinate = new LatLng(Double.parseDouble(locationLat), Double.parseDouble(locationLon));
         googleMap.addMarker(new MarkerOptions()
                 .snippet(locationName)
@@ -575,15 +582,23 @@ public class NoticeDetailActivity extends ActionBarActivity {
         }
     }
 
-    private void confirmNoticeDelete(final String noticeId) {
+    private void confirmNoticeDelete(final String noticeId, final boolean isDelete) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Confirm your action");
         alert.setIcon(R.drawable.icon_dark_info);
-        alert.setMessage("Removing this notice is irreversible, are you sure you want to continue ?");
+        if (isDelete) {
+            alert.setMessage("Deleting this notice is irreversible and your channels members will longer have access to the details, are you sure you want to continue ?");
+        } else {
+            alert.setMessage("Removing this notice is irreversible, are you sure you want to continue ?");
+
+        }
         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                removeNoticeFormDb(noticeId);
-
+                if (isDelete) {
+                    deleteNotice(noticeId);
+                } else {
+                    removeNoticeFormDb(noticeId);
+                }
             }
         });
         alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -649,6 +664,32 @@ public class NoticeDetailActivity extends ActionBarActivity {
                         }
                     }
                 });
+    }
+
+    private void deleteNotice(final String id) {
+        Ion.with(NoticeDetailActivity.this, Flippy.allPostURL + id + "/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            if (e != null) {
+                                ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            } else if (result != null) {
+                                Log.e("Result", result.toString());
+                                removeNoticeFormDb(id);
+                            } else {
+                                Log.e("Result has details", result.toString());
+                            }
+                        } catch (Resources.NotFoundException error) {
+                            error.printStackTrace();
+                            Log.e(TAG, error.toString());
+                        }
+                    }
+
+                });
+
     }
 
 }

@@ -41,7 +41,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class PreviewPost extends ActionBarActivity {
     private Intent intent;
-    private String channelId, noticeTitle, noticeContent, lat, lon, channelName, noticeLocation;
+    private String channelId, noticeTitle, noticeContent, lat=Flippy.defaultLat, lon=Flippy.defaultLon, channelName, noticeLocation;
     private TextView textViewPreviewNoticeTitleDetail, textViewPreviewNoticeSubtitle,
             textViewPreviewNoticeTextDetail,
             textViewPreviewNoticeChannelName, textViewPreviewAuthorEmailAddress, textViewNoticeLocation;
@@ -54,6 +54,7 @@ public class PreviewPost extends ActionBarActivity {
     private String imagePath;
     private static String TAG = "PreviewPost";
     private ProgressDialog progressDialog;
+    private String datePicked = Flippy.defaultDate, timePicked = Flippy.defaultTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +67,11 @@ public class PreviewPost extends ActionBarActivity {
         noticeContent = intent.getStringExtra("noticeContent");
         channelName = intent.getStringExtra("channelName");
         noticeLocation = intent.getStringExtra("noticeLocation");
-        if (intent.getStringExtra("lat") != null) {
-            lat = intent.getStringExtra("lat");
-            lon = intent.getStringExtra("lon");
-        }
+        datePicked = intent.getStringExtra("datePicked");
+        timePicked = intent.getStringExtra("timePicked");
+        lat = intent.getStringExtra("lat");
+        lon = intent.getStringExtra("lon");
+
 
         imageViewPreviewNoticeImageDetail = (ImageView) findViewById(R.id.imageViewPreviewNoticeImageDetail);
         textViewPreviewNoticeTitleDetail = (TextView) findViewById(R.id.textViewPreviewNoticeTitleDetail);
@@ -81,13 +83,11 @@ public class PreviewPost extends ActionBarActivity {
         imageViewPreviewNoticeCreatorImage = (ImageView) findViewById(R.id.imageViewPreviewNoticeCreatorImage);
         buttonPublishPost = (Button) findViewById(R.id.buttonPublishPost);
         progressDialog = new ProgressDialog(PreviewPost.this);
+        imageViewPreviewNoticeImageDetail.setVisibility(View.GONE);
 
-        if (intent.getStringExtra("noticeImage") != null) {
+        if (intent.getStringExtra("noticeImage") != null && !intent.getStringExtra("noticeImage").equalsIgnoreCase("")) {
             imagePath = intent.getStringExtra("noticeImage");
-            Log.e("Notice Image", imagePath);
-            if (imagePath == null || imagePath == "") {
-                imageViewPreviewNoticeImageDetail.setVisibility(View.GONE);
-            }
+            imageViewPreviewNoticeImageDetail.setVisibility(View.VISIBLE);
             decodeFile(imagePath);
         }
 
@@ -120,8 +120,11 @@ public class PreviewPost extends ActionBarActivity {
         buttonPublishPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String reminderDateTime = datePicked + "T" + timePicked + "Z";
                 if (imagePath == null || imagePath == "") {
-                    createPost(noticeTitle, noticeContent, channelId);
+                    createPost(noticeTitle, noticeContent, channelId, noticeLocation, lat, lon, reminderDateTime);
+                } else {
+                    creatPost(noticeTitle, noticeContent, channelId, imagePath, noticeLocation, lat, lon, reminderDateTime);
                 }
             }
         });
@@ -146,13 +149,17 @@ public class PreviewPost extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void createPost(String title, String body, String channel) {
+    private void createPost(String title, String body, String channel, String location, String latitude, String longitude, String reminder) {
         progressDialog.setMessage("publishing post ...");
         progressDialog.show();
         JsonObject json = new JsonObject();
         json.addProperty("title", title);
         json.addProperty("content", body);
         json.addProperty("channel_id", channel);
+        json.addProperty("location_name", location);
+        json.addProperty("latitude", latitude);
+        json.addProperty("longitude", longitude);
+        json.addProperty("reminder_date", reminder);
         Ion.with(PreviewPost.this, Flippy.allPostURL)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
@@ -179,15 +186,19 @@ public class PreviewPost extends ActionBarActivity {
 
     }
 
-    private void creatPost(String noticeTitle, String noticeContent, String channelId, final String image) {
+    private void creatPost(String noticeTitle, String noticeContent, String channelId, final String image, String location, String latitude, String longitude, String reminder) {
         progressDialog.setMessage("creating the notice...");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         Ion.with(PreviewPost.this, Flippy.channels)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setMultipartParameter("title", noticeTitle)
                 .setMultipartParameter("content", noticeContent)
                 .setMultipartParameter("channel_id", channelId)
-                .setMultipartParameter("name", channelName)
+                .setMultipartParameter("location_name", location)
+                .setMultipartParameter("latitude", latitude)
+                .setMultipartParameter("longitude", longitude)
+                .setMultipartParameter("reminder_date", reminder)
                 .setMultipartFile("image", new File(image))
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -224,7 +235,7 @@ public class PreviewPost extends ActionBarActivity {
 
     private void showMap() {
         //get this data from the intent
-        if (lat == null || lon == null || lat.equalsIgnoreCase("") || lon.equalsIgnoreCase("")) {
+        if (lat.equalsIgnoreCase(Flippy.defaultLat) || lon.equalsIgnoreCase(Flippy.defaultLon)) {
             return;
         }
         linearLayoutPreviewMapView.setVisibility(View.VISIBLE);

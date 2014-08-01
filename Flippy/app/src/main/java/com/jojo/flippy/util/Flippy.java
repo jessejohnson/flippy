@@ -22,6 +22,10 @@ public class Flippy extends Application {
     public static String communitiesURL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/communities/";
     public static String allPostURL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/posts/";
     private static Flippy sInstance;
+    public static String defaultDate = "0000:00:00";
+    public static String defaultTime = "00:00:00";
+    public static String defaultLat = "75.7667";
+    public static String defaultLon = "99.7833";
     public Dao<User, Integer> userDao;
     public Dao<Post, Integer> postDao;
     public User thisUser;

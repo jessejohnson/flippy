@@ -42,17 +42,17 @@ public class NoticeExtrasActivity extends ActionBarActivity {
     private static final int START_MAP = 3;
     public static int reminderYear, reminderMonth, reminderDay, reminderHour, reminderMinute;
     protected static FragmentManager timerSupport;
-    private static String datePicked;
-    private static String timePicked;
+    private static String datePicked=Flippy.defaultDate;
+    private static String timePicked=Flippy.defaultTime;
     Uri imageUri;
     private Intent intent;
     private String channelToCreateNotice;
     private String noticeTitle;
     private Button buttonAddImageToNotice, buttonPreviewCreateNotice, buttonAddMapToNotice;
     private AlertDialog levelDialog;
-    private String lat, lon;
+    private String lat=Flippy.defaultLat, lon=Flippy.defaultLon;
     Uri selectedImageUri = null;
-    private String filePath = null;
+    private String filePath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,12 +208,6 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                     Log.e("Bitmap", "Unknown path");
                 }
 
-            /*    if (filePath != null) {
-                    decodeFile(filePath);
-                } else {
-                    bitmapNotice = null;
-                }
-            */
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "Sorry, Something went wrong",
                         Toast.LENGTH_LONG).show();
@@ -252,7 +246,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
             reminderYear = year;
             reminderMonth = month;
             reminderDay = day;
-            datePicked = day + ": " + month + " : " + year;
+            datePicked = year + ": " + month + " : " + day;
             ToastMessages.showToastLong(getActivity(), "Date picked is  " + year + ": " + month + " : " + day);
             DialogFragment timer = new TimePickerFragment();
             timer.show(timerSupport, "timePicker");
