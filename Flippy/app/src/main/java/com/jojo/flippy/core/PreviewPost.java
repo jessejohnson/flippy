@@ -22,11 +22,22 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.persistence.Channels;
+import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.StripCharacter;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.ProgressCallback;
+
+import java.io.File;
+import java.sql.SQLException;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class PreviewPost extends ActionBarActivity {
     private Intent intent;
@@ -73,6 +84,7 @@ public class PreviewPost extends ActionBarActivity {
 
         if (intent.getStringExtra("noticeImage") != null) {
             imagePath = intent.getStringExtra("noticeImage");
+            Log.e("Notice Image", imagePath);
             if (imagePath == null || imagePath == "") {
                 imageViewPreviewNoticeImageDetail.setVisibility(View.GONE);
             }
@@ -109,7 +121,7 @@ public class PreviewPost extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 if (imagePath == null || imagePath == "") {
-                    createPostWithoutImage(noticeTitle, noticeContent, channelId);
+                    createPost(noticeTitle, noticeContent, channelId);
                 }
             }
         });
@@ -134,7 +146,7 @@ public class PreviewPost extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean createPostWithoutImage(String title, String body, String channel) {
+    private void createPost(String title, String body, String channel) {
         progressDialog.setMessage("publishing post ...");
         progressDialog.show();
         JsonObject json = new JsonObject();
@@ -165,7 +177,49 @@ public class PreviewPost extends ActionBarActivity {
 
                 });
 
-        return true;
+    }
+
+    private void creatPost(String noticeTitle, String noticeContent, String channelId, final String image) {
+        progressDialog.setMessage("creating the notice...");
+        progressDialog.show();
+        Ion.with(PreviewPost.this, Flippy.channels)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .setMultipartParameter("title", noticeTitle)
+                .setMultipartParameter("content", noticeContent)
+                .setMultipartParameter("channel_id", channelId)
+                .setMultipartParameter("name", channelName)
+                .setMultipartFile("image", new File(image))
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        Log.e("file", image);
+                        buttonPublishPost.setEnabled(true);
+                        buttonPublishPost.setText(getText(R.string.preview_post_publish_post));
+                        progressDialog.dismiss();
+                        try {
+                            if (result.has("details")) {
+                                Crouton.makeText(PreviewPost.this, "Failed to create post", Style.ALERT)
+                                        .show();
+                                return;
+                            }
+                            if (result != null && !result.has("details")) {
+
+                            }
+                            if (e != null) {
+                                ToastMessages.showToastLong(PreviewPost.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                                return;
+                            }
+                        } catch (Exception exception) {
+                            Log.e("Preview post", exception.toString());
+                            exception.printStackTrace();
+                        }
+
+                    }
+
+                });
+
+
     }
 
     private void showMap() {

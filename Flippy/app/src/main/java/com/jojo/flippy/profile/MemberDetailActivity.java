@@ -227,12 +227,19 @@ public class MemberDetailActivity extends ActionBarActivity {
 
         if (avatar.equalsIgnoreCase("")) {
             myImageViewText.setText(userFirstLetter);
+            Ion.with(imageViewMemberAnotherUserProfilePic)
+                    .placeholder(R.color.flippy_orange)
+                    .animateIn(R.anim.fade_in)
+                    .error(R.color.flippy_orange)
+                    .load(avatar);
+        } else {
+            Ion.with(imageViewMemberAnotherUserProfilePic)
+                    .placeholder(R.drawable.user_place_small)
+                    .animateIn(R.anim.fade_in)
+                    .error(R.drawable.user_error_small)
+                    .load(avatar);
+
         }
-        Ion.with(imageViewMemberAnotherUserProfilePic)
-                .placeholder(R.color.flippy_orange)
-                .animateIn(R.anim.fade_in)
-                .error(R.color.flippy_orange)
-                .load(avatar);
 
 
     }

@@ -24,4 +24,17 @@ public class Validator {
     public static boolean isValidEmailOrPhoneNumber(String emailOrPhoneNumber){
         return isValidEmail(emailOrPhoneNumber);
     }
+    public static  boolean isValidDate(String date){
+        return date.matches("\\d{4}-\\d{2}-\\d{2}");
+    }
+    public static boolean isValidFirstName( String firstName )
+    {
+        return firstName.matches( "[A-Z][a-zA-Z]*" );
+    }
+
+    public static boolean isValidLastName( String lastName )
+    {
+        return lastName.matches( "[a-zA-z]+([ '-][a-zA-Z]+)*" );
+    }
+
 }

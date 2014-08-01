@@ -9,6 +9,7 @@
     <ScrollView
         android:id="@+id/scrollViewUserDetail"
         android:layout_width="match_parent"
+        android:scrollbars="none"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -114,23 +115,23 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:layout_weight="1"
+                        android:layout_weight="0.4"
                         android:id="@+id/textViewAnotherUserEmailLabel"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="@string/edit_profile_email"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/flippy_orange" />
 
                     <TextView
-                        android:layout_weight="1"
+                        android:layout_weight="1.6"
                         android:id="@+id/textViewAnotherUserEmail"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="@string/dummy_user_email"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/flippy_orange" />
 
                 </LinearLayout>
@@ -140,7 +141,7 @@
                     android:layout_marginLeft="@dimen/margin_five"
                     android:layout_marginRight="@dimen/margin_five"
                     android:background="@color/flippy_light_header"
-                    android:layout_height="@dimen/margin_half" />
+                    android:layout_height="0.2dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -150,23 +151,23 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:layout_weight="1"
+                        android:layout_weight="0.4"
                         android:id="@+id/textViewAnotherFirstNameLabel"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="@string/edit_profile_first_name"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/flippy_orange" />
 
                     <TextView
-                        android:layout_weight="1"
+                        android:layout_weight="1.6"
                         android:id="@+id/textViewAnotherFirstName"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="@string/edit_profile_first_name"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/flippy_orange" />
 
                 </LinearLayout>
@@ -176,7 +177,7 @@
                     android:layout_marginLeft="@dimen/margin_five"
                     android:layout_marginRight="@dimen/margin_five"
                     android:background="@color/flippy_light_header"
-                    android:layout_height="@dimen/margin_half" />
+                    android:layout_height="0.2dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -186,23 +187,23 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:layout_weight="1"
+                        android:layout_weight="0.4"
                         android:id="@+id/textViewAnotherLastNameLabel"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="@string/edit_profile_last_name"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/flippy_orange" />
 
                     <TextView
-                        android:layout_weight="1"
+                        android:layout_weight="1.6"
                         android:id="@+id/textViewAnotherUseLastName"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="@string/edit_profile_last_name"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/flippy_orange" />
 
                 </LinearLayout>
@@ -212,7 +213,7 @@
                     android:layout_marginLeft="@dimen/margin_five"
                     android:layout_marginRight="@dimen/margin_five"
                     android:background="@color/flippy_light_header"
-                    android:layout_height="@dimen/margin_half" />
+                    android:layout_height="0.2dp" />
 
             </LinearLayout>
 

@@ -199,7 +199,7 @@ public class FragmentNotice extends Fragment {
                                     JsonObject item = communityArray.get(i).getAsJsonObject();
                                     JsonObject author = item.getAsJsonObject("author");
                                     String startDate = item.get("timestamp").getAsString();
-                                    String title = item.get("title").getAsString();
+                                    String title = item.get("title").getAsString().trim();
                                     String id = item.get("id").getAsString();
                                     String content = item.get("content").getAsString();
                                     String channel = item.get("channel").getAsString();

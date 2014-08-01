@@ -32,11 +32,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.adapter.AdminAdapter;
 import com.jojo.flippy.adapter.AdminPerson;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.ChannelMembers;
 import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.persistence.Channels;
+import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
@@ -44,6 +48,7 @@ import com.koushikdutta.ion.Ion;
 
 import java.io.File;
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +74,8 @@ public class ManageChannelActivity extends ActionBarActivity {
     private AdminAdapter adminAdapter;
     public static String channelId;
     private ProgressDialog progressDialog;
+    private Dao<Channels, Integer> channelDao;
+    private Channels channels;
 
 
     private static String TAG = "ManageChannelActivity";
@@ -188,7 +195,7 @@ public class ManageChannelActivity extends ActionBarActivity {
                 Log.e(TAG, data.getStringExtra("memberId") + " " + data.getStringExtra("memberEmail"));
                 promoteUser(data.getStringExtra("memberId"));
             }
-        } else if(requestCode ==PICK_FROM_FILE) {
+        } else if (requestCode == PICK_FROM_FILE) {
 
         }
 
@@ -307,13 +314,24 @@ public class ManageChannelActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void deleteChannel(String channelId) {
+    private void deleteChannel(final String channelId) {
         String url = Flippy.channels + channelId + "/";
         StringRequest delete = new StringRequest(Request.Method.DELETE, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         showSuperToast("successfully removed", true);
+                        DatabaseHelper databaseHelper = OpenHelperManager.getHelper(ManageChannelActivity.this,
+                                DatabaseHelper.class);
+
+                        try {
+                            channelDao = databaseHelper.getChannelDao();
+                            channelDao.deleteById(Integer.parseInt(channelId));
+                            channelDao.refresh(channels);
+                        } catch (SQLException e1) {
+                            e1.printStackTrace();
+                            Log.e(TAG, "Error removing channel");
+                        }
                         goToMainActivity();
                     }
                 },
@@ -340,7 +358,7 @@ public class ManageChannelActivity extends ActionBarActivity {
         progressDialog.show();
         String url = Flippy.channels + channelId + "/promote_user/";
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", memberId);
+        jsonObject.addProperty("user_id", memberId);
         Ion.with(ManageChannelActivity.this)
                 .load(url)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
@@ -350,8 +368,8 @@ public class ManageChannelActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressDialog.dismiss();
-                        try {
-                            if (result != null) {
+                         try {
+                            if (result != null && !result.has("detail")) {
                                 showSuperToast(result.get("result").getAsString(), true);
                                 intent.setClass(ManageChannelActivity.this, CommunityCenterActivity.class);
                                 startActivity(intent);
@@ -360,6 +378,8 @@ public class ManageChannelActivity extends ActionBarActivity {
                                 showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                                 Log.e("Error promoting user", e.toString());
                                 return;
+                            } else if (result.has("detail")) {
+                                Log.e(TAG, "Something else went wrong promoting a user");
                             } else {
                                 Log.e(TAG, "Something else went wrong promoting a user");
                             }
@@ -367,6 +387,7 @@ public class ManageChannelActivity extends ActionBarActivity {
                         } catch (Exception exception) {
                             Log.e(TAG, "Error promoting the user " + memberId + " " + exception.toString());
                         }
+
 
                     }
                 });

@@ -206,7 +206,6 @@ public class SignInActivity extends ActionBarActivity {
 
     private void saveUserChannels() {
         String url = Flippy.users + regUserID + "/subscriptions/";
-        signGetStartedButton.setText("retrieving your channels ...");
         if (regUserID == null || regUserID == "") {
             showSuperToast("Unfortunately something went wrong, try again later");
             return;

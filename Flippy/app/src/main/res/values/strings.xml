@@ -170,7 +170,7 @@
     <string name="edit_profile_last_name">Last name</string>
     <string name="edit_profile_number">Phone number</string>
     <string name="edit_profile_email">Email address</string>
-    <string name="edit_profile_date">Date of birth</string>
+    <string name="edit_profile_date">Date of birth (YYY-MM-DD)</string>
     <string name="edit_profile_message">we promise to keep your information safe and secured on flippy, cheers!</string>
 
     <!-- the create channel activity strings -->

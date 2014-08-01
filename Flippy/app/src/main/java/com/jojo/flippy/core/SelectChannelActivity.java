@@ -13,15 +13,10 @@ import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.jojo.flippy.adapter.AdminPerson;
-import com.jojo.flippy.adapter.ChannelMemberAdapter;
 import com.jojo.flippy.adapter.ChannelSelectItem;
 import com.jojo.flippy.adapter.ChannelSelectionItemAdapter;
-import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
-import com.jojo.flippy.profile.MemberDetailActivity;
 import com.jojo.flippy.util.Flippy;
-import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -37,7 +32,6 @@ public class SelectChannelActivity extends ActionBarActivity {
     private ChannelSelectionItemAdapter userChannelsAdapter;
     private ListView userChannelList;
     private List<ChannelSelectItem> userChannelItem;
-    private String userChannels = "/subscriptions/";
     private ProgressBar progressBarLoadUserChannels;
     private TextView textViewNoChannel;
     private TextView textViewNoChannelHelp;
@@ -56,7 +50,7 @@ public class SelectChannelActivity extends ActionBarActivity {
 
         intent = getIntent();
         isReFLIP = intent.getBooleanExtra("isReFLIP", false);
-        String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
+        String url = Flippy.users + CommunityCenterActivity.regUserID + "/admin_channels/";
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setSubtitle(subTitle);
@@ -111,12 +105,11 @@ public class SelectChannelActivity extends ActionBarActivity {
                             if (e != null) {
                                 textViewNoChannelHelp.setVisibility(View.VISIBLE);
                                 textViewNoChannel.setVisibility(View.VISIBLE);
-                                ToastMessages.showToastLong(SelectChannelActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
                                 return;
                             }
 
                         } catch (Exception exception) {
-                            Log.e("Error occurred", "Error retrieving a list of user subscribed channels");
+                            Log.e("Error occurred", "Error retrieving a list of user admin channels");
                         }
 
 

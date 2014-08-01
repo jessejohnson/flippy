@@ -44,7 +44,6 @@ public class NoticeExtrasActivity extends ActionBarActivity {
     protected static FragmentManager timerSupport;
     private static String datePicked;
     private static String timePicked;
-    private static String location;
     Uri imageUri;
     private Intent intent;
     private String channelToCreateNotice;
@@ -189,7 +188,6 @@ public class NoticeExtrasActivity extends ActionBarActivity {
             case START_MAP:
                 if (resultCode == RESULT_OK) {
                     Log.e("From location", data.getStringExtra("location"));
-                    location = data.getStringExtra("location");
                     String[] location = data.getStringExtra("location").split(",");
                     lat = location[0];
                     lon = location[1];

@@ -1,6 +1,8 @@
 package com.jojo.flippy.profile;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -18,18 +20,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -41,18 +31,20 @@ import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
+import com.jojo.flippy.util.Validator;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.SQLException;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class EditProfileActivity extends ActionBarActivity {
     private static final int SELECT_PICTURE = 1;
@@ -77,13 +69,15 @@ public class EditProfileActivity extends ActionBarActivity {
     private String userFirstName;
     private String userLastName;
     private String userEmail;
+    private String userId;
     private String userAvatar = "";
     private String userGender = "";
     private String userDateOfBirth = "";
     private String userAvatarThumb = "";
-    private String userCommunityId;
     private ProgressBar progressBarUpdateAvatar;
     private Dao<User, Integer> userDao;
+    private Context context;
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +85,12 @@ public class EditProfileActivity extends ActionBarActivity {
         setContentView(R.layout.activity_edit_profile);
 
 
+        actionBar = getActionBar();
         imageViewMemberEdit = (ImageView) findViewById(R.id.imageViewMemberEdit);
         editTextEditProfileFirstName = (EditText) findViewById(R.id.editTextEditProfileFirstName);
         editTextEditProfileLastName = (EditText) findViewById(R.id.editTextEditProfileLastName);
         editTextEditProfileEmail = (EditText) findViewById(R.id.editTextEditProfileEmail);
+        editTextEditProfileEmail.setEnabled(false);
         editTextEditProfileDateOfBirth = (EditText) findViewById(R.id.editTextEditProfileDateOfBirth);
         progressBarUpdateAvatar = (ProgressBar) findViewById(R.id.progressBarUpdateAvatar);
         progressBarUpdateAvatar.setVisibility(View.GONE);
@@ -104,17 +100,18 @@ public class EditProfileActivity extends ActionBarActivity {
         editTextEditProfileEmail.setText(CommunityCenterActivity.regUserEmail);
         editTextEditProfileDateOfBirth.setText(CommunityCenterActivity.userDateOfBirth);
         imageViewUploadPhoto = (ImageView) findViewById(R.id.imageViewUploadPhoto);
+        context = this;
 
         loadProfile();
 
         try {
-            if (CommunityCenterActivity.userGender.isEmpty()) {
+            if (CommunityCenterActivity.userGender.isEmpty() || CommunityCenterActivity.userGender.equalsIgnoreCase("")) {
                 genderSpinner.setSelection(0);
             }
-            if (CommunityCenterActivity.userGender.equalsIgnoreCase("male")) {
+            if (CommunityCenterActivity.userGender.equalsIgnoreCase("M")) {
                 genderSpinner.setSelection(1);
             }
-            if (CommunityCenterActivity.userGender.equalsIgnoreCase("female")) {
+            if (CommunityCenterActivity.userGender.equalsIgnoreCase("F")) {
                 genderSpinner.setSelection(2);
             }
         } catch (Exception e) {
@@ -138,6 +135,7 @@ public class EditProfileActivity extends ActionBarActivity {
                 uploadAvatar(selectedImagePath);
             }
         });
+
     }
 
     @Override
@@ -178,15 +176,36 @@ public class EditProfileActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_profile_done) {
-            NewFirstNameUpdate = editTextEditProfileFirstName.getText().toString().trim();
-            NewLastNameUpdate = editTextEditProfileLastName.getText().toString().trim();
-            NewEmailUpdate = editTextEditProfileEmail.getText().toString().trim();
-            NewDateOfBirthUpdate = editTextEditProfileDateOfBirth.getText().toString().trim();
-            NewGenderUpdate = genderSpinner.getSelectedItem().toString();
-            updateUserStringDetails(NewEmailUpdate, NewFirstNameUpdate, NewLastNameUpdate, NewGenderUpdate);
-            return true;
+            getUserData();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getUserData() {
+        NewFirstNameUpdate = editTextEditProfileFirstName.getText().toString().trim();
+        NewLastNameUpdate = editTextEditProfileLastName.getText().toString().trim();
+        NewEmailUpdate = editTextEditProfileEmail.getText().toString().trim();
+        String dateBefore = editTextEditProfileDateOfBirth.getText().toString().trim();
+        NewDateOfBirthUpdate = editTextEditProfileDateOfBirth.getText().toString().trim() + "T00:00:00Z";
+        if (!Validator.isValidFirstName(NewFirstNameUpdate)) {
+            editTextEditProfileFirstName.setError("Wrong name format");
+            return;
+        }
+        if (!Validator.isValidLastName(NewLastNameUpdate)) {
+            editTextEditProfileLastName.setError("Wrong name format");
+            return;
+        }
+        if (!Validator.isValidDate(dateBefore)) {
+            editTextEditProfileDateOfBirth.setError("Wrong name format");
+            return;
+        }
+        if (genderSpinner.getSelectedItemPosition() == 0) {
+            ToastMessages.showToastShort(context, "Select your gender");
+            return;
+        }
+        NewGenderUpdate = genderSpinner.getSelectedItem().toString().substring(0, 1).toUpperCase();
+        updateUserStringDetails(NewEmailUpdate, NewFirstNameUpdate, NewLastNameUpdate, NewGenderUpdate, NewDateOfBirthUpdate);
+
     }
 
     private void goToMainActivity() {
@@ -248,12 +267,19 @@ public class EditProfileActivity extends ActionBarActivity {
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(this,
                     DatabaseHelper.class);
+
             userDao = databaseHelper.getUserDao();
-            UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
-            updateBuilder.where().eq("user_email", userEmail);
-            updateBuilder.updateColumnValue("avatar", userAvatar);
-            updateBuilder.updateColumnValue("avatar_thumb", userAvatarThumb);
-            updateBuilder.update();
+            User user = userDao.queryForId(Integer.parseInt(userId));
+            user.user_email = userEmail;
+            user.avatar = userAvatar;
+            user.date_of_birth = userDateOfBirth;
+            user.avatar_thumb = userAvatarThumb;
+            user.first_name = userFirstName;
+            user.last_name = userLastName;
+            user.gender = userGender;
+            userDao.update(user);
+            userDao.refresh(user);
+            ToastMessages.showToastShort(context, "Update successful");
             goToMainActivity();
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
@@ -282,14 +308,14 @@ public class EditProfileActivity extends ActionBarActivity {
                                     userAvatarThumb = result.get("avatar_thumb").getAsString();
                                 }
                                 userEmail = result.get("email").getAsString();
-                                userCommunityId = result.get("community").getAsString();
+                                userId = result.get("id").getAsString();
                                 userLastName = result.get("last_name").getAsString();
                                 userFirstName = result.get("first_name").getAsString();
                                 if (!result.get("gender").isJsonNull()) {
                                     userGender = result.get("gender").getAsString();
                                 }
                                 if (!result.get("date_of_birth").isJsonNull()) {
-                                    userDateOfBirth = result.get("date_of_birth").getAsString();
+                                    userDateOfBirth = result.get("date_of_birth").getAsString().substring(0, 10).trim();
                                 }
 
                             }
@@ -314,58 +340,46 @@ public class EditProfileActivity extends ActionBarActivity {
                 .load(CommunityCenterActivity.userAvatarURL);
     }
 
-    private void updateUserStringDetails(final String email, final String firstName, final String lastName, final String gender) {
+    private void updateUserStringDetails(final String email, final String firstName, final String lastName, final String gender, final String dateOfBirth) {
+        if (actionBar != null) {
+            actionBar.setSubtitle("updating profile...");
+        }
         String url = Flippy.users + "me/";
-        StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.e("Response", response);
-                        ToastMessages.showToastLong(EditProfileActivity.this, "Profile updated");
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Error.Response", error.toString());
-                        if (error instanceof NetworkError) {
-                        } else if (error instanceof ServerError) {
-                            showSuperToast("Sorry server error occurred", false);
-                        } else if (error instanceof AuthFailureError) {
-
-                        } else if (error instanceof ParseError) {
-
-                        } else if (error instanceof NoConnectionError) {
-                            showSuperToast("Sorry internet connection error", false);
-                        } else if (error instanceof TimeoutError) {
-                            showSuperToast("Sorry server timeout", false);
-                        }
-                    }
+        RequestParams params = new RequestParams();
+        params.put("email", email);
+        params.put("first_name", firstName);
+        params.put("last_name", lastName);
+        params.put("gender", gender);
+        params.put("date_of_birth", dateOfBirth);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
+        client.put(url, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseBody) {
+                Log.e("Status code success", statusCode + "");
+                Log.e("Response success", responseBody);
+                try {
+                    JSONObject jsonObject = new JSONObject(responseBody);
+                    Log.e("Result", jsonObject.toString());
+                    getUserInfo();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-        ) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("email", email);
-                params.put("first_name", firstName);
-                params.put("last_name", lastName);
-                params.put("gender", gender);
-                return params;
             }
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                //headers.put("Content-Type", "application/x-www-form-urlencoded");
-                headers.put("Content-Type", "application/json");
-                headers.put("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
-                return headers;
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable
+                    error) {
+                if (actionBar != null) {
+                    actionBar.setSubtitle("update failed");
+                }
+                Log.e("Status code error", statusCode + "");
+                ToastMessages.showToastLong(context, "Failed to update, try later");
+
             }
 
-        };
-        Flippy.getInstance().getRequestQueue().add(putRequest);
 
+        });
     }
 
     private void showSuperToast(String message, boolean isSuccess) {

@@ -115,7 +115,12 @@ public class ChannelMembers extends ActionBarActivity {
                                     }
                                     memberFirstName = item.get("first_name").getAsString();
                                     ProfileItem profileItem = new ProfileItem(URI.create(url), item.get("email").getAsString(), memberFirstName + ", " + item.get("last_name").getAsString(), memberId);
-                                    ChannelMemberItem.add(profileItem);
+                                    if (isManage && !CommunityCenterActivity.regUserID.equalsIgnoreCase(memberId)) {
+                                        ChannelMemberItem.add(profileItem);
+                                    } else if (!isManage) {
+                                        ChannelMemberItem.add(profileItem);
+                                    }
+
                                 }
                                 updateAdapter();
                             }
@@ -165,7 +170,11 @@ public class ChannelMembers extends ActionBarActivity {
 
     private void updateAdapter() {
         channelMemberAdapter.notifyDataSetChanged();
-        actionBar.setSubtitle(totalMembers + " " + "member(s)");
+        if (actionBar != null && !isManage) {
+            actionBar.setSubtitle(totalMembers + " " + "member(s)");
+        } else if (actionBar != null && isManage) {
+            actionBar.setSubtitle("select a member");
+        }
         if (channelMemberAdapter.isEmpty()) {
             textViewNoChannelMember.setVisibility(View.VISIBLE);
             textViewNoChannelMember.setText("Channel has no member");

@@ -108,7 +108,7 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
         progressDialog.show();
         String URL = Flippy.channels + ManageChannelActivity.channelId + "/demote_user/";
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", memberId);
+        jsonObject.addProperty("user_id", memberId);
         Ion.with(context)
                 .load(URL)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
@@ -119,6 +119,7 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
                     public void onCompleted(Exception e, JsonObject result) {
                         progressDialog.dismiss();
                         try {
+
                             if (result != null) {
                                 if (result.has("detail")) {
                                     showSuperToast("Sorry unable to demote user ", false);
