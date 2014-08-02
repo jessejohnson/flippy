@@ -60,7 +60,7 @@ public class ImagePreviewActivity extends ActionBarActivity {
 
         if (avatar == null || avatar.equals("")) {
             progressBarLoadUserImage.setVisibility(View.GONE);
-            ToastMessages.showToastLong(ImagePreviewActivity.this, "The request cannot be processed");
+            ToastMessages.showToastLong(ImagePreviewActivity.this, "This image cannot be preview");
             return;
         }
 

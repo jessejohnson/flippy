@@ -7,11 +7,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.jojo.flippy.core.NoticeDetailActivity;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.services.DataService;
 import com.jojo.flippy.services.ManageLocalPost;
+import com.parse.Parse;
+import com.parse.PushService;
 
 import java.util.List;
 
@@ -38,13 +41,18 @@ public class Flippy extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        Parse.initialize(this, "GfO0y1AB23ZQe4yEr1Gj8uDaN4Vqatg0MjzsESqm", "LmsLETFs5O6256XMHmZwTzkqMfrSF3o5eKQx6ydy");
+        PushService.setDefaultPushCallback(this, NoticeDetailActivity.class);
         mRequestQueue = Volley.newRequestQueue(this);
         sInstance = this;
 
         //starting the manage service activity
         Intent serviceIntent = new Intent(this, ManageLocalPost.class);
         startService(serviceIntent);
+
+        Intent dataServiceIntent = new Intent(this, DataService.class);
+        startService(dataServiceIntent);
+
 
         DatabaseHelper databaseHelper = OpenHelperManager.getHelper(this,
                 DatabaseHelper.class);
@@ -60,10 +68,6 @@ public class Flippy extends Application {
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
         }
-
-        //letter start the data synchronization intent
-        Intent dataServiceIntent = new Intent(getApplicationContext(), DataService.class);
-        startService(dataServiceIntent);
     }
 
     public RequestQueue getRequestQueue() {

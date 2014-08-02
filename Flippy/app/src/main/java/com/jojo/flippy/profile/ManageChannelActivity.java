@@ -192,7 +192,6 @@ public class ManageChannelActivity extends ActionBarActivity {
         }
         if (requestCode == PROMOTE_USER) {
             if (resultCode == RESULT_OK) {
-                Log.e(TAG, data.getStringExtra("memberId") + " " + data.getStringExtra("memberEmail"));
                 promoteUser(data.getStringExtra("memberId"));
             }
         } else if (requestCode == PICK_FROM_FILE) {
@@ -368,18 +367,20 @@ public class ManageChannelActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressDialog.dismiss();
-                         try {
-                            if (result != null && !result.has("detail")) {
-                                showSuperToast(result.get("result").getAsString(), true);
-                                intent.setClass(ManageChannelActivity.this, CommunityCenterActivity.class);
-                                startActivity(intent);
-                                finish();
+                        try {
+                            if (result.has("detail")) {
+                                ToastMessages.showToastLong(ManageChannelActivity.this, result.get("detail").getAsString());
+                                Log.e(TAG, "Something else went wrong promoting a user");
+
                             } else if (e != null) {
                                 showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                                 Log.e("Error promoting user", e.toString());
                                 return;
-                            } else if (result.has("detail")) {
-                                Log.e(TAG, "Something else went wrong promoting a user");
+                            } else if (result != null) {
+                                Log.e(TAG,result.toString());
+                                ToastMessages.showToastLong(ManageChannelActivity.this, result.get("result").getAsString());
+                                Intent intentHome = new Intent(ManageChannelActivity.this, CommunityCenterActivity.class);
+                                startActivity(intentHome);
                             } else {
                                 Log.e(TAG, "Something else went wrong promoting a user");
                             }

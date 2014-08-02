@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:padding="@dimen/margin_ten"
+        android:layout_height="wrap_content"
+        android:background="@color/flippy_light_header"
+        android:textColor="@color/flippy_white"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/fragment_notice_offline"
+        android:id="@+id/textViewOfflineMode" />
+</LinearLayout>

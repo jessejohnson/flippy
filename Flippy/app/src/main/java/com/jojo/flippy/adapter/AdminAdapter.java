@@ -60,7 +60,8 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
         holder.textViewAdminFullName.setText(rowItem.getProfileFullName());
 
         String creator = ManageChannelActivity.creatorId;
-        if (creator != null && creator.equalsIgnoreCase(rowItem.getAdminId())) {
+        Log.e("Admin adapter", creator);
+        if (creator.equalsIgnoreCase(rowItem.getAdminId())) {
             holder.buttonDemoteAdmin.setVisibility(View.GONE);
         }
 

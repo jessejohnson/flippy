@@ -152,7 +152,7 @@ public class MemberDetailActivity extends ActionBarActivity {
                             textViewUserTotalNumberOfCircles.setVisibility(View.VISIBLE);
                             TotalChannels = "0";
                             if (subscriptionArray.size() != 0) {
-                                TotalChannels = " CHANNELS_URL " + "(" + subscriptionArray.size() + ")";
+                                TotalChannels = " CHANNELS " + "(" + subscriptionArray.size() + ")";
                             }
                             textViewUserTotalNumberOfCircles.setText(TotalChannels);
                             return;

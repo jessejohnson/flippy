@@ -11,6 +11,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.jojo.flippy.persistence.Channels;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.util.Flippy;
@@ -18,6 +19,7 @@ import com.jojo.flippy.util.InternetConnectionDetector;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -26,9 +28,11 @@ import java.util.TimerTask;
 
 public class DataService extends Service {
     private Dao<Post, Integer> postDao;
+    private Dao<Channels, Integer> channelDao;
     private ArrayList<String> savedPostIds;
     private static String TAG = "DataService";
     private String minutes;
+    private boolean isUserSubscribed = false;
 
 
     @Override
@@ -46,7 +50,7 @@ public class DataService extends Service {
 
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         minutes = SP.getString("sync_frequency", "180");
-        long millis = Integer.parseInt(minutes) * 60 * 1000;
+        //long millis = Integer.parseInt(minutes) * 60 * 1000;
 
 
         savedPostIds = new ArrayList<String>();
@@ -54,6 +58,7 @@ public class DataService extends Service {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
                     DatabaseHelper.class);
             postDao = databaseHelper.getPostDao();
+            channelDao = databaseHelper.getChannelDao();
             List<Post> postList = postDao.queryForAll();
             if (!postList.isEmpty()) {
                 for (Post post : postList) {
@@ -65,14 +70,14 @@ public class DataService extends Service {
             Log.e(TAG, "Error occurred retrieving post ids");
         }
         InternetConnectionDetector internetConnectionDetector = new InternetConnectionDetector(getApplicationContext());
-        if (internetConnectionDetector.isConnectingToInternet()) {
-            Timer dataTimer = new Timer();
-            dataTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    getNewPost();
-                }
-            }, millis, millis);
+
+        try {
+            isUserSubscribed = channelDao.queryForAll().isEmpty();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (internetConnectionDetector.isConnectingToInternet() && !isUserSubscribed ) {
+            getNewPost();
         }
 
 

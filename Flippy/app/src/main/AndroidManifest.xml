@@ -15,6 +15,18 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!-- another parse section -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission
+        android:protectionLevel="signature"
+        android:name="com.jojo.flippy.app.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.jojo.flippy.app.permission.C2D_MESSAGE" />
+
+    <!-- parse section -->
+
     <application
         android:name="com.jojo.flippy.util.Flippy"
         android:allowBackup="true"
@@ -22,6 +34,7 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/FlippyActionBarTheme">
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -228,9 +241,7 @@
         <service
             android:name="com.jojo.flippy.services.ManageLocalPost"
             android:enabled="true" />
-        <service
-            android:name="com.jojo.flippy.services.StartingService"
-            android:enabled="true" />
+
 
         <receiver
             android:enabled="false"
@@ -269,6 +280,30 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
         </activity>
+
+
+        <!-- parse section -->
+
+        <service android:name="com.parse.PushService" />
+
+        <receiver android:name="com.parse.ParseBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+
+                <category android:name="com.jojo.flippy.app" />
+            </intent-filter>
+        </receiver>
+        <!-- closing of parse -->
     </application>
 
 </manifest>
