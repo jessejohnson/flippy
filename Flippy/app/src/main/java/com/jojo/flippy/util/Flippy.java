@@ -13,8 +13,6 @@ import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.services.DataService;
 import com.jojo.flippy.services.ManageLocalPost;
-import com.parse.Parse;
-import com.parse.PushService;
 
 import java.util.List;
 
@@ -25,7 +23,7 @@ public class Flippy extends Application {
     public static String COMMUNITIES_URL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/communities/";
     public static String POST_URL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/posts/";
     private static Flippy sInstance;
-    public static String defaultDate = "0000:00:00";
+    public static String defaultDate = "2090-01-01";
     public static String defaultTime = "00:00:00";
     public static String defaultLat = "75.7667";
     public static String defaultLon = "99.7833";
@@ -41,8 +39,6 @@ public class Flippy extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Parse.initialize(this, "GfO0y1AB23ZQe4yEr1Gj8uDaN4Vqatg0MjzsESqm", "LmsLETFs5O6256XMHmZwTzkqMfrSF3o5eKQx6ydy");
-        PushService.setDefaultPushCallback(this, NoticeDetailActivity.class);
         mRequestQueue = Volley.newRequestQueue(this);
         sInstance = this;
 

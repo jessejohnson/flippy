@@ -73,7 +73,6 @@ public class NoticeAdapter extends ArrayAdapter<Notice> {
                 .load(rowItem.getCreatorUrl().toString());
 
         String noticeImage = rowItem.getImageUrl().toString();
-
         if (noticeImage == null || noticeImage.equalsIgnoreCase("")) {
             holder.imageViewNotice.setVisibility(View.GONE);
         } else {

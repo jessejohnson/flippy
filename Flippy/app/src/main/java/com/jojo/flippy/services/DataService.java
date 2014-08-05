@@ -76,7 +76,7 @@ public class DataService extends Service {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        if (internetConnectionDetector.isConnectingToInternet() && !isUserSubscribed ) {
+        if (internetConnectionDetector.isConnectingToInternet() && !isUserSubscribed) {
             getNewPost();
         }
 
@@ -132,9 +132,9 @@ public class DataService extends Service {
                                     }
                                 }
 
-                                Intent postIntent = new Intent();
-                                postIntent.setAction("newPostArrived");
-                                sendBroadcast(postIntent);
+                                Intent i = new Intent("android.intent.action.MAIN").putExtra("NEW_POST", "NEW_POST_ARRIVED");
+                                sendBroadcast(i);
+                                stopSelf();
                             }
                             if (e != null) {
                                 Log.e(TAG, "Error occurred internet connection");

@@ -43,11 +43,10 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class FragmentNotice extends Fragment {
-
-    public static IntentFilter postIntentFilter;
-    ListView noticeList;
+    private BroadcastReceiver mReceiver;
+    private ListView noticeList;
     private NoticeAdapter listAdapter;
-    List<Notice> noticeFeed;
+    private List<Notice> noticeFeed;
     private Intent intent;
     private String noticeTitle;
     private String noticeSubtitle;
@@ -180,7 +179,9 @@ public class FragmentNotice extends Fragment {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarCommunityCenterLoader.setVisibility(view.GONE);
+
                         try {
+
                             if (result != null && result.has("results")) {
                                 JsonArray communityArray = result.getAsJsonArray("results");
                                 for (int i = 0; i < communityArray.size(); i++) {
@@ -191,14 +192,14 @@ public class FragmentNotice extends Fragment {
                                     String id = item.get("id").getAsString();
                                     String content = item.get("content").getAsString();
                                     String channel = item.get("channel").getAsString();
-                                    String image_link = "flip";
+                                    String image_link = "";
                                     if (!item.get("image_url").isJsonNull()) {
                                         image_link = item.get("image_url").getAsString();
                                     }
                                     String authorEmail = author.get("email").getAsString();
-                                    String authorAvatarThumb = "flip";
-                                    String authorAvatar = "flip";
-                                    if (!author.get("avatar_thumb").isJsonNull()) {
+                                    String authorAvatarThumb = "";
+                                    String authorAvatar = "";
+                                    if (!author.get("avatar_thumb").isJsonNull() && !author.get("avatar").isJsonNull()) {
                                         authorAvatarThumb = author.get("avatar_thumb").getAsString();
                                         authorAvatar = author.get("avatar").getAsString();
                                     }
@@ -210,14 +211,18 @@ public class FragmentNotice extends Fragment {
                                 }
                                 //after persistence load from database
                                 loadAdapterFromDatabase(view);
+                            } else {
+                                Log.e("Fragment Notice", result.toString());
                             }
                             if (e != null) {
+                                Log.e("Fragment Notice", e.toString());
                                 return;
                             }
 
                         } catch (Exception exception) {
-                            Log.e("Fragment Notice", "Error occurred getting post from server");
+                            Log.e("Fragment Notice", exception.toString());
                         }
+
                     }
                 });
     }
@@ -268,11 +273,21 @@ public class FragmentNotice extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        IntentFilter intentFilter = new IntentFilter(
+                "android.intent.action.MAIN");
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String RECEIVED = intent.getStringExtra("NEW_POST");
+                Log.i("Fragment Notice", RECEIVED);
+            }
+        };
+        getActivity().registerReceiver(mReceiver, intentFilter);
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        getActivity().unregisterReceiver(this.mReceiver);
     }
 }

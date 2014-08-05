@@ -3,6 +3,7 @@ package com.jojo.flippy.profile;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -17,13 +18,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageRequest;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.ProgressCallback;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
+
+import org.apache.http.Header;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -112,17 +119,29 @@ public class ImagePreviewActivity extends ActionBarActivity {
             return;
         }
         progressBarLoadUserImage.setVisibility(View.VISIBLE);
-        ImageRequest imageRequest = new ImageRequest(image, new Response.Listener<Bitmap>() {
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(image, new FileAsyncHttpResponseHandler(ImagePreviewActivity.this) {
             @Override
-            public void onResponse(Bitmap response) {
+            public void onSuccess(int statusCode, Header[] headers, File response) {
                 progressBarLoadUserImage.setVisibility(View.GONE);
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("image/*");
-                share.putExtra(Intent.EXTRA_STREAM, response);
-                startActivity(Intent.createChooser(share, "Share Image"));
+                Log.e("ImagePreview", response.getAbsolutePath());
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                Bitmap bitmap = BitmapFactory.decodeFile(response.getAbsolutePath(), options);
+
+
+
+                response.deleteOnExit();
             }
 
-        }, 0, 0, null, null);
+            @Override
+            public void onFailure(Throwable e, File response) {
+                progressBarLoadUserImage.setVisibility(View.GONE);
+                ToastMessages.showToastLong(ImagePreviewActivity.this, "Sharing failed");
+            }
+
+        });
+
     }
 }
 

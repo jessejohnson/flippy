@@ -127,7 +127,7 @@ public class PreviewPost extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.preview_post, menu);
+        //getMenuInflater().inflate(R.menu.preview_post, menu);
         return true;
     }
 
@@ -140,17 +140,17 @@ public class PreviewPost extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void createPost(String title, String body, String channel, String location, String latitude, String longitude, String reminder) {
+    private void createPost(String title, String body, String channelId, String location, String latitude, String longitude, String reminder) {
         progressDialog.setMessage("publishing post ...");
         progressDialog.show();
         JsonObject json = new JsonObject();
         json.addProperty("title", title);
         json.addProperty("content", body);
-        json.addProperty("channel_id", channel);
+        json.addProperty("channel_id", channelId);
         json.addProperty("location_name", location);
         json.addProperty("latitude", latitude);
         json.addProperty("longitude", longitude);
-        //json.addProperty("reminder_date", reminder);
+        json.addProperty("reminder_date", reminder);
         Ion.with(PreviewPost.this, Flippy.POST_URL)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
@@ -193,7 +193,7 @@ public class PreviewPost extends ActionBarActivity {
                 .setMultipartParameter("location_name", location)
                 .setMultipartParameter("latitude", latitude)
                 .setMultipartParameter("longitude", longitude)
-                        //.setMultipartParameter("reminder_date", reminder)
+                .setMultipartParameter("reminder_date", reminder)
                 .setMultipartFile("image", new File(image))
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {

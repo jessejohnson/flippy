@@ -40,7 +40,7 @@
         android:layout_centerInParent="true"
         android:layout_centerVertical="true"
         android:textColor="@color/flippy_orange"
-        android:text=""
+        android:text="Error"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

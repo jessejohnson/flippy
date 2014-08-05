@@ -6,6 +6,12 @@
         android:id="@+id/action_remove_channel"
         android:title="@string/manage_channel_remove"
         android:icon="@drawable/ic_action_discard"
+        android:orderInCategory="200"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_rename_channel"
+        android:title="@string/manage_channel_rename"
+        android:icon="@drawable/ic_action_save"
         android:orderInCategory="100"
         app:showAsAction="always" />
 </menu>

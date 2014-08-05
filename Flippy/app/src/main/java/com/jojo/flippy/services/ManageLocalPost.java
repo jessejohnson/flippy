@@ -16,7 +16,7 @@ import java.util.List;
 public class ManageLocalPost extends Service {
     private Dao<Post, Integer> postDao;
     private int totalPost = 0;
-    private int maxRowLength = 100;
+    private int maxRowLength = 20;
 
     @Override
     public IBinder onBind(Intent intent) {

@@ -42,15 +42,15 @@ public class NoticeExtrasActivity extends ActionBarActivity {
     private static final int START_MAP = 3;
     public static int reminderYear, reminderMonth, reminderDay, reminderHour, reminderMinute;
     protected static FragmentManager timerSupport;
-    private static String datePicked=Flippy.defaultDate;
-    private static String timePicked=Flippy.defaultTime;
+    private static String datePicked = Flippy.defaultDate;
+    private static String timePicked = Flippy.defaultTime;
     Uri imageUri;
     private Intent intent;
     private String channelToCreateNotice;
     private String noticeTitle;
     private Button buttonAddImageToNotice, buttonPreviewCreateNotice, buttonAddMapToNotice;
     private AlertDialog levelDialog;
-    private String lat=Flippy.defaultLat, lon=Flippy.defaultLon;
+    private String lat = Flippy.defaultLat, lon = Flippy.defaultLon;
     Uri selectedImageUri = null;
     private String filePath = "";
 
@@ -82,7 +82,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                 intent.putExtra("lon", lon);
                 intent.putExtra("datePicked", datePicked);
                 intent.putExtra("timePicked", timePicked);
-                intent.putExtra("noticeImage",filePath);
+                intent.putExtra("noticeImage", filePath);
                 intent.setClass(NoticeExtrasActivity.this, PreviewPost.class);
                 startActivity(intent);
             }
@@ -246,8 +246,8 @@ public class NoticeExtrasActivity extends ActionBarActivity {
             reminderYear = year;
             reminderMonth = month;
             reminderDay = day;
-            datePicked = year + ": " + month + " : " + day;
-            ToastMessages.showToastLong(getActivity(), "Date picked is  " + year + ": " + month + " : " + day);
+            datePicked = year + "-" + month + "-" + day;
+            ToastMessages.showToastLong(getActivity(), "Date picked is  " + year + " - " + month + " - " + day);
             DialogFragment timer = new TimePickerFragment();
             timer.show(timerSupport, "timePicker");
 
@@ -272,7 +272,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             reminderHour = hourOfDay;
             reminderMinute = minute;
-            timePicked = hourOfDay + ": " + minute;
+            timePicked = hourOfDay + ":" + minute + ":00";
             ToastMessages.showToastLong(getActivity(), "Time picked is  " + hourOfDay + ": " + minute);
         }
     }

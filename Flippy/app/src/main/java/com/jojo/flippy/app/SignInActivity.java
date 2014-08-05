@@ -107,7 +107,8 @@ public class SignInActivity extends ActionBarActivity {
                             .setCallback(new FutureCallback<JsonObject>() {
                                 @Override
                                 public void onCompleted(Exception e, JsonObject result) {
-                                    signGetStartedButton.setText("just a minute ...");
+                                    signGetStartedButton.setEnabled(true);
+                                    signGetStartedButton.setText("get started");
                                     if (e != null) {
                                         showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
                                         return;

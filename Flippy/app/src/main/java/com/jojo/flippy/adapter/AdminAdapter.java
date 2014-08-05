@@ -52,24 +52,27 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
             holder.textViewAdminFullName = (TextView) convertView.findViewById(R.id.textViewAdminFullName);
             holder.textViewAdminId = (TextView) convertView.findViewById(R.id.textViewAdminId);
             convertView.setTag(holder);
-        } else {
+        } else
+
             holder = (ViewHolder) convertView.getTag();
-        }
+
         holder.textViewAdminEmail.setText(rowItem.getProfileEmail());
         holder.textViewAdminId.setText(rowItem.getAdminId());
         holder.textViewAdminFullName.setText(rowItem.getProfileFullName());
 
-        String creator = ManageChannelActivity.creatorId;
-        Log.e("Admin adapter", creator);
-        if (creator.equalsIgnoreCase(rowItem.getAdminId())) {
-            holder.buttonDemoteAdmin.setVisibility(View.GONE);
-        }
 
         Ion.with(holder.imageViewAdminOne)
                 .placeholder(R.drawable.user_place_small)
                 .error(R.drawable.user_error_small)
                 .animateIn(R.anim.fade_in)
                 .load(String.valueOf(rowItem.getAdminProfileItem()));
+
+        String creator = ManageChannelActivity.creatorId;
+        if (!creator.equals(rowItem.getAdminId())) {
+            Log.e("Admin adapter", creator + " " + rowItem.getAdminId());
+            holder.buttonDemoteAdmin.setVisibility(View.VISIBLE);
+        }
+
         holder.buttonDemoteAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,6 +84,8 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
 
         return convertView;
     }
+
+
 
     private void confirmDemotion(String adminName, final String memberId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -169,4 +174,5 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
                 textViewAdminId;
 
     }
+
 }

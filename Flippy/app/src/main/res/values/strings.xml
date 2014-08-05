@@ -63,7 +63,7 @@
     <!-- The community center's strings -->
     <string name="title_activity_community_center">Community Center</string>
     <string name="community_center_old_notice">load old notices</string>
-    <string name="fragment_notice_offline">You currently in the offline mode</string>
+    <string name="fragment_notice_offline">You are currently in the offline mode</string>
 
     <!-- Channel list view strings -->
     <string name="default_channel_name">Channel name</string>
@@ -218,6 +218,7 @@
     <!-- manage channel strings -->
     <string name="channel_manage">Manage channel</string>
     <string name="manage_channel_remove">remove this channel</string>
+    <string name="manage_channel_rename">rename channel</string>
     <string name="select_member_from_list">choose member</string>
     <string name="manage_channel_add_admin">add administrator</string>
     <string name="manage_channel_demote_admin">Demote admin</string>

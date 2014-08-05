@@ -11,16 +11,31 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal">
 
-        <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/imageViewChannelManageEdit"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/margin_one_fifty"
-            android:layout_alignParentTop="true"
-            android:scaleType="centerCrop"
-            app:border_color="@color/border"
-            app:border_width="3dp"
-            app:corner_radius="0dp"
-            app:oval="false" />
+            android:layout_height="wrap_content">
+
+            <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/imageViewChannelManageEdit"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/margin_one_fifty"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+                app:border_color="@color/border"
+                app:border_width="3dp"
+                app:corner_radius="0dp"
+                app:oval="false" />
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/progressBarUploadChannelImage"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -53,6 +68,7 @@
             android:layout_weight="0.1"
             android:background="@drawable/ic_action_dark_edit" />
     </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:padding="@dimen/margin_two"

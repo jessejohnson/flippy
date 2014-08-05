@@ -253,7 +253,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 intent.putExtra("avatar", image_url);
-                intent.putExtra("ImageName", channelName);
+                intent.putExtra("imageName", channelName);
                 intent.setClass(ChannelDetailActivity.this, ImagePreviewActivity.class);
                 startActivity(intent);
             }

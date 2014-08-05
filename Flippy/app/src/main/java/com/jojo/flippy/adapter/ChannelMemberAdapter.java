@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by bright on 6/13/14.
  */
-public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> implements Filterable {
+public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem>{
     Context context;
     boolean isManage;
     private List<ProfileItem> allModelItemsArray;
@@ -51,8 +51,6 @@ public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> implements F
         return filter;
     }
 
-
-    /*private view holder class*/
     private class ViewHolder {
         ImageView imageView;
         TextView textViewChannelMemberFirstName;

@@ -39,7 +39,7 @@ public class SelectChannelActivity extends ActionBarActivity {
     private String channelName;
     private String channelBio;
     private String subTitle = "a step to more to go";
-    private boolean isReFLIP;
+    private boolean isReFlip;
 
 
     @Override
@@ -49,7 +49,7 @@ public class SelectChannelActivity extends ActionBarActivity {
 
 
         intent = getIntent();
-        isReFLIP = intent.getBooleanExtra("isReFLIP", false);
+        isReFlip = intent.getBooleanExtra("isReFlip", false);
         String url = Flippy.USERS_URL + CommunityCenterActivity.regUserID + "/admin_channels/";
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
@@ -124,15 +124,16 @@ public class SelectChannelActivity extends ActionBarActivity {
                 TextView textViewChannelName = (TextView) view.findViewById(R.id.textViewChannelName);
                 String channelId = textViewChannelId.getText().toString();
                 String channelName = textViewChannelName.getText().toString();
-                if (isReFLIP) {
-                    intent.setClass(SelectChannelActivity.this, NoticeDetailActivity.class);
-                    intent.putExtra("channelId", channelId);
-                    setResult(1, intent);
-                }
-                intent.setClass(SelectChannelActivity.this, CreateNoticeActivity.class);
                 intent.putExtra("channelId", channelId);
                 intent.putExtra("channelName", channelName);
-                startActivity(intent);
+                if (isReFlip) {
+                    intent.setClass(SelectChannelActivity.this, NoticeDetailActivity.class);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    intent.setClass(SelectChannelActivity.this, CreateNoticeActivity.class);
+                    startActivity(intent);
+                }
 
 
             }

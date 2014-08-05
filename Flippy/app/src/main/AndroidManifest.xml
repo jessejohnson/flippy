@@ -282,7 +282,7 @@
         </activity>
 
 
-        <!-- parse section -->
+        <!-- parse section
 
         <service android:name="com.parse.PushService" />
 
@@ -303,7 +303,7 @@
                 <category android:name="com.jojo.flippy.app" />
             </intent-filter>
         </receiver>
-        <!-- closing of parse -->
+        closing of parse -->
     </application>
 
 </manifest>
