@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,9 +48,9 @@ import com.koushikdutta.ion.Ion;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
 import org.apache.http.Header;
-import org.json.JSONException;
-import org.json.JSONObject;
+
 import java.io.File;
 import java.net.URI;
 import java.sql.SQLException;
@@ -63,12 +62,12 @@ import java.util.Map;
 public class ManageChannelActivity extends ActionBarActivity {
     private static final int PICK_FROM_FILE = 7;
     private static final int PROMOTE_USER = 8;
-    private EditText editTextManageChannelChannelName;
-    private ImageView imageViewChannelManageEdit, imageViewEditChannelName;
+    private TextView textViewChannelNameEdit;
+    private ImageView imageViewChannelManageEdit, imageViewChannelEdit;
     private Intent intent;
     private String channelName, image_url;
     public static String creatorId;
-    private Button buttonAddAdmin;
+    private Button buttonAddAdmin, buttonEditChannelName;
     private ProgressBar progressBarLoadAdmin, progressBarUploadChannelImage;
     private SuperToast superToast;
     private ListView listViewChannelAdmins;
@@ -77,9 +76,9 @@ public class ManageChannelActivity extends ActionBarActivity {
     public static String channelId;
     private ProgressDialog progressDialog;
     private Dao<Channels, Integer> channelDao;
-    private Channels channels;
     private Context context;
     private String filePath;
+    private ActionBar actionBar;
 
 
     private static String TAG = "ManageChannelActivity";
@@ -95,7 +94,7 @@ public class ManageChannelActivity extends ActionBarActivity {
         image_url = intent.getStringExtra("image_url");
         creatorId = intent.getStringExtra("creatorId");
 
-        ActionBar actionBar = getActionBar();
+        actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setSubtitle(channelName);
         }
@@ -109,15 +108,16 @@ public class ManageChannelActivity extends ActionBarActivity {
         progressBarUploadChannelImage = (ProgressBar) findViewById(R.id.progressBarUploadChannelImage);
         buttonAddAdmin = (Button) findViewById(R.id.buttonAddAdminChannel);
         buttonAddAdmin.setVisibility(View.GONE);
-        editTextManageChannelChannelName = (EditText) findViewById(R.id.editTextManageChannelChannelName);
-        editTextManageChannelChannelName.setText(channelName);
+        textViewChannelNameEdit = (TextView) findViewById(R.id.textViewChannelNameEdit);
+        textViewChannelNameEdit.setText(channelName);
         //textViewChannelAdmins.setText(channelName + " channel administrators");
         rowItems = new ArrayList<AdminPerson>();
         adminAdapter = new AdminAdapter(ManageChannelActivity.this,
                 R.layout.channel_admis_listview, rowItems);
         listViewChannelAdmins.setAdapter(adminAdapter);
         imageViewChannelManageEdit = (ImageView) findViewById(R.id.imageViewChannelManageEdit);
-        imageViewEditChannelName = (ImageView) findViewById(R.id.imageViewEditChannelName);
+        imageViewChannelEdit = (ImageView) findViewById(R.id.imageViewChannelEdit);
+        buttonEditChannelName = (Button) findViewById(R.id.buttonEditChannelName);
         String adminURL = Flippy.CHANNELS_URL + channelId + "/admins/";
         getAdminsList(adminURL);
 
@@ -143,23 +143,21 @@ public class ManageChannelActivity extends ActionBarActivity {
                 .error(R.drawable.channel_error)
                 .animateIn(R.anim.fade_in)
                 .load(image_url);
-        imageViewChannelManageEdit.setOnClickListener(new View.OnClickListener() {
+        imageViewChannelEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 pickPhoto(view);
             }
         });
-        //disable all the fields
-        editTextManageChannelChannelName.setEnabled(false);
+
         intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
         intent.putExtra("isManage", true);
 
         //enable the edit text for the channel name on click
-        imageViewEditChannelName.setOnClickListener(new View.OnClickListener() {
+        buttonEditChannelName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editTextManageChannelChannelName.setEnabled(true);
-                editTextManageChannelChannelName.setFocusable(true);
+                editChannelName();
             }
         });
 
@@ -184,12 +182,9 @@ public class ManageChannelActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String noMember = "No member selected";
-        String noImage = "No image selected";
+        String cancel = "Action cancelled";
         if (requestCode == PROMOTE_USER && resultCode == RESULT_OK && null != data) {
             promoteUser(data.getStringExtra("memberId"));
-        } else {
-            ToastMessages.showToastLong(context, noMember);
         }
         if (requestCode == PICK_FROM_FILE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
@@ -201,18 +196,21 @@ public class ManageChannelActivity extends ActionBarActivity {
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 filePath = cursor.getString(columnIndex);
                 cursor.close();
-                imageViewChannelManageEdit.setImageBitmap(BitmapFactory.decodeFile(filePath));
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
             if (filePath != null) {
+                imageViewChannelManageEdit.setImageBitmap(BitmapFactory.decodeFile(filePath));
+                imageViewChannelManageEdit.setAdjustViewBounds(true);
+                imageViewChannelManageEdit.setMaxHeight(imageViewChannelManageEdit.getHeight());
+                imageViewChannelManageEdit.setMaxWidth(imageViewChannelManageEdit.getWidth());
+                imageViewChannelManageEdit.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                 uploadNewChannelImage(filePath);
             } else {
                 ToastMessages.showToastLong(context, "Sorry image upload failed");
             }
         } else {
-            ToastMessages.showToastLong(context, noImage);
+            ToastMessages.showToastLong(context, cancel);
         }
 
     }
@@ -299,16 +297,6 @@ public class ManageChannelActivity extends ActionBarActivity {
         if (id == R.id.action_remove_channel) {
             confirmChannelDelete(channelId);
         }
-        if (id == R.id.action_rename_channel) {
-            EditText editTextManageChannelChannelName = (EditText) findViewById(R.id.editTextManageChannelChannelName);
-            String name = editTextManageChannelChannelName.getText().toString().trim();
-            if (name.equalsIgnoreCase("")) {
-                editTextManageChannelChannelName.setError("Channel name is required");
-            } else {
-                updateChannelName(name);
-            }
-
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -325,7 +313,7 @@ public class ManageChannelActivity extends ActionBarActivity {
                         try {
                             channelDao = databaseHelper.getChannelDao();
                             channelDao.deleteById(Integer.parseInt(channelId));
-                            channelDao.refresh(channels);
+
                         } catch (SQLException e1) {
                             e1.printStackTrace();
                             Log.e(TAG, "Error removing channel");
@@ -417,7 +405,7 @@ public class ManageChannelActivity extends ActionBarActivity {
 
     private void uploadNewChannelImage(String filePath) {
         if (filePath == null) {
-            ToastMessages.showToastShort(context, "Browse a new image first");
+            ToastMessages.showToastShort(context, "Browse a new image");
             return;
         }
         progressBarUploadChannelImage.setVisibility(View.VISIBLE);
@@ -454,6 +442,8 @@ public class ManageChannelActivity extends ActionBarActivity {
     }
 
     private void updateChannelName(String channelNewName) {
+        buttonEditChannelName.setText("Saving...");
+        buttonEditChannelName.setEnabled(false);
         String url = Flippy.CHANNELS_URL + channelId + "/";
         RequestParams params = new RequestParams();
         params.put("name", channelNewName);
@@ -462,28 +452,51 @@ public class ManageChannelActivity extends ActionBarActivity {
         client.put(url, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseBody) {
-                Log.e("Status code success", statusCode + "");
+                buttonEditChannelName.setEnabled(true);
+                buttonEditChannelName.setText("Edit");
                 Log.e("Response success", responseBody);
-                try {
-                    JSONObject jsonObject = new JSONObject(responseBody);
-                    String newName = jsonObject.getString("name");
-                    editTextManageChannelChannelName.setText(newName);
-                    editTextManageChannelChannelName.setEnabled(false);
-                    ToastMessages.showToastLong(context, "Name changed successfully");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                ToastMessages.showToastLong(context, "Name changed successfully");
+                goToMainActivity();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable
                     error) {
+                buttonEditChannelName.setEnabled(true);
+                buttonEditChannelName.setText("Edit");
                 Log.e("Status code error", statusCode + "");
                 ToastMessages.showToastLong(context, "Failed to update, try later");
 
             }
-
-
         });
+    }
+
+    private void editChannelName() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Change channel name");
+        alert.setMessage("This change will be seen by people in this channel");
+        final EditText input = new EditText(this);
+        input.setText(channelName);
+        alert.setView(input);
+        alert.setCancelable(false);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String value = input.getText().toString();
+                if (!value.equalsIgnoreCase(""))
+                    updateChannelName(value);
+                else {
+                    input.setError("Channel name is required");
+                }
+
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
     }
 }

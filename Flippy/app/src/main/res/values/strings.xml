@@ -217,6 +217,7 @@
 
     <!-- manage channel strings -->
     <string name="channel_manage">Manage channel</string>
+    <string name="channel_manage_edit">Edit</string>
     <string name="manage_channel_remove">remove this channel</string>
     <string name="manage_channel_rename">rename channel</string>
     <string name="select_member_from_list">choose member</string>

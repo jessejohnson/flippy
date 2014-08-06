@@ -31,6 +31,7 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
     Context context;
     private ProgressDialog progressDialog;
     private SuperToast superToast;
+    private String creator = ManageChannelActivity.creatorId;
 
     public AdminAdapter(Context context, int resourceId,
                         List<AdminPerson> items) {
@@ -67,9 +68,9 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
                 .animateIn(R.anim.fade_in)
                 .load(String.valueOf(rowItem.getAdminProfileItem()));
 
-        String creator = ManageChannelActivity.creatorId;
-        if (!creator.equals(rowItem.getAdminId())) {
-            Log.e("Admin adapter", creator + " " + rowItem.getAdminId());
+        if (creator.equals(rowItem.getAdminId())) {
+            holder.buttonDemoteAdmin.setVisibility(View.GONE);
+        }else{
             holder.buttonDemoteAdmin.setVisibility(View.VISIBLE);
         }
 

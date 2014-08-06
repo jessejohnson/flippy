@@ -8,6 +8,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -34,6 +36,8 @@ import org.apache.http.Header;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.Calendar;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -45,6 +49,7 @@ public class ImagePreviewActivity extends ActionBarActivity {
     private Intent intent;
     private ProgressBar progressBarLoadUserImage;
     private String avatar, description = "";
+    private String TAG = "ImagePreviewActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,13 +129,12 @@ public class ImagePreviewActivity extends ActionBarActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, File response) {
                 progressBarLoadUserImage.setVisibility(View.GONE);
-                Log.e("ImagePreview", response.getAbsolutePath());
+                Log.e(TAG, response.getAbsolutePath());
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inPreferredConfig = Bitmap.Config.ARGB_8888;
                 Bitmap bitmap = BitmapFactory.decodeFile(response.getAbsolutePath(), options);
-
-
-
+                String imagePath = saveBitmap(bitmap, "Flippy", "Media");
+                shareImage(imagePath);
                 response.deleteOnExit();
             }
 
@@ -142,6 +146,47 @@ public class ImagePreviewActivity extends ActionBarActivity {
 
         });
 
+    }
+
+    private String saveBitmap(Bitmap bitmap, String dir, String baseName) {
+        try {
+            File sdCard = Environment.getExternalStorageDirectory();
+            File pictureDir = new File(sdCard, dir);
+            pictureDir.mkdirs();
+            File f;
+            Calendar calendar = Calendar.getInstance();
+            baseName = baseName + calendar.getTimeInMillis() + ".png";
+            f = new File(pictureDir, baseName);
+
+            if (!f.exists()) {
+                String name = f.getAbsolutePath();
+                FileOutputStream fos = new FileOutputStream(name);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.flush();
+                fos.close();
+                return f.getAbsolutePath();
+            }
+
+        } catch (Exception e) {
+        } finally {
+
+        }
+        return null;
+    }
+
+    private void shareImage(String imagePath) {
+        if (imagePath != null && imagePath != "") {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            Uri photoUri = Uri.parse(imagePath);
+            shareIntent.setData(photoUri);
+            shareIntent.setType("image/png");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, description);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, photoUri);
+            startActivity(Intent.createChooser(shareIntent, "Share Via"));
+
+        } else {
+            ToastMessages.showToastLong(ImagePreviewActivity.this, "Sharing failed");
+        }
     }
 }
 

@@ -63,15 +63,10 @@ public class EditProfileActivity extends ActionBarActivity {
     private String NewDateOfBirthUpdate;
     private String NewGenderUpdate;
     private String selectedImagePath;
-    private String imagePath;
-    private String fileManagerString;
     private int column_index;
-    private Cursor cursor;
-    private String path;
     private String userFirstName;
     private String userLastName;
     private String userEmail;
-    private String userId;
     private String userAvatar = "";
     private String userGender = "";
     private String userDateOfBirth = "";
@@ -121,7 +116,8 @@ public class EditProfileActivity extends ActionBarActivity {
             e.printStackTrace();
         }
 
-        imageViewMemberEdit.setOnClickListener(new View.OnClickListener() {
+
+        imageViewUploadPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
@@ -129,13 +125,7 @@ public class EditProfileActivity extends ActionBarActivity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent,
                         "Select Picture"), SELECT_PICTURE);
-            }
-        });
 
-        imageViewUploadPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                uploadAvatar(selectedImagePath);
             }
         });
 
@@ -146,20 +136,18 @@ public class EditProfileActivity extends ActionBarActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
-                fileManagerString = selectedImageUri.getPath();
                 selectedImagePath = getPath(selectedImageUri);
-                if (imagePath == null) {
+                if (selectedImagePath == null) {
                     showSuperToast("Please sorry, choose another image", false);
                     return;
                 }
-                imagePath.getBytes();
-                path = imagePath.toString();
-                Bitmap bm = BitmapFactory.decodeFile(imagePath);
+                Bitmap bm = BitmapFactory.decodeFile(selectedImagePath);
                 imageViewMemberEdit.setAdjustViewBounds(true);
                 imageViewMemberEdit.setMaxHeight(imageViewMemberEdit.getHeight());
                 imageViewMemberEdit.setMaxWidth(imageViewMemberEdit.getWidth());
                 imageViewMemberEdit.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                 imageViewMemberEdit.setImageBitmap(bm);
+                uploadAvatar(selectedImagePath);
 
             } else {
                 showSuperToast("sorry, unable to upload image", false);
@@ -223,8 +211,6 @@ public class EditProfileActivity extends ActionBarActivity {
         column_index = cursor
                 .getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
         cursor.moveToFirst();
-        imagePath = cursor.getString(column_index);
-
         return cursor.getString(column_index);
     }
 
@@ -312,7 +298,7 @@ public class EditProfileActivity extends ActionBarActivity {
                                     userAvatarThumb = result.get("avatar_thumb").getAsString();
                                 }
                                 userEmail = result.get("email").getAsString();
-                                userId = result.get("id").getAsString();
+                                //String userId = result.get("id").getAsString();
                                 userLastName = result.get("last_name").getAsString();
                                 userFirstName = result.get("first_name").getAsString();
                                 if (!result.get("gender").isJsonNull()) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -33,6 +33,20 @@
                 android:id="@+id/progressBarUploadChannelImage"
                 android:layout_gravity="center" />
 
+            <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/imageViewChannelEdit"
+                android:layout_margin="@dimen/margin_five"
+                android:layout_width="@dimen/margin_fifty"
+                android:layout_height="@dimen/margin_fifty"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/camera"
+                android:scaleType="centerCrop"
+                app:border_color="@color/border"
+                app:border_width="3dp"
+                app:corner_radius="0dp"
+                app:oval="false"
+                android:layout_gravity="right|bottom" />
+
         </FrameLayout>
 
 
@@ -47,31 +61,36 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <EditText
-            android:id="@+id/editTextManageChannelChannelName"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/scrollView"
-            android:layout_weight="0.9"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:singleLine="true"
-            android:text="@string/default_channel_name" />
+            android:capitalize="sentences"
+            android:textColor="@color/flippy_orange"
+            android:layout_gravity="center_vertical"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/default_channel_name"
+            android:id="@+id/textViewChannelNameEdit"
+            android:layout_weight="0.6" />
 
-        <ImageView
-            android:id="@+id/imageViewEditChannelName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="0.1"
-            android:background="@drawable/ic_action_dark_edit" />
+
+        <Button
+            android:id="@+id/buttonEditChannelName"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:layout_height="@dimen/margin_thirty"
+            android:background="@drawable/flippy_button_default_plain"
+            android:text="@string/channel_manage_edit"
+            android:textColor="@color/flippy_orange" />
+
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:padding="@dimen/margin_two"
+        android:layout_below="@+id/linearLayoutChannelName"
         android:id="@+id/textViewChannelAdmins"
         android:textStyle="normal"
         android:textColor="@color/flippy_orange"
@@ -81,4 +100,4 @@
         android:text="@string/manage_channel_admin_list_title"
         android:layout_height="wrap_content" />
 
-</LinearLayout>
+</RelativeLayout>

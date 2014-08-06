@@ -408,7 +408,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         textViewAuthorEmailAddress.setText(author_email);
         textViewNoticeTimeStamp.setText(time_stamp);
         if (CommunityCenterActivity.regUserEmail.equalsIgnoreCase(author_email)) {
-            imageViewDeletePost.setEnabled(true);
+            imageViewDeletePost.setVisibility(View.VISIBLE);
         }
 
     }

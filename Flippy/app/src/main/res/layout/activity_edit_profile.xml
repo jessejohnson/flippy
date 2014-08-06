@@ -38,19 +38,19 @@
                         app:corner_radius="0dp"
                         app:oval="false" />
 
-                    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <com.makeramen.RoundedImageView
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/imageViewUploadPhoto"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/margin_fifty"
+                        android:layout_height="@dimen/margin_fifty"
                         android:layout_gravity="right|bottom"
                         android:layout_margin="@dimen/margin_ten"
-                        android:background="@color/flippy_dark_header"
+                        android:background="@drawable/camera"
                         android:padding="@dimen/margin_ten"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_action_save"
                         app:border_color="@color/border"
                         app:border_width="1dp"
-                        app:corner_radius="0dp"
+                        app:corner_radius="@dimen/margin_five"
                         app:oval="false" />
 
                     <ProgressBar
