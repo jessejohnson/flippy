@@ -164,6 +164,7 @@ public class FacebookSignInFragment extends Fragment {
                                 profilePic = "http://graph.facebook.com/" + fbId + "/picture?type=large";
                                 profilePicSmall = "http://graph.facebook.com/" + fbId + "/picture?type=small";
                                 gender = user.asMap().get("gender").toString();
+                                avatar = profilePic;
                                 //setting the user parameters
                                 final ProgressDialog progressDialog = new ProgressDialog(mContext);
                                 progressDialog.setMessage("Just a minute ...");

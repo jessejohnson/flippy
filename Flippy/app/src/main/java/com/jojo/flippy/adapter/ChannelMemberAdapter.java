@@ -85,7 +85,6 @@ public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem>{
         Ion.with(holder.imageView)
                 .placeholder(R.drawable.user_place_small)
                 .error(R.drawable.user_error_small)
-                .animateIn(R.anim.fade_in)
                 .load(String.valueOf(rowItem.getProfileChannelItem()));
 
 

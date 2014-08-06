@@ -26,6 +26,7 @@ import com.jojo.flippy.core.NoticeDetailActivity;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.persistence.User;
 
+import java.net.URI;
 import java.util.Calendar;
 import java.util.List;
 
@@ -90,7 +91,7 @@ public class FlippyAlarmService extends Service {
         builder.setVibrate(pattern);
         builder.setPriority(Notification.PRIORITY_MAX);
         builder.setStyle(new NotificationCompat.InboxStyle());
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+        Uri alarmSound = Uri.parse("android.resource://com.jojo.flippy/raw/flippy.mp3");
         if (alarmSound == null) {
             alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
             if (alarmSound == null) {

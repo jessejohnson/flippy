@@ -142,7 +142,7 @@ public class FragmentNotice extends Fragment {
         listAdapter.notifyDataSetChanged();
         if (listAdapter.isEmpty()) {
             textViewNoNotice.setVisibility(View.VISIBLE);
-            textViewNoNotice.setText("Currently no notice");
+            textViewNoNotice.setText("Currently no notice, subscribe to receive notice");
         }
         if (listAdapter.getCount() >= 20) {
             buttonLoadOldPost.setVisibility(View.VISIBLE);

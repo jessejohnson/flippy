@@ -29,7 +29,6 @@ import java.util.List;
 public class ChannelAdapter extends ArrayAdapter<Channel> {
 
     Context context;
-    String channelDetailSubscribeURL = Flippy.CHANNELS_URL;
     private boolean isUserChannel;
     private ViewHolder holder;
     private Dao<Channels, Integer> channelDao;
@@ -134,7 +133,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         JsonObject json = new JsonObject();
         json.addProperty("id", CommunityCenterActivity.regUserID);
         Ion.with(context)
-                .load(channelDetailSubscribeURL + channelId + "/subscribe/")
+                .load(Flippy.CHANNELS_URL + channelId + "/subscribe/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()
@@ -154,7 +153,6 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                                 if (result.has("detail")) {
                                     ToastMessages.showToastLong(context, result.get("detail").getAsString());
                                 }
-
                             }
                             if (e != null) {
                                 Log.e("Channel adapter", e.toString());
@@ -175,7 +173,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         JsonObject json = new JsonObject();
         json.addProperty("id", CommunityCenterActivity.regUserID);
         Ion.with(context)
-                .load(channelDetailSubscribeURL + channelId + "/unsubscribe/")
+                .load(Flippy.CHANNELS_URL + channelId + "/unsubscribe/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()
