@@ -2,7 +2,6 @@ package com.jojo.flippy.core;
 
 import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.app.ActionBarActivity;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.github.johnpersano.supertoasts.SuperToast;
@@ -22,7 +20,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.adapter.ChannelPostAdapter;
 import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
@@ -83,8 +80,8 @@ public class ChannelDetailActivity extends ActionBarActivity {
         superToast = new SuperToast(ChannelDetailActivity.this);
         channelName = intent.getStringExtra("channelName");
         channelId = intent.getStringExtra("channelId");
-        channelDetailsURL = Flippy.channels + channelId + "/";
-        String adminURL = Flippy.channels + channelId + "/admins/";
+        channelDetailsURL = Flippy.CHANNELS_URL + channelId + "/";
+        String adminURL = Flippy.CHANNELS_URL + channelId + "/admins/";
         getUserSubscribedChannelId();
 
         ActionBar actionBar = getActionBar();
@@ -256,7 +253,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
             @Override
             public void onClick(View view) {
                 intent.putExtra("avatar", image_url);
-                intent.putExtra("ImageName", channelName);
+                intent.putExtra("imageName", channelName);
                 intent.setClass(ChannelDetailActivity.this, ImagePreviewActivity.class);
                 startActivity(intent);
             }
@@ -265,7 +262,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
 
     private void getCommunityName(String communityId) {
         Ion.with(ChannelDetailActivity.this)
-                .load(Flippy.communitiesURL + communityId + "/")
+                .load(Flippy.COMMUNITIES_URL + communityId + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -276,7 +273,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
                         }
                         if (e != null) {
                             Log.e("Error from community", e.toString());
-                            showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
+
                         }
 
                     }
@@ -292,19 +289,16 @@ public class ChannelDetailActivity extends ActionBarActivity {
 
     private void showViews() {
         Ion.with(imageViewChannelLarge)
-                .placeholder(R.color.flippy_light_header)
+                .placeholder(R.drawable.channel_place)
                 .animateIn(R.anim.fade_in)
+                .error(R.drawable.channel_error)
                 .load(image_url);
-        if (creatorAvatarURL == null || creatorAvatarURL.equalsIgnoreCase("")) {
-            Ion.with(imageViewCreator)
-                    .placeholder(R.drawable.default_small);
 
-        } else {
-            Ion.with(imageViewCreator)
-                    .placeholder(R.drawable.default_small)
-                    .animateIn(R.anim.fade_in)
-                    .load(creatorAvatarURL);
-        }
+        Ion.with(imageViewCreator)
+                .placeholder(R.drawable.user_place_small)
+                .error(R.drawable.user_error_small)
+                .animateIn(R.anim.fade_in)
+                .load(creatorAvatarURL);
 
         textViewChannelNameDetail.setText(channelName);
         textViewNameChannelDetailFullName.setText(creatorName);

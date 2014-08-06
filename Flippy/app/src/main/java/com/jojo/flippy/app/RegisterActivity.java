@@ -124,7 +124,7 @@ public class RegisterActivity extends Activity {
                     json.addProperty("password", password);
 
                     Ion.with(RegisterActivity.this)
-                            .load(Flippy.users + "signup/")
+                            .load(Flippy.USERS_URL + "signup/")
                             .setJsonObjectBody(json)
                             .asJsonObject()
                             .setCallback(new FutureCallback<JsonObject>() {

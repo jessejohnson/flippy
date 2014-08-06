@@ -5,9 +5,22 @@
     android:orientation="vertical"
     tools:context="com.jojo.flippy.core.NoticeDetailActivity">
 
+    <android.support.v4.widget.ContentLoadingProgressBar
+        android:id="@+id/progressCreatePost"
+        style="?android:attr/android:progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="-5dp"
+        android:visibility="gone"
+        android:background="@null"
+        android:indeterminate="true"
+        android:padding="0dp" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_fifty"
         android:scrollbars="none">
 
         <LinearLayout
@@ -61,7 +74,7 @@
                     android:id="@+id/imageViewPreviewNoticeImageDetail"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/margin_one_fifty"
-                    android:background="@drawable/default_medium"
+                    android:background="@drawable/notice_place"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/linearLayout"
@@ -126,14 +139,13 @@
                 android:layout_margin="@dimen/margin_ten"
                 android:orientation="horizontal">
 
-                <com.makeramen.RoundedImageView
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/imageViewPreviewNoticeCreatorImage"
                     android:layout_width="@dimen/margin_hundred"
                     android:layout_height="@dimen/margin_hundred"
                     android:layout_alignParentTop="true"
                     android:padding="1dp"
-                    android:scaleType="center"
+                    android:scaleType="centerCrop"
                     app:border_color="@color/border_white"
                     app:border_width="2dp"
                     app:corner_radius="100dp"
@@ -175,25 +187,27 @@
                 android:layout_marginBottom="@dimen/margin_twenty"
                 android:layout_margin="0dp">
 
-                <fragment
-                    xmlns:android="http://schemas.android.com/apk/res/android"
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/linearLayoutPreviewNoticeShowLocation"
                     class="com.google.android.gms.maps.SupportMapFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/flippy_button_default"
-                android:text="@string/preview_post_publish_post"
-                android:id="@+id/buttonPublishPost"
-                android:textColor="@color/flippy_white"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/margin_two"
+        android:layout_height="wrap_content"
+        android:background="@drawable/flippy_button_default"
+        android:text="@string/preview_post_publish_post"
+        android:id="@+id/buttonPublishPost"
+        android:textColor="@color/flippy_white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

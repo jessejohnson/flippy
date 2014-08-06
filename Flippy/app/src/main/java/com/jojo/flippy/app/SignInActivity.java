@@ -7,17 +7,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.jojo.flippy.adapter.Channel;
 import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.persistence.Channels;
 import com.jojo.flippy.persistence.DatabaseHelper;
@@ -27,7 +24,6 @@ import com.jojo.flippy.util.Validator;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
-import java.net.URI;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -50,6 +46,7 @@ public class SignInActivity extends ActionBarActivity {
     private List<Channels> channelList;
     private Channels channels;
     private SuperToast superToast;
+    private final String TAG = "SignInActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,13 +101,14 @@ public class SignInActivity extends ActionBarActivity {
                     json.addProperty("password", password);
 
                     Ion.with(SignInActivity.this)
-                            .load(Flippy.users + "login/")
+                            .load(Flippy.USERS_URL + "login/")
                             .setJsonObjectBody(json)
                             .asJsonObject()
                             .setCallback(new FutureCallback<JsonObject>() {
                                 @Override
                                 public void onCompleted(Exception e, JsonObject result) {
-                                    signGetStartedButton.setText("just a minute ...");
+                                    signGetStartedButton.setEnabled(true);
+                                    signGetStartedButton.setText("get started");
                                     if (e != null) {
                                         showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title));
                                         return;
@@ -205,8 +203,7 @@ public class SignInActivity extends ActionBarActivity {
     }
 
     private void saveUserChannels() {
-        String url = Flippy.users + regUserID + "/subscriptions/";
-        signGetStartedButton.setText("retrieving your channels ...");
+        String url = Flippy.USERS_URL + regUserID + "/subscriptions/";
         if (regUserID == null || regUserID == "") {
             showSuperToast("Unfortunately something went wrong, try again later");
             return;
@@ -233,7 +230,7 @@ public class SignInActivity extends ActionBarActivity {
                                         channelDao.createOrUpdate(channels);
                                     } catch (java.sql.SQLException sqlE) {
                                         sqlE.printStackTrace();
-                                        Log.e("Sign in activity", "Error getting all user channels");
+                                        Log.e("Sign in activity", "Error getting all user CHANNELS_URL");
                                     }
                                 }
                                 intent.setClass(SignInActivity.this, CommunityCenterActivity.class);
@@ -241,11 +238,11 @@ public class SignInActivity extends ActionBarActivity {
                             } else if (e != null) {
                                 showSuperToast("Internet connection error occurred");
                             } else {
-                                Log.e("Fragment channels", "something else went wrong");
+                                Log.e(TAG, "something else went wrong");
                                 return;
                             }
                         } catch (Exception exception) {
-                            Log.e("Fragment channels", "Error loading channels " + exception.toString());
+                            Log.e(TAG, "Error loading channels " + exception.toString());
                         }
                     }
                 });

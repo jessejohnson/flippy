@@ -3,6 +3,7 @@ package com.jojo.flippy.core;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,7 +22,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.persistence.Channels;
+import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
@@ -29,6 +34,7 @@ import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.ProgressCallback;
 
 import java.io.File;
+import java.sql.SQLException;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -41,10 +47,13 @@ public class CreateChannelActivity extends ActionBarActivity {
     private CheckBox checkBoxChannelIsPublic;
     private Button buttonCreateNewChannel;
     private String selectedImagePath;
-    private String fileManagerString;
     private int column_index;
     private ProgressBar progressBar;
     private ProgressDialog progressDialog;
+    private Dao<Channels, Integer> channelDao;
+    private Channels channels;
+    private final String TAG ="CreateChannelActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +90,15 @@ public class CreateChannelActivity extends ActionBarActivity {
                 createChannel();
             }
         });
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(CreateChannelActivity.this,
+                    DatabaseHelper.class);
+            channelDao = databaseHelper.getChannelDao();
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            Log.e("Fragment", "Error getting all user CHANNELS_URL");
+        }
+
     }
 
     @Override
@@ -88,7 +106,6 @@ public class CreateChannelActivity extends ActionBarActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
-                //fileManagerString = selectedImageUri.getPath();
                 selectedImagePath = getPath(selectedImageUri);
                 if (selectedImagePath == null) {
                     ToastMessages.showToastLong(CreateChannelActivity.this, "Choose an image with local source");
@@ -157,7 +174,7 @@ public class CreateChannelActivity extends ActionBarActivity {
             return;
         }
         buttonCreateNewChannel.setEnabled(false);
-        Ion.with(CreateChannelActivity.this, Flippy.channels)
+        Ion.with(CreateChannelActivity.this, Flippy.CHANNELS_URL)
                 .uploadProgressBar(progressBar)
                 .uploadProgressHandler(new ProgressCallback() {
                     @Override
@@ -185,17 +202,32 @@ public class CreateChannelActivity extends ActionBarActivity {
                         buttonCreateNewChannel.setEnabled(true);
                         buttonCreateNewChannel.setText(getText(R.string.channel_create));
                         progressDialog.dismiss();
-                        if (result.has("details")) {
-                            Crouton.makeText(CreateChannelActivity.this, "Failed to create channel", Style.ALERT)
-                                    .show();
-                            return;
-                        }
-                        if (result != null && !result.has("details")) {
-                            ToastMessages.showToastLong(CreateChannelActivity.this, "Channel " + channelName + " Created successfully");
-                            goToMainActivity();
-                        }
-                        if (e != null) {
-                            ToastMessages.showToastLong(CreateChannelActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                        try {
+                            if (result.has("details")) {
+                                Crouton.makeText(CreateChannelActivity.this, "Failed to create channel", Style.ALERT)
+                                        .show();
+                                return;
+                            }
+                            if (result != null && !result.has("details")) {
+                                JsonObject channelObject = result.getAsJsonObject("results");
+                                channels = new Channels(channelObject.get("id").getAsString());
+                                DatabaseHelper databaseHelper = OpenHelperManager.getHelper(CreateChannelActivity.this,
+                                        DatabaseHelper.class);
+                                try {
+                                    channelDao = databaseHelper.getChannelDao();
+                                    channelDao.createOrUpdate(channels);
+                                    channelDao.refresh(channels);
+                                } catch (SQLException e1) {
+                                    e1.printStackTrace();
+                                }
+                                ToastMessages.showToastLong(CreateChannelActivity.this, "Channel " + channelName + " Created successfully");
+                                goToMainActivity();
+                            }
+                            if (e != null) {
+                                ToastMessages.showToastLong(CreateChannelActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            }
+                        } catch (Resources.NotFoundException e1) {
+                            e1.printStackTrace();
                         }
 
                     }

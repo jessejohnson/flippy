@@ -3,10 +3,15 @@ package com.jojo.flippy.profile;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,13 +19,26 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageRequest;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.ProgressCallback;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
+
+import org.apache.http.Header;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.Calendar;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -31,8 +49,7 @@ public class ImagePreviewActivity extends ActionBarActivity {
     private Intent intent;
     private ProgressBar progressBarLoadUserImage;
     private String avatar, description = "";
-    private Bitmap bitmap;
-
+    private String TAG = "ImagePreviewActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +72,7 @@ public class ImagePreviewActivity extends ActionBarActivity {
 
         if (avatar == null || avatar.equals("")) {
             progressBarLoadUserImage.setVisibility(View.GONE);
-            ToastMessages.showToastLong(ImagePreviewActivity.this, "The request cannot be processed");
+            ToastMessages.showToastLong(ImagePreviewActivity.this, "This image cannot be preview");
             return;
         }
 
@@ -101,19 +118,75 @@ public class ImagePreviewActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void sharePhoto(String image) {
+    private void sharePhoto(final String image) {
         if (image == null) {
             ToastMessages.showToastLong(ImagePreviewActivity.this, "Sharing failed");
             return;
         }
+        progressBarLoadUserImage.setVisibility(View.VISIBLE);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(image, new FileAsyncHttpResponseHandler(ImagePreviewActivity.this) {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, File response) {
+                progressBarLoadUserImage.setVisibility(View.GONE);
+                Log.e(TAG, response.getAbsolutePath());
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                Bitmap bitmap = BitmapFactory.decodeFile(response.getAbsolutePath(), options);
+                String imagePath = saveBitmap(bitmap, "Flippy", "Media");
+                shareImage(imagePath);
+                response.deleteOnExit();
+            }
 
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Download flippy resource at :" + image);
-        sendIntent.setType("text/plain");
-        startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.app_name)));
+            @Override
+            public void onFailure(Throwable e, File response) {
+                progressBarLoadUserImage.setVisibility(View.GONE);
+                ToastMessages.showToastLong(ImagePreviewActivity.this, "Sharing failed");
+            }
+
+        });
 
     }
 
+    private String saveBitmap(Bitmap bitmap, String dir, String baseName) {
+        try {
+            File sdCard = Environment.getExternalStorageDirectory();
+            File pictureDir = new File(sdCard, dir);
+            pictureDir.mkdirs();
+            File f;
+            Calendar calendar = Calendar.getInstance();
+            baseName = baseName + calendar.getTimeInMillis() + ".png";
+            f = new File(pictureDir, baseName);
+
+            if (!f.exists()) {
+                String name = f.getAbsolutePath();
+                FileOutputStream fos = new FileOutputStream(name);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.flush();
+                fos.close();
+                return f.getAbsolutePath();
+            }
+
+        } catch (Exception e) {
+        } finally {
+
+        }
+        return null;
+    }
+
+    private void shareImage(String imagePath) {
+        if (imagePath != null && imagePath != "") {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            Uri photoUri = Uri.parse(imagePath);
+            shareIntent.setData(photoUri);
+            shareIntent.setType("image/png");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, description);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, photoUri);
+            startActivity(Intent.createChooser(shareIntent, "Share Via"));
+
+        } else {
+            ToastMessages.showToastLong(ImagePreviewActivity.this, "Sharing failed");
+        }
+    }
 }
 

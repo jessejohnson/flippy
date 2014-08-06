@@ -1,6 +1,8 @@
 package com.jojo.flippy.profile;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -18,41 +20,33 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.stmt.UpdateBuilder;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
+import com.jojo.flippy.util.Validator;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class EditProfileActivity extends ActionBarActivity {
     private static final int SELECT_PICTURE = 1;
@@ -69,11 +63,7 @@ public class EditProfileActivity extends ActionBarActivity {
     private String NewDateOfBirthUpdate;
     private String NewGenderUpdate;
     private String selectedImagePath;
-    private String imagePath;
-    private String fileManagerString;
     private int column_index;
-    private Cursor cursor;
-    private String path;
     private String userFirstName;
     private String userLastName;
     private String userEmail;
@@ -81,9 +71,11 @@ public class EditProfileActivity extends ActionBarActivity {
     private String userGender = "";
     private String userDateOfBirth = "";
     private String userAvatarThumb = "";
-    private String userCommunityId;
     private ProgressBar progressBarUpdateAvatar;
     private Dao<User, Integer> userDao;
+    private Context context;
+    private ActionBar actionBar;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +83,12 @@ public class EditProfileActivity extends ActionBarActivity {
         setContentView(R.layout.activity_edit_profile);
 
 
+        actionBar = getActionBar();
         imageViewMemberEdit = (ImageView) findViewById(R.id.imageViewMemberEdit);
         editTextEditProfileFirstName = (EditText) findViewById(R.id.editTextEditProfileFirstName);
         editTextEditProfileLastName = (EditText) findViewById(R.id.editTextEditProfileLastName);
         editTextEditProfileEmail = (EditText) findViewById(R.id.editTextEditProfileEmail);
+        editTextEditProfileEmail.setEnabled(false);
         editTextEditProfileDateOfBirth = (EditText) findViewById(R.id.editTextEditProfileDateOfBirth);
         progressBarUpdateAvatar = (ProgressBar) findViewById(R.id.progressBarUpdateAvatar);
         progressBarUpdateAvatar.setVisibility(View.GONE);
@@ -104,24 +98,26 @@ public class EditProfileActivity extends ActionBarActivity {
         editTextEditProfileEmail.setText(CommunityCenterActivity.regUserEmail);
         editTextEditProfileDateOfBirth.setText(CommunityCenterActivity.userDateOfBirth);
         imageViewUploadPhoto = (ImageView) findViewById(R.id.imageViewUploadPhoto);
+        context = this;
 
         loadProfile();
 
         try {
-            if (CommunityCenterActivity.userGender.isEmpty()) {
+            if (CommunityCenterActivity.userGender.isEmpty() || CommunityCenterActivity.userGender.equalsIgnoreCase("")) {
                 genderSpinner.setSelection(0);
             }
-            if (CommunityCenterActivity.userGender.equalsIgnoreCase("male")) {
+            if (CommunityCenterActivity.userGender.equalsIgnoreCase("M")) {
                 genderSpinner.setSelection(1);
             }
-            if (CommunityCenterActivity.userGender.equalsIgnoreCase("female")) {
+            if (CommunityCenterActivity.userGender.equalsIgnoreCase("F")) {
                 genderSpinner.setSelection(2);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        imageViewMemberEdit.setOnClickListener(new View.OnClickListener() {
+
+        imageViewUploadPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
@@ -129,15 +125,10 @@ public class EditProfileActivity extends ActionBarActivity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent,
                         "Select Picture"), SELECT_PICTURE);
+
             }
         });
 
-        imageViewUploadPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                uploadAvatar(selectedImagePath);
-            }
-        });
     }
 
     @Override
@@ -145,20 +136,18 @@ public class EditProfileActivity extends ActionBarActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
-                fileManagerString = selectedImageUri.getPath();
                 selectedImagePath = getPath(selectedImageUri);
-                if (imagePath == null) {
+                if (selectedImagePath == null) {
                     showSuperToast("Please sorry, choose another image", false);
                     return;
                 }
-                imagePath.getBytes();
-                path = imagePath.toString();
-                Bitmap bm = BitmapFactory.decodeFile(imagePath);
+                Bitmap bm = BitmapFactory.decodeFile(selectedImagePath);
                 imageViewMemberEdit.setAdjustViewBounds(true);
                 imageViewMemberEdit.setMaxHeight(imageViewMemberEdit.getHeight());
                 imageViewMemberEdit.setMaxWidth(imageViewMemberEdit.getWidth());
                 imageViewMemberEdit.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                 imageViewMemberEdit.setImageBitmap(bm);
+                uploadAvatar(selectedImagePath);
 
             } else {
                 showSuperToast("sorry, unable to upload image", false);
@@ -178,15 +167,36 @@ public class EditProfileActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_profile_done) {
-            NewFirstNameUpdate = editTextEditProfileFirstName.getText().toString().trim();
-            NewLastNameUpdate = editTextEditProfileLastName.getText().toString().trim();
-            NewEmailUpdate = editTextEditProfileEmail.getText().toString().trim();
-            NewDateOfBirthUpdate = editTextEditProfileDateOfBirth.getText().toString().trim();
-            NewGenderUpdate = genderSpinner.getSelectedItem().toString();
-            updateUserStringDetails(NewEmailUpdate, NewFirstNameUpdate, NewLastNameUpdate, NewGenderUpdate);
-            return true;
+            getUserData();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getUserData() {
+        NewFirstNameUpdate = editTextEditProfileFirstName.getText().toString().trim();
+        NewLastNameUpdate = editTextEditProfileLastName.getText().toString().trim();
+        NewEmailUpdate = editTextEditProfileEmail.getText().toString().trim();
+        String dateBefore = editTextEditProfileDateOfBirth.getText().toString().trim();
+        NewDateOfBirthUpdate = editTextEditProfileDateOfBirth.getText().toString().trim() + "T00:00:00Z";
+        if (!Validator.isValidFirstName(NewFirstNameUpdate)) {
+            editTextEditProfileFirstName.setError("Wrong name format");
+            return;
+        }
+        if (!Validator.isValidLastName(NewLastNameUpdate)) {
+            editTextEditProfileLastName.setError("Wrong name format");
+            return;
+        }
+        if (!Validator.isValidDate(dateBefore)) {
+            editTextEditProfileDateOfBirth.setError("Wrong name format");
+            return;
+        }
+        if (genderSpinner.getSelectedItemPosition() == 0) {
+            ToastMessages.showToastShort(context, "Select your gender");
+            return;
+        }
+        NewGenderUpdate = genderSpinner.getSelectedItem().toString().substring(0, 1).toUpperCase();
+        updateUserStringDetails(NewEmailUpdate, NewFirstNameUpdate, NewLastNameUpdate, NewGenderUpdate, NewDateOfBirthUpdate);
+
     }
 
     private void goToMainActivity() {
@@ -201,8 +211,6 @@ public class EditProfileActivity extends ActionBarActivity {
         column_index = cursor
                 .getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
         cursor.moveToFirst();
-        imagePath = cursor.getString(column_index);
-
         return cursor.getString(column_index);
     }
 
@@ -212,7 +220,7 @@ public class EditProfileActivity extends ActionBarActivity {
             return;
         }
         progressBarUpdateAvatar.setVisibility(View.VISIBLE);
-        Ion.with(EditProfileActivity.this, Flippy.users + "upload-avatar/")
+        Ion.with(EditProfileActivity.this, Flippy.USERS_URL + "upload-avatar/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setMultipartFile("avatar", new File(filePath))
                 .asJsonObject()
@@ -224,7 +232,7 @@ public class EditProfileActivity extends ActionBarActivity {
                             if (result == null) {
                                 showSuperToast("Failed to upload avatar", false);
                                 return;
-                            } else if (result != null) {
+                            } else if (result != null && !result.has("detail")) {
                                 getUserInfo();
                             } else if (e != null) {
                                 showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
@@ -248,12 +256,20 @@ public class EditProfileActivity extends ActionBarActivity {
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(this,
                     DatabaseHelper.class);
+
             userDao = databaseHelper.getUserDao();
-            UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
-            updateBuilder.where().eq("user_email", userEmail);
-            updateBuilder.updateColumnValue("avatar", userAvatar);
-            updateBuilder.updateColumnValue("avatar_thumb", userAvatarThumb);
-            updateBuilder.update();
+            List<User> userList = userDao.queryForAll();
+            user = userList.get(0);
+            user.user_email = userEmail;
+            user.avatar = userAvatar;
+            user.date_of_birth = userDateOfBirth;
+            user.avatar_thumb = userAvatarThumb;
+            user.first_name = userFirstName;
+            user.last_name = userLastName;
+            user.gender = userGender;
+            userDao.update(user);
+            userDao.refresh(user);
+            ToastMessages.showToastShort(context, "Update successful");
             goToMainActivity();
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
@@ -264,7 +280,7 @@ public class EditProfileActivity extends ActionBarActivity {
     }
 
     private void getUserInfo() {
-        Ion.with(EditProfileActivity.this, Flippy.users + CommunityCenterActivity.regUserID + "/")
+        Ion.with(EditProfileActivity.this, Flippy.USERS_URL + CommunityCenterActivity.regUserID + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -282,14 +298,14 @@ public class EditProfileActivity extends ActionBarActivity {
                                     userAvatarThumb = result.get("avatar_thumb").getAsString();
                                 }
                                 userEmail = result.get("email").getAsString();
-                                userCommunityId = result.get("community").getAsString();
+                                //String userId = result.get("id").getAsString();
                                 userLastName = result.get("last_name").getAsString();
                                 userFirstName = result.get("first_name").getAsString();
                                 if (!result.get("gender").isJsonNull()) {
                                     userGender = result.get("gender").getAsString();
                                 }
                                 if (!result.get("date_of_birth").isJsonNull()) {
-                                    userDateOfBirth = result.get("date_of_birth").getAsString();
+                                    userDateOfBirth = result.get("date_of_birth").getAsString().substring(0, 10).trim();
                                 }
 
                             }
@@ -308,94 +324,52 @@ public class EditProfileActivity extends ActionBarActivity {
 
     private void loadProfile() {
         Ion.with(imageViewMemberEdit)
-                .placeholder(R.drawable.default_profile_picture)
+                .placeholder(R.drawable.user_place_large)
+                .error(R.drawable.user_error_large)
                 .animateIn(R.anim.fade_in)
                 .load(CommunityCenterActivity.userAvatarURL);
     }
 
-    private void updateUserStringDetails(final String email, final String firstName, final String lastName, final String gender) {
-        String url = Flippy.users + "me/";
-        /*
-        Map<String, String> jsonParams = new HashMap<String, String>();
-        jsonParams.put("email", email);
-        jsonParams.put("first_name", firstName);
-        jsonParams.put("last_name", lastName);
-        jsonParams.put("gender", gender);
-        JsonObjectRequest myRequest = new JsonObjectRequest(Request.Method.PUT,url,new JSONObject(jsonParams),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.e("Response", response.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Error", error.toString());
-                    }
+    private void updateUserStringDetails(final String email, final String firstName, final String lastName, final String gender, final String dateOfBirth) {
+        if (actionBar != null) {
+            actionBar.setSubtitle("updating profile...");
+        }
+        String url = Flippy.USERS_URL + "me/";
+        RequestParams params = new RequestParams();
+        params.put("email", email);
+        params.put("first_name", firstName);
+        params.put("last_name", lastName);
+        params.put("gender", gender);
+        params.put("date_of_birth", dateOfBirth);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
+        client.put(url, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseBody) {
+                Log.e("Status code success", statusCode + "");
+                Log.e("Response success", responseBody);
+                try {
+                    JSONObject jsonObject = new JSONObject(responseBody);
+                    Log.e("Result", jsonObject.toString());
+                    getUserInfo();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-        ) {
+            }
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json; charset=utf-8");
-                headers.put("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
-                return headers;
-            }
-        };
-        Flippy.getInstance().getRequestQueue().add(myRequest);
-        */
-        StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.e("Response", response);
-                        ToastMessages.showToastLong(EditProfileActivity.this, "Profile updated");
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Error.Response", error.toString());
-                        if (error instanceof NetworkError) {
-                        } else if (error instanceof ServerError) {
-                            showSuperToast("Sorry server error occurred", false);
-                        } else if (error instanceof AuthFailureError) {
-
-                        } else if (error instanceof ParseError) {
-
-                        } else if (error instanceof NoConnectionError) {
-                            showSuperToast("Sorry internet connection error", false);
-                        } else if (error instanceof TimeoutError) {
-                            showSuperToast("Sorry server timeout", false);
-                        }
-                    }
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable
+                    error) {
+                if (actionBar != null) {
+                    actionBar.setSubtitle("update failed");
                 }
-        ) {
+                Log.e("Status code error", statusCode + "");
+                ToastMessages.showToastLong(context, "Failed to update, try later");
 
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("email", email);
-                params.put("first_name", firstName);
-                params.put("last_name", lastName);
-                params.put("gender", gender);
-                return params;
             }
 
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                //headers.put("Content-Type", "application/x-www-form-urlencoded");
-                headers.put("Content-Type", "application/json");
-                headers.put("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
-                return headers;
-            }
 
-        };
-        Flippy.getInstance().getRequestQueue().add(putRequest);
-
+        });
     }
 
     private void showSuperToast(String message, boolean isSuccess) {

@@ -45,7 +45,8 @@ public class ProfileAdapter extends ArrayAdapter<ProfileItem> {
         holder.textViewProfileChannelTotalMembers.setText(rowItem.getProfileChannelTotalNumber());
 
         Ion.with(holder.imageViewChannelImage)
-                .placeholder(R.color.flippy_orange)
+                .placeholder(R.drawable.channel_place)
+                .error(R.drawable.channel_error)
                 .animateIn(R.anim.fade_in)
                 .load(String.valueOf(rowItem.getProfileChannelItem()));
 

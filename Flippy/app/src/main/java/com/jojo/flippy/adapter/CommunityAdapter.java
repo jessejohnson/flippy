@@ -66,8 +66,8 @@ public class CommunityAdapter extends ArrayAdapter<Community> {
         holder.textViewCommunityBio.setText(rowItem.getCommunityBio());
         Ion.with(holder.imageView)
                 .animateIn(R.anim.fade_in)
-                .placeholder(R.color.flippy_orange)
-                .error(R.color.flippy_orange)
+                .placeholder(R.drawable.community_place)
+                .error(R.drawable.community_error)
                 .load(String.valueOf(rowItem.getImageUrl()));
         holder.textViewCommunityName.setText(rowItem.getCommunityName());
 

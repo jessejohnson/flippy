@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,7 +25,6 @@ import com.jojo.flippy.adapter.NoticeAdapter;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
-import com.jojo.flippy.services.StartingService;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.InternetConnectionDetector;
 import com.jojo.flippy.util.ToastMessages;
@@ -43,22 +43,10 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class FragmentNotice extends Fragment {
-
-    public static IntentFilter postIntentFilter;
-    ListView noticeList;
+    private BroadcastReceiver mReceiver;
+    private ListView noticeList;
     private NoticeAdapter listAdapter;
-    List<Notice> noticeFeed;
-    BroadcastReceiver postReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            loadAdapterFromDatabaseOnReceive();
-        }
-
-        @Override
-        protected void finalize() throws Throwable {
-            super.finalize();
-        }
-    };
+    private List<Notice> noticeFeed;
     private Intent intent;
     private String noticeTitle;
     private String noticeSubtitle;
@@ -69,6 +57,7 @@ public class FragmentNotice extends Fragment {
     private InternetConnectionDetector internetConnectionDetector;
     private View view;
     private TextView textViewNoNotice;
+    private Button buttonLoadOldPost;
 
 
     public FragmentNotice() {
@@ -82,31 +71,27 @@ public class FragmentNotice extends Fragment {
         view = inflater.inflate(R.layout.fragment_notice, container,
                 false);
 
-        View v = inflater.inflate(R.layout.notice_list_footer, null);
+        View footer = inflater.inflate(R.layout.notice_list_footer, null);
+        View header = inflater.inflate(R.layout.notice_list_header, null);
 
         noticeFeed = new ArrayList<Notice>();
-        listAdapter = new NoticeAdapter(getActivity(),R.layout.notice_list_item, noticeFeed);
+        listAdapter = new NoticeAdapter(getActivity(), R.layout.notice_list_item, noticeFeed);
+
         noticeList = (ListView) view.findViewById(R.id.listViewNoticeList);
         textViewNoNotice = (TextView) view.findViewById(R.id.textViewNoNotice);
         textViewNoNotice.setVisibility(View.GONE);
         progressBarCommunityCenterLoader = (ProgressBar) view.findViewById(R.id.progressBarLoadNoticeData);
-        noticeList.addFooterView(v);
+        noticeList.addHeaderView(header);
+        noticeList.addFooterView(footer);
         noticeList.setAdapter(listAdapter);
-
+        buttonLoadOldPost = (Button) view.findViewById(R.id.buttonLoadOldPost);
+        buttonLoadOldPost.setVisibility(View.GONE);
+        TextView textViewOfflineMode = (TextView) view.findViewById(R.id.textViewOfflineMode);
+        textViewOfflineMode.setVisibility(View.GONE);
 
         internetConnectionDetector = new InternetConnectionDetector(getActivity());
-        if (internetConnectionDetector.isConnectingToInternet()) {
-            //starting the manage service activity
-            Intent serviceIntent = new Intent(getActivity(), StartingService.class);
-            getActivity().startService(serviceIntent);
-
-            postIntentFilter = new IntentFilter();
-            postIntentFilter.addAction("newPostArrived");
-            getActivity().registerReceiver(postReceiver, postIntentFilter);
-
-        } else {
-            Crouton.makeText(getActivity(), "You are currently offline", Style.ALERT)
-                    .show();
+        if (!internetConnectionDetector.isConnectingToInternet()) {
+            textViewOfflineMode.setVisibility(View.VISIBLE);
         }
 
         try {
@@ -150,7 +135,6 @@ public class FragmentNotice extends Fragment {
             }
         });
 
-        //registerForContextMenu(noticeList);
         return view;
     }
 
@@ -158,7 +142,10 @@ public class FragmentNotice extends Fragment {
         listAdapter.notifyDataSetChanged();
         if (listAdapter.isEmpty()) {
             textViewNoNotice.setVisibility(View.VISIBLE);
-            textViewNoNotice.setText("Currently no notice");
+            textViewNoNotice.setText("Currently no notice, subscribe to receive notice");
+        }
+        if (listAdapter.getCount() >= 20) {
+            buttonLoadOldPost.setVisibility(View.VISIBLE);
         }
     }
 
@@ -182,7 +169,7 @@ public class FragmentNotice extends Fragment {
     }
 
     private void getAllPost(final View view) {
-        String url = Flippy.allPostURL;
+        String url = Flippy.POST_URL;
         Ion.with(getActivity())
                 .load(url)
                 .setTimeout(60 * 60 * 1000)
@@ -192,25 +179,27 @@ public class FragmentNotice extends Fragment {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressBarCommunityCenterLoader.setVisibility(view.GONE);
+
                         try {
+
                             if (result != null && result.has("results")) {
                                 JsonArray communityArray = result.getAsJsonArray("results");
                                 for (int i = 0; i < communityArray.size(); i++) {
                                     JsonObject item = communityArray.get(i).getAsJsonObject();
                                     JsonObject author = item.getAsJsonObject("author");
                                     String startDate = item.get("timestamp").getAsString();
-                                    String title = item.get("title").getAsString();
+                                    String title = item.get("title").getAsString().trim();
                                     String id = item.get("id").getAsString();
                                     String content = item.get("content").getAsString();
                                     String channel = item.get("channel").getAsString();
-                                    String image_link = "flip";
+                                    String image_link = "";
                                     if (!item.get("image_url").isJsonNull()) {
                                         image_link = item.get("image_url").getAsString();
                                     }
                                     String authorEmail = author.get("email").getAsString();
-                                    String authorAvatarThumb = "flip";
-                                    String authorAvatar = "flip";
-                                    if (!author.get("avatar_thumb").isJsonNull()) {
+                                    String authorAvatarThumb = "";
+                                    String authorAvatar = "";
+                                    if (!author.get("avatar_thumb").isJsonNull() && !author.get("avatar").isJsonNull()) {
                                         authorAvatarThumb = author.get("avatar_thumb").getAsString();
                                         authorAvatar = author.get("avatar").getAsString();
                                     }
@@ -222,14 +211,18 @@ public class FragmentNotice extends Fragment {
                                 }
                                 //after persistence load from database
                                 loadAdapterFromDatabase(view);
+                            } else {
+                                Log.e("Fragment Notice", result.toString());
                             }
                             if (e != null) {
+                                Log.e("Fragment Notice", e.toString());
                                 return;
                             }
 
                         } catch (Exception exception) {
-                            Log.e("Fragment Notice", "Error occurred getting post from server");
+                            Log.e("Fragment Notice", exception.toString());
                         }
+
                     }
                 });
     }
@@ -272,43 +265,6 @@ public class FragmentNotice extends Fragment {
 
     }
 
-    private void loadAdapterFromDatabaseOnReceive() {
-        try {
-            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
-                    DatabaseHelper.class);
-            postDao = databaseHelper.getPostDao();
-            List<Post> postList = postDao.queryForAll();
-            if (!postList.isEmpty()) {
-                noticeFeed.clear();
-                for (int i = 0; i < postList.size(); i++) {
-                    Post post = postList.get(i);
-                    String[] timestampArray = post.start_date.replace("Z", "").split("T");
-                    String timestamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0, 8);
-
-                    try {
-                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
-                        Date dateConverted = dateFormat.parse(timestampArray[0].toString());
-                        timestamp = formatter.format(dateConverted) + " @ " + timestampArray[1].substring(0, 8);
-                    } catch (Exception error) {
-                        //maintain the first format
-                    }
-                    String subtitle = post.author_first_name + ", " + post.author_last_name;
-                    noticeFeed.add(new Notice(post.notice_id, post.notice_title, subtitle, post.notice_body, post.author_id, post.channel_id, timestamp, URI.create(post.author_avatar_thumb), URI.create(post.notice_image)));
-
-                }
-                updateListAdapter();
-
-            }
-        } catch (java.sql.SQLException sqlE) {
-            sqlE.printStackTrace();
-            Crouton.makeText(getActivity(), "Sorry, Try again later", Style.ALERT)
-                    .show();
-
-        }
-
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -317,18 +273,21 @@ public class FragmentNotice extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (internetConnectionDetector.isConnectingToInternet()) {
-            postIntentFilter = new IntentFilter();
-            postIntentFilter.addAction("newPostArrived");
-            getActivity().registerReceiver(postReceiver, postIntentFilter);
-
-        }
+        IntentFilter intentFilter = new IntentFilter(
+                "android.intent.action.MAIN");
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String RECEIVED = intent.getStringExtra("NEW_POST");
+                Log.i("Fragment Notice", RECEIVED);
+            }
+        };
+        getActivity().registerReceiver(mReceiver, intentFilter);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //getActivity().unregisterReceiver(postReceiver);
-
+        getActivity().unregisterReceiver(this.mReceiver);
     }
 }

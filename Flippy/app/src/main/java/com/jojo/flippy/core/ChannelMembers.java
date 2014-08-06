@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,7 +33,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChannelMembers extends ActionBarActivity implements SearchView.OnQueryTextListener {
+public class ChannelMembers extends ActionBarActivity {
 
     private String channelName;
     private String channelId;
@@ -66,7 +65,7 @@ public class ChannelMembers extends ActionBarActivity implements SearchView.OnQu
         channelName = intent.getStringExtra("channelName");
         channelId = intent.getStringExtra("channelId");
         isManage = intent.getBooleanExtra("isManage", false);
-        String channelDetailsURL = Flippy.channels + channelId + membersURL;
+        String channelDetailsURL = Flippy.CHANNELS_URL + channelId + membersURL;
 
 
         actionBar = getActionBar();
@@ -88,7 +87,7 @@ public class ChannelMembers extends ActionBarActivity implements SearchView.OnQu
         membershipList.setTextFilterEnabled(true);
 
 
-        //load the channels members
+        //load the CHANNELS_URL members
         Ion.with(ChannelMembers.this)
                 .load(channelDetailsURL)
                 .asJsonObject()
@@ -115,7 +114,12 @@ public class ChannelMembers extends ActionBarActivity implements SearchView.OnQu
                                     }
                                     memberFirstName = item.get("first_name").getAsString();
                                     ProfileItem profileItem = new ProfileItem(URI.create(url), item.get("email").getAsString(), memberFirstName + ", " + item.get("last_name").getAsString(), memberId);
-                                    ChannelMemberItem.add(profileItem);
+                                    if (isManage && !CommunityCenterActivity.regUserID.equalsIgnoreCase(memberId)) {
+                                        ChannelMemberItem.add(profileItem);
+                                    } else if (!isManage) {
+                                        ChannelMemberItem.add(profileItem);
+                                    }
+
                                 }
                                 updateAdapter();
                             }
@@ -165,7 +169,11 @@ public class ChannelMembers extends ActionBarActivity implements SearchView.OnQu
 
     private void updateAdapter() {
         channelMemberAdapter.notifyDataSetChanged();
-        actionBar.setSubtitle(totalMembers + " " + "member(s)");
+        if (actionBar != null && !isManage) {
+            actionBar.setSubtitle(totalMembers + " " + "member(s)");
+        } else if (actionBar != null && isManage) {
+            actionBar.setSubtitle("select a member");
+        }
         if (channelMemberAdapter.isEmpty()) {
             textViewNoChannelMember.setVisibility(View.VISIBLE);
             textViewNoChannelMember.setText("Channel has no member");
@@ -199,23 +207,23 @@ public class ChannelMembers extends ActionBarActivity implements SearchView.OnQu
                 (SearchView) menu.findItem(R.id.action_channel_members_search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-        searchView.setOnQueryTextListener(this);
+        SearchView.OnQueryTextListener textChangeListener = new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                channelMemberAdapter.getFilter().filter(newText);
+                Log.e("The channel members", "on text change text: " + newText);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                channelMemberAdapter.getFilter().filter(query);
+                Log.e("The query", "on query submit: " + query);
+                return true;
+            }
+        };
+        searchView.setOnQueryTextListener(textChangeListener);
         return true;
     }
 
-    @Override
-    public boolean onQueryTextChange(String search) {
-        if (TextUtils.isEmpty(search)) {
-            membershipList.clearTextFilter();
-        } else {
-           // membershipList.setFilterText(search.toString());
-            ChannelMembers.this.channelMemberAdapter.getFilter().filter(search);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
 }

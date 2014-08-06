@@ -67,19 +67,18 @@ public class NoticeAdapter extends ArrayAdapter<Notice> {
         holder.textViewId.setText(rowItem.getId());
 
         Ion.with(holder.imageViewCreator)
-                .placeholder(R.drawable.default_profile_picture)
-                .error(R.drawable.default_profile_picture)
+                .placeholder(R.drawable.user_place_small)
+                .error(R.drawable.user_error_small)
                 .animateIn(R.anim.fade_in)
                 .load(rowItem.getCreatorUrl().toString());
 
         String noticeImage = rowItem.getImageUrl().toString();
-
         if (noticeImage == null || noticeImage.equalsIgnoreCase("")) {
             holder.imageViewNotice.setVisibility(View.GONE);
         } else {
             Ion.with(holder.imageViewNotice)
-                    .placeholder(R.drawable.default_profile_picture)
-                    .error(R.drawable.default_profile_picture)
+                    .placeholder(R.drawable.notice_place)
+                    .error(R.drawable.notice_error)
                     .animateIn(R.anim.fade_in)
                     .load(noticeImage);
         }

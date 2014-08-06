@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,6 +32,7 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,10 +49,13 @@ public class SelectCommunityActivity extends ActionBarActivity {
     private String regUserEmail;
     private ProgressBar progressBarLoadCommunity;
     private Dao<User, Integer> userDao;
+    private User user;
     private TextView textViewNoCommunity;
     private CommunityAdapter adapter;
     private ProgressDialog progressDialog;
     private SuperToast superToast;
+    private boolean isSocialAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +65,21 @@ public class SelectCommunityActivity extends ActionBarActivity {
 
         intent = getIntent();
         regUserEmail = intent.getStringExtra("regUserEmail");
+        isSocialAuth = intent.getBooleanExtra("isSocialAuth", isSocialAuth);
+
 
         ActionBar actionbar = getActionBar();
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setSubtitle(getString(R.string.last_step));
             actionbar.setTitle("Select a community");
+        }
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(SelectCommunityActivity.this,
+                    DatabaseHelper.class);
+            userDao = databaseHelper.getUserDao();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         superToast = new SuperToast(SelectCommunityActivity.this);
         progressDialog = new ProgressDialog(SelectCommunityActivity.this);
@@ -84,7 +96,7 @@ public class SelectCommunityActivity extends ActionBarActivity {
 
 
         Ion.with(SelectCommunityActivity.this)
-                .load(Flippy.communitiesURL)
+                .load(Flippy.COMMUNITIES_URL)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -118,57 +130,58 @@ public class SelectCommunityActivity extends ActionBarActivity {
                     }
                 });
         listViewCommunities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                                       @Override
+                                                       public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                TextView textViewCommunityId = (TextView) view.findViewById(R.id.textViewCommunityId);
-                TextView textViewCommunityName = (TextView) view.findViewById(R.id.textViewCommunityName);
-                final String communityId = textViewCommunityId.getText().toString();
-                final String communityName = textViewCommunityName.getText().toString();
-                progressDialog.setMessage("Preparing " + communityName + " community");
-                progressDialog.show();
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("community_id", communityId);
-                Ion.with(SelectCommunityActivity.this)
-                        .load(Flippy.users + intent.getStringExtra("regUserID") + "/community/")
-                        .setHeader("Authorization", "Token " + intent.getStringExtra("regUserAuthToken"))
-                        .setJsonObjectBody(jsonObject)
-                        .asJsonObject()
-                        .setCallback(new FutureCallback<JsonObject>() {
-                            @Override
-                            public void onCompleted(Exception e, JsonObject result) {
-                                progressDialog.dismiss();
-                                if (result != null) {
-                                    try {
-                                        DatabaseHelper databaseHelper = OpenHelperManager.getHelper(SelectCommunityActivity.this,
-                                                DatabaseHelper.class);
-                                        userDao = databaseHelper.getUserDao();
-                                        UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
-                                        updateBuilder.where().eq("user_email", regUserEmail);
-                                        updateBuilder.updateColumnValue("community_id", communityId);
-                                        updateBuilder.updateColumnValue("community_name", communityName);
-                                        updateBuilder.update();
-                                        intent.setClass(SelectCommunityActivity.this, CommunityCenterActivity.class);
-                                        intent.putExtra("communitySelected", communityName);
-                                        intent.putExtra("selectedCommunityID", communityId);
-                                        startActivity(intent);
-                                    } catch (java.sql.SQLException sqlE) {
-                                        sqlE.printStackTrace();
-                                        showSuperToast("sorry, Failed to prepare community");
-                                        return;
-                                    }
-                                }
-                                if (e != null) {
-                                    showSuperToast("Check internet connection");
-                                    return;
+                                                           TextView textViewCommunityId = (TextView) view.findViewById(R.id.textViewCommunityId);
+                                                           TextView textViewCommunityName = (TextView) view.findViewById(R.id.textViewCommunityName);
+                                                           final String communityId = textViewCommunityId.getText().toString();
+                                                           final String communityName = textViewCommunityName.getText().toString();
+                                                           progressDialog.setMessage("Preparing " + communityName + " community");
+                                                           progressDialog.show();
 
-                                }
+                                                           JsonObject jsonObject = new JsonObject();
+                                                           jsonObject.addProperty("community_id", communityId);
+                                                           Ion.with(SelectCommunityActivity.this)
+                                                                   .load(Flippy.USERS_URL + intent.getStringExtra("regUserID") + "/community/")
+                                                                   .setHeader("Authorization", "Token " + intent.getStringExtra("regUserAuthToken"))
+                                                                   .setJsonObjectBody(jsonObject)
+                                                                   .asJsonObject()
+                                                                   .setCallback(new FutureCallback<JsonObject>() {
+                                                                       @Override
+                                                                       public void onCompleted(Exception e, JsonObject result) {
+                                                                           progressDialog.dismiss();
+                                                                           if (result != null) {
+                                                                               try {
+                                                                                   UpdateBuilder<User, Integer> updateBuilder = userDao.updateBuilder();
+                                                                                   updateBuilder.where().eq("user_email", regUserEmail);
+                                                                                   updateBuilder.updateColumnValue("community_id", communityId);
+                                                                                   updateBuilder.updateColumnValue("community_name", communityName);
+                                                                                   updateBuilder.update();
+                                                                                   intent.setClass(SelectCommunityActivity.this, CommunityCenterActivity.class);
+                                                                                   intent.putExtra("communitySelected", communityName);
+                                                                                   intent.putExtra("selectedCommunityID", communityId);
+                                                                                   startActivity(intent);
+                                                                               } catch (java.sql.SQLException sqlE) {
+                                                                                   sqlE.printStackTrace();
+                                                                                   showSuperToast("sorry, Failed to prepare community");
+                                                                                   return;
+                                                                               }
+                                                                           }
+                                                                           if (e != null) {
+                                                                               showSuperToast("Check internet connection");
+                                                                               return;
 
-                            }
-                        });
+                                                                           }
 
-            }
-        });
+                                                                       }
+                                                                   });
+
+
+                                                       }
+
+                                                   }
+        );
     }
 
     private void showSuperToast(String message) {
@@ -209,8 +222,11 @@ public class SelectCommunityActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+      /*
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.select_community, menu);
+
+      */
         return true;
     }
 

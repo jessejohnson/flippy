@@ -13,15 +13,10 @@ import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.jojo.flippy.adapter.AdminPerson;
-import com.jojo.flippy.adapter.ChannelMemberAdapter;
 import com.jojo.flippy.adapter.ChannelSelectItem;
 import com.jojo.flippy.adapter.ChannelSelectionItemAdapter;
-import com.jojo.flippy.adapter.ProfileItem;
 import com.jojo.flippy.app.R;
-import com.jojo.flippy.profile.MemberDetailActivity;
 import com.jojo.flippy.util.Flippy;
-import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -37,7 +32,6 @@ public class SelectChannelActivity extends ActionBarActivity {
     private ChannelSelectionItemAdapter userChannelsAdapter;
     private ListView userChannelList;
     private List<ChannelSelectItem> userChannelItem;
-    private String userChannels = "/subscriptions/";
     private ProgressBar progressBarLoadUserChannels;
     private TextView textViewNoChannel;
     private TextView textViewNoChannelHelp;
@@ -45,7 +39,7 @@ public class SelectChannelActivity extends ActionBarActivity {
     private String channelName;
     private String channelBio;
     private String subTitle = "a step to more to go";
-    private boolean isReFLIP;
+    private boolean isReFlip;
 
 
     @Override
@@ -55,8 +49,8 @@ public class SelectChannelActivity extends ActionBarActivity {
 
 
         intent = getIntent();
-        isReFLIP = intent.getBooleanExtra("isReFLIP", false);
-        String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
+        isReFlip = intent.getBooleanExtra("isReFlip", false);
+        String url = Flippy.USERS_URL + CommunityCenterActivity.regUserID + "/admin_channels/";
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setSubtitle(subTitle);
@@ -73,7 +67,7 @@ public class SelectChannelActivity extends ActionBarActivity {
         userChannelsAdapter = new ChannelSelectionItemAdapter(SelectChannelActivity.this,
                 R.layout.channel_select_listview, userChannelItem);
         userChannelList.setAdapter(userChannelsAdapter);
-        //load the channels of user
+        //load the CHANNELS_URL of user
         Ion.with(SelectChannelActivity.this)
                 .load(url)
                 .asJsonObject()
@@ -111,12 +105,11 @@ public class SelectChannelActivity extends ActionBarActivity {
                             if (e != null) {
                                 textViewNoChannelHelp.setVisibility(View.VISIBLE);
                                 textViewNoChannel.setVisibility(View.VISIBLE);
-                                ToastMessages.showToastLong(SelectChannelActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
                                 return;
                             }
 
                         } catch (Exception exception) {
-                            Log.e("Error occurred", "Error retrieving a list of user subscribed channels");
+                            Log.e("Error occurred", "Error retrieving a list of user admin CHANNELS_URL");
                         }
 
 
@@ -131,15 +124,16 @@ public class SelectChannelActivity extends ActionBarActivity {
                 TextView textViewChannelName = (TextView) view.findViewById(R.id.textViewChannelName);
                 String channelId = textViewChannelId.getText().toString();
                 String channelName = textViewChannelName.getText().toString();
-                if (isReFLIP) {
-                    intent.setClass(SelectChannelActivity.this, NoticeDetailActivity.class);
-                    intent.putExtra("channelId", channelId);
-                    setResult(1, intent);
-                }
-                intent.setClass(SelectChannelActivity.this, CreateNoticeActivity.class);
                 intent.putExtra("channelId", channelId);
                 intent.putExtra("channelName", channelName);
-                startActivity(intent);
+                if (isReFlip) {
+                    intent.setClass(SelectChannelActivity.this, NoticeDetailActivity.class);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    intent.setClass(SelectChannelActivity.this, CreateNoticeActivity.class);
+                    startActivity(intent);
+                }
 
 
             }

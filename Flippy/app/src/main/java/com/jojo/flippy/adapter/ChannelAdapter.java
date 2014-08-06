@@ -29,7 +29,6 @@ import java.util.List;
 public class ChannelAdapter extends ArrayAdapter<Channel> {
 
     Context context;
-    String channelDetailSubscribeURL = Flippy.channels;
     private boolean isUserChannel;
     private ViewHolder holder;
     private Dao<Channels, Integer> channelDao;
@@ -87,9 +86,9 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         holder.textViewNumberOfMembers.setText(rowItem.getCreatorFullName());
         holder.textViewChannelName.setText(rowItem.getChannelName());
         Ion.with(holder.imageView)
-                .placeholder(R.drawable.channel_bg)
+                .placeholder(R.drawable.channel_place)
                 .animateIn(R.anim.fade_in)
-                .error(R.color.flippy_orange)
+                .error(R.drawable.channel_error)
                 .load(String.valueOf(rowItem.getImageUrl()));
         holder.textViewStatus.setText(rowItem.getCreatorEmail());
         holder.textViewChannelId.setText(rowItem.getId());
@@ -134,7 +133,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         JsonObject json = new JsonObject();
         json.addProperty("id", CommunityCenterActivity.regUserID);
         Ion.with(context)
-                .load(channelDetailSubscribeURL + channelId + "/subscribe/")
+                .load(Flippy.CHANNELS_URL + channelId + "/subscribe/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()
@@ -154,10 +153,9 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                                 if (result.has("detail")) {
                                     ToastMessages.showToastLong(context, result.get("detail").getAsString());
                                 }
-
                             }
                             if (e != null) {
-                                ToastMessages.showToastLong(context, context.getResources().getString(R.string.internet_connection_error_dialog_title));
+                                Log.e("Channel adapter", e.toString());
                             }
                         } catch (Exception exception) {
                             Log.e("Channel Adapter", "Error subscribing to a channel " + channelId);
@@ -175,7 +173,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         JsonObject json = new JsonObject();
         json.addProperty("id", CommunityCenterActivity.regUserID);
         Ion.with(context)
-                .load(channelDetailSubscribeURL + channelId + "/unsubscribe/")
+                .load(Flippy.CHANNELS_URL + channelId + "/unsubscribe/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()

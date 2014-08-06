@@ -4,9 +4,12 @@ import android.app.ActionBar;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -51,7 +54,7 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class NoticeDetailActivity extends ActionBarActivity {
     private final String TAG = "NoticeDetailActivity";
-    SuperToast superToast;
+    private SuperToast superToast;
     private GoogleMap googleMap;
     private Intent intent;
     private PendingIntent pendingIntent;
@@ -81,13 +84,13 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private String locationLon = "";
     private String channelId = "";
     private String startDate;
-    private String endDate;
-    private int reminderInterval;
     private String noReminder;
     private LinearLayout linearLayoutMapView;
     private Calendar calendar;
     private String noPost = "Sorry, this post has been remove";
     private final int RE_FLIP = 1;
+    private Context context;
+    private ProgressDialog progressDialog;
 
     private Dao<Post, Integer> postDao;
 
@@ -102,14 +105,16 @@ public class NoticeDetailActivity extends ActionBarActivity {
         noticeId = intent.getStringExtra("noticeId");
         noticeSubtitle = intent.getStringExtra("noticeSubtitle");
         noticeBody = intent.getStringExtra("noticeBody");
-        String url = Flippy.allPostURL + noticeId + "/";
+        String url = Flippy.POST_URL + noticeId + "/";
         superToast = new SuperToast(NoticeDetailActivity.this);
+        context = this;
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setSubtitle(noticeTitle);
         }
+        progressDialog = new ProgressDialog(context);
         imageViewNoticeImageDetail = (ImageView) findViewById(R.id.imageViewNoticeImageDetail);
         imageViewStarDetail = (ImageView) findViewById(R.id.imageViewStarDetail);
         imageViewNoticeCreatorImage = (ImageView) findViewById(R.id.imageViewNoticeCreatorImage);
@@ -127,6 +132,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         imageViewDeletePost = (ImageView) findViewById(R.id.imageViewDeletePost);
         imageViewRemovePost = (ImageView) findViewById(R.id.imageViewRemovePost);
         imageViewDeletePost.setVisibility(View.INVISIBLE);
+        textViewNoticeLocation.setVisibility(View.GONE);
 
 
         //place holder texts
@@ -148,11 +154,11 @@ public class NoticeDetailActivity extends ActionBarActivity {
         if (googleMap == null) {
             googleMap = ((SupportMapFragment) getSupportFragmentManager().
                     findFragmentById(R.id.linearLayoutNoticeShowLocation)).getMap();
-          //  googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            //  googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
 
         //Loading the list with data from Api call
-        Ion.with(NoticeDetailActivity.this)
+        Ion.with(context)
                 .load(url)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -180,7 +186,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                     image_link = result.get("image_url").getAsString();
                                 }
                                 getChannelName(channelId);
-                                String adminUrl = Flippy.channels + channelId + "/admins/";
+                                String adminUrl = Flippy.CHANNELS_URL + channelId + "/admins/";
                                 getAdminsList(adminUrl);
                                 showView();
                             }
@@ -200,7 +206,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
             public void onClick(View view) {
                 intent.putExtra("avatar", image_link);
                 intent.putExtra("imageName", noticeTitle);
-                intent.setClass(NoticeDetailActivity.this, ImagePreviewActivity.class);
+                intent.setClass(context, ImagePreviewActivity.class);
                 startActivity(intent);
             }
         });
@@ -209,14 +215,20 @@ public class NoticeDetailActivity extends ActionBarActivity {
             public void onClick(View view) {
                 intent.putExtra("avatar", author_profile);
                 intent.putExtra("imageName", author_first_name);
-                intent.setClass(NoticeDetailActivity.this, ImagePreviewActivity.class);
+                intent.setClass(context, ImagePreviewActivity.class);
                 startActivity(intent);
             }
         });
         imageViewRemovePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                confirmNoticeDelete(noticeId);
+                confirmNoticeDelete(noticeId, false);
+            }
+        });
+        imageViewDeletePost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confirmNoticeDelete(noticeId, true);
             }
         });
         //loads the post rating from the api
@@ -228,10 +240,10 @@ public class NoticeDetailActivity extends ActionBarActivity {
         imageViewStarDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String ratingURL = Flippy.allPostURL + noticeId + "/star/";
+                String ratingURL = Flippy.POST_URL + noticeId + "/star/";
                 JsonObject json = new JsonObject();
                 json.addProperty("id", noticeId);
-                Ion.with(NoticeDetailActivity.this)
+                Ion.with(context)
                         .load(ratingURL)
                         .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                         .setJsonObjectBody(json)
@@ -274,9 +286,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings_re_flip) {
-            intent.setClass(NoticeDetailActivity.this, SelectChannelActivity.class);
-            intent.putExtra("isReFlip", true);
-            startActivityForResult(intent, RE_FLIP);
+            if (locationName == null || locationLon == null) {
+                showSuperToast("Notice not ready for re-flip, check internet connection", false);
+            } else {
+                intent.setClass(NoticeDetailActivity.this, SelectChannelActivity.class);
+                intent.putExtra("isReFlip", true);
+                startActivityForResult(intent, RE_FLIP);
+            }
+
             return true;
         }
         if (id == R.id.action_notice_alarm) {
@@ -311,14 +328,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
             showSuperToast("This notice has no reminder", false);
             return;
         }
-        if (startDate == null) {
+        if (startDate == null || startDate.equalsIgnoreCase(Flippy.defaultDate + "T" + Flippy.defaultTime + "Z")) {
             showSuperToast("This notice has no reminder date", false);
             return;
         }
         String actualDate[] = startDate.replace("Z", "").trim().split("T");
         String date = actualDate[0];
         String time = actualDate[1];
-        int month, year, day, hour, minute, seconds = 0;
+        int month, year, day, hour, minute, seconds;
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Calendar c = Calendar.getInstance();
@@ -380,24 +397,24 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private void showView() {
         Ion.with(imageViewNoticeImageDetail)
                 .animateIn(R.anim.fade_in)
-                .error(R.color.flippy_orange)
-                .placeholder(R.drawable.channel_bg)
+                .error(R.drawable.notice_error)
+                .placeholder(R.drawable.notice_place)
                 .load(image_link);
         Ion.with(imageViewNoticeCreatorImage)
                 .animateIn(R.anim.fade_in)
-                .placeholder(R.drawable.default_medium)
-                .error(R.color.flippy_orange)
+                .placeholder(R.drawable.user_place_small)
+                .error(R.drawable.user_error_small)
                 .load(author_profile);
         textViewAuthorEmailAddress.setText(author_email);
         textViewNoticeTimeStamp.setText(time_stamp);
         if (CommunityCenterActivity.regUserEmail.equalsIgnoreCase(author_email)) {
-            imageViewDeletePost.setEnabled(true);
+            imageViewDeletePost.setVisibility(View.VISIBLE);
         }
 
     }
 
     private void getPostCount(String id) {
-        String URL = Flippy.allPostURL + id + "/count_ratings/";
+        String URL = Flippy.POST_URL + id + "/count_ratings/";
         Ion.with(NoticeDetailActivity.this)
                 .load(URL)
                 .asJsonObject()
@@ -429,7 +446,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
     }
 
     private void getPostLocation(String id) {
-        String postLocationURL = Flippy.allPostURL + id + "/location/";
+        String postLocationURL = Flippy.POST_URL + id + "/location/";
         Ion.with(NoticeDetailActivity.this)
                 .load(postLocationURL)
                 .asJsonObject()
@@ -459,7 +476,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
     }
 
     private void getNoticeReminder(String id) {
-        String postReminderURL = Flippy.allPostURL + id + "/reminder/";
+        String postReminderURL = Flippy.POST_URL + id + "/reminder/";
         Ion.with(NoticeDetailActivity.this)
                 .load(postReminderURL)
                 .asJsonObject()
@@ -474,8 +491,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                 }
                                 JsonObject item = result.getAsJsonObject("results");
                                 startDate = item.get("start_date").getAsString();
-                                endDate = item.get("end_date").getAsString();
-                                reminderInterval = item.get("repeat_interval").getAsInt();
                             }
                             if (e != null) {
                                 showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
@@ -491,11 +506,14 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
     private void showMap() {
         //get this data from the intent
-        if (locationLon.equalsIgnoreCase("") || locationLat.equalsIgnoreCase("")) {
+        if (locationLon.equalsIgnoreCase("") || locationLat.equalsIgnoreCase("") || locationLat.equalsIgnoreCase(Flippy.defaultLat) || locationLon.equalsIgnoreCase(Flippy.defaultLon)) {
             return;
         }
         linearLayoutMapView.setVisibility(View.VISIBLE);
-        textViewNoticeLocation.setText("location : " + locationName);
+        if (!locationName.equalsIgnoreCase("")) {
+            textViewNoticeLocation.setVisibility(View.VISIBLE);
+            textViewNoticeLocation.setText("location : " + locationName);
+        }
         LatLng coordinate = new LatLng(Double.parseDouble(locationLat), Double.parseDouble(locationLon));
         googleMap.addMarker(new MarkerOptions()
                 .snippet(locationName)
@@ -507,7 +525,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
     private void getChannelName(String id) {
         Ion.with(NoticeDetailActivity.this)
-                .load(Flippy.channels + id + "/")
+                .load(Flippy.CHANNELS_URL + id + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -563,10 +581,11 @@ public class NoticeDetailActivity extends ActionBarActivity {
         if (data == null) {
             showSuperToast("No channel selected", false);
             return;
-        }
-        if (resultCode == RESULT_OK && requestCode == RE_FLIP) {
-            //process and send to create notice
-            showSuperToast("Create a new notice passing all this details", true);
+        } else if (resultCode == RESULT_OK && requestCode == RE_FLIP) {
+            String channelId = data.getStringExtra("channelId");
+            String channelName = data.getStringExtra("channelName");
+            Log.e(TAG, channelId + " " + channelName);
+            reFlipPost(channelId,channelName);
 
         } else {
             showSuperToast("No channel selected", false);
@@ -575,15 +594,23 @@ public class NoticeDetailActivity extends ActionBarActivity {
         }
     }
 
-    private void confirmNoticeDelete(final String noticeId) {
+    private void confirmNoticeDelete(final String noticeId, final boolean isDelete) {
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Confirm your action");
         alert.setIcon(R.drawable.icon_dark_info);
-        alert.setMessage("Removing this notice is irreversible, are you sure you want to continue ?");
+        if (isDelete) {
+            alert.setMessage("Deleting this notice is irreversible and your CHANNELS_URL members will longer have access to the details, are you sure you want to continue ?");
+        } else {
+            alert.setMessage("Removing this notice is irreversible, are you sure you want to continue ?");
+
+        }
         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                removeNoticeFormDb(noticeId);
-
+                if (isDelete) {
+                    deleteNotice(noticeId);
+                } else {
+                    removeNoticeFormDb(noticeId);
+                }
             }
         });
         alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -608,7 +635,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
-            Log.e("Channel adapter", "Error getting all user channels");
+            Log.e("Channel adapter", "Error getting all user CHANNELS_URL");
         }
     }
 
@@ -649,6 +676,69 @@ public class NoticeDetailActivity extends ActionBarActivity {
                         }
                     }
                 });
+    }
+
+    private void deleteNotice(final String id) {
+        Ion.with(NoticeDetailActivity.this, Flippy.POST_URL + id + "/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        try {
+                            if (e != null) {
+                                ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                            } else if (result != null) {
+                                Log.e("Result", result.toString());
+                                removeNoticeFormDb(id);
+                            } else {
+                                Log.e("Result has details", result.toString());
+                            }
+                        } catch (Resources.NotFoundException error) {
+                            error.printStackTrace();
+                            Log.e(TAG, error.toString());
+                        }
+                    }
+
+                });
+
+    }
+
+    private void reFlipPost(String channelId, final String channelName) {
+        progressDialog.setMessage("reflipping the notice...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        Ion.with(context, Flippy.POST_URL + noticeId + "/reflip/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .setMultipartParameter("channel_id", channelId)
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        progressDialog.dismiss();
+                        try {
+                            if (result.has("detail")) {
+                                ToastMessages.showToastLong(context, "Failed to reflip notice");
+                                Log.e(TAG, result.toString());
+                                return;
+                            } else if (result != null) {
+                                ToastMessages.showToastLong(context, "Notice refliped successfully into "+channelName);
+                                Log.e(TAG, result.toString());
+                            } else {
+                                ToastMessages.showToastLong(context, getResources().getString(R.string.internet_connection_error_dialog_title));
+                                Log.e(TAG, e.toString());
+                                return;
+                            }
+                        } catch (Exception exception) {
+                            Log.e("Reflip post", exception.toString());
+                            exception.printStackTrace();
+                        }
+
+                    }
+
+                });
+
+
     }
 
 }

@@ -11,11 +11,11 @@
 
     <ImageView
         android:id="@+id/imageViewPreviewShare"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
         android:layout_centerInParent="true"
         android:background="@color/flippy_dark_header"
-        android:scaleType="centerInside" />
+        android:scaleType="centerCrop" />
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -38,4 +38,5 @@
         android:textColor="@color/flippy_white"
         android:layout_alignRight="@+id/imageViewPreviewShare"
         android:layout_alignEnd="@+id/imageViewPreviewShare" />
+
 </RelativeLayout>

@@ -20,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:paddingTop="@dimen/margin_one"
         android:layout_margin="@dimen/margin_two"
         android:gravity="center_horizontal"
@@ -33,6 +34,7 @@
             android:layout_alignParentBottom="true"
             android:background="@drawable/flippy_button_default_plain"
             android:text="@string/subscription_state_true"
+            android:visibility="gone"
             android:textStyle="bold"
             android:textColor="@color/flippy_orange" />
 
@@ -44,6 +46,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/flippy_button_default_plain"
             android:text="@string/subscription_state_false"
+            android:visibility="gone"
             android:textStyle="bold"
             android:textColor="@color/flippy_orange" />
     </LinearLayout>

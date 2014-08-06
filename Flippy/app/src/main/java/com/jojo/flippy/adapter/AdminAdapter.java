@@ -22,7 +22,6 @@ import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.profile.ManageChannelActivity;
 import com.jojo.flippy.util.Flippy;
-import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
@@ -32,6 +31,7 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
     Context context;
     private ProgressDialog progressDialog;
     private SuperToast superToast;
+    private String creator = ManageChannelActivity.creatorId;
 
     public AdminAdapter(Context context, int resourceId,
                         List<AdminPerson> items) {
@@ -53,23 +53,26 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
             holder.textViewAdminFullName = (TextView) convertView.findViewById(R.id.textViewAdminFullName);
             holder.textViewAdminId = (TextView) convertView.findViewById(R.id.textViewAdminId);
             convertView.setTag(holder);
-        } else {
+        } else
+
             holder = (ViewHolder) convertView.getTag();
-        }
+
         holder.textViewAdminEmail.setText(rowItem.getProfileEmail());
         holder.textViewAdminId.setText(rowItem.getAdminId());
         holder.textViewAdminFullName.setText(rowItem.getProfileFullName());
 
-        String creator = ManageChannelActivity.creatorId;
-        if (creator != null && creator.equalsIgnoreCase(rowItem.getAdminId())) {
-            holder.buttonDemoteAdmin.setVisibility(View.GONE);
-        }
 
         Ion.with(holder.imageViewAdminOne)
-                .placeholder(R.drawable.default_profile_picture)
-                .error(R.drawable.default_profile_picture)
-                .animateIn(R.anim.fade_in)
+                .placeholder(R.drawable.user_place_small)
+                .error(R.drawable.user_error_small)
                 .load(String.valueOf(rowItem.getAdminProfileItem()));
+
+        if (creator.equals(rowItem.getAdminId())) {
+            holder.buttonDemoteAdmin.setVisibility(View.GONE);
+        }else{
+            holder.buttonDemoteAdmin.setVisibility(View.VISIBLE);
+        }
+
         holder.buttonDemoteAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,6 +84,8 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
 
         return convertView;
     }
+
+
 
     private void confirmDemotion(String adminName, final String memberId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -106,9 +111,9 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Demoting an admin ...");
         progressDialog.show();
-        String URL = Flippy.channels + ManageChannelActivity.channelId + "/demote_user/";
+        String URL = Flippy.CHANNELS_URL + ManageChannelActivity.channelId + "/demote_user/";
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", memberId);
+        jsonObject.addProperty("user_id", memberId);
         Ion.with(context)
                 .load(URL)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
@@ -119,6 +124,7 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
                     public void onCompleted(Exception e, JsonObject result) {
                         progressDialog.dismiss();
                         try {
+
                             if (result != null) {
                                 if (result.has("detail")) {
                                     showSuperToast("Sorry unable to demote user ", false);
@@ -168,4 +174,5 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
                 textViewAdminId;
 
     }
+
 }

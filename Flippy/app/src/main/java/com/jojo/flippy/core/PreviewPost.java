@@ -28,9 +28,11 @@ import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.io.File;
+
 public class PreviewPost extends ActionBarActivity {
     private Intent intent;
-    private String channelId, noticeTitle, noticeContent, lat, lon, channelName, noticeLocation;
+    private String channelId, noticeTitle, noticeContent, lat = Flippy.defaultLat, lon = Flippy.defaultLon, channelName, noticeLocation;
     private TextView textViewPreviewNoticeTitleDetail, textViewPreviewNoticeSubtitle,
             textViewPreviewNoticeTextDetail,
             textViewPreviewNoticeChannelName, textViewPreviewAuthorEmailAddress, textViewNoticeLocation;
@@ -43,6 +45,7 @@ public class PreviewPost extends ActionBarActivity {
     private String imagePath;
     private static String TAG = "PreviewPost";
     private ProgressDialog progressDialog;
+    private String datePicked = Flippy.defaultDate, timePicked = Flippy.defaultTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +58,11 @@ public class PreviewPost extends ActionBarActivity {
         noticeContent = intent.getStringExtra("noticeContent");
         channelName = intent.getStringExtra("channelName");
         noticeLocation = intent.getStringExtra("noticeLocation");
-        if (intent.getStringExtra("lat") != null) {
-            lat = intent.getStringExtra("lat");
-            lon = intent.getStringExtra("lon");
-        }
+        datePicked = intent.getStringExtra("datePicked");
+        timePicked = intent.getStringExtra("timePicked");
+        lat = intent.getStringExtra("lat");
+        lon = intent.getStringExtra("lon");
+
 
         imageViewPreviewNoticeImageDetail = (ImageView) findViewById(R.id.imageViewPreviewNoticeImageDetail);
         textViewPreviewNoticeTitleDetail = (TextView) findViewById(R.id.textViewPreviewNoticeTitleDetail);
@@ -70,12 +74,11 @@ public class PreviewPost extends ActionBarActivity {
         imageViewPreviewNoticeCreatorImage = (ImageView) findViewById(R.id.imageViewPreviewNoticeCreatorImage);
         buttonPublishPost = (Button) findViewById(R.id.buttonPublishPost);
         progressDialog = new ProgressDialog(PreviewPost.this);
+        imageViewPreviewNoticeImageDetail.setVisibility(View.GONE);
 
-        if (intent.getStringExtra("noticeImage") != null) {
+        if (intent.getStringExtra("noticeImage") != null && !intent.getStringExtra("noticeImage").equalsIgnoreCase("")) {
             imagePath = intent.getStringExtra("noticeImage");
-            if (imagePath == null || imagePath == "") {
-                imageViewPreviewNoticeImageDetail.setVisibility(View.GONE);
-            }
+            imageViewPreviewNoticeImageDetail.setVisibility(View.VISIBLE);
             decodeFile(imagePath);
         }
 
@@ -99,8 +102,8 @@ public class PreviewPost extends ActionBarActivity {
         textViewNoticeLocation.setText("location: " + noticeLocation);
         textViewPreviewNoticeSubtitle.setText(CommunityCenterActivity.userFirstName + ", " + CommunityCenterActivity.userLastName);
         Ion.with(imageViewPreviewNoticeCreatorImage)
-                .error(R.drawable.default_profile_picture)
-                .placeholder(R.drawable.default_profile_picture)
+                .error(R.drawable.user_error_small)
+                .placeholder(R.drawable.user_place_small)
                 .load(CommunityCenterActivity.userAvatarURL);
         showMap();
 
@@ -108,8 +111,11 @@ public class PreviewPost extends ActionBarActivity {
         buttonPublishPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String reminderDateTime = datePicked + "T" + timePicked + "Z";
                 if (imagePath == null || imagePath == "") {
-                    createPostWithoutImage(noticeTitle, noticeContent, channelId);
+                    createPost(noticeTitle, noticeContent, channelId, noticeLocation, lat, lon, reminderDateTime);
+                } else {
+                    createPost(noticeTitle, noticeContent, channelId, imagePath, noticeLocation, lat, lon, reminderDateTime);
                 }
             }
         });
@@ -121,7 +127,7 @@ public class PreviewPost extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.preview_post, menu);
+        //getMenuInflater().inflate(R.menu.preview_post, menu);
         return true;
     }
 
@@ -134,14 +140,18 @@ public class PreviewPost extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean createPostWithoutImage(String title, String body, String channel) {
+    private void createPost(String title, String body, String channelId, String location, String latitude, String longitude, String reminder) {
         progressDialog.setMessage("publishing post ...");
         progressDialog.show();
         JsonObject json = new JsonObject();
         json.addProperty("title", title);
         json.addProperty("content", body);
-        json.addProperty("channel_id", channel);
-        Ion.with(PreviewPost.this, Flippy.allPostURL)
+        json.addProperty("channel_id", channelId);
+        json.addProperty("location_name", location);
+        json.addProperty("latitude", latitude);
+        json.addProperty("longitude", longitude);
+        json.addProperty("reminder_date", reminder);
+        Ion.with(PreviewPost.this, Flippy.POST_URL)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .setJsonObjectBody(json)
                 .asJsonObject()
@@ -152,9 +162,13 @@ public class PreviewPost extends ActionBarActivity {
                         try {
                             if (e != null) {
                                 ToastMessages.showToastLong(PreviewPost.this, getResources().getString(R.string.internet_connection_error_dialog_title));
-                            } else if (result != null) {
+                                Log.e(TAG, e.toString());
+                            } else if (result != null && !result.has("detail")) {
+                                ToastMessages.showToastLong(PreviewPost.this, "Notice created successfully");
+                                goToHome();
                                 Log.e("Result", result.toString());
                             } else {
+                                ToastMessages.showToastLong(PreviewPost.this, "sorry,unable to create notice");
                                 Log.e("Result has details", result.toString());
                             }
                         } catch (Resources.NotFoundException error) {
@@ -165,12 +179,59 @@ public class PreviewPost extends ActionBarActivity {
 
                 });
 
-        return true;
+    }
+
+    private void createPost(String noticeTitle, String noticeContent, String channelId, final String image, String location, String latitude, String longitude, String reminder) {
+        progressDialog.setMessage("creating the notice...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        Ion.with(PreviewPost.this, Flippy.POST_URL)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .setMultipartParameter("title", noticeTitle)
+                .setMultipartParameter("content", noticeContent)
+                .setMultipartParameter("channel_id", channelId)
+                .setMultipartParameter("location_name", location)
+                .setMultipartParameter("latitude", latitude)
+                .setMultipartParameter("longitude", longitude)
+                .setMultipartParameter("reminder_date", reminder)
+                .setMultipartFile("image", new File(image))
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        Log.e("Notice image", image);
+                        buttonPublishPost.setEnabled(true);
+                        buttonPublishPost.setText(getText(R.string.preview_post_publish_post));
+                        progressDialog.dismiss();
+                        try {
+                            if (result.has("detail")) {
+                                ToastMessages.showToastLong(PreviewPost.this, "Failed to create post");
+                                Log.e(TAG, result.toString());
+                                return;
+                            } else if (result != null) {
+                                ToastMessages.showToastLong(PreviewPost.this, "Notice created successfully");
+                                Log.e(TAG, result.toString());
+                                goToHome();
+                            } else {
+                                ToastMessages.showToastLong(PreviewPost.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                                Log.e(TAG, e.toString());
+                                return;
+                            }
+                        } catch (Exception exception) {
+                            Log.e("Preview post", exception.toString());
+                            exception.printStackTrace();
+                        }
+
+                    }
+
+                });
+
+
     }
 
     private void showMap() {
         //get this data from the intent
-        if (lat == null || lon == null || lat.equalsIgnoreCase("") || lon.equalsIgnoreCase("")) {
+        if (lat.equalsIgnoreCase(Flippy.defaultLat) || lon.equalsIgnoreCase(Flippy.defaultLon)) {
             return;
         }
         linearLayoutPreviewMapView.setVisibility(View.VISIBLE);
@@ -203,5 +264,10 @@ public class PreviewPost extends ActionBarActivity {
         o2.inSampleSize = scale;
         bitmap = BitmapFactory.decodeFile(filePath, o2);
         imageViewPreviewNoticeImageDetail.setImageBitmap(bitmap);
+    }
+
+    private void goToHome() {
+        Intent intentHome = new Intent(PreviewPost.this, CommunityCenterActivity.class);
+        startActivity(intentHome);
     }
 }

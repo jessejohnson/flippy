@@ -72,7 +72,7 @@ The Register activity:----
 This section presents the user with the needed input fields for the user
 to register. Currently using ...
 Email address, First name, Lastname and Password.
-The user checks an
+The user checks are done using the ion network calls
 
 
 

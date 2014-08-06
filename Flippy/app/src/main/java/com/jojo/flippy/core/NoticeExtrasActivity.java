@@ -42,18 +42,17 @@ public class NoticeExtrasActivity extends ActionBarActivity {
     private static final int START_MAP = 3;
     public static int reminderYear, reminderMonth, reminderDay, reminderHour, reminderMinute;
     protected static FragmentManager timerSupport;
-    private static String datePicked;
-    private static String timePicked;
-    private static String location;
+    private static String datePicked = Flippy.defaultDate;
+    private static String timePicked = Flippy.defaultTime;
     Uri imageUri;
     private Intent intent;
     private String channelToCreateNotice;
     private String noticeTitle;
     private Button buttonAddImageToNotice, buttonPreviewCreateNotice, buttonAddMapToNotice;
     private AlertDialog levelDialog;
-    private String lat, lon;
+    private String lat = Flippy.defaultLat, lon = Flippy.defaultLon;
     Uri selectedImageUri = null;
-    private String filePath = null;
+    private String filePath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +82,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                 intent.putExtra("lon", lon);
                 intent.putExtra("datePicked", datePicked);
                 intent.putExtra("timePicked", timePicked);
-                intent.putExtra("noticeImage",filePath);
+                intent.putExtra("noticeImage", filePath);
                 intent.setClass(NoticeExtrasActivity.this, PreviewPost.class);
                 startActivity(intent);
             }
@@ -189,7 +188,6 @@ public class NoticeExtrasActivity extends ActionBarActivity {
             case START_MAP:
                 if (resultCode == RESULT_OK) {
                     Log.e("From location", data.getStringExtra("location"));
-                    location = data.getStringExtra("location");
                     String[] location = data.getStringExtra("location").split(",");
                     lat = location[0];
                     lon = location[1];
@@ -210,12 +208,6 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                     Log.e("Bitmap", "Unknown path");
                 }
 
-            /*    if (filePath != null) {
-                    decodeFile(filePath);
-                } else {
-                    bitmapNotice = null;
-                }
-            */
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "Sorry, Something went wrong",
                         Toast.LENGTH_LONG).show();
@@ -254,8 +246,8 @@ public class NoticeExtrasActivity extends ActionBarActivity {
             reminderYear = year;
             reminderMonth = month;
             reminderDay = day;
-            datePicked = day + ": " + month + " : " + year;
-            ToastMessages.showToastLong(getActivity(), "Date picked is  " + year + ": " + month + " : " + day);
+            datePicked = year + "-" + month + "-" + day;
+            ToastMessages.showToastLong(getActivity(), "Date picked is  " + year + " - " + month + " - " + day);
             DialogFragment timer = new TimePickerFragment();
             timer.show(timerSupport, "timePicker");
 
@@ -280,7 +272,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             reminderHour = hourOfDay;
             reminderMinute = minute;
-            timePicked = hourOfDay + ": " + minute;
+            timePicked = hourOfDay + ":" + minute + ":00";
             ToastMessages.showToastLong(getActivity(), "Time picked is  " + hourOfDay + ": " + minute);
         }
     }

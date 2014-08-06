@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -73,7 +72,7 @@ public class AccountProfileActivity extends ActionBarActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         superToast = new SuperToast(AccountProfileActivity.this);
-        final String url = Flippy.users + CommunityCenterActivity.regUserID + userChannels;
+        final String url = Flippy.USERS_URL + CommunityCenterActivity.regUserID + userChannels;
         intent = getIntent();
 
         View header = getLayoutInflater().inflate(R.layout.activity_account_header,null);
@@ -103,16 +102,16 @@ public class AccountProfileActivity extends ActionBarActivity {
 
         //set the user profile
         Ion.with(imageViewProfilePic)
-                .placeholder(R.drawable.default_profile_picture)
+                .placeholder(R.drawable.user_place_small)
                 .animateIn(R.anim.fade_in)
-                .error(R.drawable.default_profile_picture)
+                .error(R.drawable.user_error_small)
                 .load(CommunityCenterActivity.userAvatarURL);
 
         textViewProfileUserNameNew.setText(userFullName);
         textViewProfileUserEmailNew.setText(userEmail);
         getCommunityImage(CommunityCenterActivity.userCommunityId);
 
-        //load the channels user subscribed to
+        //load the CHANNELS_URL user subscribed to
         Ion.with(AccountProfileActivity.this)
                 .load(url)
                 .asJsonObject()
@@ -132,7 +131,6 @@ public class AccountProfileActivity extends ActionBarActivity {
                                 updateAdapter();
                             }
                             if (e != null) {
-                                showSuperToast("sorry, failed to load your channels");
                                 Log.e("Error loading channel", e.toString());
                             }
                         } catch (Exception el) {
@@ -156,7 +154,7 @@ public class AccountProfileActivity extends ActionBarActivity {
 
     private void getCommunityImage(String id) {
         Ion.with(AccountProfileActivity.this)
-                .load(Flippy.communitiesURL + id + "/")
+                .load(Flippy.COMMUNITIES_URL + id + "/")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -168,7 +166,6 @@ public class AccountProfileActivity extends ActionBarActivity {
                                 loadCommunityImage(userCommunityImageLink);
                             }
                             if (e != null) {
-                                showSuperToast("sorry, failed to get community image");
                                 Log.e("error", e.toString());
                             }
                         } catch (Exception exception) {
@@ -191,15 +188,14 @@ public class AccountProfileActivity extends ActionBarActivity {
 
     private void loadCommunityImage(String url) {
         if (url == null) {
-            showSuperToast("sorry, internal error occurred");
             Log.e("Error loading community image", "url is null");
             return;
         }
         textViewProfileUserCommunity.setText("Community: " + userCommunityName);
         textViewProfileUserCommunity.setVisibility(View.VISIBLE);
         Ion.with(imageViewProfileUserCommunity)
-                .placeholder(R.drawable.default_profile_picture)
-                .error(R.color.flippy_light_header)
+                .placeholder(R.drawable.community_place)
+                .error(R.drawable.community_error)
                 .animateIn(R.anim.fade_in)
                 .load(url);
     }

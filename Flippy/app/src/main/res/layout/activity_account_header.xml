@@ -27,7 +27,6 @@
                 android:layout_height="@dimen/margin_one_fifty"
                 android:layout_gravity="center_horizontal"
                 android:alpha="0.5"
-                android:background="@color/flippy_orange"
                 android:scaleType="centerCrop" />
 
             <LinearLayout

@@ -76,12 +76,12 @@ public class CustomDrawer extends ArrayAdapter<DrawerItem> {
             drawerHolder.userName.setText(CommunityCenterActivity.userFirstName + " " + CommunityCenterActivity.userLastName);
             drawerHolder.userEmail.setText(CommunityCenterActivity.regUserEmail);
             if (CommunityCenterActivity.userAvatarURL == null) {
-                drawerHolder.userImage.setImageResource(R.drawable.default_profile_picture);
+                drawerHolder.userImage.setImageResource(R.drawable.user_place_large);
             } else {
                 Ion.with(drawerHolder.userImage)
-                        .placeholder(R.drawable.default_profile_picture)
+                        .placeholder(R.drawable.user_place_large)
                         .animateIn(R.anim.fade_in)
-                        .error(R.color.flippy_light_header)
+                        .error(R.drawable.user_error_large)
                         .load(CommunityCenterActivity.userAvatarURL.toString());
             }
 

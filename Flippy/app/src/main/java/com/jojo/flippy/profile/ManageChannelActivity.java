@@ -3,12 +3,13 @@ package com.jojo.flippy.profile;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -16,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,43 +32,53 @@ import com.android.volley.toolbox.StringRequest;
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.adapter.AdminAdapter;
 import com.jojo.flippy.adapter.AdminPerson;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.ChannelMembers;
 import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.persistence.Channels;
+import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
 
 import java.io.File;
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ManageChannelActivity extends ActionBarActivity {
-    private static final int PICK_FROM_CAMERA = 5;
-    private static final int CROP_FROM_CAMERA = 6;
     private static final int PICK_FROM_FILE = 7;
     private static final int PROMOTE_USER = 8;
-    private EditText editTextManageChannelChannelName;
-    private ImageView imageViewChannelManageEdit, imageViewEditChannelName;
+    private TextView textViewChannelNameEdit;
+    private ImageView imageViewChannelManageEdit, imageViewChannelEdit;
     private Intent intent;
     private String channelName, image_url;
     public static String creatorId;
-    private Uri mImageCaptureUri;
-    private AlertDialog dialog;
-    private Button buttonAddAdmin;
-    private ProgressBar progressBarLoadAdmin;
+    private Button buttonAddAdmin, buttonEditChannelName;
+    private ProgressBar progressBarLoadAdmin, progressBarUploadChannelImage;
     private SuperToast superToast;
     private ListView listViewChannelAdmins;
     private List<AdminPerson> rowItems;
     private AdminAdapter adminAdapter;
     public static String channelId;
     private ProgressDialog progressDialog;
+    private Dao<Channels, Integer> channelDao;
+    private Context context;
+    private String filePath;
+    private ActionBar actionBar;
 
 
     private static String TAG = "ManageChannelActivity";
@@ -84,30 +94,33 @@ public class ManageChannelActivity extends ActionBarActivity {
         image_url = intent.getStringExtra("image_url");
         creatorId = intent.getStringExtra("creatorId");
 
-        ActionBar actionBar = getActionBar();
+        actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setSubtitle(channelName);
         }
+        context = this;
         View header = getLayoutInflater().inflate(R.layout.activity_manage_channel_header, null);
         listViewChannelAdmins = (ListView) findViewById(R.id.listViewChannelAdmins);
         listViewChannelAdmins.addHeaderView(header);
         progressDialog = new ProgressDialog(ManageChannelActivity.this);
         superToast = new SuperToast(ManageChannelActivity.this);
         progressBarLoadAdmin = (ProgressBar) findViewById(R.id.progressBarLoadAdmin);
+        progressBarUploadChannelImage = (ProgressBar) findViewById(R.id.progressBarUploadChannelImage);
         buttonAddAdmin = (Button) findViewById(R.id.buttonAddAdminChannel);
         buttonAddAdmin.setVisibility(View.GONE);
-        editTextManageChannelChannelName = (EditText) findViewById(R.id.editTextManageChannelChannelName);
-        editTextManageChannelChannelName.setText(channelName);
+        textViewChannelNameEdit = (TextView) findViewById(R.id.textViewChannelNameEdit);
+        textViewChannelNameEdit.setText(channelName);
         //textViewChannelAdmins.setText(channelName + " channel administrators");
         rowItems = new ArrayList<AdminPerson>();
         adminAdapter = new AdminAdapter(ManageChannelActivity.this,
                 R.layout.channel_admis_listview, rowItems);
         listViewChannelAdmins.setAdapter(adminAdapter);
         imageViewChannelManageEdit = (ImageView) findViewById(R.id.imageViewChannelManageEdit);
-        imageViewEditChannelName = (ImageView) findViewById(R.id.imageViewEditChannelName);
-        String adminURL = Flippy.channels + channelId + "/admins/";
+        imageViewChannelEdit = (ImageView) findViewById(R.id.imageViewChannelEdit);
+        buttonEditChannelName = (Button) findViewById(R.id.buttonEditChannelName);
+        String adminURL = Flippy.CHANNELS_URL + channelId + "/admins/";
         getAdminsList(adminURL);
-        showDialog();
+
 
         listViewChannelAdmins.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -123,30 +136,28 @@ public class ManageChannelActivity extends ActionBarActivity {
                 intent.putExtra("memberId", memberId);
                 intent.setClass(ManageChannelActivity.this, MemberDetailActivity.class);
                 startActivity(intent);
-
             }
         });
         Ion.with(imageViewChannelManageEdit)
-                .placeholder(R.drawable.channel_bg)
+                .placeholder(R.drawable.channel_place)
+                .error(R.drawable.channel_error)
                 .animateIn(R.anim.fade_in)
                 .load(image_url);
-        imageViewChannelManageEdit.setOnClickListener(new View.OnClickListener() {
+        imageViewChannelEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.show();
+                pickPhoto(view);
             }
         });
-        //disable all the fields
-        editTextManageChannelChannelName.setEnabled(false);
+
         intent.setClass(ManageChannelActivity.this, ChannelMembers.class);
         intent.putExtra("isManage", true);
 
         //enable the edit text for the channel name on click
-        imageViewEditChannelName.setOnClickListener(new View.OnClickListener() {
+        buttonEditChannelName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editTextManageChannelChannelName.setEnabled(true);
-                editTextManageChannelChannelName.setFocusable(true);
+                editChannelName();
             }
         });
 
@@ -171,64 +182,47 @@ public class ManageChannelActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String noMember = "No member selected";
-        if (requestCode == RESULT_CANCELED) {
-            Log.e(TAG, "Cancelled");
-            showSuperToast(noMember, false);
-            return;
+        String cancel = "Action cancelled";
+        if (requestCode == PROMOTE_USER && resultCode == RESULT_OK && null != data) {
+            promoteUser(data.getStringExtra("memberId"));
         }
-        if (data == null) {
-            showSuperToast(noMember, false);
-            Log.e(TAG, "Null data");
-            return;
-        }
-        if (requestCode == PROMOTE_USER) {
-            if (resultCode == RESULT_OK) {
-                Log.e(TAG, data.getStringExtra("memberId") + " " + data.getStringExtra("memberEmail"));
-                promoteUser(data.getStringExtra("memberId"));
+        if (requestCode == PICK_FROM_FILE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            try {
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                filePath = cursor.getString(columnIndex);
+                cursor.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } else if(requestCode ==PICK_FROM_FILE) {
-
+            if (filePath != null) {
+                imageViewChannelManageEdit.setImageBitmap(BitmapFactory.decodeFile(filePath));
+                imageViewChannelManageEdit.setAdjustViewBounds(true);
+                imageViewChannelManageEdit.setMaxHeight(imageViewChannelManageEdit.getHeight());
+                imageViewChannelManageEdit.setMaxWidth(imageViewChannelManageEdit.getWidth());
+                imageViewChannelManageEdit.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                uploadNewChannelImage(filePath);
+            } else {
+                ToastMessages.showToastLong(context, "Sorry image upload failed");
+            }
+        } else {
+            ToastMessages.showToastLong(context, cancel);
         }
 
     }
 
-    private void showDialog() {
-        final String[] items = new String[]{"Take from camera",
-                "Select from gallery"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ManageChannelActivity.this,
-                android.R.layout.select_dialog_item, items);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(ManageChannelActivity.this);
-        builder.setTitle("Select image");
-        builder.setAdapter(adapter, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int position) {
-                if (position == 0) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    mImageCaptureUri = Uri.fromFile(new File(Environment
-                            .getExternalStorageDirectory(), "tmp_avatar_"
-                            + String.valueOf(System.currentTimeMillis())
-                            + ".jpg"));
-                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                            mImageCaptureUri);
-                    try {
-                        intent.putExtra("return-data", true);
-                        startActivityForResult(intent, PICK_FROM_CAMERA);
-                    } catch (ActivityNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                } else if (position == 1) {
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent,
-                            "Complete action using"), PICK_FROM_FILE);
-                } else {
-                    ToastMessages.showToastLong(ManageChannelActivity.this, "No option selected");
-                }
-            }
-        });
-        dialog = builder.create();
+    public void pickPhoto(View view) {
+        Intent i = new Intent(
+                Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, PICK_FROM_FILE);
+
     }
+
 
     private void goToMainActivity() {
         Intent intent = getIntent();
@@ -306,13 +300,24 @@ public class ManageChannelActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void deleteChannel(String channelId) {
-        String url = Flippy.channels + channelId + "/";
+    private void deleteChannel(final String channelId) {
+        String url = Flippy.CHANNELS_URL + channelId + "/";
         StringRequest delete = new StringRequest(Request.Method.DELETE, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         showSuperToast("successfully removed", true);
+                        DatabaseHelper databaseHelper = OpenHelperManager.getHelper(ManageChannelActivity.this,
+                                DatabaseHelper.class);
+
+                        try {
+                            channelDao = databaseHelper.getChannelDao();
+                            channelDao.deleteById(Integer.parseInt(channelId));
+
+                        } catch (SQLException e1) {
+                            e1.printStackTrace();
+                            Log.e(TAG, "Error removing channel");
+                        }
                         goToMainActivity();
                     }
                 },
@@ -337,9 +342,9 @@ public class ManageChannelActivity extends ActionBarActivity {
     private void promoteUser(final String memberId) {
         progressDialog.setMessage("Promoting user...");
         progressDialog.show();
-        String url = Flippy.channels + channelId + "/promote_user/";
+        String url = Flippy.CHANNELS_URL + channelId + "/promote_user/";
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("id", memberId);
+        jsonObject.addProperty("user_id", memberId);
         Ion.with(ManageChannelActivity.this)
                 .load(url)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
@@ -349,16 +354,22 @@ public class ManageChannelActivity extends ActionBarActivity {
                     @Override
                     public void onCompleted(Exception e, JsonObject result) {
                         progressDialog.dismiss();
+
                         try {
-                            if (result != null) {
-                                showSuperToast(result.get("result").getAsString(), true);
-                                intent.setClass(ManageChannelActivity.this, CommunityCenterActivity.class);
-                                startActivity(intent);
-                                finish();
+
+                            if (result.has("detail")) {
+                                ToastMessages.showToastLong(ManageChannelActivity.this, result.get("detail").getAsString());
+                                Log.e(TAG, "Something else went wrong promoting a user");
+
                             } else if (e != null) {
                                 showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                                 Log.e("Error promoting user", e.toString());
                                 return;
+                            } else if (result != null) {
+                                Log.e(TAG, result.toString());
+                                ToastMessages.showToastLong(ManageChannelActivity.this, result.get("results").getAsString());
+                                Intent intentHome = new Intent(ManageChannelActivity.this, CommunityCenterActivity.class);
+                                startActivity(intentHome);
                             } else {
                                 Log.e(TAG, "Something else went wrong promoting a user");
                             }
@@ -388,6 +399,104 @@ public class ManageChannelActivity extends ActionBarActivity {
 
             }
         });
+        alert.show();
+    }
+
+
+    private void uploadNewChannelImage(String filePath) {
+        if (filePath == null) {
+            ToastMessages.showToastShort(context, "Browse a new image");
+            return;
+        }
+        progressBarUploadChannelImage.setVisibility(View.VISIBLE);
+        Ion.with(context, Flippy.CHANNELS_URL + channelId + "/upload-image/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
+                .setMultipartFile("image", new File(filePath))
+                .asJsonObject()
+                .setCallback(new FutureCallback<JsonObject>() {
+                    @Override
+                    public void onCompleted(Exception e, JsonObject result) {
+                        progressBarUploadChannelImage.setVisibility(View.GONE);
+                        try {
+                            if (result != null && !result.has("detail")) {
+                                showSuperToast("Channel image changed", false);
+                                goToMainActivity();
+                                return;
+
+                            } else if (e != null) {
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
+                                return;
+                            } else {
+                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
+                                return;
+                            }
+
+                        } catch (Exception exception) {
+                            Log.e("Error try catch", "Error while updating channel image");
+                            showSuperToast("Failed to upload image", false);
+                            return;
+                        }
+
+                    }
+                });
+    }
+
+    private void updateChannelName(String channelNewName) {
+        buttonEditChannelName.setText("Saving...");
+        buttonEditChannelName.setEnabled(false);
+        String url = Flippy.CHANNELS_URL + channelId + "/";
+        RequestParams params = new RequestParams();
+        params.put("name", channelNewName);
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken);
+        client.put(url, params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseBody) {
+                buttonEditChannelName.setEnabled(true);
+                buttonEditChannelName.setText("Edit");
+                Log.e("Response success", responseBody);
+                ToastMessages.showToastLong(context, "Name changed successfully");
+                goToMainActivity();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable
+                    error) {
+                buttonEditChannelName.setEnabled(true);
+                buttonEditChannelName.setText("Edit");
+                Log.e("Status code error", statusCode + "");
+                ToastMessages.showToastLong(context, "Failed to update, try later");
+
+            }
+        });
+    }
+
+    private void editChannelName() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Change channel name");
+        alert.setMessage("This change will be seen by people in this channel");
+        final EditText input = new EditText(this);
+        input.setText(channelName);
+        alert.setView(input);
+        alert.setCancelable(false);
+        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String value = input.getText().toString();
+                if (!value.equalsIgnoreCase(""))
+                    updateChannelName(value);
+                else {
+                    input.setError("Channel name is required");
+                }
+
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        });
+
         alert.show();
     }
 }
