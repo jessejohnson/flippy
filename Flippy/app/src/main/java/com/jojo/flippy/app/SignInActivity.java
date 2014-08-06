@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.gson.JsonArray;
@@ -126,6 +127,11 @@ public class SignInActivity extends ActionBarActivity {
                                             regLastName = result.get("last_name").getAsString();
                                             if (!result.get("community").isJsonNull()) {
                                                 regUserCommunity = result.get("community").getAsString();
+                                            } else if (result.get("community").isJsonNull()){
+                                                //if community is null, user may not have set community
+                                                //allow user to choose community again
+                                                Toast.makeText(SignInActivity.this, "No community", Toast.LENGTH_LONG).show();
+                                                startActivity(new Intent(SignInActivity.this, SelectCommunityActivity.class));
                                             }
                                             if (!result.get("avatar").isJsonNull()) {
                                                 avatar = result.get("avatar").getAsString();
