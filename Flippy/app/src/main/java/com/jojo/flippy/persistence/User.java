@@ -15,7 +15,6 @@ public class User {
     @DatabaseField(columnName = "user_email", uniqueIndex = true)
     public String user_email;
 
-
     @DatabaseField(columnName = "first_name")
     public String first_name;
 

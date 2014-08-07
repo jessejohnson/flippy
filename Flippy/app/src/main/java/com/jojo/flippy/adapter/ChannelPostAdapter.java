@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jojo.flippy.app.R;
@@ -31,6 +30,7 @@ public class ChannelPostAdapter extends ArrayAdapter<ProfileItem> {
         ImageView imageViewChannelNoticeImage;
         TextView textViewNoticeChannelTitle;
         TextView textViewChannelNoticeDetail;
+        TextView textViewChannelNoticeId;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -42,7 +42,8 @@ public class ChannelPostAdapter extends ArrayAdapter<ProfileItem> {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.channel_post_listview, null);
             holder = new ViewHolder();
-            holder.textViewNoticeChannelTitle = (TextView) convertView.findViewById(R.id.textViewNoticeChannelTitle);
+            holder.textViewNoticeChannelTitle = (TextView) convertView.findViewById(R.id.textViewChannelPostTitle);
+            holder.textViewChannelNoticeId = (TextView) convertView.findViewById(R.id.textViewChannelNoticeId);
             holder.imageViewChannelNoticeImage = (ImageView) convertView.findViewById(R.id.imageViewChannelNoticeImage);
             holder.textViewChannelNoticeDetail = (TextView) convertView.findViewById(R.id.textViewChannelNoticeDetail);
             convertView.setTag(holder);
@@ -51,6 +52,7 @@ public class ChannelPostAdapter extends ArrayAdapter<ProfileItem> {
 
         holder.textViewNoticeChannelTitle.setText(rowItem.getProfileChannelName());
         holder.textViewChannelNoticeDetail.setText(rowItem.getProfileChannelTotalNumber());
+        holder.textViewChannelNoticeId.setText(rowItem.getTextViewMemberId());
         Ion.with(holder.imageViewChannelNoticeImage)
                 .placeholder(R.drawable.notice_place)
                 .error(R.drawable.notice_error)

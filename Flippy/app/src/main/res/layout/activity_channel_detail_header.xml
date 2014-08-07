@@ -127,7 +127,7 @@
         android:background="@color/flippy_orange"
         android:shadowDy="1"
         android:text="@string/channel_detail_some_posts"
-        android:textStyle="bold"
+        android:textStyle="normal"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/flippy_white" />
 </LinearLayout>

@@ -1,6 +1,5 @@
 package com.jojo.flippy.adapter;
 
-import android.widget.ImageView;
 
 import java.net.URI;
 

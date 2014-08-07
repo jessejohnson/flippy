@@ -41,6 +41,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
         android:layout_centerVertical="true"
+        android:textStyle="bold"
         android:textColor="@color/flippy_orange"
         android:text="Error"
         android:textAppearance="?android:attr/textAppearanceMedium" />

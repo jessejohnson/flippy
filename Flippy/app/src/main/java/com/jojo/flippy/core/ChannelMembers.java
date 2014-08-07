@@ -212,6 +212,7 @@ public class ChannelMembers extends ActionBarActivity {
             public boolean onQueryTextChange(String newText) {
                 channelMemberAdapter.getFilter().filter(newText);
                 Log.e("The channel members", "on text change text: " + newText);
+                channelMemberAdapter.notifyDataSetChanged();
                 return true;
             }
 

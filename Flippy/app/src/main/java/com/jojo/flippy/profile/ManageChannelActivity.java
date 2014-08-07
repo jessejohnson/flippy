@@ -247,6 +247,8 @@ public class ManageChannelActivity extends ActionBarActivity {
                                 JsonArray adminArray = result.getAsJsonArray("results");
                                 if (adminArray.size() < 5) {
                                     buttonAddAdmin.setVisibility(View.VISIBLE);
+                                } else {
+                                    listViewChannelAdmins.setPadding(10, 10, 10, 0);
                                 }
                                 for (int i = 0; i < adminArray.size(); i++) {
                                     JsonObject item = adminArray.get(i).getAsJsonObject();

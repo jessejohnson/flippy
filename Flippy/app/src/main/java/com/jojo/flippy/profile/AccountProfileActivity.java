@@ -49,7 +49,6 @@ public class AccountProfileActivity extends ActionBarActivity {
     private TextView textViewProfileUserCommunity;
     private ProgressBar progressBarUserChannelLoad;
     private SuperToast superToast;
-    private LayoutInflater inflater;
 
 
     @Override

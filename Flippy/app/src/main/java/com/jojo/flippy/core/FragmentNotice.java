@@ -140,7 +140,7 @@ public class FragmentNotice extends Fragment {
 
     private void updateListAdapter() {
         listAdapter.notifyDataSetChanged();
-        if (listAdapter.isEmpty()) {
+        if (listAdapter.getCount()==0) {
             textViewNoNotice.setVisibility(View.VISIBLE);
             textViewNoNotice.setText("Currently no notice, subscribe to receive notice");
         }
@@ -251,11 +251,9 @@ public class FragmentNotice extends Fragment {
                     }
                     String subtitle = post.author_first_name + ", " + post.author_last_name;
                     noticeFeed.add(new Notice(post.notice_id, post.notice_title, subtitle, post.notice_body, post.author_id, post.channel_id, timestamp, URI.create(post.author_avatar_thumb), URI.create(post.notice_image)));
-
                 }
-                updateListAdapter();
-
             }
+            updateListAdapter();
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
             Crouton.makeText(getActivity(), "Sorry, Try again later", Style.ALERT)

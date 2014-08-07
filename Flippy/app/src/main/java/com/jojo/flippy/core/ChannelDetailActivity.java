@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -69,7 +70,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private Dao<Channels, Integer> channelDao;
     private List<Channels> channelList;
     private static ArrayList<String> channelIdList = new ArrayList<String>();
-    private String letter;
+    private String letter, noticeId, noticeTitle, noticeSubtitle, noticeBody;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,13 +199,16 @@ public class ChannelDetailActivity extends ActionBarActivity {
                                     }
                                     for (int i = 0; i < arrayEnd; i++) {
                                         JsonObject item = channelPostsArray.get(i).getAsJsonObject();
-                                        String title = item.get("title").getAsString();
-                                        String content = item.get("content").getAsString();
+                                        JsonObject author = item.getAsJsonObject("author");
+                                        noticeSubtitle = author.get("first_name").getAsString() + ", " + author.get("last_name").getAsString();
+                                        noticeTitle = item.get("title").getAsString();
+                                        noticeBody = item.get("content").getAsString();
+                                        noticeId = item.get("id").getAsString();
                                         String url = "";
                                         if (!item.get("image_thumbnail_url").isJsonNull()) {
                                             url = item.get("image_thumbnail_url").getAsString();
                                         }
-                                        ProfileItem channelItem = new ProfileItem(URI.create(url), title, content, "");
+                                        ProfileItem channelItem = new ProfileItem(URI.create(url), noticeTitle, noticeBody, noticeId);
                                         userChannelItem.add(channelItem);
                                     }
                                     updateChannelPostAdapter();
@@ -256,6 +260,26 @@ public class ChannelDetailActivity extends ActionBarActivity {
                 intent.putExtra("imageName", channelName);
                 intent.setClass(ChannelDetailActivity.this, ImagePreviewActivity.class);
                 startActivity(intent);
+            }
+        });
+        listViewChannelPost.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                if (position > 0) {
+                    intent.setClass(ChannelDetailActivity.this, NoticeDetailActivity.class);
+                    TextView textViewNoticeChannelTitle = (TextView) view.findViewById(R.id.textViewChannelPostTitle);
+                    TextView textViewChannelNoticeDetail = (TextView) view.findViewById(R.id.textViewChannelNoticeDetail);
+                    TextView textViewChannelNoticeId = (TextView) view.findViewById(R.id.textViewChannelNoticeId);
+                    String noticeTitle = textViewNoticeChannelTitle.getText().toString();
+                    String noticeBody = textViewChannelNoticeDetail.getText().toString();
+                    String noticeId = textViewChannelNoticeId.getText().toString();
+                    intent.putExtra("noticeTitle", noticeTitle);
+                    intent.putExtra("noticeBody", noticeBody);
+                    intent.putExtra("noticeSubtitle", "");
+                    intent.putExtra("noticeId", noticeId);
+                    startActivity(intent);
+                }
+
             }
         });
     }

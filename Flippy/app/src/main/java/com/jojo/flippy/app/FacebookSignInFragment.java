@@ -219,7 +219,7 @@ public class FacebookSignInFragment extends Fragment {
                                                                 sqlE.printStackTrace();
                                                             }
 
-                                                            if (community.equalsIgnoreCase("")) {
+                                                            if (community == null || community.equalsIgnoreCase("")) {
                                                                 Intent intent = new Intent(mContext, SelectCommunityActivity.class);
                                                                 intent.putExtra("regUserEmail", regUserEmail);
                                                                 intent.putExtra("regUserAuthToken", regUserAuthToken);
@@ -227,8 +227,18 @@ public class FacebookSignInFragment extends Fragment {
                                                                 startActivity(intent);
 
                                                             } else {
+                                                                try {
+                                                                    List<User> userList = userDao.queryForAll();
+                                                                    if (!userList.isEmpty()) {
+                                                                        User sameUser = userList.get(0);
+                                                                        sameUser.community_id = community;
+                                                                        userDao.update(sameUser);
+                                                                        userDao.refresh(sameUser);
+                                                                    }
+                                                                } catch (java.sql.SQLException sqlE) {
+                                                                    sqlE.printStackTrace();
+                                                                }
                                                                 saveUserChannels(regUserID);
-
                                                             }
                                                         }
                                                     }

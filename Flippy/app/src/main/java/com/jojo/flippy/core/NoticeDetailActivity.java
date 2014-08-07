@@ -256,8 +256,9 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                         if (result.has("detail")) {
                                             Crouton.makeText(NoticeDetailActivity.this, noPost, Style.ALERT);
                                             return;
+                                        } else {
+                                            showSuperToast(result.get("results").getAsString(), true);
                                         }
-                                        showSuperToast(result.get("results").getAsString(), true);
                                     }
                                     if (e != null) {
                                         showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
@@ -424,7 +425,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
                         try {
                             if (result != null) {
                                 if (result.has("detail")) {
-                                    Crouton.makeText(NoticeDetailActivity.this, noPost, Style.ALERT);
                                     return;
                                 }
                                 String item = result.get("results").getAsString();
@@ -456,7 +456,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
                         try {
                             if (result != null) {
                                 if (result.has("detail")) {
-                                    showSuperToast(noPost, false);
                                     return;
                                 }
                                 JsonObject item = result.getAsJsonObject("results");
@@ -533,7 +532,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
                         try {
                             if (nameResult != null) {
                                 if (nameResult.has("detail")) {
-                                    showSuperToast(noPost, false);
                                     return;
                                 }
                                 textViewNoticeSubtitleChannelName.setVisibility(View.VISIBLE);
@@ -585,7 +583,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
             String channelId = data.getStringExtra("channelId");
             String channelName = data.getStringExtra("channelName");
             Log.e(TAG, channelId + " " + channelName);
-            reFlipPost(channelId,channelName);
+            reFlipPost(channelId, channelName);
 
         } else {
             showSuperToast("No channel selected", false);
@@ -722,7 +720,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                 Log.e(TAG, result.toString());
                                 return;
                             } else if (result != null) {
-                                ToastMessages.showToastLong(context, "Notice refliped successfully into "+channelName);
+                                ToastMessages.showToastLong(context, "Notice refliped successfully into " + channelName);
                                 Log.e(TAG, result.toString());
                             } else {
                                 ToastMessages.showToastLong(context, getResources().getString(R.string.internet_connection_error_dialog_title));
