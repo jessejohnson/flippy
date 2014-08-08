@@ -20,6 +20,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.jojo.flippy.adapter.Notice;
 import com.jojo.flippy.adapter.NoticeAdapter;
 import com.jojo.flippy.app.R;
@@ -232,7 +233,10 @@ public class FragmentNotice extends Fragment {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
                     DatabaseHelper.class);
             postDao = databaseHelper.getPostDao();
-            List<Post> postList = postDao.queryForAll();
+            QueryBuilder<Post, Integer> queryBuilder = postDao.queryBuilder();
+            queryBuilder.orderBy("notice_id",false);
+            List<Post> postList = queryBuilder.query();
+            //List<Post> postList = postDao.queryForAll();
             progressBarCommunityCenterLoader.setVisibility(view.GONE);
             noticeFeed.clear();
             if (!postList.isEmpty()) {

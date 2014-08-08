@@ -5,9 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
-    <uses-feature android:name="android.hardware.camera" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permissions.READ_GSERVICES" />
@@ -15,11 +12,22 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
+    <permission
+        android:name="com.jojo.flippy.app.debug.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.jojo.flippy.app.debug.permission.C2D_MESSAGE" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
+    <uses-feature android:name="android.hardware.camera" />
+
 
 
     <application
@@ -29,12 +37,9 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/FlippyActionBarTheme">
-
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
 
         <activity
             android:name=".SplashScreenActivity"
@@ -80,7 +85,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jojo.flippy.core.CommunityCenterActivity" />
-
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
@@ -88,7 +92,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-
         </activity>
         <activity
             android:name="com.jojo.flippy.core.CommunityCenterActivity"
@@ -236,10 +239,9 @@
             android:name="com.jojo.flippy.services.ManageLocalPost"
             android:enabled="true" />
 
-
         <receiver
-            android:enabled="false"
-            android:name="com.jojo.flippy.services.FlippyReceiver" />
+            android:name="com.jojo.flippy.services.FlippyReceiver"
+            android:enabled="false" />
 
         <activity
             android:name="com.jojo.flippy.core.SettingsLegalActivity"
@@ -276,9 +278,40 @@
         </activity>
 
 
+        <activity
+            android:name="com.jojo.flippy.core.PushedNotices"
+            android:label="@string/title_activity_pushed_notices"
+            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
+        </activity>
+
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCQW6eKn8VSyt15vAI0OwBewgeMoQRiaEY" />
+
+
+        <!-- parse push notification -->
+        <service android:name="com.parse.PushService" />
+
+        <receiver android:name="com.parse.ParseBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="com.jojo.flippy.app.debug" />
+            </intent-filter>
+        </receiver>
+        <!-- end of the parse -->
     </application>
 
 </manifest>

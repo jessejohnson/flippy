@@ -8,6 +8,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -38,6 +39,7 @@ public class FlippyAlarmService extends Service {
     private String noticeId;
     private String noticeSubtitle;
     private boolean isValidReminder = true;
+    private Context context;
 
     @Override
     public IBinder onBind(Intent arg0) {
@@ -53,6 +55,7 @@ public class FlippyAlarmService extends Service {
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
+        context = getApplicationContext();
         noticeSubtitle = intent.getStringExtra("noticeSubtitle");
         noticeBody = intent.getStringExtra("noticeBody");
         noticeId = intent.getStringExtra("noticeId");
@@ -91,7 +94,7 @@ public class FlippyAlarmService extends Service {
         builder.setVibrate(pattern);
         builder.setPriority(Notification.PRIORITY_MAX);
         builder.setStyle(new NotificationCompat.InboxStyle());
-        Uri alarmSound = Uri.parse("android.resource://com.jojo.flippy/raw/flippy.mp3");
+        Uri alarmSound = Uri.parse("android.resource://" + context.getPackageName() + "flippy.mp3");
         if (alarmSound == null) {
             alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
             if (alarmSound == null) {

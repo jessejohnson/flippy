@@ -10,12 +10,15 @@
             android:summary="@string/turn_on_notifications_summary"
             android:title="@string/turn_on_notifications_title" />
 
-        <RingtonePreference
+
+        <ListPreference
+            android:title="@string/ringtone_title"
             android:dependency="@string/turn_on_notifications_key"
-            android:key="@string/ringtone_key"
-            android:ringtoneType="notification"
+            android:entries="@array/preferenceFlippyNoticeName"
             android:summary="@string/ringtone_summary"
-            android:title="@string/ringtone_title" />
+            android:entryValues="@array/preferenceFlippyNoticeValues"
+            android:key="preferenceName"
+            />
     </PreferenceCategory>
 
     <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to

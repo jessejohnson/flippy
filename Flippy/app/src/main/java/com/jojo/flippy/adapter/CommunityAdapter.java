@@ -6,7 +6,6 @@ package com.jojo.flippy.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.JsonObject;
 import com.jojo.flippy.app.R;
-import com.jojo.flippy.core.CommunityCenterActivity;
-import com.jojo.flippy.util.Flippy;
-import com.jojo.flippy.util.ToastMessages;
-import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
 import java.util.List;

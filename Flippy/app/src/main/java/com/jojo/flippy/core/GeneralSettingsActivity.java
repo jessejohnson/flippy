@@ -2,6 +2,7 @@ package com.jojo.flippy.core;
 
 import android.app.ActionBar;
 import android.content.SharedPreferences;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.os.Bundle;
 import android.preference.PreferenceCategory;
@@ -22,9 +23,6 @@ public class GeneralSettingsActivity extends PreferenceActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-
-
 
     }
 }

@@ -1,7 +1,5 @@
 package com.jojo.flippy.adapter;
 
-import android.widget.ImageView;
-
 /**
  * Created by bright on 6/12/14.
  */

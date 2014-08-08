@@ -4,8 +4,6 @@ package com.jojo.flippy.adapter;
  * Created by bright on 6/9/14.
  */
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -20,6 +18,8 @@ import android.widget.TextView;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
 import com.koushikdutta.ion.Ion;
+
+import java.util.List;
 
 public class CustomDrawer extends ArrayAdapter<DrawerItem> {
 
