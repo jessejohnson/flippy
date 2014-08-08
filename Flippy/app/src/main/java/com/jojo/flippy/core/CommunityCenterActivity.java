@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.adapter.CustomDrawer;
@@ -27,6 +28,14 @@ import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.profile.AccountProfileActivity;
+import com.jojo.flippy.util.SendParseNotification;
+import com.parse.ParseException;
+import com.parse.ParsePush;
+import com.parse.SendCallback;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,8 +97,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
             sqlE.printStackTrace();
             Log.e(TAG, "Unfortunately a system error occurred");
         }
-
-
         // Initializing
         dataList = new ArrayList<DrawerItem>();
         mTitle = mDrawerTitle = getTitle();

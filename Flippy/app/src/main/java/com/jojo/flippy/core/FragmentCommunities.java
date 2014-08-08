@@ -70,6 +70,7 @@ public class FragmentCommunities extends Fragment {
         //Loading the list with data from Api call
         Ion.with(getActivity())
                 .load(url)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

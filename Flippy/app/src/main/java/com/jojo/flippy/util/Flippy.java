@@ -7,7 +7,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.jojo.flippy.core.NoticeDetailActivity;
 import com.jojo.flippy.core.PushedNotices;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
@@ -25,6 +24,8 @@ public class Flippy extends Application {
     public static String USERS_URL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/users/";
     public static String COMMUNITIES_URL = "http://test-flippy-rest-api.herokuapp.com/api/v1.0/communities/";
     public static String POST_URL = "http://test-flippy-rest-api.herokuapp.com:80/api/v1.0/posts/";
+    public static String DEFAULT_TOKEN = "7fbf71e4f0037c661af37f838e054d38d5f912da";
+
     private static Flippy sInstance;
     public static String defaultDate = "2090-01-01";
     public static String defaultTime = "00:00:00";
@@ -46,7 +47,9 @@ public class Flippy extends Application {
         sInstance = this;
         //The parse notification
         Parse.initialize(this, "GfO0y1AB23ZQe4yEr1Gj8uDaN4Vqatg0MjzsESqm", "LmsLETFs5O6256XMHmZwTzkqMfrSF3o5eKQx6ydy");
+        PushService.subscribe(this, "notice", PushedNotices.class);
         PushService.setDefaultPushCallback(this, PushedNotices.class);
+
 
         //starting the manage service activity
         Intent serviceIntent = new Intent(this, ManageLocalPost.class);

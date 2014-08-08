@@ -160,6 +160,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         //Loading the list with data from Api call
         Ion.with(context)
                 .load(url)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -418,6 +419,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         String URL = Flippy.POST_URL + id + "/count_ratings/";
         Ion.with(NoticeDetailActivity.this)
                 .load(URL)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -449,6 +451,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         String postLocationURL = Flippy.POST_URL + id + "/location/";
         Ion.with(NoticeDetailActivity.this)
                 .load(postLocationURL)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -478,6 +481,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         String postReminderURL = Flippy.POST_URL + id + "/reminder/";
         Ion.with(NoticeDetailActivity.this)
                 .load(postReminderURL)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -525,6 +529,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private void getChannelName(String id) {
         Ion.with(NoticeDetailActivity.this)
                 .load(Flippy.CHANNELS_URL + id + "/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -641,6 +646,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         final ArrayList<String> channelAdmins = new ArrayList<String>();
         Ion.with(NoticeDetailActivity.this)
                 .load(url)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

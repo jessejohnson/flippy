@@ -101,8 +101,11 @@ public class SignInActivity extends ActionBarActivity {
                     json.addProperty("email", email);
                     json.addProperty("password", password);
 
+
+
                     Ion.with(SignInActivity.this)
                             .load(Flippy.USERS_URL + "login/")
+                            .setHeader("Authorization", "Token "+Flippy.DEFAULT_TOKEN)
                             .setJsonObjectBody(json)
                             .asJsonObject()
                             .setCallback(new FutureCallback<JsonObject>() {
@@ -216,6 +219,7 @@ public class SignInActivity extends ActionBarActivity {
         }
         Ion.with(SignInActivity.this)
                 .load(url)
+                .setHeader("Authorization", "Token "+Flippy.DEFAULT_TOKEN)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

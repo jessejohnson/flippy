@@ -113,6 +113,7 @@ public class AccountProfileActivity extends ActionBarActivity {
         //load the CHANNELS_URL user subscribed to
         Ion.with(AccountProfileActivity.this)
                 .load(url)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -154,6 +155,7 @@ public class AccountProfileActivity extends ActionBarActivity {
     private void getCommunityImage(String id) {
         Ion.with(AccountProfileActivity.this)
                 .load(Flippy.COMMUNITIES_URL + id + "/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

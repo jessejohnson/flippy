@@ -140,6 +140,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         //load the details of a channel
         Ion.with(ChannelDetailActivity.this)
                 .load(channelDetailsURL)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -182,6 +183,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         //load the post in this channel
         Ion.with(ChannelDetailActivity.this)
                 .load(channelDetailsURL + "posts/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -287,6 +289,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private void getCommunityName(String communityId) {
         Ion.with(ChannelDetailActivity.this)
                 .load(Flippy.COMMUNITIES_URL + communityId + "/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -484,6 +487,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
     private void getAdminsList(String url) {
         Ion.with(ChannelDetailActivity.this)
                 .load(url)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

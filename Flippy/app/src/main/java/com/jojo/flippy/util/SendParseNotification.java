@@ -1,8 +1,10 @@
 package com.jojo.flippy.util;
 
-import com.parse.ParseInstallation;
+import android.util.Log;
+
+import com.parse.ParseException;
 import com.parse.ParsePush;
-import com.parse.ParseQuery;
+import com.parse.SendCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,23 +13,42 @@ import org.json.JSONObject;
  * Created by bright on 8/8/14.
  */
 public class SendParseNotification {
+    public static final String ACTION = "com.jojo.flippy.app.PUSH_NOTIFICATION";
+    public static final String TAG = "SendParseNotification";
 
-    public static void sendMessage() {
-        ParseQuery<ParseInstallation> userQuery = ParseInstallation.getQuery();
-        JSONObject data = null;
-        try {
-            data = new JSONObject("{\"title\" : \"Hush!\"," +
-                    "\"intent\" : \"PushedNotices\"," +
-                    "\"action\" : \"com.jojo.flippy.app.PUSH_NOTIFICATION\"," +
-                    "\"chatId\" :" + 1 + "}");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+    public static void sendMessage(final String title, String id) {
         ParsePush push = new ParsePush();
-        push.setQuery(userQuery);
-        push.setData(data);
-        push.setMessage("New notice sent");
+        push.setData(getJSONDataMessageForIntent(title, id));
+        push.setMessage(title);
+        push.setChannel("notice");
+        push.sendInBackground(new SendCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e("Error", e.toString());
+                } else {
+                    Log.e("Success", title);
+                }
+
+            }
+        });
+
+    }
+
+    private static JSONObject getJSONDataMessageForIntent(String title, String id) {
+        JSONObject data = new JSONObject();
+        try {
+            //Notice alert is not required
+            //data.put("alert", content);
+            //instead action is used
+            data.put("action", ACTION);
+            data.put("intent", "PushedNotices");
+            data.put("title", title);
+            data.put("chatId", id);
+            return data;
+        } catch (JSONException x) {
+            Log.e(TAG, x.toString());
+            return data;
+        }
     }
 }

@@ -70,6 +70,7 @@ public class SelectChannelActivity extends ActionBarActivity {
         //load the CHANNELS_URL of user
         Ion.with(SelectChannelActivity.this)
                 .load(url)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -78,6 +79,7 @@ public class SelectChannelActivity extends ActionBarActivity {
                         try {
                             if (result != null) {
                                 if (result.has("detail")) {
+                                    Log.e("SelectChannelActivity",result.toString());
                                     Crouton.makeText(SelectChannelActivity.this, "The requested channel was not found", Style.ALERT)
                                             .show();
                                     return;

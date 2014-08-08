@@ -90,6 +90,7 @@ public class ChannelMembers extends ActionBarActivity {
         //load the CHANNELS_URL members
         Ion.with(ChannelMembers.this)
                 .load(channelDetailsURL)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

@@ -44,7 +44,7 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 public class SelectCommunityActivity extends ActionBarActivity {
     private ListView listViewCommunities;
     private List<Community> rowItems;
-    private String communityKeyURL = "";
+    private String communityKeyURL,regUserAuthToken = "";
     private Intent intent;
     private String regUserEmail;
     private ProgressBar progressBarLoadCommunity;
@@ -66,6 +66,7 @@ public class SelectCommunityActivity extends ActionBarActivity {
         intent = getIntent();
         regUserEmail = intent.getStringExtra("regUserEmail");
         isSocialAuth = intent.getBooleanExtra("isSocialAuth", isSocialAuth);
+        regUserAuthToken = intent.getStringExtra("regUserAuthToken");
 
 
         ActionBar actionbar = getActionBar();
@@ -97,6 +98,7 @@ public class SelectCommunityActivity extends ActionBarActivity {
 
         Ion.with(SelectCommunityActivity.this)
                 .load(Flippy.COMMUNITIES_URL)
+                .setHeader("Authorization", "Token "+regUserAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

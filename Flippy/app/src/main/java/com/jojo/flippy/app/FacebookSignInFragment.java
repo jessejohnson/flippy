@@ -177,6 +177,7 @@ public class FacebookSignInFragment extends Fragment {
                                 jsonObject.addProperty("gender", gender.toString().substring(0, 1).toUpperCase());
                                 Ion.with(mContext)
                                         .load(Flippy.USERS_URL + "social-signup/")
+                                        .setHeader("Authorization", "Token "+Flippy.DEFAULT_TOKEN)
                                         .setJsonObjectBody(jsonObject)
                                         .asJsonObject()
                                         .setCallback(new FutureCallback<JsonObject>() {
@@ -277,6 +278,7 @@ public class FacebookSignInFragment extends Fragment {
         }
         Ion.with(mContext)
                 .load(url)
+                .setHeader("Authorization", "Token "+regUserAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

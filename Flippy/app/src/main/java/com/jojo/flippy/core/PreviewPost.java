@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonObject;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.SendParseNotification;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -140,7 +141,7 @@ public class PreviewPost extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void createPost(String title, String body, String channelId, String location, String latitude, String longitude, String reminder) {
+    private void createPost(final String title, final String body, final String channelId, String location, String latitude, String longitude, String reminder) {
         progressDialog.setMessage("publishing post ...");
         progressDialog.show();
         JsonObject json = new JsonObject();
@@ -165,6 +166,13 @@ public class PreviewPost extends ActionBarActivity {
                                 Log.e(TAG, e.toString());
                             } else if (result != null && !result.has("detail")) {
                                 ToastMessages.showToastLong(PreviewPost.this, "Notice created successfully");
+
+                                String title = result.get("title").getAsString().trim();
+                                String id = result.get("id").getAsString();
+                                String content = result.get("content").getAsString();
+
+                                SendParseNotification.sendMessage(title,content);
+
                                 goToHome();
                                 Log.e("Result", result.toString());
                             } else {

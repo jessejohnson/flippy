@@ -83,6 +83,7 @@ public class FragmentChannel extends Fragment {
         //load the CHANNELS_URL user subscribed to
         Ion.with(getActivity())
                 .load(url)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
