@@ -2,14 +2,13 @@ package com.jojo.flippy.core;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -28,6 +27,7 @@ import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.Channels;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.ImageDecoder;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -47,12 +47,12 @@ public class CreateChannelActivity extends ActionBarActivity {
     private CheckBox checkBoxChannelIsPublic;
     private Button buttonCreateNewChannel;
     private String selectedImagePath;
-    private int column_index;
     private ProgressBar progressBar;
     private ProgressDialog progressDialog;
     private Dao<Channels, Integer> channelDao;
     private Channels channels;
-    private final String TAG ="CreateChannelActivity";
+    private final String TAG = "CreateChannelActivity";
+    private Context context;
 
 
     @Override
@@ -64,6 +64,7 @@ public class CreateChannelActivity extends ActionBarActivity {
         imageViewCreateChannel = (ImageView) findViewById(R.id.imageViewCreateChannel);
         checkBoxChannelIsPublic = (CheckBox) findViewById(R.id.checkBoxChannelIsPublic);
         checkBoxChannelIsPublic.setChecked(true);
+        context = this;
 
         editTextNewChannelName = (EditText) findViewById(R.id.editTextNewChannelName);
         editTextNewChannelOneLiner = (EditText) findViewById(R.id.editTextNewChannelOneLiner);
@@ -76,11 +77,12 @@ public class CreateChannelActivity extends ActionBarActivity {
         imageViewCreateChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select Picture"), SELECT_PICTURE);
+                if (Environment.getExternalStorageState().equals("mounted")) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(Intent.createChooser(intent,
+                            "Select Picture"), SELECT_PICTURE);
+                }
+
             }
         });
 
@@ -103,22 +105,17 @@ public class CreateChannelActivity extends ActionBarActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
-                selectedImagePath = getPath(selectedImageUri);
+                selectedImagePath = ImageDecoder.getPath(context,selectedImageUri);
                 if (selectedImagePath == null) {
                     ToastMessages.showToastLong(CreateChannelActivity.this, "Choose an image with local source");
                     return;
                 }
-                selectedImagePath.getBytes();
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 8;
-                Bitmap bm = BitmapFactory.decodeFile(selectedImagePath, options);
+                Bitmap bm = ImageDecoder.decodeFile(selectedImagePath);
                 imageViewCreateChannel.setImageBitmap(bm);
-
-            } else {
-                ToastMessages.showToastLong(CreateChannelActivity.this, "No image selected");
             }
 
         } else {
@@ -144,15 +141,6 @@ public class CreateChannelActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private String getPath(Uri uri) {
-        String[] projection = {MediaStore.MediaColumns.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        column_index = cursor
-                .getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-        cursor.moveToFirst();
-
-        return cursor.getString(column_index);
-    }
 
     private void createChannel() {
         final String channelName = editTextNewChannelName.getText().toString().trim();
@@ -240,4 +228,5 @@ public class CreateChannelActivity extends ActionBarActivity {
         intent.setClass(CreateChannelActivity.this, CommunityCenterActivity.class);
         startActivity(intent);
     }
+
 }

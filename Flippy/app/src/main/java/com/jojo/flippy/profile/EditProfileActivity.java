@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -29,6 +30,7 @@ import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.ImageDecoder;
 import com.jojo.flippy.util.ToastMessages;
 import com.jojo.flippy.util.Validator;
 import com.koushikdutta.async.future.FutureCallback;
@@ -36,16 +38,12 @@ import com.koushikdutta.ion.Ion;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
-
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.File;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
+
 
 
 public class EditProfileActivity extends ActionBarActivity {
@@ -63,7 +61,6 @@ public class EditProfileActivity extends ActionBarActivity {
     private String NewDateOfBirthUpdate;
     private String NewGenderUpdate;
     private String selectedImagePath;
-    private int column_index;
     private String userFirstName;
     private String userLastName;
     private String userEmail;
@@ -120,11 +117,11 @@ public class EditProfileActivity extends ActionBarActivity {
         imageViewUploadPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select Picture"), SELECT_PICTURE);
+                if (Environment.getExternalStorageState().equals("mounted")) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(Intent.createChooser(intent,
+                            "Select Picture"), SELECT_PICTURE);
+                }
 
             }
         });
@@ -136,16 +133,12 @@ public class EditProfileActivity extends ActionBarActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
                 Uri selectedImageUri = data.getData();
-                selectedImagePath = getPath(selectedImageUri);
+                selectedImagePath = ImageDecoder.getPath(context, selectedImageUri);
                 if (selectedImagePath == null) {
                     showSuperToast("Please sorry, choose another image", false);
                     return;
                 }
-                Bitmap bm = BitmapFactory.decodeFile(selectedImagePath);
-                imageViewMemberEdit.setAdjustViewBounds(true);
-                imageViewMemberEdit.setMaxHeight(imageViewMemberEdit.getHeight());
-                imageViewMemberEdit.setMaxWidth(imageViewMemberEdit.getWidth());
-                imageViewMemberEdit.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                Bitmap bm = ImageDecoder.decodeFile(selectedImagePath);
                 imageViewMemberEdit.setImageBitmap(bm);
                 uploadAvatar(selectedImagePath);
 
@@ -205,14 +198,6 @@ public class EditProfileActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
-    private String getPath(Uri uri) {
-        String[] projection = {MediaStore.MediaColumns.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        column_index = cursor
-                .getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
 
     private void uploadAvatar(String filePath) {
         if (filePath == null) {

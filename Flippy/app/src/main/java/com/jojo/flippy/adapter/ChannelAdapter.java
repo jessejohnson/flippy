@@ -148,7 +148,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                                     channelDao.createOrUpdate(channels);
                                     holder.imageViewUnSubscribe.setVisibility(View.VISIBLE);
                                     holder.imageViewSubscribe.setVisibility(View.GONE);
-                                    ToastMessages.showToastLong(context, result.get("results").getAsString());
+                                    ToastMessages.showToastLong(context, context.getString(R.string.success_subscribe));
                                 }
                                 if (result.has("detail")) {
                                     ToastMessages.showToastLong(context, result.get("detail").getAsString());
@@ -187,7 +187,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
                                     channelDao.deleteById(Integer.parseInt(channelId));
                                     holder.imageViewUnSubscribe.setVisibility(View.GONE);
                                     holder.imageViewSubscribe.setVisibility(View.VISIBLE);
-                                    ToastMessages.showToastLong(context, result.get("results").getAsString());
+                                    ToastMessages.showToastLong(context, context.getString(R.string.success_un_subscribe));
                                 }
                                 if (result.has("detail")) {
                                     ToastMessages.showToastLong(context, result.get("detail").getAsString());

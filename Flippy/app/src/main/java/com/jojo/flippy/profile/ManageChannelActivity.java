@@ -7,9 +7,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -42,6 +44,7 @@ import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.persistence.Channels;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.ImageDecoder;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -188,23 +191,10 @@ public class ManageChannelActivity extends ActionBarActivity {
         }
         if (requestCode == PICK_FROM_FILE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            try {
-                Cursor cursor = getContentResolver().query(selectedImage,
-                        filePathColumn, null, null, null);
-                cursor.moveToFirst();
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                filePath = cursor.getString(columnIndex);
-                cursor.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            filePath = ImageDecoder.getPath(context, selectedImage);
             if (filePath != null) {
-                imageViewChannelManageEdit.setImageBitmap(BitmapFactory.decodeFile(filePath));
-                imageViewChannelManageEdit.setAdjustViewBounds(true);
-                imageViewChannelManageEdit.setMaxHeight(imageViewChannelManageEdit.getHeight());
-                imageViewChannelManageEdit.setMaxWidth(imageViewChannelManageEdit.getWidth());
-                imageViewChannelManageEdit.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                Bitmap bitmap = ImageDecoder.decodeFile(filePath);
+                imageViewChannelManageEdit.setImageBitmap(bitmap);
                 uploadNewChannelImage(filePath);
             } else {
                 ToastMessages.showToastLong(context, "Sorry image upload failed");
@@ -216,11 +206,11 @@ public class ManageChannelActivity extends ActionBarActivity {
     }
 
     public void pickPhoto(View view) {
-        Intent i = new Intent(
-                Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, PICK_FROM_FILE);
-
+        if (Environment.getExternalStorageState().equals("mounted")) {
+            Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(Intent.createChooser(intent,
+                    "Select Picture"), PICK_FROM_FILE);
+        }
     }
 
 

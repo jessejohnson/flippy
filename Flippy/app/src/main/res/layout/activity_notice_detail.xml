@@ -11,6 +11,8 @@
         android:layout_marginBottom="@dimen/margin_fifty"
         android:scrollbars="none">
 
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -214,6 +216,7 @@
             android:layout_marginLeft="@dimen/margin_five"
             android:layout_marginRight="@dimen/margin_five"
             android:padding="5dp"
+
             android:scaleType="centerInside"
             android:src="@drawable/ic_action_remove"
             app:border_color="@color/border_white"
@@ -230,6 +233,7 @@
             android:layout_marginLeft="@dimen/margin_five"
             android:layout_marginRight="@dimen/margin_five"
             android:padding="5dp"
+            android:visibility="invisible"
             android:scaleType="centerInside"
             android:src="@drawable/ic_action_discard"
             app:border_color="@color/border_white"

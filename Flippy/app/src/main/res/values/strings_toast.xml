@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="success_subscribe">Successfully subscribed, you will now receive notices from this channel</string>
+    <string name="success_un_subscribe">Successfully unsubscribed, you will no longer receive notice from this channel</string>
+</resources>

@@ -355,9 +355,11 @@ public class ChannelDetailActivity extends ActionBarActivity {
                         try {
                             if (result != null) {
                                 if (result.has("results")) {
-                                    showSuperToast(result.get("results").getAsString(), true);
+                                    showSuperToast(getString(R.string.success_subscribe), true);
                                     Channels channel = new Channels(channelId);
                                     channelDao.createOrUpdate(channel);
+                                    buttonSubscribeToChannel.setVisibility(View.GONE);
+                                    buttonUnSubscribeToChannel.setVisibility(View.VISIBLE);
                                 }
                                 if (result.has("detail")) {
                                     showSuperToast("sorry, channel has been removed", false);
@@ -397,8 +399,10 @@ public class ChannelDetailActivity extends ActionBarActivity {
                         try {
                             if (result != null) {
                                 if (result.has("results")) {
-                                    showSuperToast(result.get("results").getAsString(), true);
+                                    showSuperToast(getString(R.string.success_un_subscribe), true);
                                     channelDao.deleteById(Integer.parseInt(channelId));
+                                    buttonUnSubscribeToChannel.setVisibility(View.GONE);
+                                    buttonSubscribeToChannel.setVisibility(View.VISIBLE);
                                 } else if (result.has("detail")) {
                                     showSuperToast(result.get("detail").getAsString(), false);
                                 }
