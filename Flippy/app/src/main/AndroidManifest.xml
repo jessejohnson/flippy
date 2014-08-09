@@ -276,6 +276,25 @@
         </activity>
 
 
+        <receiver
+            android:name="com.jojo.flippy.gcm.GCMBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <category android:name="com.jojo.flippy.gcm" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.jojo.flippy.gcm.GcmMessageHandler"
+            android:exported="false" >
+        </service>
+
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCQW6eKn8VSyt15vAI0OwBewgeMoQRiaEY" />
