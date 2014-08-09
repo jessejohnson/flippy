@@ -16,10 +16,9 @@ public class SendParseNotification {
     public static final String ACTION = "com.jojo.flippy.app.PUSH_NOTIFICATION";
     public static final String TAG = "SendParseNotification";
 
-    public static void sendMessage(final String title, String id) {
+    public static void sendMessage(final String title, String id, String body, String channelId) {
         ParsePush push = new ParsePush();
-        push.setData(getJSONDataMessageForIntent(title, id));
-        push.setMessage(title);
+        push.setData(getJSONDataMessageForIntent(title, id, body, channelId));
         push.setChannel("notice");
         push.sendInBackground(new SendCallback() {
             @Override
@@ -35,16 +34,14 @@ public class SendParseNotification {
 
     }
 
-    private static JSONObject getJSONDataMessageForIntent(String title, String id) {
+    private static JSONObject getJSONDataMessageForIntent(String title, String id, String body, String channelId) {
         JSONObject data = new JSONObject();
         try {
-            //Notice alert is not required
-            //data.put("alert", content);
-            //instead action is used
             data.put("action", ACTION);
-            data.put("intent", "PushedNotices");
             data.put("title", title);
-            data.put("chatId", id);
+            data.put("noticeId", id);
+            data.put("body", body);
+            data.put("channelId", channelId);
             return data;
         } catch (JSONException x) {
             Log.e(TAG, x.toString());

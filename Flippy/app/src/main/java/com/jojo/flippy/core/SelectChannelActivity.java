@@ -79,7 +79,7 @@ public class SelectChannelActivity extends ActionBarActivity {
                         try {
                             if (result != null) {
                                 if (result.has("detail")) {
-                                    Log.e("SelectChannelActivity",result.toString());
+                                    Log.e("SelectChannelActivity", result.toString());
                                     Crouton.makeText(SelectChannelActivity.this, "The requested channel was not found", Style.ALERT)
                                             .show();
                                     return;
@@ -159,5 +159,9 @@ public class SelectChannelActivity extends ActionBarActivity {
 
     }
 
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
 }

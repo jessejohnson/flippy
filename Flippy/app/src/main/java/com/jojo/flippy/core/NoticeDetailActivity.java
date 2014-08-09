@@ -10,6 +10,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -37,10 +39,17 @@ import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.profile.ImagePreviewActivity;
 import com.jojo.flippy.services.FlippyReceiver;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.ImageDecoder;
+import com.jojo.flippy.util.SendParseNotification;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
 
+import org.apache.http.Header;
+
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -91,7 +100,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private final int RE_FLIP = 1;
     private Context context;
     private ProgressDialog progressDialog;
-
     private Dao<Post, Integer> postDao;
 
 
@@ -131,7 +139,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
         textViewNoticeSubtitleDetail.setText(noticeSubtitle);
         imageViewDeletePost = (ImageView) findViewById(R.id.imageViewDeletePost);
         imageViewRemovePost = (ImageView) findViewById(R.id.imageViewRemovePost);
-        imageViewDeletePost.setVisibility(View.INVISIBLE);
         textViewNoticeLocation.setVisibility(View.GONE);
 
 
@@ -154,7 +161,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         if (googleMap == null) {
             googleMap = ((SupportMapFragment) getSupportFragmentManager().
                     findFragmentById(R.id.linearLayoutNoticeShowLocation)).getMap();
-            //  googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
 
         //Loading the list with data from Api call
@@ -303,7 +310,12 @@ public class NoticeDetailActivity extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_share_all) {
-            shareNoticeWithOtherApps(noticeTitle, noticeBody, image_link, getString(R.string.splash_screen_url));
+            if (image_link == null || image_link.equalsIgnoreCase("")) {
+                shareNoticeWithOtherApps(noticeTitle, noticeBody);
+            } else {
+                Log.e(TAG, image_link);
+                downloadPhoto(image_link, noticeTitle, noticeBody);
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -554,13 +566,12 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 });
     }
 
-    private void shareNoticeWithOtherApps(String title, String body, String imageLink, String footer) {
+    private void shareNoticeWithOtherApps(String title, String body) {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, title + "\n" + body + "\n" + imageLink + "\n" + footer);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, title + "\n" + "\n" + body + "\n" + "\n" + "Flippy team");
         sendIntent.setType("text/plain");
         startActivity(Intent.createChooser(sendIntent, "Share Flippy notice via ..."));
-        showSuperToast("Noticed shared successfully", true);
     }
 
     @Override
@@ -638,7 +649,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
-            Log.e("Channel adapter", "Error getting all user CHANNELS_URL");
+            Log.e(TAG, "Error getting all user CHANNELS_URL");
         }
     }
 
@@ -683,7 +694,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
     }
 
     private void deleteNotice(final String id) {
-        Ion.with(NoticeDetailActivity.this, Flippy.POST_URL + id + "/")
+        Ion.with(NoticeDetailActivity.this, Flippy.POST_URL + id + "/delete/")
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
@@ -708,7 +719,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
     }
 
-    private void reFlipPost(String channelId, final String channelName) {
+    private void reFlipPost(final String channelId, final String channelName) {
         progressDialog.setMessage("reflipping the notice...");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -727,6 +738,9 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                 return;
                             } else if (result != null) {
                                 ToastMessages.showToastLong(context, "Notice refliped successfully into " + channelName);
+                                JsonObject jsonObject = result.getAsJsonObject("results");
+                                String id = jsonObject.get("id").getAsString();
+                                SendParseNotification.sendMessage(noticeTitle, id, noticeBody, channelId);
                                 Log.e(TAG, result.toString());
                             } else {
                                 ToastMessages.showToastLong(context, getResources().getString(R.string.internet_connection_error_dialog_title));
@@ -743,6 +757,46 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 });
 
 
+    }
+
+    private void downloadPhoto(final String image, final String noticeTitle, final String noticeBody) {
+        final ProgressDialog progressDialogShare = new ProgressDialog(context);
+        progressDialogShare.setMessage("preparing notice to share ...");
+        progressDialogShare.show();
+        if (image == null) {
+            ToastMessages.showToastLong(context, "Sharing failed");
+            return;
+        }
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.get(image, new FileAsyncHttpResponseHandler(context) {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, File response) {
+                progressDialogShare.dismiss();
+                Log.e(TAG, response.getAbsolutePath());
+                Bitmap bitmap = ImageDecoder.decodeFile(response.getAbsolutePath());
+                String imagePath = ImageDecoder.saveBitmap(bitmap, "Flippy", "Media");
+                shareImage(imagePath, noticeTitle, noticeBody);
+                response.deleteOnExit();
+            }
+
+            @Override
+            public void onFailure(Throwable e, File response) {
+                progressDialogShare.dismiss();
+                ToastMessages.showToastLong(context, "Sharing failed");
+            }
+
+        });
+    }
+
+    private void shareImage(String imagePath, String noticeTitle, String noticeBody) {
+        Uri photoUri = Uri.parse(imagePath);
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, noticeTitle + "\n" + noticeBody);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, photoUri);
+        shareIntent.setType("image/*");
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(Intent.createChooser(shareIntent, "send"));
     }
 
 }

@@ -166,15 +166,10 @@ public class PreviewPost extends ActionBarActivity {
                                 Log.e(TAG, e.toString());
                             } else if (result != null && !result.has("detail")) {
                                 ToastMessages.showToastLong(PreviewPost.this, "Notice created successfully");
-
-                                String title = result.get("title").getAsString().trim();
-                                String id = result.get("id").getAsString();
-                                String content = result.get("content").getAsString();
-
-                                SendParseNotification.sendMessage(title,content);
-
+                                JsonObject jsonObject = result.getAsJsonObject("results");
+                                String id = jsonObject.get("id").getAsString();
+                                SendParseNotification.sendMessage(title, id, body, channelId);
                                 goToHome();
-                                Log.e("Result", result.toString());
                             } else {
                                 ToastMessages.showToastLong(PreviewPost.this, "sorry,unable to create notice");
                                 Log.e("Result has details", result.toString());
@@ -189,7 +184,7 @@ public class PreviewPost extends ActionBarActivity {
 
     }
 
-    private void createPost(String noticeTitle, String noticeContent, String channelId, final String image, String location, String latitude, String longitude, String reminder) {
+    private void createPost(final String noticeTitle, final String noticeContent,final String channelId, final String image, String location, String latitude, String longitude, String reminder) {
         progressDialog.setMessage("creating the notice...");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -218,6 +213,9 @@ public class PreviewPost extends ActionBarActivity {
                                 return;
                             } else if (result != null) {
                                 ToastMessages.showToastLong(PreviewPost.this, "Notice created successfully");
+                                JsonObject jsonObject = result.getAsJsonObject("results");
+                                String id = jsonObject.get("id").getAsString();
+                                SendParseNotification.sendMessage(noticeTitle, id, noticeContent, channelId);
                                 Log.e(TAG, result.toString());
                                 goToHome();
                             } else {

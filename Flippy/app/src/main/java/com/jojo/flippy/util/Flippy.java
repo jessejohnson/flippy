@@ -7,7 +7,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.jojo.flippy.core.PushedNotices;
+import com.jojo.flippy.core.NoticeDetailActivity;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.persistence.User;
@@ -47,8 +47,8 @@ public class Flippy extends Application {
         sInstance = this;
         //The parse notification
         Parse.initialize(this, "GfO0y1AB23ZQe4yEr1Gj8uDaN4Vqatg0MjzsESqm", "LmsLETFs5O6256XMHmZwTzkqMfrSF3o5eKQx6ydy");
-        PushService.subscribe(this, "notice", PushedNotices.class);
-        PushService.setDefaultPushCallback(this, PushedNotices.class);
+        //PushService.subscribe(this, "notice", NoticeDetailActivity.class);
+        //PushService.setDefaultPushCallback(this, NoticeDetailActivity.class);
 
 
         //starting the manage service activity

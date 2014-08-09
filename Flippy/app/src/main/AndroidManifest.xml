@@ -277,15 +277,6 @@
         </activity>
 
 
-        <activity
-            android:name="com.jojo.flippy.core.PushedNotices"
-            android:label="@string/title_activity_pushed_notices"
-            android:parentActivityName="com.jojo.flippy.core.CommunityCenterActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jojo.flippy.core.CommunityCenterActivity" />
-        </activity>
-
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"

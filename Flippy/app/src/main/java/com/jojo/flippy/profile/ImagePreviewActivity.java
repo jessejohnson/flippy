@@ -24,6 +24,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageRequest;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.ImageDecoder;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
@@ -130,10 +131,8 @@ public class ImagePreviewActivity extends ActionBarActivity {
             public void onSuccess(int statusCode, Header[] headers, File response) {
                 progressBarLoadUserImage.setVisibility(View.GONE);
                 Log.e(TAG, response.getAbsolutePath());
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                Bitmap bitmap = BitmapFactory.decodeFile(response.getAbsolutePath(), options);
-                String imagePath = saveBitmap(bitmap, "Flippy", "Media");
+                Bitmap bitmap = ImageDecoder.decodeFile(response.getAbsolutePath());
+                String imagePath = ImageDecoder.saveBitmap(bitmap, "Flippy", "Media");
                 shareImage(imagePath);
                 response.deleteOnExit();
             }
@@ -146,32 +145,6 @@ public class ImagePreviewActivity extends ActionBarActivity {
 
         });
 
-    }
-
-    private String saveBitmap(Bitmap bitmap, String dir, String baseName) {
-        try {
-            File sdCard = Environment.getExternalStorageDirectory();
-            File pictureDir = new File(sdCard, dir);
-            pictureDir.mkdirs();
-            File f;
-            Calendar calendar = Calendar.getInstance();
-            baseName = baseName + calendar.getTimeInMillis() + ".png";
-            f = new File(pictureDir, baseName);
-
-            if (!f.exists()) {
-                String name = f.getAbsolutePath();
-                FileOutputStream fos = new FileOutputStream(name);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                fos.flush();
-                fos.close();
-                return f.getAbsolutePath();
-            }
-
-        } catch (Exception e) {
-        } finally {
-
-        }
-        return null;
     }
 
     private void shareImage(String imagePath) {

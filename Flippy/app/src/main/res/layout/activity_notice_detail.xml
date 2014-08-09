@@ -210,13 +210,12 @@
         <com.makeramen.RoundedImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageViewRemovePost"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="@dimen/margin_five"
             android:layout_marginRight="@dimen/margin_five"
             android:padding="5dp"
-
             android:scaleType="centerInside"
             android:src="@drawable/ic_action_remove"
             app:border_color="@color/border_white"
@@ -227,12 +226,12 @@
         <com.makeramen.RoundedImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageViewDeletePost"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginLeft="@dimen/margin_five"
             android:layout_marginRight="@dimen/margin_five"
             android:padding="5dp"
+            android:layout_weight="1"
             android:visibility="invisible"
             android:scaleType="centerInside"
             android:src="@drawable/ic_action_discard"
@@ -245,7 +244,7 @@
         <com.makeramen.RoundedImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageViewStarDetail"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="@dimen/margin_five"

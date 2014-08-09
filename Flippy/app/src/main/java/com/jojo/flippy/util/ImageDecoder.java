@@ -5,7 +5,12 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Calendar;
 
 /**
  * Created by bright on 8/8/14.
@@ -42,5 +47,30 @@ public class ImageDecoder {
                 .getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
         cursor.moveToFirst();
         return cursor.getString(column_index);
+    }
+    public static String saveBitmap(Bitmap bitmap, String dir, String baseName) {
+        try {
+            File sdCard = Environment.getExternalStorageDirectory();
+            File pictureDir = new File(sdCard, dir);
+            pictureDir.mkdirs();
+            File f;
+            Calendar calendar = Calendar.getInstance();
+            baseName = baseName + calendar.getTimeInMillis() + ".png";
+            f = new File(pictureDir, baseName);
+
+            if (!f.exists()) {
+                String name = f.getAbsolutePath();
+                FileOutputStream fos = new FileOutputStream(name);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                fos.flush();
+                fos.close();
+                return f.getAbsolutePath();
+            }
+
+        } catch (Exception e) {
+        } finally {
+
+        }
+        return null;
     }
 }

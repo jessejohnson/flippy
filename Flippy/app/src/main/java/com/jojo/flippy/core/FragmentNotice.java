@@ -243,7 +243,7 @@ public class FragmentNotice extends Fragment {
                 for (int i = 0; i < postList.size(); i++) {
                     Post post = postList.get(i);
                     String[] timestampArray = post.start_date.replace("Z", "").split("T");
-                    String timestamp = timestampArray[0].toString() + " @ " + timestampArray[1].substring(0, 8);
+                    String timestamp = timestampArray[0]+ " @ " + timestampArray[1].substring(0, 8);
 
                     try {
                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
