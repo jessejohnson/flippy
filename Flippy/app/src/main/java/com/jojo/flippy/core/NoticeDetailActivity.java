@@ -524,11 +524,12 @@ public class NoticeDetailActivity extends ActionBarActivity {
         if (locationLon.equalsIgnoreCase("") || locationLat.equalsIgnoreCase("") || locationLat.equalsIgnoreCase(Flippy.defaultLat) || locationLon.equalsIgnoreCase(Flippy.defaultLon)) {
             return;
         }
-        linearLayoutMapView.setVisibility(View.VISIBLE);
+
         if (!locationName.equalsIgnoreCase("")) {
             textViewNoticeLocation.setVisibility(View.VISIBLE);
             textViewNoticeLocation.setText("location : " + locationName);
         }
+        linearLayoutMapView.setVisibility(View.VISIBLE);
         LatLng coordinate = new LatLng(Double.parseDouble(locationLat), Double.parseDouble(locationLon));
         googleMap.addMarker(new MarkerOptions()
                 .snippet(locationName)

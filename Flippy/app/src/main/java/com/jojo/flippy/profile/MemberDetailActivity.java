@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.StripCharacter;
 import com.jojo.flippy.util.ToastMessages;
@@ -100,6 +101,7 @@ public class MemberDetailActivity extends ActionBarActivity {
     private void loadMemberData() {
         Ion.with(MemberDetailActivity.this)
                 .load(userDetailURL)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -138,6 +140,7 @@ public class MemberDetailActivity extends ActionBarActivity {
     private void memberTotalChannels() {
         Ion.with(MemberDetailActivity.this)
                 .load(Flippy.USERS_URL + memberId + "/subscriptions/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -200,6 +203,7 @@ public class MemberDetailActivity extends ActionBarActivity {
     private void getCommunityName(String communityId) {
         Ion.with(MemberDetailActivity.this)
                 .load(Flippy.COMMUNITIES_URL + communityId + "/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

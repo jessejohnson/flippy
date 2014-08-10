@@ -54,7 +54,7 @@ public class CustomParseReceiver extends BroadcastReceiver {
     private List<Channels> channelList;
     private static ArrayList<String> channelIdList = new ArrayList<String>();
     private Bitmap bitmap;
-    private int messageNumber=0;
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -68,14 +68,14 @@ public class CustomParseReceiver extends BroadcastReceiver {
             }
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
-            Log.e("ChannelDetailActivity", "Error getting all user channels");
+            Log.e(TAG, sqlE.toString());
         }
         try {
             String action = intent.getAction();
             String channel = intent.getExtras().getString(PARSE_JSON_ALERT_CHANNEL);
             JSONObject json = new JSONObject(intent.getExtras().getString(PARSE_EXTRA_DATA_KEY));
             ParseAnalytics.trackAppOpened(intent);
-            Log.e(TAG, "got action " + action + " on channel " + channel + " with:");
+            Log.e(TAG, "Action " + action + " Channel " + channel);
             if (action.equalsIgnoreCase(ACTION)) {
                 String id = "";
                 String channelId = "";
@@ -109,6 +109,7 @@ public class CustomParseReceiver extends BroadcastReceiver {
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_launcher)
                         .setLargeIcon(bitmap)
+                        .setContentInfo(subTitle)
                         .setContentTitle(title);
         builder.setContentIntent(pendingIntent);
         builder.setAutoCancel(true);
