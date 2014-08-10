@@ -646,10 +646,11 @@ public class NoticeDetailActivity extends ActionBarActivity {
                 postDao.delete(post);
             }
             showSuperToast("Notice successfully removed from board", true);
+            goHome();
 
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
-            Log.e(TAG, "Error getting all user CHANNELS_URL");
+            Log.e(TAG, sqlE.toString());
         }
     }
 
@@ -741,7 +742,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                 JsonObject jsonObject = result.getAsJsonObject("results");
                                 String id = jsonObject.get("id").getAsString();
                                 SendParseNotification.sendMessage(noticeTitle, id, noticeBody, channelId);
-                                Log.e(TAG, result.toString());
                             } else {
                                 ToastMessages.showToastLong(context, getResources().getString(R.string.internet_connection_error_dialog_title));
                                 Log.e(TAG, e.toString());
@@ -797,6 +797,13 @@ public class NoticeDetailActivity extends ActionBarActivity {
         shareIntent.setType("image/*");
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(Intent.createChooser(shareIntent, "send"));
+    }
+
+    private void goHome() {
+        Intent intentHome = new Intent();
+        intentHome.setClass(context, CommunityCenterActivity.class);
+        startActivity(intentHome);
+
     }
 
 }

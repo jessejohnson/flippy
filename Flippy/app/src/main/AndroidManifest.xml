@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission android:name="android.permission.STATUS_BAR_SERVICE" android:protectionLevel="signature" />
 
     <permission
         android:name="com.jojo.flippy.app.debug.permission.C2D_MESSAGE"

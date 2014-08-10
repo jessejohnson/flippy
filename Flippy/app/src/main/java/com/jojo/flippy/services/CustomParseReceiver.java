@@ -1,19 +1,17 @@
 package com.jojo.flippy.services;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.widget.RemoteViews;
+
 
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -25,12 +23,18 @@ import com.jojo.flippy.persistence.Channels;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.ImageDecoder;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.FileAsyncHttpResponseHandler;
+import com.parse.ParseAnalytics;
 
+import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -44,15 +48,16 @@ public class CustomParseReceiver extends BroadcastReceiver {
     public static final String PARSE_EXTRA_DATA_KEY = "com.parse.Data";
     public static final String PARSE_JSON_ALERT_CHANNEL = "com.parse.Channel";
     private NotificationManager notificationManager;
-    public static int numMessages = 0;
+    public static int NOTICE_ID = 1;
     private Dao<Post, Integer> postDao;
     private Dao<Channels, Integer> channelDao;
     private List<Channels> channelList;
     private static ArrayList<String> channelIdList = new ArrayList<String>();
+    private Bitmap bitmap;
+    private int messageNumber=0;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, ">>onReceive()<< RECEIVED PUSH NOTIFICATION!");
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(context,
                     DatabaseHelper.class);
@@ -69,11 +74,12 @@ public class CustomParseReceiver extends BroadcastReceiver {
             String action = intent.getAction();
             String channel = intent.getExtras().getString(PARSE_JSON_ALERT_CHANNEL);
             JSONObject json = new JSONObject(intent.getExtras().getString(PARSE_EXTRA_DATA_KEY));
+            ParseAnalytics.trackAppOpened(intent);
             Log.e(TAG, "got action " + action + " on channel " + channel + " with:");
             if (action.equalsIgnoreCase(ACTION)) {
                 String id = "";
                 String channelId = "";
-                if (json.has("title")) {
+                if (json.has("message")) {
                     id = json.getString("noticeId");
                     channelId = json.getString("channelId");
                 }
@@ -88,36 +94,25 @@ public class CustomParseReceiver extends BroadcastReceiver {
         }
     }
 
-    private void generateNotification(Context context, String id, String title, String body, String subTitle) {
-        numMessages = 0;
-
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.ic_action_alarms)
-                        .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher))
-                        .setContentTitle("Flippy notice")
-                        .setAutoCancel(true)
-                        .setContentInfo(title)
-                        .setContentText(body);
-
+    private void generateNotification(Context context, Bitmap bitmap, String id, String title, String body, String subTitle) {
+        if (bitmap == null) {
+            bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
+        }
         Intent notificationIntent = new Intent();
         notificationIntent.putExtra("noticeId", id);
         notificationIntent.putExtra("noticeTitle", title);
         notificationIntent.putExtra("noticeSubtitle", subTitle);
         notificationIntent.putExtra("noticeBody", body);
         notificationIntent.setClass(context, NoticeDetailActivity.class);
-
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-        builder.setContentIntent(contentIntent);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setLargeIcon(bitmap)
+                        .setContentTitle(title);
+        builder.setContentIntent(pendingIntent);
         builder.setAutoCancel(true);
-        builder.setLights(R.color.flippy_orange, 500, 500);
-        long[] pattern = {500, 500, 500, 500, 500, 500, 500, 500, 500};
-        builder.setVibrate(pattern);
-        builder.setPriority(Notification.PRIORITY_MAX);
-        builder.setStyle(new NotificationCompat.InboxStyle());
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
         Uri alarmSound = Uri.parse("android.resource://" + context.getPackageName() + "flippy.mp3");
         if (alarmSound == null) {
             alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
@@ -126,9 +121,8 @@ public class CustomParseReceiver extends BroadcastReceiver {
             }
         }
         builder.setSound(alarmSound);
-        //Add as notification
         notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, builder.build());
+        notificationManager.notify(NOTICE_ID, builder.build());
     }
 
     private void getANotice(final Context context, final String id) {
@@ -171,7 +165,7 @@ public class CustomParseReceiver extends BroadcastReceiver {
                                 return;
                             }
                         } catch (Exception exception) {
-                            Log.e(TAG, "Try catch, something went wrong getting detail");
+                            Log.e(TAG, exception.toString());
                         }
                     }
                 });
@@ -185,15 +179,41 @@ public class CustomParseReceiver extends BroadcastReceiver {
             postDao = databaseHelper.getPostDao();
             Calendar calendar = Calendar.getInstance();
             Post post = new Post(notice_id, notice_title, notice_body, notice_image, start_date, author_email, author_id, author_first_name, author_last_name, authorAvatar, authorAvatarThumb, channel_id, calendar.getTimeInMillis());
-            postDao.create(post);
+            postDao.createOrUpdate(post);
             String subtitle = author_first_name + ", " + author_last_name;
-            generateNotification(context, notice_id, notice_title, notice_body, subtitle);
+            getNoticeImage(context, notice_image, notice_id, notice_title, notice_body, subtitle);
 
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
 
         }
 
+    }
+
+    private void getNoticeImage(final Context context, String image, final String notice_id, final String notice_title, final String notice_body, final String subtitle) {
+        if (image.equalsIgnoreCase("")) {
+            bitmap = null;
+            generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
+        } else {
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.get(image, new FileAsyncHttpResponseHandler(context) {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, File response) {
+                    Log.e(TAG, response.getAbsolutePath());
+                    bitmap = ImageDecoder.decodeFile(response.getAbsolutePath());
+                    generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
+                    response.deleteOnExit();
+                }
+
+                @Override
+                public void onFailure(Throwable e, File response) {
+                    bitmap = null;
+                    generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
+                }
+
+
+            });
+        }
     }
 }
 
