@@ -69,13 +69,16 @@
                 android:textStyle="italic" />
         </LinearLayout>
 
-        <ImageView
+        <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imageViewNoticeCreator"
             android:layout_width="@dimen/margin_fifty"
             android:layout_height="@dimen/margin_fifty"
             android:layout_margin="@dimen/margin_ten"
             android:layout_weight="0.1"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            app:border_color="@color/border_white"
+            app:border_width="2dp"
+            app:oval="false" />
 
     </LinearLayout>
 

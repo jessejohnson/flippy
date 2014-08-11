@@ -38,6 +38,10 @@ public class ManageLocalPost extends Service {
                 totalPost = postList.size();
                 if (totalPost > maxRowLength) {
                     //delete the rows
+                    for (int i = 0; i < totalPost - maxRowLength; i++) {
+                        Post post = postList.get(i);
+                        postDao.delete(post);
+                    }
                 }
                 for (Post post : postList) {
                     int dateDiff = (int) (calendar.getTimeInMillis() - getPostLocalId(post)) / (1000 * 60 * 60 * 24);

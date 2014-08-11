@@ -1,10 +1,12 @@
 package com.jojo.flippy.core;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -24,6 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonObject;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.util.Flippy;
+import com.jojo.flippy.util.ImageDecoder;
 import com.jojo.flippy.util.SendParseNotification;
 import com.jojo.flippy.util.ToastMessages;
 import com.koushikdutta.async.future.FutureCallback;
@@ -47,6 +50,7 @@ public class PreviewPost extends ActionBarActivity {
     private static String TAG = "PreviewPost";
     private ProgressDialog progressDialog;
     private String datePicked = Flippy.defaultDate, timePicked = Flippy.defaultTime;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,7 @@ public class PreviewPost extends ActionBarActivity {
         timePicked = intent.getStringExtra("timePicked");
         lat = intent.getStringExtra("lat");
         lon = intent.getStringExtra("lon");
+        context = this;
 
 
         imageViewPreviewNoticeImageDetail = (ImageView) findViewById(R.id.imageViewPreviewNoticeImageDetail);
@@ -74,7 +79,7 @@ public class PreviewPost extends ActionBarActivity {
         textViewNoticeLocation = (TextView) findViewById(R.id.textViewNoticeLocation);
         imageViewPreviewNoticeCreatorImage = (ImageView) findViewById(R.id.imageViewPreviewNoticeCreatorImage);
         buttonPublishPost = (Button) findViewById(R.id.buttonPublishPost);
-        progressDialog = new ProgressDialog(PreviewPost.this);
+        progressDialog = new ProgressDialog(context);
         imageViewPreviewNoticeImageDetail.setVisibility(View.GONE);
 
         if (intent.getStringExtra("noticeImage") != null && !intent.getStringExtra("noticeImage").equalsIgnoreCase("")) {
@@ -100,7 +105,7 @@ public class PreviewPost extends ActionBarActivity {
         textViewPreviewNoticeTextDetail.setText(noticeContent);
         textViewPreviewNoticeChannelName.setText(channelName);
         textViewPreviewAuthorEmailAddress.setText(CommunityCenterActivity.regUserEmail);
-        textViewNoticeLocation.setText("location: " + noticeLocation);
+        textViewNoticeLocation.setText("Location: " + noticeLocation);
         textViewPreviewNoticeSubtitle.setText(CommunityCenterActivity.userFirstName + ", " + CommunityCenterActivity.userLastName);
         Ion.with(imageViewPreviewNoticeCreatorImage)
                 .error(R.drawable.user_error_small)
@@ -122,23 +127,6 @@ public class PreviewPost extends ActionBarActivity {
         });
 
 
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.preview_post, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_publish_post) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void createPost(final String title, final String body, final String channelId, String location, String latitude, String longitude, String reminder) {
@@ -184,7 +172,7 @@ public class PreviewPost extends ActionBarActivity {
 
     }
 
-    private void createPost(final String noticeTitle, final String noticeContent,final String channelId, final String image, String location, String latitude, String longitude, String reminder) {
+    private void createPost(final String noticeTitle, final String noticeContent, final String channelId, final String image, String location, String latitude, String longitude, String reminder) {
         progressDialog.setMessage("creating the notice...");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -251,24 +239,7 @@ public class PreviewPost extends ActionBarActivity {
     }
 
     public void decodeFile(String filePath) {
-        Log.e("File path", filePath);
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, o);
-        final int REQUIRED_SIZE = 1024;
-        int width_tmp = o.outWidth, height_tmp = o.outHeight;
-        int scale = 1;
-        while (true) {
-            if (width_tmp < REQUIRED_SIZE && height_tmp < REQUIRED_SIZE)
-                break;
-            width_tmp /= 2;
-            height_tmp /= 2;
-            scale *= 2;
-        }
-        // Decode with inSampleSize
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
-        bitmap = BitmapFactory.decodeFile(filePath, o2);
+        bitmap = ImageDecoder.decodeFile(filePath);
         imageViewPreviewNoticeImageDetail.setImageBitmap(bitmap);
     }
 

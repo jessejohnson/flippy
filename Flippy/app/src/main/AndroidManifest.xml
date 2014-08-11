@@ -21,10 +21,10 @@
         android:protectionLevel="signature" />
 
     <permission
-        android:name="com.jojo.flippy.app.debug.permission.C2D_MESSAGE"
+        android:name="com.jojo.flippy.app.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.jojo.flippy.app.debug.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.jojo.flippy.app.permission.C2D_MESSAGE" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -308,8 +308,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCQW6eKn8VSyt15vAI0OwBewgeMoQRiaEY" />
-
+            android:value="AIzaSyC0i2qjY-6KdezTZ99HlLwzGwP3PcYEOP4" />
 
         <!-- parse push notification -->
         <service android:name="com.parse.PushService" />
@@ -317,6 +316,7 @@
         <receiver android:name="com.parse.ParseBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.RECEIVE_BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
@@ -326,8 +326,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-
-                <category android:name="com.jojo.flippy.app.debug" />
+                <category android:name="com.jojo.flippy.app" />
             </intent-filter>
         </receiver>
         <!-- end of the parse -->

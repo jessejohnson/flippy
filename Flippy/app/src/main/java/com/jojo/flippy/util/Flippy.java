@@ -14,6 +14,7 @@ import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.services.DataService;
 import com.jojo.flippy.services.ManageLocalPost;
 import com.parse.Parse;
+import com.parse.ParseInstallation;
 import com.parse.PushService;
 
 import java.util.List;
@@ -49,6 +50,7 @@ public class Flippy extends Application {
         Parse.initialize(this, "GfO0y1AB23ZQe4yEr1Gj8uDaN4Vqatg0MjzsESqm", "LmsLETFs5O6256XMHmZwTzkqMfrSF3o5eKQx6ydy");
         PushService.subscribe(this, "notice", NoticeDetailActivity.class);
         PushService.setDefaultPushCallback(this, NoticeDetailActivity.class);
+
 
 
         //starting the manage service activity

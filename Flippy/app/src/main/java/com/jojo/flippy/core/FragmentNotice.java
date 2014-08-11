@@ -26,6 +26,7 @@ import com.jojo.flippy.adapter.NoticeAdapter;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
+import com.jojo.flippy.services.DataService;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.InternetConnectionDetector;
 import com.jojo.flippy.util.ToastMessages;
@@ -104,6 +105,9 @@ public class FragmentNotice extends Fragment {
                 getAllPost(view);
             } else {
                 loadAdapterFromDatabase(view);
+                Intent dataServiceIntent = new Intent(getActivity(), DataService.class);
+                getActivity().startService(dataServiceIntent);
+
             }
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();

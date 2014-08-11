@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -128,12 +129,11 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                     case 0:
                         // Your code when first option selected
                         try {
-                            Intent intent = new Intent();
-                            intent.setType("image/*");
-                            intent.setAction(Intent.ACTION_GET_CONTENT);
-                            startActivityForResult(
-                                    Intent.createChooser(intent, "Select Picture"),
-                                    BROWSE_IMAGE);
+                            if (Environment.getExternalStorageState().equals("mounted")) {
+                                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                startActivityForResult(Intent.createChooser(intent,
+                                        "Select Picture"), BROWSE_IMAGE);
+                            }
                         } catch (Exception e) {
                             Toast.makeText(getApplicationContext(),
                                     e.getMessage(),
@@ -142,8 +142,6 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                         }
                         break;
                     case 1:
-                        // Your code when 2nd  option selected
-                        //define the file-name to save photo taken by Camera activity
                         String fileName = "new-photo-name.jpg";
                         //create parameters for Intent with filename
                         ContentValues values = new ContentValues();

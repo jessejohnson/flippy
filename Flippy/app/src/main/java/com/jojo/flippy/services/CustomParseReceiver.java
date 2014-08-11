@@ -3,7 +3,9 @@ package com.jojo.flippy.services;
 import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +19,7 @@ import android.util.Log;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.jojo.flippy.adapter.Community;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.core.NoticeDetailActivity;
@@ -115,13 +118,7 @@ public class CustomParseReceiver extends BroadcastReceiver {
         builder.setContentIntent(pendingIntent);
         builder.setAutoCancel(true);
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(body));
-        Uri alarmSound = Uri.parse("android.resource://" + context.getPackageName() + "flippy.mp3");
-        if (alarmSound == null) {
-            alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-            if (alarmSound == null) {
-                alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            }
-        }
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         builder.setSound(alarmSound);
         notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTICE_ID, builder.build());
@@ -184,7 +181,7 @@ public class CustomParseReceiver extends BroadcastReceiver {
             postDao.createOrUpdate(post);
             String subtitle = author_first_name + ", " + author_last_name;
             getNoticeImage(context, notice_image, notice_id, notice_title, notice_body, subtitle);
-
+            updateWidget(context);
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
 
@@ -193,12 +190,11 @@ public class CustomParseReceiver extends BroadcastReceiver {
     }
 
     private void getNoticeImage(final Context context, String image, final String notice_id, final String notice_title, final String notice_body, final String subtitle) {
-        final boolean notifyUser = checkRunningApp(context);
+
         if (image.equalsIgnoreCase("")) {
             bitmap = null;
-            if (!notifyUser) {
-                generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
-            }
+            generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
+
         } else {
             AsyncHttpClient client = new AsyncHttpClient();
             client.get(image, new FileAsyncHttpResponseHandler(context) {
@@ -206,18 +202,16 @@ public class CustomParseReceiver extends BroadcastReceiver {
                 public void onSuccess(int statusCode, Header[] headers, File response) {
                     Log.e(TAG, response.getAbsolutePath());
                     bitmap = ImageDecoder.decodeFile(response.getAbsolutePath());
-                    if (!notifyUser) {
-                        generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
-                    }
+
+                    generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
+
                     response.deleteOnExit();
                 }
 
                 @Override
                 public void onFailure(Throwable e, File response) {
                     bitmap = null;
-                    if (!notifyUser) {
-                        generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
-                    }
+                    generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
                 }
 
 
@@ -237,5 +231,12 @@ public class CustomParseReceiver extends BroadcastReceiver {
         }
         return isActivityFound;
     }
+
+    private void updateWidget(Context context) {
+        int[] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, FlippyWidget.class));
+        FlippyWidget myWidget = new FlippyWidget();
+        myWidget.onUpdate(context, AppWidgetManager.getInstance(context), ids);
+    }
+
 }
 

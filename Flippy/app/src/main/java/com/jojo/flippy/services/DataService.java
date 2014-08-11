@@ -72,11 +72,16 @@ public class DataService extends Service {
         InternetConnectionDetector internetConnectionDetector = new InternetConnectionDetector(getApplicationContext());
 
         try {
-            isUserSubscribed = channelDao.queryForAll().isEmpty();
+            if (channelDao.queryForAll().isEmpty()) {
+                isUserSubscribed = false;
+            } else {
+                isUserSubscribed = true;
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        if (internetConnectionDetector.isConnectingToInternet() && !isUserSubscribed) {
+        if (internetConnectionDetector.isConnectingToInternet() && isUserSubscribed) {
             getNewPost();
         }
 
