@@ -229,7 +229,6 @@
             android:layout_marginRight="@dimen/margin_five"
             android:padding="5dp"
             android:layout_weight="1"
-            android:visibility="invisible"
             android:scaleType="centerInside"
             android:src="@drawable/ic_action_discard"
             app:border_color="@color/border_white"
@@ -237,21 +236,7 @@
             app:corner_radius="100dp"
             app:oval="false" />
 
-        <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/imageViewDeletePostPlace"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_five"
-            android:layout_marginRight="@dimen/margin_five"
-            android:padding="5dp"
-            android:layout_weight="1"
-            android:visibility="invisible"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_action_discard"
-            app:border_color="@color/border_white"
-            app:border_width="2dp"
-            app:corner_radius="100dp"
-            app:oval="false" />
+
 
 
         <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"

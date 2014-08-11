@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <stroke
+        android:width="@dimen/margin_half"
+        android:color="@color/flippy_white" />
+
+    <gradient
+        android:angle="225"
+        android:endColor="@color/flippy_dark_header"
+        android:startColor="@color/flippy_dark_header" />
+
+    <corners
+        android:bottomLeftRadius="@dimen/margin_one"
+        android:bottomRightRadius="@dimen/margin_one"
+        android:topLeftRadius="@dimen/margin_one"
+        android:topRightRadius="@dimen/margin_one" />
+
+</shape>

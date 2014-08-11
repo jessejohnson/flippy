@@ -1,5 +1,6 @@
 package com.jojo.flippy.services;
 
+import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -192,9 +193,12 @@ public class CustomParseReceiver extends BroadcastReceiver {
     }
 
     private void getNoticeImage(final Context context, String image, final String notice_id, final String notice_title, final String notice_body, final String subtitle) {
+        final boolean notifyUser = checkRunningApp(context);
         if (image.equalsIgnoreCase("")) {
             bitmap = null;
-            generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
+            if (!notifyUser) {
+                generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
+            }
         } else {
             AsyncHttpClient client = new AsyncHttpClient();
             client.get(image, new FileAsyncHttpResponseHandler(context) {
@@ -202,19 +206,36 @@ public class CustomParseReceiver extends BroadcastReceiver {
                 public void onSuccess(int statusCode, Header[] headers, File response) {
                     Log.e(TAG, response.getAbsolutePath());
                     bitmap = ImageDecoder.decodeFile(response.getAbsolutePath());
-                    generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
+                    if (!notifyUser) {
+                        generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
+                    }
                     response.deleteOnExit();
                 }
 
                 @Override
                 public void onFailure(Throwable e, File response) {
                     bitmap = null;
-                    generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
+                    if (!notifyUser) {
+                        generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
+                    }
                 }
 
 
             });
         }
+    }
+
+    private boolean checkRunningApp(Context context) {
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> services = activityManager
+                .getRunningTasks(Integer.MAX_VALUE);
+        boolean isActivityFound = false;
+
+        if (services.get(0).topActivity.getPackageName().toString()
+                .equalsIgnoreCase(context.getPackageName().toString())) {
+            isActivityFound = true;
+        }
+        return isActivityFound;
     }
 }
 

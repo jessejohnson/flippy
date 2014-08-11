@@ -199,7 +199,7 @@
     </ScrollView>
 
     <Button
-        style="?android:attr/buttonStyleSmall"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="match_parent"
         android:layout_margin="@dimen/margin_two"
         android:layout_height="wrap_content"

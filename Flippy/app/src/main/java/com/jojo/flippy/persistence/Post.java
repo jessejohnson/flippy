@@ -8,7 +8,7 @@ import com.j256.ormlite.table.DatabaseTable;
  */
 @DatabaseTable(tableName = "postTable")
 public class Post {
-    @DatabaseField(id = true)
+    @DatabaseField(id = true,columnName = "notice_id")
     public String notice_id;
 
     @DatabaseField(columnName = "notice_title")

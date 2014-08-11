@@ -57,7 +57,6 @@ public class ChannelSelectionItemAdapter extends ArrayAdapter<ChannelSelectItem>
         Ion.with(holder.imageViewAChannelImage)
                 .placeholder(R.drawable.channel_place)
                 .error(R.drawable.channel_error)
-                .animateIn(R.anim.fade_in)
                 .load(String.valueOf(rowItem.getImageUrl()));
 
 

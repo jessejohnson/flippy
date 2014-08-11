@@ -138,6 +138,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         textViewNoticeTextDetail.setText(noticeBody);
         textViewNoticeSubtitleDetail.setText(noticeSubtitle);
         imageViewDeletePost = (ImageView) findViewById(R.id.imageViewDeletePost);
+        imageViewDeletePost.setVisibility(View.INVISIBLE);
         imageViewRemovePost = (ImageView) findViewById(R.id.imageViewRemovePost);
         textViewNoticeLocation.setVisibility(View.GONE);
 
@@ -614,7 +615,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         alert.setTitle("Confirm your action");
         alert.setIcon(R.drawable.icon_dark_info);
         if (isDelete) {
-            alert.setMessage("Deleting this notice is irreversible and your CHANNELS_URL members will longer have access to the details, are you sure you want to continue ?");
+            alert.setMessage("Deleting this notice is irreversible and your channel members will longer have access to the details, are you sure you want to continue ?");
         } else {
             alert.setMessage("Removing this notice is irreversible, are you sure you want to continue ?");
 

@@ -13,6 +13,7 @@ import android.widget.Button;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.app.R;
+import com.jojo.flippy.persistence.Channels;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.persistence.User;
@@ -23,6 +24,7 @@ public class UserAccountLogout extends ActionBarActivity {
     private Button buttonLogOut;
     private Dao<Post, Integer> postDao;
     private Dao<User, Integer> userDao;
+    private Dao<Channels, Integer> channelDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class UserAccountLogout extends ActionBarActivity {
 
                 deleteAllPost();
                 deleteUser();
+                deleteChannels();
                 dialog.dismiss();
                 moveTaskToBack(true);
                 android.os.Process.killProcess(android.os.Process.myPid());
@@ -89,6 +92,21 @@ public class UserAccountLogout extends ActionBarActivity {
             List<User> userList = userDao.queryForAll();
             if (!userList.isEmpty()) {
                 userDao.delete(userList);
+            }
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+
+        }
+    }
+
+    private void deleteChannels() {
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
+                    DatabaseHelper.class);
+            channelDao = databaseHelper.getChannelDao();
+            List<Channels> channelList = channelDao.queryForAll();
+            if (!channelList.isEmpty()) {
+                channelDao.delete(channelList);
             }
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();

@@ -141,7 +141,7 @@ public class FragmentNotice extends Fragment {
 
     private void updateListAdapter() {
         listAdapter.notifyDataSetChanged();
-        if (listAdapter.getCount()==0) {
+        if (listAdapter.getCount() == 0) {
             textViewNoNotice.setVisibility(View.VISIBLE);
             textViewNoNotice.setText("Currently no notice, subscribe to receive notice");
         }
@@ -233,17 +233,14 @@ public class FragmentNotice extends Fragment {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
                     DatabaseHelper.class);
             postDao = databaseHelper.getPostDao();
-            QueryBuilder<Post, Integer> queryBuilder = postDao.queryBuilder();
-            queryBuilder.orderBy("notice_id",false);
-            List<Post> postList = queryBuilder.query();
-            //List<Post> postList = postDao.queryForAll();
+            List<Post> postList = postDao.queryForAll();
             progressBarCommunityCenterLoader.setVisibility(view.GONE);
             noticeFeed.clear();
             if (!postList.isEmpty()) {
-                for (int i = 0; i < postList.size(); i++) {
+                for (int i = postList.size() - 1; i >= 0; i--) {
                     Post post = postList.get(i);
                     String[] timestampArray = post.start_date.replace("Z", "").split("T");
-                    String timestamp = timestampArray[0]+ " @ " + timestampArray[1].substring(0, 8);
+                    String timestamp = timestampArray[0] + " @ " + timestampArray[1].substring(0, 8);
 
                     try {
                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

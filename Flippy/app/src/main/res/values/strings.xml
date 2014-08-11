@@ -7,7 +7,7 @@
 
     <!-- splash screen strings -->
     <string name="splash_screen_tag_line">closer communities</string>
-    <string name="splash_screen_url">flippy.co</string>
+    <string name="splash_screen_url">flippygh.com</string>
 
     <!-- on boarding strings -->
     <string name="title_activity_on_boarding">On Boarding</string>
@@ -187,7 +187,7 @@
 
     <!-- creating notice activity strings -->
     <string name="title_activity_create_notice">Create Notice</string>
-    <string name="notice_new_title">Create a new Notice</string>
+    <string name="notice_new_title">create a new notice</string>
     <string name="notice_new_warning">        Notice are meant to be relevant to creatorFullName of the channel you manage. It is your
         responsibility to keep them so.</string>
     <string name="notice_new_learn">To learn more about creating successful Notice, read our Notice\'s Guide</string>
@@ -201,7 +201,7 @@
     <string name="optional_notice_title">Optional Information</string>
     <string name="optional_notice_help">        Images, Maps and Reminders are great ways to give the creatorFullName of your channel more
         value from a notice</string>
-    <string name="final_step_create_notice">send to channel</string>
+    <string name="final_step_create_notice">preview notice</string>
     <string name="optional_notice_add_image">add Image</string>
     <string name="optional_notice_add_map">add Map</string>
     <string name="optional_notice_add_reminder">add Reminder</string>
@@ -278,7 +278,6 @@
     <string name="ringtone_summary">Choose a ringtone for Flippy Notifications</string>
     <string name="ringtone_key">flippy_ringtone</string>
     <string name="title_activity_help">Help</string>
-    <string name="hello_world">Hello world!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Help Activity Strings -->
@@ -330,8 +329,7 @@
 
     <!-- preview post strings -->
     <string name="title_activity_preview_post">Notice preview</string>
-    <string name="preview_post_publish_post">Publish post</string>
+    <string name="preview_post_publish_post">publish post</string>
     <string name="preview_post_likes">0 stars</string>
-    <string name="title_activity_pushed_notices">PushedNotices</string>
 
 </resources>
