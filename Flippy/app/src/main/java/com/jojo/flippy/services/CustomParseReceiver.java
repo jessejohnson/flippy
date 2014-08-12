@@ -62,6 +62,7 @@ public class CustomParseReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.e(TAG, "Here");
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(context,
                     DatabaseHelper.class);

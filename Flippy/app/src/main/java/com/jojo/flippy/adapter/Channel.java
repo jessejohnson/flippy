@@ -8,13 +8,15 @@ public class Channel {
     private String creatorEmail;
     private String creatorFullName;
     private String id;
+    private boolean defaultState;
 
-    public Channel(URI imageUrl, String id, String channelName, String creatorEmail, String creatorFullName) {
+    public Channel(URI imageUrl, String id, String channelName, String creatorEmail, String creatorFullName,boolean defaultState) {
         this.imageUrl = imageUrl;
         this.channelName = channelName;
         this.creatorEmail = creatorEmail;
         this.creatorFullName = creatorFullName;
         this.id = id;
+        this.defaultState = defaultState;
     }
 
     public URI getImageUrl() {
@@ -55,6 +57,14 @@ public class Channel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setDefaultState(boolean defaultState) {
+        this.defaultState = defaultState;
+    }
+
+    public boolean isDefaultState() {
+        return defaultState;
     }
 
     @Override

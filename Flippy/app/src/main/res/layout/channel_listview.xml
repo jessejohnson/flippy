@@ -139,6 +139,7 @@
                     android:text="@string/default_channel_number"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/flippy_white" />
+
             </LinearLayout>
         </LinearLayout>
 

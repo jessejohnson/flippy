@@ -79,6 +79,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
             holder.imageViewSubscribe = (ImageView) convertView.findViewById(R.id.imageViewSubscribe);
             holder.imageViewUnSubscribe = (ImageView) convertView.findViewById(R.id.imageViewUnSubscribe);
             holder.textViewChannelId = (TextView) convertView.findViewById(R.id.textViewChannelId);
+            holder.textViewChannelId = (TextView) convertView.findViewById(R.id.textViewChannelId);
             convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
@@ -93,7 +94,7 @@ public class ChannelAdapter extends ArrayAdapter<Channel> {
         holder.textViewStatus.setText(rowItem.getCreatorEmail());
         holder.textViewChannelId.setText(rowItem.getId());
 
-        if (isUserChannel) {
+        if (isUserChannel || rowItem.isDefaultState()) {
             holder.imageViewSubscribe.setVisibility(convertView.GONE);
             holder.imageViewUnSubscribe.setVisibility(convertView.GONE);
         } else {

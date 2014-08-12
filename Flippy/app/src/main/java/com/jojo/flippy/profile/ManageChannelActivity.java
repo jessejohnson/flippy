@@ -185,7 +185,6 @@ public class ManageChannelActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String cancel = "Action cancelled";
         if (requestCode == PROMOTE_USER && resultCode == RESULT_OK && null != data) {
             promoteUser(data.getStringExtra("memberId"));
         }
@@ -200,7 +199,7 @@ public class ManageChannelActivity extends ActionBarActivity {
                 ToastMessages.showToastLong(context, "Sorry image upload failed");
             }
         } else {
-            ToastMessages.showToastLong(context, cancel);
+           // ToastMessages.showToastLong(context, cancel);
         }
 
     }
@@ -223,6 +222,7 @@ public class ManageChannelActivity extends ActionBarActivity {
     private void getAdminsList(String url) {
         Ion.with(ManageChannelActivity.this)
                 .load(url)
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override

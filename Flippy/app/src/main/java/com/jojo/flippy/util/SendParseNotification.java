@@ -24,9 +24,9 @@ public class SendParseNotification {
             @Override
             public void done(ParseException e) {
                 if (e != null) {
-                    Log.e("Error", e.toString());
+                    Log.e(TAG, e.toString());
                 } else {
-                    Log.e("Success", title);
+                    Log.e(TAG, "Success : " + title);
                 }
 
             }

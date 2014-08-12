@@ -42,6 +42,7 @@ import java.util.List;
 public class ChannelDetailActivity extends ActionBarActivity {
     private Intent intent;
     private String name;
+    private boolean isDefault = true;
     private String id;
     private String bio;
     private String creatorName;
@@ -82,7 +83,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         channelName = intent.getStringExtra("channelName");
         channelId = intent.getStringExtra("channelId");
         channelDetailsURL = Flippy.CHANNELS_URL + channelId + "/";
-        String adminURL = Flippy.CHANNELS_URL + channelId + "/admins/";
+        final String adminURL = Flippy.CHANNELS_URL + channelId + "/admins/";
         getUserSubscribedChannelId();
 
         ActionBar actionBar = getActionBar();
@@ -136,7 +137,7 @@ public class ChannelDetailActivity extends ActionBarActivity {
         textViewChannelNameDetail.setText(channelName);
 
 
-        getAdminsList(adminURL);
+
         //load the details of a channel
         Ion.with(ChannelDetailActivity.this)
                 .load(channelDetailsURL)
@@ -165,9 +166,11 @@ public class ChannelDetailActivity extends ActionBarActivity {
                                 communityId = result.get("community").getAsString();
                                 image_thumbnail_url = result.get("image_thumbnail_url").getAsString();
                                 image_url = result.get("image_url").getAsString();
+                                isDefault = result.get("is_default").getAsBoolean();
                                 getCommunityName(communityId);
                                 progressLoadChannel.setVisibility(View.GONE);
                                 showViews();
+                                getAdminsList(adminURL);
                             } else if (e != null) {
                                 Log.e("Error from channel detail", e.toString());
                                 return;
@@ -448,17 +451,20 @@ public class ChannelDetailActivity extends ActionBarActivity {
     }
 
     private void showSubscribeButton() {
-        linearLayoutSubscriptions.setVisibility(View.VISIBLE);
-        buttonManageToChannel.setVisibility(View.GONE);
-        if (channelIdList.contains(channelId)) {
+        if (isDefault) {
+            linearLayoutSubscriptions.setVisibility(View.GONE);
             buttonSubscribeToChannel.setVisibility(View.GONE);
-            buttonUnSubscribeToChannel.setVisibility(View.VISIBLE);
-        } else {
-            buttonSubscribeToChannel.setVisibility(View.VISIBLE);
             buttonUnSubscribeToChannel.setVisibility(View.GONE);
+        } else {
+            linearLayoutSubscriptions.setVisibility(View.VISIBLE);
+            if (channelIdList.contains(channelId)) {
+                buttonSubscribeToChannel.setVisibility(View.GONE);
+                buttonUnSubscribeToChannel.setVisibility(View.VISIBLE);
+            } else {
+                buttonSubscribeToChannel.setVisibility(View.VISIBLE);
+                buttonUnSubscribeToChannel.setVisibility(View.GONE);
+            }
         }
-
-
     }
 
     private void showManageButton() {

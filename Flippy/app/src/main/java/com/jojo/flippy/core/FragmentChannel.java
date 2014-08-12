@@ -96,7 +96,7 @@ public class FragmentChannel extends Fragment {
                                     JsonObject item = communityArray.get(i).getAsJsonObject();
                                     JsonObject creator = item.getAsJsonObject("creator");
                                     String channel_id = item.get("id").getAsString();
-                                    Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), channel_id, item.get("name").getAsString(), creator.get("email").getAsString(), creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString());
+                                    Channel channelItem = new Channel(URI.create(item.get("image_url").getAsString()), channel_id, item.get("name").getAsString(), creator.get("email").getAsString(), creator.get("first_name").getAsString() + " " + creator.get("last_name").getAsString(),item.get("is_default").getAsBoolean());
 
                                     if (channelList.isEmpty()) {
                                         channels = new Channels(channel_id);

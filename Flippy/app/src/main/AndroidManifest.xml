@@ -316,7 +316,6 @@
         <receiver android:name="com.parse.ParseBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.RECEIVE_BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
@@ -335,6 +334,8 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="com.jojo.flippy.app.PUSH_NOTIFICATION" />
+                <action android:name="com.jojo.flippy.app.BOOT_COMPLETED" />
+                <action android:name="com.jojo.flippy.app.USER_PRESENT" />
             </intent-filter>
         </receiver>
 

@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -27,6 +28,7 @@ import com.github.johnpersano.supertoasts.SuperToast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.JsonArray;
@@ -163,6 +165,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
             googleMap = ((SupportMapFragment) getSupportFragmentManager().
                     findFragmentById(R.id.linearLayoutNoticeShowLocation)).getMap();
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            googleMap.setMyLocationEnabled(true);
         }
 
         //Loading the list with data from Api call
@@ -447,7 +450,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                 return;
                             }
                             if (e != null) {
-                                ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
+                                Log.e(TAG, e.toString());
+                                //ToastMessages.showToastLong(NoticeDetailActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
                                 return;
                             }
 
@@ -481,7 +485,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                 showMap();
                             }
                             if (e != null) {
-                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
+                                Log.e(TAG, e.toString());
+                                //showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                             }
                         } catch (Exception el) {
                             Log.e(TAG, "Error getting the location of a notice");
@@ -509,7 +514,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                 startDate = item.get("start_date").getAsString();
                             }
                             if (e != null) {
-                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
+                                Log.e(TAG, e.toString());
+                                //showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                             }
 
                         } catch (Exception el) {
@@ -528,16 +534,17 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
         if (!locationName.equalsIgnoreCase("")) {
             textViewNoticeLocation.setVisibility(View.VISIBLE);
-            textViewNoticeLocation.setText("location : " + locationName);
+            textViewNoticeLocation.setText("Location : " + locationName);
         }
         linearLayoutMapView.setVisibility(View.VISIBLE);
-        LatLng coordinate = new LatLng(Double.parseDouble(locationLat), Double.parseDouble(locationLon));
-        googleMap.addMarker(new MarkerOptions()
-                .snippet(locationName)
-                .title(noticeTitle)
-                .position(coordinate)
-                .draggable(false));
+
+        MarkerOptions marker = new MarkerOptions().position(new LatLng(Double.parseDouble(locationLat), Double.parseDouble(locationLon))).title(noticeTitle);
+        marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        marker.snippet(locationName);
+        googleMap.addMarker(marker);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(locationLat), Double.parseDouble(locationLon)), 5));
+        googleMap.getUiSettings().setCompassEnabled(true);
+        googleMap.getUiSettings().setRotateGesturesEnabled(true);
     }
 
     private void getChannelName(String id) {
@@ -557,7 +564,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                 textViewNoticeSubtitleChannelName.setText(nameResult.get("name").getAsString());
                             }
                             if (ex != null) {
-                                showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
+                                Log.e(TAG, ex.toString());
+                                //showSuperToast(getResources().getString(R.string.internet_connection_error_dialog_title), false);
                             }
 
                         } catch (Exception exception) {
