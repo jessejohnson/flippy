@@ -100,9 +100,9 @@ public class CustomParseReceiver extends BroadcastReceiver {
     }
 
     private void generateNotification(Context context, Bitmap bitmap, String id, String title, String body, String subTitle) {
-        if (bitmap == null) {
+        if (bitmap == null)
             bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
-        }
+
         Intent notificationIntent = new Intent();
         notificationIntent.putExtra("noticeId", id);
         notificationIntent.putExtra("noticeTitle", title);
@@ -203,9 +203,7 @@ public class CustomParseReceiver extends BroadcastReceiver {
                 public void onSuccess(int statusCode, Header[] headers, File response) {
                     Log.e(TAG, response.getAbsolutePath());
                     bitmap = ImageDecoder.decodeFile(response.getAbsolutePath());
-
                     generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
-
                     response.deleteOnExit();
                 }
 

@@ -104,10 +104,9 @@ public class FragmentNotice extends Fragment {
             if (postList.isEmpty()) {
                 getAllPost(view);
             } else {
-                loadAdapterFromDatabase(view);
                 Intent dataServiceIntent = new Intent(getActivity(), DataService.class);
                 getActivity().startService(dataServiceIntent);
-
+                loadAdapterFromDatabase(view);
             }
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();

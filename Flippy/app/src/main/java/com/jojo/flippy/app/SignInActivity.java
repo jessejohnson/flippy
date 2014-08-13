@@ -133,7 +133,6 @@ public class SignInActivity extends ActionBarActivity {
                                             } else if (result.get("community").isJsonNull()){
                                                 //if community is null, user may not have set community
                                                 //allow user to choose community again
-                                                Toast.makeText(SignInActivity.this, "No community", Toast.LENGTH_LONG).show();
                                                 startActivity(new Intent(SignInActivity.this, SelectCommunityActivity.class));
                                             }
                                             if (!result.get("avatar").isJsonNull()) {
@@ -176,6 +175,7 @@ public class SignInActivity extends ActionBarActivity {
                                                 userDao.update(user);
                                             } catch (SQLException e1) {
                                                 e1.printStackTrace();
+                                                Log.e(TAG,e1.toString());
                                             }
                                             saveUserChannels();
                                         } else {
@@ -240,7 +240,7 @@ public class SignInActivity extends ActionBarActivity {
                                         channelDao.createOrUpdate(channels);
                                     } catch (java.sql.SQLException sqlE) {
                                         sqlE.printStackTrace();
-                                        Log.e("Sign in activity", "Error getting all user CHANNELS_URL");
+                                        Log.e("Sign in activity", "Error getting all user channels");
                                     }
                                 }
                                 intent.setClass(SignInActivity.this, CommunityCenterActivity.class);

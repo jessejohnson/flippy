@@ -9,15 +9,13 @@ import com.parse.SendCallback;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by bright on 8/8/14.
- */
 public class SendParseNotification {
     public static final String ACTION = "com.jojo.flippy.app.PUSH_NOTIFICATION";
     public static final String TAG = "SendParseNotification";
 
     public static void sendMessage(final String title, String id, String body, String channelId) {
         ParsePush push = new ParsePush();
+        //push.setMessage("");
         push.setData(getJSONDataMessageForIntent(title, id, body, channelId));
         push.setChannel("notice");
         push.sendInBackground(new SendCallback() {
