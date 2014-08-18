@@ -334,8 +334,6 @@
             android:name="com.jojo.flippy.services.CustomParseReceiver"
             android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.USER_PRESENT" />
                 <action android:name="com.jojo.flippy.app.PUSH_NOTIFICATION" />
             </intent-filter>
         </receiver>

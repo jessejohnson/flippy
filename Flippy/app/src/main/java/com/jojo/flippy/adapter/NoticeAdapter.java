@@ -78,7 +78,8 @@ public class NoticeAdapter extends ArrayAdapter<Notice> {
 
 
     private class ViewHolder {
-        ImageView imageViewNotice, imageViewCreator;
+        ImageView imageViewNotice;
+        ImageView imageViewCreator;
         TextView textViewTitle;
         TextView textViewSubtitle;
         TextView textViewContent;

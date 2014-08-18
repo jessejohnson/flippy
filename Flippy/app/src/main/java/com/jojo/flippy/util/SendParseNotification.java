@@ -14,9 +14,11 @@ public class SendParseNotification {
     public static final String TAG = "SendParseNotification";
 
     public static void sendMessage(final String title, String id, String body, String channelId) {
+        long weekInterval = 60*60*24*7; 
         ParsePush push = new ParsePush();
         //push.setMessage("");
         push.setData(getJSONDataMessageForIntent(title, id, body, channelId));
+        push.setExpirationTimeInterval(weekInterval);
         push.setChannel("notice");
         push.sendInBackground(new SendCallback() {
             @Override

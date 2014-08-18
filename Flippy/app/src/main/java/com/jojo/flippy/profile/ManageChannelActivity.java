@@ -82,9 +82,8 @@ public class ManageChannelActivity extends ActionBarActivity {
     private Context context;
     private String filePath;
     private ActionBar actionBar;
-
-
     private static String TAG = "ManageChannelActivity";
+    private String adminURL = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +120,7 @@ public class ManageChannelActivity extends ActionBarActivity {
         imageViewChannelManageEdit = (ImageView) findViewById(R.id.imageViewChannelManageEdit);
         imageViewChannelEdit = (ImageView) findViewById(R.id.imageViewChannelEdit);
         buttonEditChannelName = (Button) findViewById(R.id.buttonEditChannelName);
-        String adminURL = Flippy.CHANNELS_URL + channelId + "/admins/";
+        adminURL = Flippy.CHANNELS_URL + channelId + "/admins/";
         getAdminsList(adminURL);
 
 
@@ -199,7 +198,7 @@ public class ManageChannelActivity extends ActionBarActivity {
                 ToastMessages.showToastLong(context, "Sorry image upload failed");
             }
         } else {
-           // ToastMessages.showToastLong(context, cancel);
+            // ToastMessages.showToastLong(context, cancel);
         }
 
     }
@@ -360,8 +359,7 @@ public class ManageChannelActivity extends ActionBarActivity {
                             } else if (result != null) {
                                 Log.e(TAG, result.toString());
                                 ToastMessages.showToastLong(ManageChannelActivity.this, result.get("results").getAsString());
-                                Intent intentHome = new Intent(ManageChannelActivity.this, CommunityCenterActivity.class);
-                                startActivity(intentHome);
+                                getAdminsList(adminURL);
                             } else {
                                 Log.e(TAG, "Something else went wrong promoting a user");
                             }

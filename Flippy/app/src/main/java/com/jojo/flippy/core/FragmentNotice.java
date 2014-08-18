@@ -149,7 +149,7 @@ public class FragmentNotice extends Fragment {
             textViewNoNotice.setText("Currently no notice, subscribe to receive notice");
         }
         if (listAdapter.getCount() >= 20) {
-            buttonLoadOldPost.setVisibility(View.VISIBLE);
+            buttonLoadOldPost.setVisibility(View.GONE);
         }
     }
 

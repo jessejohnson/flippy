@@ -73,11 +73,11 @@
             android:id="@+id/imageViewNoticeCreator"
             android:layout_width="@dimen/margin_fifty"
             android:layout_height="@dimen/margin_fifty"
-            android:layout_margin="@dimen/margin_ten"
-            android:layout_weight="0.1"
             android:scaleType="centerCrop"
+            android:layout_margin="@dimen/margin_five"
             app:border_color="@color/border_white"
-            app:border_width="2dp"
+            app:border_width="3dp"
+            app:corner_radius="@dimen/margin_fifty"
             app:oval="false" />
 
     </LinearLayout>
