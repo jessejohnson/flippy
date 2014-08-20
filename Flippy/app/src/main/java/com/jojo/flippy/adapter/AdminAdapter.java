@@ -69,7 +69,7 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
 
         if (creator.equals(rowItem.getAdminId())) {
             holder.buttonDemoteAdmin.setVisibility(View.GONE);
-        }else{
+        } else {
             holder.buttonDemoteAdmin.setVisibility(View.VISIBLE);
         }
 
@@ -84,7 +84,6 @@ public class AdminAdapter extends ArrayAdapter<AdminPerson> {
 
         return convertView;
     }
-
 
 
     private void confirmDemotion(String adminName, final String memberId) {

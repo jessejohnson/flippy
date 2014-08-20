@@ -17,6 +17,7 @@ public class  ToastMessages {
     private  static Context context;
 
     public  ToastMessages(Context context){
+
         this.context = context;
     }
 

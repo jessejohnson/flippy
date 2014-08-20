@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import com.jojo.flippy.app.R;
-
 /**
  * Created by odette on 6/3/14.
  */

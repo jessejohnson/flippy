@@ -191,8 +191,6 @@ public class ManageChannelActivity extends ActionBarActivity {
             Uri selectedImage = data.getData();
             filePath = ImageDecoder.getPath(context, selectedImage);
             if (filePath != null) {
-                Bitmap bitmap = ImageDecoder.decodeFile(filePath);
-                imageViewChannelManageEdit.setImageBitmap(bitmap);
                 uploadNewChannelImage(filePath);
             } else {
                 ToastMessages.showToastLong(context, "Sorry image upload failed");
@@ -219,6 +217,7 @@ public class ManageChannelActivity extends ActionBarActivity {
     }
 
     private void getAdminsList(String url) {
+        rowItems.clear();
         Ion.with(ManageChannelActivity.this)
                 .load(url)
                 .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
@@ -393,7 +392,7 @@ public class ManageChannelActivity extends ActionBarActivity {
     }
 
 
-    private void uploadNewChannelImage(String filePath) {
+    private void uploadNewChannelImage(final String filePath) {
         if (filePath == null) {
             ToastMessages.showToastShort(context, "Browse a new image");
             return;
@@ -410,7 +409,8 @@ public class ManageChannelActivity extends ActionBarActivity {
                         try {
                             if (result != null && !result.has("detail")) {
                                 showSuperToast("Channel image changed", false);
-                                goToMainActivity();
+                                Bitmap bitmap = ImageDecoder.decodeFile(filePath);
+                                imageViewChannelManageEdit.setImageBitmap(bitmap);
                                 return;
 
                             } else if (e != null) {
@@ -446,7 +446,7 @@ public class ManageChannelActivity extends ActionBarActivity {
                 buttonEditChannelName.setText("Edit");
                 Log.e("Response success", responseBody);
                 ToastMessages.showToastLong(context, "Name changed successfully");
-                goToMainActivity();
+                refresh();
             }
 
             @Override
@@ -488,5 +488,9 @@ public class ManageChannelActivity extends ActionBarActivity {
         });
 
         alert.show();
+    }
+    private void refresh(){
+        finish();
+        startActivity(getIntent());
     }
 }

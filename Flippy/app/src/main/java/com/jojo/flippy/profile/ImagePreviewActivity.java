@@ -1,6 +1,7 @@
 package com.jojo.flippy.profile;
 
 import android.app.ActionBar;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -124,12 +125,14 @@ public class ImagePreviewActivity extends ActionBarActivity {
             ToastMessages.showToastLong(ImagePreviewActivity.this, "Sharing failed");
             return;
         }
-        progressBarLoadUserImage.setVisibility(View.VISIBLE);
+        final ProgressDialog progressDialog = new ProgressDialog(ImagePreviewActivity.this);
+        progressDialog.setMessage("preparing to share");
+        progressDialog.show();
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(image, new FileAsyncHttpResponseHandler(ImagePreviewActivity.this) {
             @Override
             public void onSuccess(int statusCode, Header[] headers, File response) {
-                progressBarLoadUserImage.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 Log.e(TAG, response.getAbsolutePath());
                 Bitmap bitmap = ImageDecoder.decodeFile(response.getAbsolutePath());
                 String imagePath = ImageDecoder.saveBitmap(bitmap, "Flippy", "Media");
@@ -139,7 +142,7 @@ public class ImagePreviewActivity extends ActionBarActivity {
 
             @Override
             public void onFailure(Throwable e, File response) {
-                progressBarLoadUserImage.setVisibility(View.GONE);
+                progressDialog.dismiss();
                 ToastMessages.showToastLong(ImagePreviewActivity.this, "Sharing failed");
             }
 

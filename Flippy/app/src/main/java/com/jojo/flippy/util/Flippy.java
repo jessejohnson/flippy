@@ -5,6 +5,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.core.NoticeDetailActivity;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
@@ -42,7 +43,7 @@ public class Flippy extends android.app.Application {
         super.onCreate();
         //The parse notification
         Parse.initialize(this, "9cpdxBZyvLiCJX7nRuCrGocOc5gWKVWCazPreMXq", "J7pUmdRHF89NO4yiCeVZ5bSNDtMIkgpJSqf01uqA");
-        PushService.setDefaultPushCallback(this, NoticeDetailActivity.class);
+        PushService.setDefaultPushCallback(this, CommunityCenterActivity.class);
         PushService.subscribe(this, "notice", NoticeDetailActivity.class);
 
         mRequestQueue = Volley.newRequestQueue(this);

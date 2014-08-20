@@ -41,6 +41,7 @@ But some libraries used include the following ..
 8. Facebook sdk
 9. Google progress bar
 10. Ormlite library
+11. Parse sdk 1.5
 
 The "app" package
 
@@ -73,6 +74,33 @@ This section presents the user with the needed input fields for the user
 to register. Currently using ...
 Email address, First name, Lastname and Password.
 The user checks are done using the ion network calls
+
+
+The OnBoardingActivity:...
+This activity together with the onboardingTextFragment is a point of familiarization to the app.
+It also introduces the app theme. User can catch a glimpse of the features of the Flippy app 
+in this activity.
+
+FacebookSignInFragment:...
+It handles user connections with his or her social media platform.
+The heavy lifting and all the required things are handle by facebook sdk and the result intent
+is received and data is processed and sent to the server
+
+
+The Util package
+
+
+
+This package handles all the utility functions that are common to all the other packages.
+It contains the applcation class, some service files and also the validator class.
+
+The Flippy application file
+This Flippy.java file, declares the parse initialization. 
+
+
+
+
+
 
 
 

@@ -61,13 +61,12 @@
 
     <string name="pref_title_ringtone">Ringtone</string>
     <string name="pref_ringtone_silent">Silent</string>
-
     <string name="pref_title_vibrate">Vibrate</string>
 
 
     <string-array name="preferenceFlippyNoticeName">
         <item>Flippy default</item>
-        <item>Sound 2</item>
+        <item>Flippy beeb</item>
     </string-array>
 
     <string-array name="preferenceFlippyNoticeValues">
