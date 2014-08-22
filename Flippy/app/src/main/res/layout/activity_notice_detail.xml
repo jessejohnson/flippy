@@ -109,7 +109,7 @@
                 android:layout_below="@+id/imageViewNoticeImage"
                 android:fontFamily="san-serif-light"
                 android:lineSpacingMultiplier="1"
-                android:textIsSelectable="true"
+                android:textIsSelectable="false"
                 android:gravity="left"
                 android:padding="@dimen/margin_five"
                 android:text="@string/dummy_user_name"

@@ -38,12 +38,13 @@ import com.koushikdutta.ion.Ion;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.File;
 import java.util.List;
-
 
 
 public class EditProfileActivity extends ActionBarActivity {
@@ -274,8 +275,7 @@ public class EditProfileActivity extends ActionBarActivity {
                             if (result.has("details")) {
                                 showSuperToast("Failed to update user", false);
                                 return;
-                            }
-                            if (result != null && !result.has("details")) {
+                            } else if (result != null && !result.has("details")) {
                                 if (!result.get("avatar").isJsonNull()) {
                                     userAvatar = result.get("avatar").getAsString();
                                 }
@@ -293,8 +293,7 @@ public class EditProfileActivity extends ActionBarActivity {
                                     userDateOfBirth = result.get("date_of_birth").getAsString().substring(0, 10).trim();
                                 }
 
-                            }
-                            if (e != null) {
+                            } else {
                                 ToastMessages.showToastLong(EditProfileActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
                                 return;
                             }

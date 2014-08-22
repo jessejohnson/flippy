@@ -45,7 +45,7 @@ public class FacebookSignInFragment extends Fragment {
     LoginButton mLoginBtn;
     private Button signInWithEmail, buttonLoginWithEmail;
     private String regUserEmail, regUserAuthToken, regUserID, regFirstName, regLastName, regGender;
-    private String fbId, first_name, last_name, userEmail, profilePic, profilePicSmall, gender = "", avatar = "", date_of_birth = "", community = "";
+    private String fbId, first_name, last_name, userEmail, profilePic="", profilePicSmall="", gender = "", avatar = "", date_of_birth = "", community = "";
     private Dao<User, Integer> userDao;
     private Dao<Channels, Integer> channelDao;
 

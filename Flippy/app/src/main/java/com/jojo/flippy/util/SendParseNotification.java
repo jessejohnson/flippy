@@ -39,6 +39,7 @@ public class SendParseNotification {
         try {
             data.put("action", ACTION);
             data.put("message", title);
+            data.put("alert", "New notice available");
             data.put("noticeId", id);
             data.put("body", body);
             data.put("channelId", channelId);

@@ -44,7 +44,7 @@ public class Flippy extends android.app.Application {
         //The parse notification
         Parse.initialize(this, "9cpdxBZyvLiCJX7nRuCrGocOc5gWKVWCazPreMXq", "J7pUmdRHF89NO4yiCeVZ5bSNDtMIkgpJSqf01uqA");
         PushService.setDefaultPushCallback(this, CommunityCenterActivity.class);
-        PushService.subscribe(this, "notice", NoticeDetailActivity.class);
+        PushService.subscribe(this, "notice", CommunityCenterActivity.class);
 
         mRequestQueue = Volley.newRequestQueue(this);
         sInstance = this;
