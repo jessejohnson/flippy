@@ -41,6 +41,7 @@ public class RegisterActivity extends Activity {
         setContentView(R.layout.activity_register);
 
         ActionBar actionbar = getActionBar();
+
         if (actionbar != null) {
             actionbar.setDisplayHomeAsUpEnabled(true);
             actionbar.setSubtitle(getString(R.string.register_title_few_things));
@@ -111,16 +112,16 @@ public class RegisterActivity extends Activity {
 
                 if (allFieldsValid) {
                     String userEmail = editTextRegisterEmail.getText().toString().trim();
-                    String first_name = editTextFirstName.getText().toString().trim();
-                    String last_name = editTextLastName.getText().toString().trim();
+                    String firstName = editTextFirstName.getText().toString().trim();
+                    String lastName = editTextLastName.getText().toString().trim();
                     String password = editTextPassword.getText().toString().trim();
 
                     registrationNext.setEnabled(false);
                     registrationNext.setText("Registering ...");
                     JsonObject json = new JsonObject();
                     json.addProperty("email", userEmail);
-                    json.addProperty("first_name", first_name);
-                    json.addProperty("last_name", last_name);
+                    json.addProperty("first_name", firstName);
+                    json.addProperty("last_name", lastName);
                     json.addProperty("password", password);
 
                     Ion.with(RegisterActivity.this)

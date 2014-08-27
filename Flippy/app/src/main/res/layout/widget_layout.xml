@@ -1,70 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layoutWidget"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/margin_five"
-    android:background="@drawable/widget_bg">
+    android:layout_margin="@dimen/margin_five">
 
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
 
-        <ImageView
+        <FrameLayout
             android:layout_width="match_parent"
-            android:background="@color/flippy_light_header"
-            android:scaleType="centerCrop"
-            android:layout_height="match_parent"
-            android:id="@+id/imageViewWidgetNotice" />
-
-        <ImageView
-            android:layout_width="@dimen/margin_fifty"
-            android:layout_margin="@dimen/margin_two"
-            android:background="@drawable/flippy_logo_white"
-            android:scaleType="centerCrop"
-            android:layout_height="@dimen/margin_fifty"
-            android:id="@+id/imageViewWidgetLogo" />
+            android:layout_height="@dimen/margin_one_fifty">
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="@dimen/margin_five"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|bottom">
+            <ImageView
+                android:layout_width="match_parent"
+                android:background="@color/flippy_light_header"
+                android:scaleType="centerCrop"
+                android:layout_height="@dimen/margin_one_fifty"
+                android:id="@+id/imageViewWidgetNotice" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:singleLine="true"
-                android:shadowDx="1"
-                android:shadowDy="1"
-                android:shadowColor="@color/flippy_dark_header"
-                android:shadowRadius="1"
+            <ImageView
+                android:layout_width="@dimen/margin_hundred"
+                android:background="@color/flippy_light_header"
+                android:scaleType="centerCrop"
+                android:src="@drawable/flippy_logo_white"
+                android:layout_height="@dimen/margin_hundred"
+                android:id="@+id/imageViewWidgetNoticeLogo" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:padding="@dimen/margin_five"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text=""
-                android:textStyle="bold"
-                android:textColor="@color/flippy_white"
-                android:id="@+id/textViewWidgetNoticeTitle" />
+                android:layout_gravity="left|bottom">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxLines="5"
-                android:shadowDx="1"
-                android:shadowDy="1"
-                android:shadowColor="@color/flippy_dark_header"
-                android:shadowRadius="1"
-                android:ellipsize="marquee"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text=""
-                android:textStyle="normal"
-                android:textColor="@color/flippy_white"
-                android:id="@+id/textViewWidgetNoticeBody" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:singleLine="true"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowColor="@color/flippy_dark_header"
+                    android:shadowRadius="1"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:textColor="@color/flippy_white"
+                    android:id="@+id/textViewWidgetNoticeTitle" />
 
-        </LinearLayout>
-    </FrameLayout>
-</RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="5"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowColor="@color/flippy_dark_header"
+                    android:shadowRadius="1"
+                    android:ellipsize="marquee"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text=""
+                    android:textStyle="normal"
+                    android:textColor="@color/flippy_white"
+                    android:id="@+id/textViewWidgetNoticeBody" />
+
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>

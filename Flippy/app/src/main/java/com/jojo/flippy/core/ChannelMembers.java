@@ -200,6 +200,7 @@ public class ChannelMembers extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        /*
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.channel_members, menu);
         SearchManager searchManager =
@@ -225,6 +226,7 @@ public class ChannelMembers extends ActionBarActivity {
             }
         };
         searchView.setOnQueryTextListener(textChangeListener);
+        */
         return true;
     }
 

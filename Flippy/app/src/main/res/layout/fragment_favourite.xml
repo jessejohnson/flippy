@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:gpb="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="horizontal">
+
+    <ListView
+        android:id="@+id/listViewFavouriteNoticeList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="@dimen/margin_five"
+        android:layout_marginLeft="@dimen/margin_five"
+        android:layout_marginRight="@dimen/margin_five"
+        android:layout_marginTop="@dimen/margin_five"
+        android:layout_weight="1"
+        android:divider="@null"
+        android:dividerHeight="@dimen/margin_two"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="none" />
+
+
+    <TextView
+        android:id="@+id/textViewNoFavouriteNotice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_margin="@dimen/margin_five"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:textStyle="bold"
+        android:textColor="@color/flippy_orange"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>

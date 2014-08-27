@@ -47,7 +47,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
     public static String userAvatarURL = "";
     public static String userCommunityId = "";
     public static String userCommunityName = "";
-    public static String regUserID;
+    public static String regUserID = "";
     public static String userDateOfBirth = "";
     public static String userGender = "";
     public static String userAuthToken;
@@ -110,6 +110,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
         // Add Drawer Item to dataList
         dataList.add(new DrawerItem(getString(R.string.drawer_item_account), R.drawable.ic_action_group));
         dataList.add(new DrawerItem(getString(R.string.drawer_item_notice), R.drawable.ic_notices));
+        dataList.add(new DrawerItem(getString(R.string.drawer_item_favourite), R.drawable.ic_action_important));
         dataList.add(new DrawerItem(getString(R.string.drawer_item_channel), R.drawable.ic_channel));
         dataList.add(new DrawerItem(getString(R.string.drawer_item_community), R.drawable.ic_action_group));
         dataList.add(new DrawerItem(getString(R.string.drawer_item_settings), R.drawable.ic_action_settings));
@@ -158,12 +159,15 @@ public class CommunityCenterActivity extends ActionBarActivity {
                 fragment = new FragmentNotice();
                 break;
             case 2:
-                fragment = new FragmentChannel();
+                fragment = new FragmentFavourite();
                 break;
             case 3:
-                fragment = new FragmentCommunities();
+                fragment = new FragmentChannel();
                 break;
             case 4:
+                fragment = new FragmentCommunities();
+                break;
+            case 5:
                 fragment = new FragmentSettings();
                 break;
             default:

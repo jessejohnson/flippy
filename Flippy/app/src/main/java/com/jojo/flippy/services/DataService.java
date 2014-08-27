@@ -13,6 +13,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.persistence.Channels;
 import com.jojo.flippy.persistence.DatabaseHelper;
+import com.jojo.flippy.persistence.DeletedPosts;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.InternetConnectionDetector;
@@ -29,7 +30,8 @@ import java.util.TimerTask;
 public class DataService extends Service {
     private Dao<Post, Integer> postDao;
     private Dao<Channels, Integer> channelDao;
-    private ArrayList<String> savedPostIds;
+    private Dao<DeletedPosts, Integer> deletedPostsIntegerDao;
+    private ArrayList<String> savedPostIds, deletedPostIds;
     private static String TAG = "DataService";
     private String minutes;
     private boolean isUserSubscribed = false;
@@ -54,15 +56,23 @@ public class DataService extends Service {
 
 
         savedPostIds = new ArrayList<String>();
+        deletedPostIds = new ArrayList<String>();
         try {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
                     DatabaseHelper.class);
             postDao = databaseHelper.getPostDao();
             channelDao = databaseHelper.getChannelDao();
+            deletedPostsIntegerDao = databaseHelper.getDeletedPostDao();
             List<Post> postList = postDao.queryForAll();
+            List<DeletedPosts> deletedPostsList = deletedPostsIntegerDao.queryForAll();
             if (!postList.isEmpty()) {
                 for (Post post : postList) {
                     savedPostIds.add(post.notice_id);
+                }
+            }
+            if (!deletedPostsList.isEmpty()) {
+                for (DeletedPosts deletedPosts : deletedPostsList) {
+                    deletedPostIds.add(deletedPosts.post_id);
                 }
             }
         } catch (java.sql.SQLException sqlE) {
@@ -128,7 +138,7 @@ public class DataService extends Service {
                                         DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getApplicationContext(),
                                                 DatabaseHelper.class);
                                         postDao = databaseHelper.getPostDao();
-                                        if (!savedPostIds.contains(id)) {
+                                        if (!savedPostIds.contains(id) || !deletedPostIds.contains(id)) {
                                             postDao.createOrUpdate(new_post);
                                         }
                                     } catch (java.sql.SQLException sqlE) {

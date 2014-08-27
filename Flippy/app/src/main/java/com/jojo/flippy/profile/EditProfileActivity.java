@@ -2,6 +2,7 @@ package com.jojo.flippy.profile;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -244,8 +245,7 @@ public class EditProfileActivity extends ActionBarActivity {
                     DatabaseHelper.class);
 
             userDao = databaseHelper.getUserDao();
-            List<User> userList = userDao.queryForAll();
-            user = userList.get(0);
+            user = userDao.queryForAll().get(0);
             user.user_email = userEmail;
             user.avatar = userAvatar;
             user.date_of_birth = userDateOfBirth;
@@ -266,7 +266,9 @@ public class EditProfileActivity extends ActionBarActivity {
     }
 
     private void getUserInfo() {
-        Ion.with(EditProfileActivity.this, Flippy.USERS_URL + CommunityCenterActivity.regUserID + "/")
+        Ion.with(EditProfileActivity.this)
+                .load(Flippy.USERS_URL + CommunityCenterActivity.regUserID + "/")
+                .setHeader("Authorization", "Token " + CommunityCenterActivity.userAuthToken)
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -292,6 +294,7 @@ public class EditProfileActivity extends ActionBarActivity {
                                 if (!result.get("date_of_birth").isJsonNull()) {
                                     userDateOfBirth = result.get("date_of_birth").getAsString().substring(0, 10).trim();
                                 }
+                                updateUser();
 
                             } else {
                                 ToastMessages.showToastLong(EditProfileActivity.this, getResources().getString(R.string.internet_connection_error_dialog_title));
@@ -300,7 +303,7 @@ public class EditProfileActivity extends ActionBarActivity {
                         } catch (Exception e1) {
                             Log.e("Error updating user", "Occurred when updating user");
                         }
-                        updateUser();
+
                     }
 
                 });
@@ -315,9 +318,9 @@ public class EditProfileActivity extends ActionBarActivity {
     }
 
     private void updateUserStringDetails(final String email, final String firstName, final String lastName, final String gender, final String dateOfBirth) {
-        if (actionBar != null) {
-            actionBar.setSubtitle("updating profile...");
-        }
+        final ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Updating user information...");
+        progressDialog.show();
         String url = Flippy.USERS_URL + "me/";
         RequestParams params = new RequestParams();
         params.put("email", email);
@@ -330,6 +333,7 @@ public class EditProfileActivity extends ActionBarActivity {
         client.put(url, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseBody) {
+                progressDialog.dismiss();
                 Log.e("Status code success", statusCode + "");
                 Log.e("Response success", responseBody);
                 try {
@@ -344,9 +348,7 @@ public class EditProfileActivity extends ActionBarActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable
                     error) {
-                if (actionBar != null) {
-                    actionBar.setSubtitle("update failed");
-                }
+                progressDialog.dismiss();
                 Log.e("Status code error", statusCode + "");
                 ToastMessages.showToastLong(context, "Failed to update, try later");
 

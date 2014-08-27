@@ -1,6 +1,8 @@
 package com.jojo.flippy.util;
 
 import android.content.Intent;
+import android.util.Log;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -29,10 +31,22 @@ public class Flippy extends android.app.Application {
     public static String defaultTime = "00:00:00";
     public static String defaultLat = "75.7667";
     public static String defaultLon = "99.7833";
-    public Dao<User, Integer> userDao;
     public Dao<Post, Integer> postDao;
     public User thisUser;
     private RequestQueue mRequestQueue;
+    public static String regUserEmail = "";
+    public static String userFirstName = "";
+    public static String userLastName = "";
+    public static String userAvatarThumbURL = "";
+    public static String userAvatarURL = "";
+    public static String userCommunityId = "";
+    public static String userCommunityName = "";
+    public static String regUserID = "";
+    public static String userDateOfBirth = "";
+    public static String userGender = "";
+    public static String userAuthToken="";
+    private User currentUser;
+    public Dao<User, Integer> userDao;
 
     public synchronized static Flippy getInstance() {
         return sInstance;
@@ -49,6 +63,34 @@ public class Flippy extends android.app.Application {
         mRequestQueue = Volley.newRequestQueue(this);
         sInstance = this;
 
+
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(this,
+                    DatabaseHelper.class);
+            userDao = databaseHelper.getUserDao();
+            List<User> userList = userDao.queryForAll();
+            if (userList.isEmpty()) {
+                currentUser = null;
+            } else {
+                currentUser = userList.get(0);
+                regUserEmail = currentUser.user_email;
+                userFirstName = currentUser.first_name;
+                userLastName = currentUser.last_name;
+                userAvatarThumbURL = currentUser.avatar_thumb;
+                userAvatarURL = currentUser.avatar;
+                userCommunityId = currentUser.community_id;
+                userCommunityName = currentUser.community_name;
+                regUserID = currentUser.user_id;
+                userDateOfBirth = currentUser.date_of_birth;
+                userGender = currentUser.gender;
+                userAuthToken = currentUser.user_auth;
+            }
+
+
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            Log.e("ApplicationClass", "Unfortunately a system error occurred");
+        }
 
         //starting the manage service activity
         Intent serviceIntent = new Intent(this, ManageLocalPost.class);

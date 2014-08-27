@@ -88,6 +88,7 @@
     <string name="drawer_item_account">Profile</string>
     <string name="drawer_item_notice">Notices</string>
     <string name="drawer_item_community">My Community</string>
+    <string name="drawer_item_favourite">Favourites</string>
 
     <!-- Options menu strings for the community center -->
     <string name="menu_share">Share with friends</string>
@@ -329,7 +330,11 @@
 
     <!-- preview post strings -->
     <string name="title_activity_preview_post">Notice preview</string>
-    <string name="preview_post_publish_post">publish post</string>
+    <string name="preview_post_publish_post">create flip</string>
     <string name="preview_post_likes">0 stars</string>
+
+
+    <string name="widget_title">New Flips</string>
+    <string name="new_flip">Create flip</string>
 
 </resources>

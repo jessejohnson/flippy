@@ -37,6 +37,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.DatabaseHelper;
+import com.jojo.flippy.persistence.DeletedPosts;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.profile.ImagePreviewActivity;
 import com.jojo.flippy.services.FlippyReceiver;
@@ -103,6 +104,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
     private Context context;
     private ProgressDialog progressDialog;
     private Dao<Post, Integer> postDao;
+    private Dao<DeletedPosts, Integer> deletedPostDao;
 
 
     @Override
@@ -651,9 +653,13 @@ public class NoticeDetailActivity extends ActionBarActivity {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(NoticeDetailActivity.this,
                     DatabaseHelper.class);
             postDao = databaseHelper.getPostDao();
+            deletedPostDao = databaseHelper.getDeletedPostDao();
             Post post = postDao.queryForId(Integer.parseInt(noticeId));
+            String postId = post.notice_id;
             if (post != null) {
                 postDao.delete(post);
+                DeletedPosts deletedPost = new DeletedPosts(postId);
+                deletedPostDao.createOrUpdate(deletedPost);
             }
             showSuperToast("Notice successfully removed from board", true);
             goHome();

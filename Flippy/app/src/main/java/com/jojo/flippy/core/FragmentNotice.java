@@ -25,6 +25,7 @@ import com.jojo.flippy.adapter.Notice;
 import com.jojo.flippy.adapter.NoticeAdapter;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.DatabaseHelper;
+import com.jojo.flippy.persistence.DeletedPosts;
 import com.jojo.flippy.persistence.Post;
 import com.jojo.flippy.services.DataService;
 import com.jojo.flippy.util.Flippy;
@@ -56,6 +57,8 @@ public class FragmentNotice extends Fragment {
     private String noticeBody;
     private ProgressBar progressBarCommunityCenterLoader;
     private Dao<Post, Integer> postDao;
+    private Dao<DeletedPosts, Integer> deletedPostDao;
+    private ArrayList<String> deletedPostIds;
     private InternetConnectionDetector internetConnectionDetector;
     private View view;
     private TextView textViewNoNotice;
@@ -77,6 +80,7 @@ public class FragmentNotice extends Fragment {
         View header = inflater.inflate(R.layout.notice_list_header, null);
 
         noticeFeed = new ArrayList<Notice>();
+        deletedPostIds = new ArrayList<String>();
         listAdapter = new NoticeAdapter(getActivity(), R.layout.notice_list_item, noticeFeed);
 
         noticeList = (ListView) view.findViewById(R.id.listViewNoticeList);
@@ -100,7 +104,14 @@ public class FragmentNotice extends Fragment {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
                     DatabaseHelper.class);
             postDao = databaseHelper.getPostDao();
+            deletedPostDao = databaseHelper.getDeletedPostDao();
             List<Post> postList = postDao.queryForAll();
+            List<DeletedPosts> DeletedPostList = deletedPostDao.queryForAll();
+            if (!DeletedPostList.isEmpty()) {
+                for (DeletedPosts deletedPosts : DeletedPostList) {
+                    deletedPostIds.add(deletedPosts.post_id);
+                }
+            }
             if (postList.isEmpty()) {
                 getAllPost(view);
             } else {
@@ -210,8 +221,9 @@ public class FragmentNotice extends Fragment {
                                     String authorId = author.get("id").getAsString();
                                     String authorFirstName = author.get("first_name").getAsString();
                                     String authorLastName = author.get("last_name").getAsString();
-                                    persistPost(id, title, content, image_link, startDate, authorEmail, authorId, authorFirstName, authorLastName, authorAvatar, authorAvatarThumb, channel);
-
+                                    if (deletedPostIds.isEmpty() || !deletedPostIds.contains(id)) {
+                                        persistPost(id, title, content, image_link, startDate, authorEmail, authorId, authorFirstName, authorLastName, authorAvatar, authorAvatarThumb, channel);
+                                    }
                                 }
                                 //after persistence load from database
                                 loadAdapterFromDatabase(view);

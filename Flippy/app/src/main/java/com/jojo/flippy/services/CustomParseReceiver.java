@@ -19,13 +19,13 @@ import android.util.Log;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.jojo.flippy.adapter.Community;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.CommunityCenterActivity;
 import com.jojo.flippy.core.NoticeDetailActivity;
 import com.jojo.flippy.persistence.Channels;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.persistence.Post;
+import com.jojo.flippy.persistence.User;
 import com.jojo.flippy.util.Flippy;
 import com.jojo.flippy.util.ImageDecoder;
 import com.koushikdutta.async.future.FutureCallback;
@@ -54,10 +54,12 @@ public class CustomParseReceiver extends BroadcastReceiver {
     private NotificationManager notificationManager;
     public static int NOTICE_ID = 1;
     private Dao<Post, Integer> postDao;
+    private Dao<User, Integer> userDao;
     private Dao<Channels, Integer> channelDao;
     private List<Channels> channelList;
     private static ArrayList<String> channelIdList = new ArrayList<String>();
     private Bitmap bitmap;
+    private String currentUserId = "";
 
 
     @Override
@@ -67,6 +69,8 @@ public class CustomParseReceiver extends BroadcastReceiver {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(context,
                     DatabaseHelper.class);
             channelDao = databaseHelper.getChannelDao();
+            userDao = databaseHelper.getUserDao();
+            currentUserId = userDao.queryForAll().get(0).user_id;
             channelList = channelDao.queryForAll();
             for (Channels channels : channelList) {
                 channelIdList.add(channels.channel_id);
@@ -181,7 +185,7 @@ public class CustomParseReceiver extends BroadcastReceiver {
             Post post = new Post(notice_id, notice_title, notice_body, notice_image, start_date, author_email, author_id, author_first_name, author_last_name, authorAvatar, authorAvatarThumb, channel_id, calendar.getTimeInMillis());
             postDao.createOrUpdate(post);
             String subtitle = author_first_name + ", " + author_last_name;
-            getNoticeImage(context, notice_image, notice_id, notice_title, notice_body, subtitle);
+            getNoticeImage(context, author_id, notice_image, notice_id, notice_title, notice_body, subtitle);
             updateWidget(context);
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
@@ -190,9 +194,10 @@ public class CustomParseReceiver extends BroadcastReceiver {
 
     }
 
-    private void getNoticeImage(final Context context, String image, final String notice_id, final String notice_title, final String notice_body, final String subtitle) {
-
-        if (image.equalsIgnoreCase("")) {
+    private void getNoticeImage(final Context context, String author_id, String image, final String notice_id, final String notice_title, final String notice_body, final String subtitle) {
+        if (currentUserId.equalsIgnoreCase(author_id)) {
+            return;
+        } else if (image.equalsIgnoreCase("")) {
             bitmap = null;
             generateNotification(context, bitmap, notice_id, notice_title, notice_body, subtitle);
 
@@ -218,7 +223,7 @@ public class CustomParseReceiver extends BroadcastReceiver {
         }
     }
 
-    private boolean checkRunningApp(Context context) {
+    private boolean isAppRunning(Context context) {
         ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> services = activityManager
                 .getRunningTasks(Integer.MAX_VALUE);

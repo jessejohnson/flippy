@@ -47,6 +47,9 @@ public class Post {
     @DatabaseField(columnName = "local_id")
     public long local_id;
 
+    @DatabaseField(columnName = "is_favourite")
+    public boolean is_favourite;
+
 
     public Post(String notice_id, String notice_title, String notice_body, String notice_image, String start_date, String author_email, String author_id, String author_first_name, String author_last_name, String author_avatar, String author_avatar_thumb, String channel_id, long local_id) {
         this.notice_id = notice_id;
@@ -62,6 +65,7 @@ public class Post {
         this.local_id = local_id;
         this.author_avatar = author_avatar;
         this.author_avatar_thumb = author_avatar_thumb;
+        this.is_favourite = false;
     }
 
     Post() {

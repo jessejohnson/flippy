@@ -41,6 +41,8 @@ import com.jojo.flippy.adapter.AdminPerson;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.core.ChannelMembers;
 import com.jojo.flippy.core.CommunityCenterActivity;
+import com.jojo.flippy.core.CreateChannelActivity;
+import com.jojo.flippy.core.CreateNoticeActivity;
 import com.jojo.flippy.persistence.Channels;
 import com.jojo.flippy.persistence.DatabaseHelper;
 import com.jojo.flippy.util.Flippy;
@@ -287,6 +289,13 @@ public class ManageChannelActivity extends ActionBarActivity {
         if (id == R.id.action_remove_channel) {
             confirmChannelDelete(channelId);
         }
+        if (id == R.id.action_create_channel) {
+            intent.setClass(this, CreateNoticeActivity.class);
+            intent.putExtra("channelName", channelName);
+            intent.putExtra("channelId", channelId);
+            startActivity(intent);
+
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -442,10 +451,9 @@ public class ManageChannelActivity extends ActionBarActivity {
         client.put(url, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseBody) {
-                buttonEditChannelName.setEnabled(true);
-                buttonEditChannelName.setText("Edit");
                 Log.e("Response success", responseBody);
                 ToastMessages.showToastLong(context, "Name changed successfully");
+                goToMainActivity();
                 refresh();
             }
 
@@ -489,7 +497,8 @@ public class ManageChannelActivity extends ActionBarActivity {
 
         alert.show();
     }
-    private void refresh(){
+
+    private void refresh() {
         finish();
         startActivity(getIntent());
     }
