@@ -1,44 +1,26 @@
 package com.jojo.flippy.core;
 
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.stmt.QueryBuilder;
 import com.jojo.flippy.adapter.Notice;
 import com.jojo.flippy.adapter.NoticeAdapter;
 import com.jojo.flippy.app.R;
 import com.jojo.flippy.persistence.DatabaseHelper;
-import com.jojo.flippy.persistence.DeletedPosts;
 import com.jojo.flippy.persistence.Post;
-import com.jojo.flippy.services.DataService;
-import com.jojo.flippy.util.Flippy;
-import com.jojo.flippy.util.InternetConnectionDetector;
-import com.jojo.flippy.util.ToastMessages;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
-
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -138,11 +120,9 @@ public class FragmentFavourite extends Fragment {
                     }
                     String subtitle = post.author_first_name + ", " + post.author_last_name;
                     noticeFeed.add(new Notice(post.notice_id, post.notice_title, subtitle, post.notice_body, post.author_id, post.channel_id, timestamp, URI.create(post.author_avatar_thumb), URI.create(post.notice_image)));
-
                 }
-                updateListAdapter();
-
             }
+            updateListAdapter();
 
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();

@@ -303,7 +303,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-       /* super.onBackPressed();*/
         new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle(R.string.exit_title)
                 .setMessage(R.string.exit_message)
                 .setPositiveButton(R.string.exit_positive, new DialogInterface.OnClickListener() {
@@ -323,7 +322,6 @@ public class CommunityCenterActivity extends ActionBarActivity {
         super.onStop();
     }
 
-    /* this class set the onclick listener for the various drawer items*/
     private class DrawerItemClickListener implements
             ListView.OnItemClickListener {
         @Override

@@ -336,6 +336,8 @@
 
 
     <string name="widget_title">New Flips</string>
+    <string name="widget_title_notice">Notice title is loading</string>
+    <string name="widget_notice_body">Notice content will shortly be displayed here even as you wait. Thanks be to Flippy team.</string>
     <string name="new_flip">Create flip</string>
 
 </resources>
