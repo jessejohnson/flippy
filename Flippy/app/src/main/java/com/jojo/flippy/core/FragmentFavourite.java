@@ -131,8 +131,6 @@ public class FragmentFavourite extends Fragment {
                 for (int i = postList.size() - 1; i >= 0; i--) {
                     Post post = postList.get(i);
                     if (post.is_favourite) {
-
-
                         String[] timestampArray = post.start_date.replace("Z", "").split("T");
                         String timestamp = timestampArray[0] + " @ " + timestampArray[1].substring(0, 8);
 

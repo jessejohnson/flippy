@@ -222,6 +222,11 @@ public class CommunityCenterActivity extends ActionBarActivity {
             case R.id.action_settings:
                 Intent intent = new Intent(CommunityCenterActivity.this, HelpActivity.class);
                 startActivity(intent);
+                return true;
+
+            case R.id.action_refresh:
+                finish();
+                startActivity(getIntent());
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -280,7 +285,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
     private void shareFlippy() {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.app_name));
+        sendIntent.putExtra(Intent.EXTRA_TEXT, userFirstName + " is inviting you to join Flippy. \n Download at ...");
         sendIntent.setType("text/plain");
         sendIntent.createChooser(sendIntent, getResources().getText(R.string.app_name));
         startActivity(sendIntent);

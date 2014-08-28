@@ -93,6 +93,7 @@
     <!-- Options menu strings for the community center -->
     <string name="menu_share">Share with friends</string>
     <string name="menu_notice">Create notice</string>
+    <string name="menu_refresh">Refresh</string>
     <string name="menu_send_feedback">Send feedback</string>
     <string name="menu_help">Help</string>
     <string name="title_activity_account_profile">Account Profile</string>

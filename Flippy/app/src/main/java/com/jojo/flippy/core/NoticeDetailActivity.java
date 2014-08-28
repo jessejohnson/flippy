@@ -272,6 +272,8 @@ public class NoticeDetailActivity extends ActionBarActivity {
                                             return;
                                         } else {
                                             showSuperToast(result.get("results").getAsString(), true);
+                                            boolean isSaved = result.get("results").getAsString().equalsIgnoreCase("Post was rated");
+                                            savePostLocally(noticeId, isSaved);
                                         }
                                     }
                                     if (e != null) {
@@ -819,6 +821,31 @@ public class NoticeDetailActivity extends ActionBarActivity {
         Intent intentHome = new Intent();
         intentHome.setClass(context, CommunityCenterActivity.class);
         startActivity(intentHome);
+
+    }
+
+    private void savePostLocally(String postId, boolean isSave) {
+        try {
+            DatabaseHelper databaseHelper = OpenHelperManager.getHelper(NoticeDetailActivity.this,
+                    DatabaseHelper.class);
+            postDao = databaseHelper.getPostDao();
+            Post post = postDao.queryForId(Integer.parseInt(postId));
+            if (isSave) {
+                post.is_favourite = true;
+                postDao.update(post);
+                postDao.refresh(post);
+                showSuperToast("Notice successfully saved as favourite", true);
+            } else {
+                post.is_favourite = false;
+                postDao.update(post);
+                postDao.refresh(post);
+                showSuperToast("Notice successfully removed from favourite list", true);
+            }
+
+        } catch (java.sql.SQLException sqlE) {
+            sqlE.printStackTrace();
+            Log.e(TAG, sqlE.toString());
+        }
 
     }
 
