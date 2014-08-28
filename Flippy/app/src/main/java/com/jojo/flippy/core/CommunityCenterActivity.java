@@ -285,7 +285,7 @@ public class CommunityCenterActivity extends ActionBarActivity {
     private void shareFlippy() {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, userFirstName + " is inviting you to join Flippy. \n Download at ...");
+        sendIntent.putExtra(Intent.EXTRA_TEXT, userFirstName + " is inviting you to join Flippy. \nDownload at ...");
         sendIntent.setType("text/plain");
         sendIntent.createChooser(sendIntent, getResources().getText(R.string.app_name));
         startActivity(sendIntent);

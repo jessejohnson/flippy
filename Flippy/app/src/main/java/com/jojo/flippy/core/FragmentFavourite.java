@@ -20,6 +20,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.jojo.flippy.adapter.Notice;
 import com.jojo.flippy.adapter.NoticeAdapter;
 import com.jojo.flippy.app.R;
@@ -45,7 +46,6 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class FragmentFavourite extends Fragment {
-    private BroadcastReceiver mReceiver;
     private ListView noticeList;
     private NoticeAdapter listAdapter;
     private List<Notice> noticeFeed;
@@ -59,7 +59,6 @@ public class FragmentFavourite extends Fragment {
     private TextView textViewNoFavouriteNotice;
 
 
-
     public FragmentFavourite() {
 
     }
@@ -70,17 +69,12 @@ public class FragmentFavourite extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_favourite, container,
                 false);
-
-
         noticeFeed = new ArrayList<Notice>();
         listAdapter = new NoticeAdapter(getActivity(), R.layout.notice_list_item, noticeFeed);
-
         noticeList = (ListView) view.findViewById(R.id.listViewFavouriteNoticeList);
-
+        noticeList.setAdapter(listAdapter);
         textViewNoFavouriteNotice = (TextView) view.findViewById(R.id.textViewNoFavouriteNotice);
         textViewNoFavouriteNotice.setVisibility(View.GONE);
-
-
         loadAdapterFromDatabase();
 
 
@@ -125,29 +119,31 @@ public class FragmentFavourite extends Fragment {
             DatabaseHelper databaseHelper = OpenHelperManager.getHelper(getActivity(),
                     DatabaseHelper.class);
             postDao = databaseHelper.getPostDao();
-            List<Post> postList = postDao.queryForAll();
+            List<Post> postList = postDao.queryBuilder().where().
+                    eq("is_favourite", true).query();
             noticeFeed.clear();
             if (!postList.isEmpty()) {
                 for (int i = postList.size() - 1; i >= 0; i--) {
                     Post post = postList.get(i);
-                    if (post.is_favourite) {
-                        String[] timestampArray = post.start_date.replace("Z", "").split("T");
-                        String timestamp = timestampArray[0] + " @ " + timestampArray[1].substring(0, 8);
+                    String[] timestampArray = post.start_date.replace("Z", "").split("T");
+                    String timestamp = timestampArray[0] + " @ " + timestampArray[1].substring(0, 8);
 
-                        try {
-                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                            SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
-                            Date dateConverted = dateFormat.parse(timestampArray[0].toString());
-                            timestamp = formatter.format(dateConverted) + " @ " + timestampArray[1].substring(0, 8);
-                        } catch (Exception error) {
-                            Log.e("Date error", error.toString());
-                        }
-                        String subtitle = post.author_first_name + ", " + post.author_last_name;
-                        noticeFeed.add(new Notice(post.notice_id, post.notice_title, subtitle, post.notice_body, post.author_id, post.channel_id, timestamp, URI.create(post.author_avatar_thumb), URI.create(post.notice_image)));
+                    try {
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy");
+                        Date dateConverted = dateFormat.parse(timestampArray[0].toString());
+                        timestamp = formatter.format(dateConverted) + " @ " + timestampArray[1].substring(0, 8);
+                    } catch (Exception error) {
+                        Log.e("Date error", error.toString());
                     }
+                    String subtitle = post.author_first_name + ", " + post.author_last_name;
+                    noticeFeed.add(new Notice(post.notice_id, post.notice_title, subtitle, post.notice_body, post.author_id, post.channel_id, timestamp, URI.create(post.author_avatar_thumb), URI.create(post.notice_image)));
+
                 }
+                updateListAdapter();
+
             }
-            updateListAdapter();
+
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
             Crouton.makeText(getActivity(), "Sorry, Try again later", Style.ALERT)

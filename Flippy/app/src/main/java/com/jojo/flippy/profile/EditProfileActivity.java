@@ -68,7 +68,7 @@ public class EditProfileActivity extends ActionBarActivity {
     private String userEmail;
     private String userAvatar = "";
     private String userGender = "";
-    private String userDateOfBirth = "";
+    private String userDateOfBirth = "0000-00-00";
     private String userAvatarThumb = "";
     private ProgressBar progressBarUpdateAvatar;
     private Dao<User, Integer> userDao;

@@ -73,6 +73,6 @@ public class Post {
 
     @Override
     public String toString() {
-        return this.notice_title + " " + this.notice_id + this.notice_image;
+        return this.notice_title + " " + this.notice_id + " "+this.notice_image;
     }
 }
