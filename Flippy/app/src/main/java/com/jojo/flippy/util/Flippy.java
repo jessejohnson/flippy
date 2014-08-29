@@ -96,10 +96,6 @@ public class Flippy extends android.app.Application {
         Intent serviceIntent = new Intent(this, ManageLocalPost.class);
         startService(serviceIntent);
 
-        Intent dataServiceIntent = new Intent(this, DataService.class);
-        startService(dataServiceIntent);
-
-
         DatabaseHelper databaseHelper = OpenHelperManager.getHelper(this,
                 DatabaseHelper.class);
         try {

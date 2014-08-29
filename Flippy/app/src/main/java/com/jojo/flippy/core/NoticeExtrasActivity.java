@@ -201,7 +201,7 @@ public class NoticeExtrasActivity extends ActionBarActivity {
                 if (selectedImagePath != null) {
                     filePath = selectedImagePath;
                 } else {
-                    Toast.makeText(getApplicationContext(), "Unknown path",
+                    Toast.makeText(getApplicationContext(), "Choose another image from gallery",
                             Toast.LENGTH_LONG).show();
                     Log.e("Bitmap", "Unknown path");
                 }
@@ -244,8 +244,8 @@ public class NoticeExtrasActivity extends ActionBarActivity {
             reminderYear = year;
             reminderMonth = month;
             reminderDay = day;
-            datePicked = year + "-" + month + "-" + day;
-            ToastMessages.showToastLong(getActivity(), "Date picked is  " + year + " - " + month + " - " + day);
+            datePicked = year + "-" + month + 1 + "-" + day;
+            ToastMessages.showToastLong(getActivity(), "Date picked is  " + year + " - " + month + 1 + " - " + day);
             DialogFragment timer = new TimePickerFragment();
             timer.show(timerSupport, "timePicker");
 
@@ -257,12 +257,9 @@ public class NoticeExtrasActivity extends ActionBarActivity {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current time as the default values for the picker
             final Calendar c = Calendar.getInstance();
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
-
-            // Create a new instance of TimePickerDialog and return it
             return new TimePickerDialog(getActivity(), this, hour, minute,
                     DateFormat.is24HourFormat(getActivity()));
         }

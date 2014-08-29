@@ -346,10 +346,6 @@ public class NoticeDetailActivity extends ActionBarActivity {
 
 
     private void setAlarm() {
-        if (noReminder == null) {
-            showSuperToast("This notice has no reminder", false);
-            return;
-        }
         if (startDate == null || startDate.equalsIgnoreCase(Flippy.defaultDate + "T" + Flippy.defaultTime + "Z")) {
             showSuperToast("This notice has no reminder date", false);
             return;
@@ -362,6 +358,7 @@ public class NoticeDetailActivity extends ActionBarActivity {
         try {
             Calendar c = Calendar.getInstance();
             Date dateConverted = dateFormat.parse(date.toString());
+            Log.e(TAG,c.getTime() +" Today and "+ dateConverted);
             if (dateConverted.compareTo(c.getTime()) < 1) {
                 showSuperToast("Notice is long due", false);
                 return;

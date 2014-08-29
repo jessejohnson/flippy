@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/drop_shadow"
         android:descendantFocusability="afterDescendants"
         android:orientation="vertical">
 

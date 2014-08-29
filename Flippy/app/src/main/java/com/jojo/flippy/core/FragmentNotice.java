@@ -115,9 +115,8 @@ public class FragmentNotice extends Fragment {
             if (postList.isEmpty()) {
                 getAllPost(view);
             } else {
-                Intent dataServiceIntent = new Intent(getActivity(), DataService.class);
-                getActivity().startService(dataServiceIntent);
                 loadAdapterFromDatabase(view);
+                getAllPost(view);
             }
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
@@ -158,9 +157,6 @@ public class FragmentNotice extends Fragment {
         if (listAdapter.getCount() == 0) {
             textViewNoNotice.setVisibility(View.VISIBLE);
             textViewNoNotice.setText("Currently no notice, subscribe to receive notice");
-        }
-        if (listAdapter.getCount() >= 20) {
-            buttonLoadOldPost.setVisibility(View.GONE);
         }
     }
 
@@ -225,20 +221,20 @@ public class FragmentNotice extends Fragment {
                                         persistPost(id, title, content, image_link, startDate, authorEmail, authorId, authorFirstName, authorLastName, authorAvatar, authorAvatarThumb, channel);
                                     }
                                 }
-                                //after persistence load from database
-                                loadAdapterFromDatabase(view);
+
                             } else {
-                                Log.e("Fragment Notice", result.toString());
+                                Log.e("Fragment Notice", "result has detail");
+                                ToastMessages.showToastLong(getActivity(), "Sorry something went wrong");
                             }
                             if (e != null) {
                                 Log.e("Fragment Notice", e.toString());
                                 return;
                             }
-
                         } catch (Exception exception) {
-                            Log.e("Fragment Notice", exception.toString());
+                            Log.e("Fragment Notice try catch", exception.toString());
                         }
-
+                        //after persistence load from database
+                        loadAdapterFromDatabase(view);
                     }
                 });
     }
@@ -293,7 +289,7 @@ public class FragmentNotice extends Fragment {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String RECEIVED = intent.getStringExtra("NEW_POST");
-                Log.i("Fragment Notice", RECEIVED);
+                Log.e("Fragment Notice", RECEIVED);
             }
         };
         getActivity().registerReceiver(mReceiver, intentFilter);

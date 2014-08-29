@@ -121,7 +121,8 @@ public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem>{
 
             filteredModelItemsArray = (ArrayList<ProfileItem>) results.values;
             notifyDataSetChanged();
-            clear();
+            //clear();
+            Log.e("Data",results.toString());
             for (int i = 0, l = filteredModelItemsArray.size(); i < l; i++)
                 add(filteredModelItemsArray.get(i));
             notifyDataSetInvalidated();
