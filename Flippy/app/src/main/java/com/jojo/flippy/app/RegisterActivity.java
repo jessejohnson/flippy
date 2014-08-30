@@ -79,7 +79,7 @@ public class RegisterActivity extends Activity {
                     allFieldsValid = true;
                 } else {
                     editTextRegisterEmail.setError(getString(R.string.registration_error_email));
-                    allFieldsValid = false;
+                    return;
                 }
                 if (Validator.isValidNameString(editTextFirstName.getText().toString())) {
                     editTextFirstName.setError(null);
@@ -87,6 +87,7 @@ public class RegisterActivity extends Activity {
                 } else {
                     editTextFirstName.setError(getString(R.string.registration_error_first_name));
                     allFieldsValid = false;
+                    return;
                 }
                 if (Validator.isValidNameString(editTextLastName.getText().toString())) {
                     editTextLastName.setError(null);
@@ -94,6 +95,7 @@ public class RegisterActivity extends Activity {
                 } else {
                     editTextLastName.setError(getString(R.string.registration_error_last_name));
                     allFieldsValid = false;
+                    return;
                 }
                 if (Validator.isValidPassword(editTextPassword.getText().toString())) {
                     editTextPassword.setError(null);
@@ -101,6 +103,7 @@ public class RegisterActivity extends Activity {
                 } else {
                     editTextPassword.setError(getString(R.string.registration_error_password));
                     allFieldsValid = false;
+                    return;
                 }
                 if (checkBoxTerms.isChecked()) {
                     checkBoxTerms.setError(null);
@@ -108,6 +111,7 @@ public class RegisterActivity extends Activity {
                 } else {
                     checkBoxTerms.setError(getString(R.string.registration_error_checkbox));
                     allFieldsValid = false;
+                    return;
                 }
 
                 if (allFieldsValid) {

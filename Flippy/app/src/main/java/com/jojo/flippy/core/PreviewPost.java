@@ -243,6 +243,7 @@ public class PreviewPost extends ActionBarActivity {
         imageViewPreviewNoticeImageDetail.setImageBitmap(bitmap);
     }
 
+
     private void goToHome() {
         Intent intentHome = new Intent(PreviewPost.this, CommunityCenterActivity.class);
         startActivity(intentHome);

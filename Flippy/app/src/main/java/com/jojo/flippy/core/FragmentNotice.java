@@ -1,10 +1,7 @@
 package com.jojo.flippy.core;
 
 import android.app.Fragment;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +41,6 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class FragmentNotice extends Fragment {
-    private BroadcastReceiver mReceiver;
     private ListView noticeList;
     private NoticeAdapter listAdapter;
     private List<Notice> noticeFeed;
@@ -118,9 +114,7 @@ public class FragmentNotice extends Fragment {
             }
         } catch (java.sql.SQLException sqlE) {
             sqlE.printStackTrace();
-            Crouton.makeText(getActivity(), "Sorry, Try again later", Style.ALERT)
-                    .show();
-
+            ToastMessages.showToastLong(getActivity(), "Sorry, Try again later");
         }
 
         //Setting the click listener for the notice list
@@ -167,11 +161,11 @@ public class FragmentNotice extends Fragment {
             postDao = databaseHelper.getPostDao();
             Calendar calendar = Calendar.getInstance();
             Post post = new Post(notice_id, notice_title, notice_body, notice_image, start_date, author_email, author_id, author_first_name, author_last_name, authorAvatar, authorAvatarThumb, channel_id, calendar.getTimeInMillis());
-            postDao.create(post);
+            postDao.createIfNotExists(post);
 
         } catch (java.sql.SQLException sqlE) {
-            sqlE.printStackTrace();
             ToastMessages.showToastLong(getActivity(), "Sorry, Failed to save post");
+            Log.e("Saving to database ", sqlE.toString());
 
         }
 
@@ -268,7 +262,6 @@ public class FragmentNotice extends Fragment {
             sqlE.printStackTrace();
             Crouton.makeText(getActivity(), "Sorry, Try again later", Style.ALERT)
                     .show();
-
         }
 
     }
@@ -281,21 +274,10 @@ public class FragmentNotice extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        IntentFilter intentFilter = new IntentFilter(
-                "android.intent.action.MAIN");
-        mReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String RECEIVED = intent.getStringExtra("NEW_POST");
-                Log.e("Fragment Notice", RECEIVED);
-            }
-        };
-        getActivity().registerReceiver(mReceiver, intentFilter);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().unregisterReceiver(this.mReceiver);
     }
 }

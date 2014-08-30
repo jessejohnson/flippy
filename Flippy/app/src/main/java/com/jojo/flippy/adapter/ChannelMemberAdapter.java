@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * Created by bright on 6/13/14.
  */
-public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem>{
+public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem> implements Filterable {
     Context context;
     boolean isManage;
     private List<ProfileItem> allModelItemsArray;
@@ -122,7 +123,7 @@ public class ChannelMemberAdapter extends ArrayAdapter<ProfileItem>{
             filteredModelItemsArray = (ArrayList<ProfileItem>) results.values;
             notifyDataSetChanged();
             //clear();
-            Log.e("Data",results.toString());
+            //Log.e("Data",results.toString());
             for (int i = 0, l = filteredModelItemsArray.size(); i < l; i++)
                 add(filteredModelItemsArray.get(i));
             notifyDataSetInvalidated();
